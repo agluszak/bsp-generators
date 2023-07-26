@@ -1,0 +1,5 @@
+projectview.bazelproject
+.idea
+.bsp
+.bazelbsp
+bazel-*
