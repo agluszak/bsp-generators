@@ -1,0 +1,5 @@
+filegroup(
+    name = "definition",
+    srcs = glob(["spec/srcmain/resources/META-INF/**"]),
+    # visibility = ["//visibility:public"],
+)
