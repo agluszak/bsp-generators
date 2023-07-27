@@ -1,12 +1,12 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-
-# rules_kotlin_version = "1.8"
-# rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
-# http_archive(
-#     name = "io_bazel_rules_kotlin",
-#     urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
-#     sha256 = rules_kotlin_sha,
-# )
+rules_kotlin_version = "1.8"
+rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
+http_archive(
+    name = "io_bazel_rules_kotlin",
+    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
+    sha256 = rules_kotlin_sha,
+)
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 http_archive(
@@ -54,11 +54,6 @@ rules_jvm_external_deps()
 load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
 
 rules_jvm_external_setup()
-
-local_repository(
-    name = "io_bazel_rules_kotlin",
-    path = "/home/andrzej/code/bazel/rules_kotlin",
-)
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
