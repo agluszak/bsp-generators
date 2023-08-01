@@ -11,8 +11,8 @@ import software.amazon.smithy.utils.ToSmithyBuilder
 import java.util.stream.Collectors
 
 class DataKindTrait(builder: Builder) : AbstractTrait(ID, builder.sourceLocation), ToSmithyBuilder<DataKindTrait> {
-    private val kind: String
-    private val polymorphicData: List<ShapeId>
+    val kind: String
+    val polymorphicData: List<ShapeId>
 
     init {
         kind = builder.kind ?: throw SourceException("A kind must be provided", sourceLocation)
@@ -65,7 +65,7 @@ class DataKindTrait(builder: Builder) : AbstractTrait(ID, builder.sourceLocation
     }
 
     companion object {
-        val ID = ShapeId.from("jsonrpc#dataKind")
+        val ID = ShapeId.from("bsp.traits#dataKind")
 
         /**
          * @return Returns a new RefinedTrait builder.

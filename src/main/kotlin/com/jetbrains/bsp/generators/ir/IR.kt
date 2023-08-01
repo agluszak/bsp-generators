@@ -12,7 +12,6 @@ sealed interface Def {
             override val shapeId: ShapeId,
             val fields: List<Field>,
             override val hints: List<Hint>,
-            val associatedDataKinds: List<PolymorphicDataKind>
     ) : Def
 
     data class OpenEnum<A>(
@@ -28,13 +27,13 @@ sealed interface Def {
             val values: List<EnumValue<A>>,
             override val hints: List<Hint>
     ) : Def
-}
 
-data class Service(
-        val shapeId: ShapeId,
-        val operations: List<Operation>,
-        val hints: List<Hint>
-)
+    data class Service(
+            override val shapeId: ShapeId,
+            val operations: List<Operation>,
+            override val hints: List<Hint>
+    ) : Def
+}
 
 sealed interface JsonRpcMethodType {
     object Request : JsonRpcMethodType
@@ -82,6 +81,7 @@ data class Field(
         val required: Boolean,
         val hints: List<Hint>
 )
+
 data class PolymorphicDataKind(val kind: String, val shapeId: ShapeId)
 
 sealed interface Hint {

@@ -8,6 +8,6 @@ class UntaggedUnionTrait(node: ObjectNode) : AnnotationTrait(ID, node) {
     class Provider : AnnotationTrait.Provider<UntaggedUnionTrait>(ID, ::UntaggedUnionTrait)
 
     companion object {
-        val ID: ShapeId = ShapeId.from("jsonrpc#untaggedUnion")
+        val ID: ShapeId = ShapeId.from("bsp.traits#untaggedUnion")
     }
 }

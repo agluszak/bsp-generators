@@ -7,6 +7,6 @@ import software.amazon.smithy.model.traits.StringTrait
 class JsonRequestTrait(value: String, sourceLocation: SourceLocation) : StringTrait(ID, value, sourceLocation) {
     class Provider : StringTrait.Provider<JsonRequestTrait>(ID, ::JsonRequestTrait)
     companion object {
-        val ID: ShapeId = ShapeId.from("jsonrpc#jsonRequest")
+        val ID: ShapeId = ShapeId.from("bsp.traits#jsonRequest")
     }
 }

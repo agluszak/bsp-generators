@@ -9,6 +9,6 @@ class JsonRpcTrait(node: ObjectNode) : AnnotationTrait(ID, node) {
     class Provider : AnnotationTrait.Provider<JsonRpcTrait>(ID, ::JsonRpcTrait)
 
     companion object {
-        val ID: ShapeId = ShapeId.from("jsonrpc#jsonRPC")
+        val ID: ShapeId = ShapeId.from("bsp.traits#jsonRPC")
     }
 }

@@ -1,23 +1,28 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 rules_kotlin_version = "1.8"
+
 rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
+
 http_archive(
     name = "io_bazel_rules_kotlin",
-    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
     sha256 = rules_kotlin_sha,
+    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % rules_kotlin_version],
 )
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
     name = "rules_pkg",
+    sha256 = "8f9ee2dc10c1ae514ee599a8b42ed99fa262b757058f65ad3c384289ff70c4b8",
     urls = [
         "https://mirror.bazel.build/github.com/bazelbuild/rules_pkg/releases/download/0.9.1/rules_pkg-0.9.1.tar.gz",
         "https://github.com/bazelbuild/rules_pkg/releases/download/0.9.1/rules_pkg-0.9.1.tar.gz",
     ],
-    sha256 = "8f9ee2dc10c1ae514ee599a8b42ed99fa262b757058f65ad3c384289ff70c4b8",
 )
+
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
+
 rules_pkg_dependencies()
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -38,13 +43,14 @@ stardoc_repositories()
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 RULES_JVM_EXTERNAL_TAG = "5.3"
-RULES_JVM_EXTERNAL_SHA ="d31e369b854322ca5098ea12c69d7175ded971435e55c18dd9dd5f29cc5249ac"
+
+RULES_JVM_EXTERNAL_SHA = "d31e369b854322ca5098ea12c69d7175ded971435e55c18dd9dd5f29cc5249ac"
 
 http_archive(
     name = "rules_jvm_external",
-    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
     sha256 = RULES_JVM_EXTERNAL_SHA,
-    url = "https://github.com/bazelbuild/rules_jvm_external/releases/download/%s/rules_jvm_external-%s.tar.gz" % (RULES_JVM_EXTERNAL_TAG, RULES_JVM_EXTERNAL_TAG)
+    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+    url = "https://github.com/bazelbuild/rules_jvm_external/releases/download/%s/rules_jvm_external-%s.tar.gz" % (RULES_JVM_EXTERNAL_TAG, RULES_JVM_EXTERNAL_TAG),
 )
 
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
@@ -65,14 +71,16 @@ http_archive(
         "https://github.com/bazelbuild/rules_proto/archive/refs/tags/5.3.0-21.7.tar.gz",
     ],
 )
+
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
 rules_proto_dependencies()
+
 rules_proto_toolchains()
 
-
 load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
-kotlin_repositories() # if you want the default. Otherwise see custom kotlinc distribution below
 
+kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
 
 register_toolchains("//:kotlin_toolchain")
 
@@ -80,10 +88,10 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
 
 new_git_repository(
     name = "bsp",
-    remote = "git@github.com:build-server-protocol/build-server-protocol.git",
     build_file = "@//:BUILD.bsp.bazel",
-    commit = "5af516738f17dbb03bec931a22027c99ffd225ff"
-    )
+    commit = "5af516738f17dbb03bec931a22027c99ffd225ff",
+    remote = "git@github.com:build-server-protocol/build-server-protocol.git",
+)
 
 RULES_JVM_EXTERNAL_TAG = "5.3"
 

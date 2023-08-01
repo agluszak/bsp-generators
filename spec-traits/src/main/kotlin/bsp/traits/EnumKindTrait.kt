@@ -55,7 +55,7 @@ class EnumKindTrait private constructor(builder: Builder) : AbstractTrait(ID, bu
     }
 
     companion object {
-        val ID: ShapeId = ShapeId.from("jsonrpc#enumKind")
+        val ID: ShapeId = ShapeId.from("bsp.traits#enumKind")
 
         /**
          * @return Returns a new EnumKindTrait builder.

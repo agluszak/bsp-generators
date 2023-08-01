@@ -47,7 +47,7 @@ class DocsPriorityTrait private constructor(builder: Builder) : AbstractTrait(ID
     }
 
     companion object {
-        val ID: ShapeId = ShapeId.from("docs#docsPriority")
+        val ID: ShapeId = ShapeId.from("bsp.traits#docsPriority")
         fun builder(): Builder {
             return Builder()
         }

@@ -7,6 +7,6 @@ import software.amazon.smithy.model.traits.StringTrait
 class JsonNotificationTrait(value: String, sourceLocation: SourceLocation) : StringTrait(ID, value, sourceLocation) {
     class Provider : StringTrait.Provider<JsonNotificationTrait>(ID, ::JsonNotificationTrait)
     companion object {
-        val ID: ShapeId = ShapeId.from("jsonrpc#jsonNotification")
+        val ID: ShapeId = ShapeId.from("bsp.traits#jsonNotification")
     }
 }
