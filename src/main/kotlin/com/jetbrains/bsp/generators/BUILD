@@ -1,8 +1,8 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
 kt_jvm_library(
-    name = "ir",
-    srcs = glob(["ir/**/*.kt"]),
+    name = "codegen",
+    srcs = glob(["**/*.kt"]),
     resources = ["@//spec"],
     visibility = ["//visibility:public"],
     deps = [
