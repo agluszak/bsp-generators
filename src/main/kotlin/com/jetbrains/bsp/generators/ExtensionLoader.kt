@@ -1,30 +1,26 @@
 package com.jetbrains.bsp.generators
 
-//import java.nio.file.{Files, Paths}
-//import java.util.stream.Collectors
-//
-//object ExtensionLoader {
-//  def loadExtensions(): List[String] = {
-//    try {
-//      val extensionsPath = Paths.get("spec/src/main/resources/META-INF/smithy/bsp/extensions")
-//      val extensions = Files
-//        .list(extensionsPath)
-//        .collect(Collectors.toList[java.nio.file.Path])
-//        .asScala
-//        .map(_.getFileName.toString.split("\\.").head)
-//        .toList
-//      extensions
-//    } catch {
-//      case e: Throwable =>
-//        throw new RuntimeException(
-//          "Failed to load extensions, make sure that the working directory is set correctly",
-//          e
-//        )
-//    }
-//  }
-//
-//  def namespaces(): List[String] = {
-//    val extensions = loadExtensions()
-//    "bsp" :: extensions.map(ext => s"bsp.$ext")
-//  }
-//}
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.util.stream.Collectors
+
+object ExtensionLoader {
+  val extensions: List<String> = run {
+      try {
+          val extensionsPath = Paths.get("spec/src/main/resources/META-INF/smithy/bsp/extensions")
+          return@run Files
+              .list(extensionsPath)
+              .collect(Collectors.toList())
+              .map { it.fileName.toString().split("\\.").first() }
+      } catch (e: Throwable) {
+        throw RuntimeException(
+          "Failed to load extensions, make sure that the working directory is set correctly",
+          e
+        )
+    }
+  }
+
+  val namespaces: List<String> = run {
+    listOf("bsp") + extensions.map { "bsp.$it" }
+  }
+}

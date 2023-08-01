@@ -12,4 +12,5 @@ load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 alias(
     name = "codegen",
     actual = "@//src/main/kotlin/com/jetbrains/bsp/generators:codegen",
+    visibility = ["//visibility:public"],
 )
