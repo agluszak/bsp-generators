@@ -17,12 +17,14 @@ class DataKindTrait(builder: Builder) : AbstractTrait(ID, builder.sourceLocation
     init {
         kind = builder.kind ?: throw SourceException("A kind must be provided", sourceLocation)
         polymorphicData = builder.polymorphicData
-                ?: throw SourceException("Polymorphic data must be provided", sourceLocation)
+            ?: throw SourceException("Polymorphic data must be provided", sourceLocation)
     }
 
     override fun createNode(): Node {
         val builder = Node.objectNodeBuilder()
-        val polymorphicDataNodes = polymorphicData.stream().map { obj: ShapeId -> obj.toString() }.map { value: String? -> Node.from(value) }.collect(Collectors.toList())
+        val polymorphicDataNodes =
+            polymorphicData.stream().map { obj: ShapeId -> obj.toString() }.map { value: String? -> Node.from(value) }
+                .collect(Collectors.toList())
         val extendsNode = Node.fromNodes(polymorphicDataNodes)
         builder.withMember("extends", extendsNode)
         builder.withMember("kind", kind)
@@ -58,7 +60,8 @@ class DataKindTrait(builder: Builder) : AbstractTrait(ID, builder.sourceLocation
 
         override fun createTrait(target: ShapeId, value: Node): DataKindTrait {
             val objectNode = value.expectObjectNode()
-            val polymorphicData = objectNode.expectMember("extends").expectArrayNode().getElementsAs { node: Node? -> ShapeId.fromNode(node) }
+            val polymorphicData = objectNode.expectMember("extends").expectArrayNode()
+                .getElementsAs { node: Node? -> ShapeId.fromNode(node) }
             val kind = objectNode.expectMember("kind").expectStringNode().value
             return builder().kind(kind).polymorphicData(polymorphicData).build()
         }

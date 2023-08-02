@@ -8,9 +8,10 @@ import software.amazon.smithy.model.traits.AbstractTraitBuilder
 import software.amazon.smithy.model.traits.TraitService
 import software.amazon.smithy.utils.SmithyBuilder
 import software.amazon.smithy.utils.ToSmithyBuilder
-import java.util.*
+import java.util.Locale
 
-class EnumKindTrait private constructor(builder: Builder) : AbstractTrait(ID, builder.sourceLocation), ToSmithyBuilder<EnumKindTrait> {
+class EnumKindTrait private constructor(builder: Builder) : AbstractTrait(ID, builder.sourceLocation),
+    ToSmithyBuilder<EnumKindTrait> {
     enum class EnumKind(val value: String) {
         OPEN("open"),
         CLOSED("closed")

@@ -1,4 +1,4 @@
-import com.jetbrains.bsp.generators.dsl.*
+import com.jetbrains.bsp.generators.dsl.code
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

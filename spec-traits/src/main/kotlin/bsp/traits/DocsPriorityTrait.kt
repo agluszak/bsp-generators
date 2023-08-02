@@ -8,7 +8,8 @@ import software.amazon.smithy.model.traits.TraitService
 import software.amazon.smithy.utils.SmithyBuilder
 import software.amazon.smithy.utils.ToSmithyBuilder
 
-class DocsPriorityTrait private constructor(builder: Builder) : AbstractTrait(ID, builder.sourceLocation), ToSmithyBuilder<DocsPriorityTrait> {
+class DocsPriorityTrait private constructor(builder: Builder) : AbstractTrait(ID, builder.sourceLocation),
+    ToSmithyBuilder<DocsPriorityTrait> {
     private val priority: Int
 
     init {

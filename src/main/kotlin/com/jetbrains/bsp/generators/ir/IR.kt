@@ -9,29 +9,29 @@ sealed interface Def {
 
     data class Alias(override val shapeId: ShapeId, val aliasedType: Type, override val hints: List<Hint>) : Def
     data class Structure(
-            override val shapeId: ShapeId,
-            val fields: List<Field>,
-            override val hints: List<Hint>,
+        override val shapeId: ShapeId,
+        val fields: List<Field>,
+        override val hints: List<Hint>,
     ) : Def
 
     data class OpenEnum<A>(
-            override val shapeId: ShapeId,
-            val enumType: EnumType<A>,
-            val values: List<EnumValue<A>>,
-            override val hints: List<Hint>
+        override val shapeId: ShapeId,
+        val enumType: EnumType<A>,
+        val values: List<EnumValue<A>>,
+        override val hints: List<Hint>
     ) : Def
 
     data class ClosedEnum<A>(
-            override val shapeId: ShapeId,
-            val enumType: EnumType<A>,
-            val values: List<EnumValue<A>>,
-            override val hints: List<Hint>
+        override val shapeId: ShapeId,
+        val enumType: EnumType<A>,
+        val values: List<EnumValue<A>>,
+        override val hints: List<Hint>
     ) : Def
 
     data class Service(
-            override val shapeId: ShapeId,
-            val operations: List<Operation>,
-            override val hints: List<Hint>
+        override val shapeId: ShapeId,
+        val operations: List<Operation>,
+        override val hints: List<Hint>
     ) : Def
 }
 
@@ -41,12 +41,12 @@ sealed interface JsonRpcMethodType {
 }
 
 data class Operation(
-        val shapeId: ShapeId,
-        val inputType: Type,
-        val outputType: Type,
-        val jsonRpcMethodType: JsonRpcMethodType,
-        val jsonRpcMethod: String,
-        val hints: List<Hint>
+    val shapeId: ShapeId,
+    val inputType: Type,
+    val outputType: Type,
+    val jsonRpcMethodType: JsonRpcMethodType,
+    val jsonRpcMethod: String,
+    val hints: List<Hint>
 ) {
     val name: String
         get() = shapeId.name
@@ -76,10 +76,10 @@ sealed interface Type {
 
 
 data class Field(
-        val name: String,
-        val type: Type,
-        val required: Boolean,
-        val hints: List<Hint>
+    val name: String,
+    val type: Type,
+    val required: Boolean,
+    val hints: List<Hint>
 )
 
 data class PolymorphicDataKind(val kind: String, val shapeId: ShapeId)

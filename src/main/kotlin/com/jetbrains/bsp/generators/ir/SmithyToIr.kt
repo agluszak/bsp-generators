@@ -1,13 +1,32 @@
 package com.jetbrains.bsp.generators.ir
 
-import bsp.traits.*
+import bsp.traits.DataKindTrait
+import bsp.traits.DataTrait
+import bsp.traits.EnumKindTrait
+import bsp.traits.JsonNotificationTrait
+import bsp.traits.JsonRequestTrait
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.*
+import software.amazon.smithy.model.shapes.BooleanShape
+import software.amazon.smithy.model.shapes.DocumentShape
+import software.amazon.smithy.model.shapes.EnumShape
+import software.amazon.smithy.model.shapes.IntEnumShape
+import software.amazon.smithy.model.shapes.IntegerShape
+import software.amazon.smithy.model.shapes.ListShape
+import software.amazon.smithy.model.shapes.LongShape
+import software.amazon.smithy.model.shapes.MapShape
+import software.amazon.smithy.model.shapes.MemberShape
+import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.model.shapes.Shape
+import software.amazon.smithy.model.shapes.ShapeId
+import software.amazon.smithy.model.shapes.ShapeVisitor
+import software.amazon.smithy.model.shapes.StringShape
+import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
 import software.amazon.smithy.model.traits.MixinTrait
 import software.amazon.smithy.model.traits.RequiredTrait
-import java.util.*
+import java.util.Locale
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
@@ -17,33 +36,33 @@ class SmithyToIr(val model: Model) {
         val allExtendableTypeIds = allExtendableTypes.map { it.id }.toSet()
 
         val dataKindInhabitants = model
-                .getShapesWithTrait(DataKindTrait::class.java)
-                .toList()
-                .map { shape ->
-                    val dataKindTrait = shape.expectTrait(DataKindTrait::class.java)
-                    shape to dataKindTrait
-                }
+            .getShapesWithTrait(DataKindTrait::class.java)
+            .toList()
+            .map { shape ->
+                val dataKindTrait = shape.expectTrait(DataKindTrait::class.java)
+                shape to dataKindTrait
+            }
 
         // Validate that all data kinds extend a known extendable type.
         dataKindInhabitants.forEach { (shape, dataKindTrait) ->
             val correct = dataKindTrait.polymorphicData.all { allExtendableTypeIds.contains(it) }
             if (!correct) {
                 throw RuntimeException(
-                        "DataKindTrait on ${shape.id.name} must extend a known extendable type."
+                    "DataKindTrait on ${shape.id.name} must extend a known extendable type."
                 )
             }
         }
 
         val groupedInhabitants = dataKindInhabitants
-                .flatMap { (shape, dataKindTrait) ->
-                    dataKindTrait.polymorphicData.map { Triple(shape, dataKindTrait.kind, it) }
+            .flatMap { (shape, dataKindTrait) ->
+                dataKindTrait.polymorphicData.map { Triple(shape, dataKindTrait.kind, it) }
+            }
+            .groupBy { (_, _, referencedShapeId) -> referencedShapeId }
+            .map { (dataType, shapeAndTraits) ->
+                dataType to shapeAndTraits.map { (shape, dataKind, _) ->
+                    PolymorphicDataKind(dataKind, shape.id)
                 }
-                .groupBy { (_, _, referencedShapeId) -> referencedShapeId }
-                .map { (dataType, shapeAndTraits) ->
-                    dataType to shapeAndTraits.map { (shape, dataKind, _) ->
-                        PolymorphicDataKind(dataKind, shape.id)
-                    }
-                }.toMap()
+            }.toMap()
 
         allExtendableTypeIds.associateWith { id ->
             val inhabitants = groupedInhabitants.getOrDefault(id, emptyList()).sortedBy { it.kind }
@@ -51,7 +70,9 @@ class SmithyToIr(val model: Model) {
         }
     }
 
-    fun definitions(namespace: String): List<Def> = model.shapes().filter { it.id.namespace == namespace && !it.hasTrait("smithy.api#trait") }.flatMap { it.accept(toDefVisitor).stream() }.collect(Collectors.toList())
+    fun definitions(namespace: String): List<Def> =
+        model.shapes().filter { it.id.namespace == namespace && !it.hasTrait("smithy.api#trait") }
+            .flatMap { it.accept(toDefVisitor).stream() }.collect(Collectors.toList())
 
     val toDefVisitor = object : ShapeVisitor.Default<List<Def>>() {
         override fun getDefault(shape: Shape): List<Def> = emptyList()
@@ -83,8 +104,8 @@ class SmithyToIr(val model: Model) {
 
         override fun serviceShape(shape: ServiceShape): List<Def> {
             val operations = shape.operations.toList()
-                    .map { model.expectShape(it, OperationShape::class.java) }
-                    .mapNotNull { buildOperation(it) }
+                .map { model.expectShape(it, OperationShape::class.java) }
+                .mapNotNull { buildOperation(it) }
 
             return listOf(Def.Service(shape.id, operations, getHints(shape)))
         }
@@ -101,7 +122,7 @@ class SmithyToIr(val model: Model) {
         fun getType(shapeId: ShapeId?): Type? = shapeId?.let { model.expectShape(it).accept(toTypeVisitor) }
 
         fun dataKindShapeId(dataTypeShapeId: ShapeId): ShapeId =
-                ShapeId.fromParts(dataTypeShapeId.namespace, dataTypeShapeId.name + "Kind")
+            ShapeId.fromParts(dataTypeShapeId.namespace, dataTypeShapeId.name + "Kind")
 
         override fun structureShape(shape: StructureShape): List<Def> {
             // Skip shapes that are used as mixins.
@@ -112,11 +133,11 @@ class SmithyToIr(val model: Model) {
             val fields = shape.members().mapNotNull { toField(it) }
 
             fun fieldIsData(field: Field): Boolean =
-                    field.name == "data" && field.type == Type.Json
+                field.name == "data" && field.type == Type.Json
 
             fun makeDiscriminatorField(dataField: Field): Field {
                 val doc =
-                        "Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified."
+                    "Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified."
                 val hints = listOf(Hint.Documentation(doc))
                 if (dataField.type != Type.Json) {
                     throw RuntimeException("Expected document type")
@@ -273,12 +294,12 @@ class SmithyToIr(val model: Model) {
 
     fun getHints(shape: Shape): List<Hint> {
         val documentation = shape
-                .getTrait(DocumentationTrait::class.java)
-                .map { Hint.Documentation(it.value) }
+            .getTrait(DocumentationTrait::class.java)
+            .map { Hint.Documentation(it.value) }
 
         val deprecated = shape
-                .getTrait(DeprecatedTrait::class.java)
-                .map { Hint.Deprecated(it.message.orElse("")) }
+            .getTrait(DeprecatedTrait::class.java)
+            .map { Hint.Deprecated(it.message.orElse("")) }
 
         return listOf(documentation, deprecated).mapNotNull { it.getOrNull() }
     }
