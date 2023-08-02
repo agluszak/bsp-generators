@@ -3,22 +3,14 @@ package com.jetbrains.bsp.generators.dsl
 @DslMarker
 annotation class CodeMarker
 
-interface Element {
-    fun render(builder: StringBuilder, indent: String)
-}
-
-class TextElement(val text: String) : Element {
-    override fun render(builder: StringBuilder, indent: String) {
-        builder.append("$indent$text\n")
-    }
-}
-
 @CodeMarker
-sealed class CodeBlock : Element {
-    protected val children = arrayListOf<Element>()
+sealed class CodeBlock {
+    protected val children = arrayListOf<CodeBlock>()
 
-    operator fun String.unaryMinus() {
-        children.add(TextElement(this))
+    operator fun String?.unaryMinus() {
+        if (this != null) {
+            children.add(Line(this))
+        }
     }
 
     fun newline() {
@@ -26,17 +18,17 @@ sealed class CodeBlock : Element {
     }
 
     fun line(line: String) {
-        children.add(TextElement(line))
+        children.add(Line(line))
     }
 
     fun lines(lines: List<String>, join: String = "", end: String = "") {
         val linesWithoutLast = lines.dropLast(1)
         val last = lines.lastOrNull()
         for (line in linesWithoutLast) {
-            children.add(TextElement(line + join))
+            children.add(Line(line + join))
         }
         if (last != null) {
-            children.add(TextElement(last + end))
+            children.add(Line(last + end))
         }
     }
 
@@ -52,7 +44,11 @@ sealed class CodeBlock : Element {
         children.add(block)
     }
 
-    override fun render(builder: StringBuilder, indent: String) {
+    fun code(other: CodeBlock) {
+        children.add(other)
+    }
+
+    open fun render(builder: StringBuilder, indent: String) {
         for (c in children) {
             c.render(builder, "$indent  ")
         }
@@ -65,7 +61,13 @@ sealed class CodeBlock : Element {
     }
 }
 
-class Newline : Element {
+class Line(val text: String) : CodeBlock() {
+    override fun render(builder: StringBuilder, indent: String) {
+        builder.append("$indent$text\n")
+    }
+}
+
+class Newline : CodeBlock() {
     override fun render(builder: StringBuilder, indent: String) {
         builder.append("\n")
     }
@@ -85,7 +87,7 @@ class Paren(thisText: String) : Wrapper(thisText, "(", ")")
 class Code : CodeBlock() {
     override fun render(builder: StringBuilder, indent: String) {
         for (c in children) {
-            c.render(builder, "$indent")
+            c.render(builder, indent)
         }
     }
 }

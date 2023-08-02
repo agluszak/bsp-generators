@@ -66,4 +66,48 @@ class DslTest {
 
         assertEquals(expected, input.toString())
     }
+
+    @Test
+    fun optionalString() {
+        val input = code {
+            -"val x = 5"
+            -null
+            -"val y = 6"
+        }
+
+        val expected = """
+            val x = 5
+            val y = 6
+            
+        """.trimIndent()
+
+        assertEquals(expected, input.toString())
+    }
+
+    fun nestedCode() {
+        val nested = code {
+            -"val a = 1"
+            -"val b = 2"
+        }
+
+        val input = code {
+            code(nested)
+            -"val x = 5"
+            code {
+                -"val y = 6"
+                -"val z = 7"
+            }
+        }
+
+        val expected = """
+            val a = 1
+            val b = 2
+            val x = 5
+            val y = 6
+            val z = 7
+            
+        """.trimIndent()
+
+        assertEquals(expected, input.toString())
+    }
 }
