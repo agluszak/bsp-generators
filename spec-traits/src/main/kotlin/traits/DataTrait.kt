@@ -1,4 +1,4 @@
-package bsp.traits
+package traits
 
 import software.amazon.smithy.model.node.ObjectNode
 import software.amazon.smithy.model.shapes.ShapeId
@@ -9,6 +9,6 @@ class DataTrait(node: ObjectNode) : AnnotationTrait(ID, node) {
     class Provider : AnnotationTrait.Provider<DataTrait>(ID, ::DataTrait)
 
     companion object {
-        val ID: ShapeId = ShapeId.from("bsp.traits#data")
+        val ID: ShapeId = ShapeId.from("traits#data")
     }
 }

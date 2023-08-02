@@ -3,8 +3,8 @@ package com.jetbrains.bsp.generators.ir
 import software.amazon.smithy.model.shapes.ShapeId
 
 sealed interface Def {
+    val name get() = shapeId.name
     val shapeId: ShapeId
-
     val hints: List<Hint>
 
     data class Alias(override val shapeId: ShapeId, val aliasedType: Type, override val hints: List<Hint>) : Def

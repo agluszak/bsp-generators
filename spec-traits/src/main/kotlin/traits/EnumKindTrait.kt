@@ -1,4 +1,4 @@
-package bsp.traits
+package traits
 
 import software.amazon.smithy.model.SourceException
 import software.amazon.smithy.model.node.Node
@@ -56,7 +56,7 @@ class EnumKindTrait private constructor(builder: Builder) : AbstractTrait(ID, bu
     }
 
     companion object {
-        val ID: ShapeId = ShapeId.from("bsp.traits#enumKind")
+        val ID: ShapeId = ShapeId.from("traits#enumKind")
 
         /**
          * @return Returns a new EnumKindTrait builder.

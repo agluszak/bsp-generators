@@ -7,10 +7,19 @@ define_kt_toolchain(
     language_version = "1.8",
 )
 
-load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
+load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_binary")
 
 alias(
     name = "codegen",
     actual = "@//src/main/kotlin/com/jetbrains/bsp/generators:codegen",
     visibility = ["//visibility:public"],
+)
+
+kt_jvm_binary(
+    name = "bsp4kt-generator",
+    main_class = "com.jetbrains.bsp.generators.bsp4kt.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":codegen",
+    ],
 )

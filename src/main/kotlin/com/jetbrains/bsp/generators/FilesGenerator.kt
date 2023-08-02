@@ -12,7 +12,7 @@ class FilesGenerator(val output: Path, val codegenFiles: List<CodegenFile>) {
             val fullPath = output.resolve(it.path)
             fullPath.parent.toFile().mkdirs()
             fullPath.toFile().writeText(it.contents)
-            println(it.path)
+            System.err.println("Generated file ${fullPath.toAbsolutePath()}")
         }
     }
 }
