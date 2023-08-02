@@ -14,3 +14,12 @@ alias(
     actual = "@//src/main/kotlin/com/jetbrains/bsp/generators:codegen",
     visibility = ["//visibility:public"],
 )
+
+kt_jvm_binary(
+    name = "bsp4rs-generator",
+    main_class = "com.jetbrains.bsp.generators.bsp4rs.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":codegen",
+    ],
+)
