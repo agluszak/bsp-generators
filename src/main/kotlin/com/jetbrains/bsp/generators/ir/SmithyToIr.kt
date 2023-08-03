@@ -1,11 +1,5 @@
 package com.jetbrains.bsp.generators.ir
 
-import bsp.traits.DataKindTrait
-import bsp.traits.DataTrait
-import bsp.traits.EnumKindTrait
-import bsp.traits.JsonNotificationTrait
-import bsp.traits.JsonRequestTrait
-import bsp.traits.SetTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.BooleanShape
 import software.amazon.smithy.model.shapes.DocumentShape
@@ -27,6 +21,12 @@ import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
 import software.amazon.smithy.model.traits.MixinTrait
 import software.amazon.smithy.model.traits.RequiredTrait
+import traits.DataKindTrait
+import traits.DataTrait
+import traits.EnumKindTrait
+import traits.JsonNotificationTrait
+import traits.JsonRequestTrait
+import traits.SetTrait
 import java.util.Locale
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
