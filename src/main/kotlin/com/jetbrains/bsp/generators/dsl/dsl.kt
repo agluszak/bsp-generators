@@ -59,6 +59,15 @@ sealed class CodeBlock {
         render(builder, "")
         return builder.toString()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CodeBlock
+
+        return children == other.children
+    }
 }
 
 class Line(val text: String) : CodeBlock() {
