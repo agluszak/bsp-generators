@@ -74,6 +74,14 @@ class Line(val text: String) : CodeBlock() {
     override fun render(builder: StringBuilder, indent: String) {
         builder.append("$indent$text\n")
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Line) return false
+        if (text != other.text) return false
+
+        return true
+    }
 }
 
 class Newline : CodeBlock() {

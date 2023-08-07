@@ -5,13 +5,49 @@ import com.jetbrains.bsp.generators.dsl.CodeBlock
 import com.jetbrains.bsp.generators.dsl.code
 import com.jetbrains.bsp.generators.ir.Def
 import com.jetbrains.bsp.generators.ir.Field
+import com.jetbrains.bsp.generators.ir.Hint
 import com.jetbrains.bsp.generators.ir.Type
 import kotlin.io.path.Path
 
-class RustRenderer(val basepkg: String, val definitions: List<Def>, val version: String) {
-    val baseRelPath = Path(basepkg.replace(".", "/"))
+class RustRenderer(basepkg: String, private val definitions: List<Def>, val version: String) {
+    private val baseRelPath = Path(basepkg.replace(".", "/"))
 
-    fun render(): List<CodegenFile> = TODO()
+    fun render(): List<CodegenFile> {
+        return definitions.mapNotNull { renderDef(it) }
+    }
+
+    private fun renderDef(def: Def): CodegenFile? {
+        return when (def) {
+            is Def.Structure -> generateStructureFile(def)
+            else -> null
+        }
+    }
+
+    private fun generateStructureFile(def: Def.Structure): CodegenFile {
+        val name = def.name
+        val file = baseRelPath.resolve("${name}.rs")
+        val code = code {
+            code(renderImports())
+            code(renderStructure(def))
+        }
+        return CodegenFile(file, code.toString())
+    }
+
+    fun renderDocumentation(hints: List<Hint>): CodeBlock {
+        val doc = hints.filterIsInstance<Hint.Documentation>()
+
+        return code {
+            for (el in doc) {
+                val docLines = el.string.split("\n").toMutableList()
+                docLines[0] = docLines.first().let { "/** $it" }
+                docLines[docLines.lastIndex] = docLines.last().let { "$it */" }
+
+                for (line in docLines) {
+                    -line
+                }
+            }
+        }
+    }
 
     fun renderFieldSerialization(field: Field): String? {
         if (field.required) return null
@@ -24,40 +60,67 @@ class RustRenderer(val basepkg: String, val definitions: List<Def>, val version:
         }
     }
 
-    fun renderFieldRaw(field: Field): String {
-        var result = "pub ${field.name}: "
-        result += if (field.required) renderType(field.type) else renderOptionalType(field.type)
-        result += ","
-
-        return result
+    private fun renderTypeName(type: Type): String = when (type) {
+        Type.Bool -> "bool"
+        Type.Int -> "i32"
+        Type.Json -> "serde_json::Value"
+        is Type.List -> "Vec<${renderTypeName(type.member)}>"
+        Type.Long -> "i64"
+        is Type.Map -> "HashMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
+        is Type.Ref -> type.shapeId.name
+        is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
+        Type.String -> "String"
+        Type.Unit -> "()"
     }
 
-    fun renderRustField(field: Field): CodeBlock {
-        val serde = renderFieldSerialization(field)
+    fun renderType(type: Type, isRequired: Boolean): String {
+        if (isRequired) return renderTypeName(type)
 
+        return when (type) {
+            is Type.List, is Type.Map, is Type.Set -> renderTypeName(type)
+            else -> "Option<${renderTypeName(type)}>"
+        }
+    }
+
+    fun renderFieldRaw(field: Field): String {
+        return "pub ${field.name.camelToSnakeCase()}: ${renderType(field.type, field.required)},"
+    }
+
+    private fun renderRustField(field: Field): CodeBlock {
         return code {
-            -serde
+            code(renderDocumentation(field.hints))
+            -renderFieldSerialization(field)
             -renderFieldRaw(field)
         }
     }
 
-    fun renderOptionalType(type: Type): String {
-        return when (type) {
-            is Type.List, is Type.Map, is Type.Set -> renderType(type)
-            else -> "Option<${renderType(type)}>"
+    private fun renderImports(): CodeBlock {
+        return code {
+            -"use cargo_metadata::Edition;"
+            -"use serde::{Deserialize, Serialize};"
+            -"use serde::de::DeserializeOwned;"
+            -"use serde_repr::{Deserialize_repr, Serialize_repr};"
+            -"use std::collections::{BTreeSet, HashMap};"
+            newline()
         }
     }
 
-    fun renderType(type: Type): String = when (type) {
-        Type.Bool -> "bool"
-        Type.Int -> "i32"
-        Type.Json -> "serde_json::Value"
-        is Type.List -> "Vec<${renderType(type.member)}>"
-        Type.Long -> "i64"
-        is Type.Map -> "HashMap<${renderType(type.key)}, ${renderType(type.value)}>"
-        is Type.Ref -> type.shapeId.name
-        is Type.Set -> "BTreeSet<${renderType(type.member)}>"
-        Type.String -> "String"
-        Type.Unit -> "()"
+    private fun renderStructure(def: Def.Structure): CodeBlock {
+        return code {
+            code(renderDocumentation(def.hints))
+            -"#[derive(Debug, PartialEq, Serialize, Deserialize, Default, Clone)]"
+            -"""#[serde(rename_all = "camelCase")]"""
+            block("pub struct ${def.name}") {
+                def.fields.forEach { field ->
+                    code(renderRustField(field))
+                }
+            }
+            newline()
+        }
     }
+}
+
+fun String.camelToSnakeCase(): String {
+    val pattern = "(?<=.)[A-Z]".toRegex()
+    return this.replace(pattern, "_$0").lowercase()
 }
