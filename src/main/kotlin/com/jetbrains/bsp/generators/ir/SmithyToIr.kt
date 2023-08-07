@@ -1,10 +1,5 @@
 package com.jetbrains.bsp.generators.ir
 
-import bsp.traits.DataKindTrait
-import bsp.traits.DataTrait
-import bsp.traits.EnumKindTrait
-import bsp.traits.JsonNotificationTrait
-import bsp.traits.JsonRequestTrait
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.BooleanShape
 import software.amazon.smithy.model.shapes.DocumentShape
@@ -26,6 +21,12 @@ import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
 import software.amazon.smithy.model.traits.MixinTrait
 import software.amazon.smithy.model.traits.RequiredTrait
+import traits.DataKindTrait
+import traits.DataTrait
+import traits.EnumKindTrait
+import traits.JsonNotificationTrait
+import traits.JsonRequestTrait
+import traits.SetTrait
 import java.util.Locale
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
@@ -74,7 +75,7 @@ class SmithyToIr(val model: Model) {
         model.shapes().filter { it.id.namespace == namespace && !it.hasTrait("smithy.api#trait") }
             .flatMap { it.accept(toDefVisitor).stream() }.collect(Collectors.toList())
 
-    val toDefVisitor = object : ShapeVisitor.Default<List<Def>>() {
+    private val toDefVisitor = object : ShapeVisitor.Default<List<Def>>() {
         override fun getDefault(shape: Shape): List<Def> = emptyList()
 
         fun buildOperation(op: OperationShape): Operation? {
@@ -116,7 +117,6 @@ class SmithyToIr(val model: Model) {
             return getType(member.target)?.let {
                 Field(name, it, required, getHints(member))
             }
-
         }
 
         fun getType(shapeId: ShapeId?): Type? = shapeId?.let { model.expectShape(it).accept(toTypeVisitor) }
@@ -150,7 +150,7 @@ class SmithyToIr(val model: Model) {
 
                 val dataIndex = fields.indexOfFirst { fieldIsData(it) }
                 if (dataIndex != -1) {
-                    val newField = makeDiscriminatorField(fields[0])
+                    val newField = makeDiscriminatorField(fields[dataIndex])
                     mutableFields.add(dataIndex, newField)
                 }
 
@@ -225,8 +225,10 @@ class SmithyToIr(val model: Model) {
                 is IntegerShape -> listOf(Def.Alias(shape.getId(), Type.Int, hints))
                 is LongShape -> listOf(Def.Alias(shape.getId(), Type.Long, hints))
                 is StringShape -> listOf(Def.Alias(shape.getId(), Type.String, hints))
-                is ListShape -> listOf(Def.Alias(shape.getId(), toTypeVisitor.listShape(shape)!!, hints))
-                is MapShape -> listOf(Def.Alias(shape.getId(), toTypeVisitor.mapShape(shape)!!, hints))
+                is ListShape -> listOfNotNull(
+                    toTypeVisitor.listShape(shape)?.let { Def.Alias(shape.getId(), it, hints) })
+
+                is MapShape -> listOfNotNull(toTypeVisitor.mapShape(shape)?.let { Def.Alias(shape.getId(), it, hints) })
                 else -> emptyList()
             }
         }
@@ -259,8 +261,10 @@ class SmithyToIr(val model: Model) {
         override fun documentShape(shape: DocumentShape): Type = Type.Json
 
         override fun listShape(shape: ListShape): Type? {
-            // TODO If it has the set trait the type should be set
-            return shape.member.accept(this)?.let { Type.List(it) }
+            return shape.member.accept(this)?.let { memberType ->
+                if (shape.hasTrait(SetTrait::class.java)) Type.Set(memberType)
+                else Type.List(memberType)
+            }
         }
 
         override fun mapShape(shape: MapShape): Type? {
@@ -289,7 +293,7 @@ class SmithyToIr(val model: Model) {
             return enumUniversal(shape, Type.Int)
         }
 
-        override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.id).accept(this)
+        override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
     }
 
     fun getHints(shape: Shape): List<Hint> {

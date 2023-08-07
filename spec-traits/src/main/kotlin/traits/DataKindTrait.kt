@@ -1,4 +1,4 @@
-package bsp.traits
+package traits
 
 import software.amazon.smithy.model.SourceException
 import software.amazon.smithy.model.node.Node
@@ -68,7 +68,7 @@ class DataKindTrait(builder: Builder) : AbstractTrait(ID, builder.sourceLocation
     }
 
     companion object {
-        val ID = ShapeId.from("bsp.traits#dataKind")
+        val ID = ShapeId.from("traits#dataKind")
 
         /**
          * @return Returns a new RefinedTrait builder.

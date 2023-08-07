@@ -3,8 +3,8 @@ $version: "2"
 namespace bsp.cargo
 
 use bsp#BuildTargetIdentifiers
-use jsonrpc#jsonRPC
-use jsonrpc#jsonRequest
+use traits#jsonRPC
+use traits#jsonRequest
 
 @jsonRPC
 service CargoBuildServer {

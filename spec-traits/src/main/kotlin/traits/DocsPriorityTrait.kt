@@ -1,4 +1,4 @@
-package bsp.traits
+package traits
 
 import software.amazon.smithy.model.node.Node
 import software.amazon.smithy.model.shapes.ShapeId
@@ -48,7 +48,7 @@ class DocsPriorityTrait private constructor(builder: Builder) : AbstractTrait(ID
     }
 
     companion object {
-        val ID: ShapeId = ShapeId.from("bsp.traits#docsPriority")
+        val ID: ShapeId = ShapeId.from("traits#docsPriority")
         fun builder(): Builder {
             return Builder()
         }
