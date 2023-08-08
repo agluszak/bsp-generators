@@ -10,5 +10,5 @@ data class CppOptionsItem(
   val copts: List<String>,
   val defines: List<String>,
   val linkopts: List<String>,
-  val linkshared: Boolean?
+  val linkshared: Boolean? = null
 )

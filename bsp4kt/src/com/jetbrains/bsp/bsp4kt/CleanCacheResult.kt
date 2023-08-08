@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CleanCacheResult(
-  val message: String?,
+  val message: String? = null,
   val cleaned: Boolean
 )

@@ -11,5 +11,5 @@ data class JvmEnvironmentItem(
   val jvmOptions: List<String>,
   val workingDirectory: String,
   val environmentVariables: Map<String, String>,
-  val mainClasses: List<JvmMainClass>?
+  val mainClasses: List<JvmMainClass>? = null
 )

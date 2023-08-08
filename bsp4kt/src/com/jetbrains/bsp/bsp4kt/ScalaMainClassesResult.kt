@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class ScalaMainClassesResult(
   val items: List<ScalaMainClassesItem>,
-  val originId: String?
+  val originId: String? = null
 )

@@ -7,9 +7,9 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class TaskFinishParams(
   val taskId: TaskId,
-  val eventTime: Long?,
-  val message: String?,
+  val eventTime: Long? = null,
+  val message: String? = null,
   val status: StatusCode,
-  val dataKind: String?,
-  val data: JsonElement?
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

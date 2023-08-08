@@ -7,12 +7,12 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class BuildTarget(
   val id: BuildTargetIdentifier,
-  val displayName: String?,
-  val baseDirectory: String?,
+  val displayName: String? = null,
+  val baseDirectory: String? = null,
   val tags: List<String>,
   val languageIds: List<String>,
   val dependencies: List<BuildTargetIdentifier>,
   val capabilities: BuildTargetCapabilities,
-  val dataKind: String?,
-  val data: JsonElement?
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

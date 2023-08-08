@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class JvmBuildTarget(
-  val javaHome: String?,
-  val javaVersion: String?
+  val javaHome: String? = null,
+  val javaVersion: String? = null
 )

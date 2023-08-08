@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class PythonBuildTarget(
-  val version: String?,
-  val interpreter: String?
+  val version: String? = null,
+  val interpreter: String? = null
 )

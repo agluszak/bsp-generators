@@ -11,5 +11,5 @@ data class ScalaBuildTarget(
   val scalaBinaryVersion: String,
   val platform: ScalaPlatform,
   val jars: List<String>,
-  val jvmBuildTarget: JvmBuildTarget?
+  val jvmBuildTarget: JvmBuildTarget? = null
 )

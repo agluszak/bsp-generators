@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class ShowMessageParams(
   val type: MessageType,
-  val task: TaskId?,
-  val originId: String?,
+  val task: TaskId? = null,
+  val originId: String? = null,
   val message: String
 )

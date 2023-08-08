@@ -10,5 +10,5 @@ data class MavenDependencyModule(
   val name: String,
   val version: String,
   val artifacts: List<MavenDependencyModuleArtifact>,
-  val scope: String?
+  val scope: String? = null
 )

@@ -7,8 +7,8 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class TaskStartParams(
   val taskId: TaskId,
-  val eventTime: Long?,
-  val message: String?,
-  val dataKind: String?,
-  val data: JsonElement?
+  val eventTime: Long? = null,
+  val message: String? = null,
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

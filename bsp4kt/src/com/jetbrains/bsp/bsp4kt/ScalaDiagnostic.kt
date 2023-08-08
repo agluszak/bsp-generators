@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaDiagnostic(
-  val actions: List<ScalaAction>?
+  val actions: List<ScalaAction>? = null
 )

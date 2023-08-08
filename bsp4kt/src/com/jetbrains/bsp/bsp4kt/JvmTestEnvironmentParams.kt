@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class JvmTestEnvironmentParams(
   val targets: List<BuildTargetIdentifier>,
-  val originId: String?
+  val originId: String? = null
 )

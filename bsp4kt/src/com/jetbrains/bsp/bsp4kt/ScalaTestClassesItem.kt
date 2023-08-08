@@ -7,6 +7,6 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class ScalaTestClassesItem(
   val target: BuildTargetIdentifier,
-  val framework: String?,
+  val framework: String? = null,
   val classes: List<String>
 )

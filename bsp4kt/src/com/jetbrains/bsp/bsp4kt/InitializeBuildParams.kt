@@ -11,6 +11,6 @@ data class InitializeBuildParams(
   val bspVersion: String,
   val rootUri: String,
   val capabilities: BuildClientCapabilities,
-  val dataKind: String?,
-  val data: JsonElement?
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

@@ -9,6 +9,6 @@ data class SbtBuildTarget(
   val sbtVersion: String,
   val autoImports: List<String>,
   val scalaBuildTarget: ScalaBuildTarget,
-  val parent: BuildTargetIdentifier?,
+  val parent: BuildTargetIdentifier? = null,
   val children: List<BuildTargetIdentifier>
 )

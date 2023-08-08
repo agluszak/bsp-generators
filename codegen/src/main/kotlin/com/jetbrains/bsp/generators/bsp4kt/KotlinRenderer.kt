@@ -113,7 +113,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     }
 
     fun renderFieldRaw(field: Field): String {
-        return "val ${field.name}: ${renderType(field.type)}${if (field.required) "" else "?"}"
+        return "val ${field.name}: ${renderType(field.type)}${if (field.required) "" else "? = null"}"
     }
 
     fun renderKotlinField(field: Field): CodeBlock {

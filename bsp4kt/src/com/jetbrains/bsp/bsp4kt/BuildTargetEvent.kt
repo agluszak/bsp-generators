@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class BuildTargetEvent(
   val target: BuildTargetIdentifier,
-  val kind: BuildTargetEventKind?,
-  val dataKind: String?,
-  val data: JsonElement?
+  val kind: BuildTargetEventKind? = null,
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

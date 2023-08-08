@@ -7,6 +7,6 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class ScalaAction(
   val title: String,
-  val description: String?,
-  val edit: ScalaWorkspaceEdit?
+  val description: String? = null,
+  val edit: ScalaWorkspaceEdit? = null
 )

@@ -7,8 +7,8 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class TestParams(
   val targets: List<BuildTargetIdentifier>,
-  val originId: String?,
-  val arguments: List<String>?,
-  val dataKind: String?,
-  val data: JsonElement?
+  val originId: String? = null,
+  val arguments: List<String>? = null,
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

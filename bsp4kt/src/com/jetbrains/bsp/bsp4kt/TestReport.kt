@@ -6,12 +6,12 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TestReport(
-  val originId: String?,
+  val originId: String? = null,
   val target: BuildTargetIdentifier,
   val passed: Int,
   val failed: Int,
   val ignored: Int,
   val cancelled: Int,
   val skipped: Int,
-  val time: Long?
+  val time: Long? = null
 )
