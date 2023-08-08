@@ -4,4 +4,7 @@ before_install:
   - sdk install gradle
 install:
   - cd bsp4kt
-  - gradle clean publish
+  - gradle clean publish publishToMavenLocal
+  - cd ..
+  # copy everything to the root directory
+  - cp -r bsp4kt/* .
