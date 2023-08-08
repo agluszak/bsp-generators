@@ -117,10 +117,16 @@ maven_install(
         "org.junit.jupiter:junit-jupiter-engine:5.10.0",
         "org.junit.jupiter:junit-jupiter-params:5.10.0",
         "org.junit.platform:junit-platform-console:1.10.0",
+
+        # serialization
+        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1",
+        "com.github.agluszak:jsonrpc4kt:main-SNAPSHOT"
+
     ],
     fetch_sources = True,
     repositories = [
         "https://maven.google.com",
         "https://repo.maven.apache.org/maven2",
+        "https://jitpack.io",
     ],
 )
