@@ -24,6 +24,7 @@ sourceSets {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("com.github.agluszak:jsonrpc4kt:main-SNAPSHOT")
     implementation(kotlin("stdlib"))
 }
 
