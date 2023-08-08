@@ -4,6 +4,7 @@ import com.jetbrains.bsp.generators.CodegenFile
 import com.jetbrains.bsp.generators.dsl.CodeBlock
 import com.jetbrains.bsp.generators.dsl.code
 import com.jetbrains.bsp.generators.ir.*
+import java.nio.file.Path
 import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val definitions: List<Def>, val version: String) {
@@ -11,8 +12,12 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
 
     fun render(): List<CodegenFile> {
         val defFiles = definitions.mapNotNull { renderDef(it) }
-        val libFile = CodegenFile(baseRelPath.resolve("lib.rs"), renderRpcTraits().toString())
+        val libFile = CodegenFile(rustFileName("lib"), renderRpcTraits().toString())
         return listOf(libFile) + defFiles
+    }
+
+    private fun rustFileName(name: String): Path {
+        return baseRelPath.resolve("${name.camelToSnakeCase()}.rs")
     }
 
     private fun renderRpcTraits(): CodeBlock {
@@ -41,13 +46,11 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun generateStructureFile(def: Def.Structure): CodegenFile {
-        val name = def.name
-        val file = baseRelPath.resolve("${name}.rs")
         val code = code {
             code(renderImports())
             code(renderStructure(def))
         }
-        return CodegenFile(file, code.toString())
+        return CodegenFile(rustFileName(def.name), code.toString())
     }
 
     fun renderDocumentation(hints: List<Hint>): CodeBlock {
@@ -164,7 +167,6 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun generateServiceFile(def: Def.Service): CodegenFile {
-        val name = def.name
         val code = code {
             code(renderImports())
             def.operations.forEach { operation ->
@@ -172,8 +174,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
             }
         }
 
-        val fileName = "$name.rs"
-        return CodegenFile(baseRelPath.resolve(fileName), code.toString())
+        return CodegenFile(rustFileName(def.name), code.toString())
     }
 }
 
