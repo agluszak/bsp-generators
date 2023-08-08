@@ -16,4 +16,3 @@ interface CargoBuildServer {
   fun disableCargoFeatures(params: DisableCargoFeaturesParams): CompletableFuture<Unit>
 
 }
-

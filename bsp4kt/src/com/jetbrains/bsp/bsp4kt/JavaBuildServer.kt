@@ -10,4 +10,3 @@ interface JavaBuildServer {
   fun buildTargetJavacOptions(params: JavacOptionsParams): CompletableFuture<JavacOptionsResult>
 
 }
-

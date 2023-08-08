@@ -10,4 +10,3 @@ interface PythonBuildServer {
   fun buildTargetPythonOptions(params: PythonOptionsParams): CompletableFuture<PythonOptionsResult>
 
 }
-

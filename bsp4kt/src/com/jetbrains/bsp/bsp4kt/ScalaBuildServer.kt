@@ -18,4 +18,3 @@ interface ScalaBuildServer {
   fun buildTargetScalaMainClasses(params: ScalaMainClassesParams): CompletableFuture<ScalaMainClassesResult>
 
 }
-

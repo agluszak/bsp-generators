@@ -13,4 +13,3 @@ interface JvmBuildServer {
   fun buildTargetJvmRunEnvironment(params: JvmRunEnvironmentParams): CompletableFuture<JvmRunEnvironmentResult>
 
 }
-

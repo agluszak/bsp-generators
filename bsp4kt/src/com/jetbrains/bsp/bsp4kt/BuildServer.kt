@@ -58,4 +58,3 @@ interface BuildServer {
   fun buildTargetCleanCache(params: CleanCacheParams): CompletableFuture<CleanCacheResult>
 
 }
-

@@ -10,4 +10,3 @@ interface CppBuildServer {
   fun buildTargetCppOptions(params: CppOptionsParams): CompletableFuture<CppOptionsResult>
 
 }
-

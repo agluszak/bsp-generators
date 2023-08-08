@@ -2,7 +2,6 @@ package com.jetbrains.bsp.generators.bsp4kt
 
 import com.jetbrains.bsp.generators.CodegenFile
 import com.jetbrains.bsp.generators.dsl.CodeBlock
-import com.jetbrains.bsp.generators.dsl.Line
 import com.jetbrains.bsp.generators.dsl.code
 import com.jetbrains.bsp.generators.ir.Def
 import com.jetbrains.bsp.generators.ir.EnumType
@@ -181,7 +180,6 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
                     include(renderOperation(operation))
                 }
             }
-            newline()
         }
 
         val fileName = "$name.kt"

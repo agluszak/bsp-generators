@@ -28,4 +28,3 @@ interface BuildClient {
   fun onBuildTaskFinish(params: TaskFinishParams): Unit
 
 }
-
