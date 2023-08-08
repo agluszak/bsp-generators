@@ -5,3 +5,4 @@ before_install:
 install:
   - cp -r bsp4kt/* .
   - gradle clean build publishToMavenLocal
+  - cp -r bsp4kt/* /tmp
