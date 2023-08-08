@@ -68,6 +68,30 @@ class DslTest {
     }
 
     @Test
+    fun multiLinesBlock() {
+        val input = code {
+            lines(listOf("a", "b", "c"))
+            block("fun foo") {
+                lines(listOf("4", "5", "6"), join = ",")
+            }
+        }
+
+        val expected = """
+            a
+            b
+            c
+            fun foo {
+              4,
+              5,
+              6
+            }
+            
+        """.trimIndent()
+
+        assertEquals(expected, input.toString())
+    }
+
+    @Test
     fun optionalString() {
         val input = code {
             -"val x = 5"
@@ -84,6 +108,7 @@ class DslTest {
         assertEquals(expected, input.toString())
     }
 
+    @Test
     fun nestedCode() {
         val nested = code {
             -"val a = 1"
@@ -91,7 +116,7 @@ class DslTest {
         }
 
         val input = code {
-            code(nested)
+            include(nested)
             -"val x = 5"
             code {
                 -"val y = 6"
