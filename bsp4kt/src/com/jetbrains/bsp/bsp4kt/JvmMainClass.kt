@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class JvmMainClass(
-val className: String,
-val arguments: List<String>)
-
+  val className: String,
+  val arguments: List<String>
+)

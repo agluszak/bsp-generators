@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class WorkspaceBuildTargetsResult(
-val targets: List<BuildTarget>)
-
+  val targets: List<BuildTarget>
+)

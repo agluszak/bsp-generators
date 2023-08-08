@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class OutputPathsResult(
-val items: List<OutputPathsItem>)
-
+  val items: List<OutputPathsItem>
+)

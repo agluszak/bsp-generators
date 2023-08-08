@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class Range(
-val start: Position,
-val end: Position)
-
+  val start: Position,
+  val end: Position
+)

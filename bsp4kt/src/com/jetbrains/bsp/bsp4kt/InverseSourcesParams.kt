@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class InverseSourcesParams(
-val textDocument: TextDocumentIdentifier)
-
+  val textDocument: TextDocumentIdentifier
+)

@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CleanCacheParams(
-val targets: List<BuildTargetIdentifier>)
-
+  val targets: List<BuildTargetIdentifier>
+)

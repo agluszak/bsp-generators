@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = BuildTargetEventKind.Companion::class)
 enum class BuildTargetEventKind(override val value: Int) : IntEnum {
-  CREATED(1),
-  CHANGED(2),
-  DELETED(3);
+  Created(1),
+  Changed(2),
+  Deleted(3);
 
   companion object : KSerializer<BuildTargetEventKind> by EnumAsIntSerializer(BuildTargetEventKind::class)
 }

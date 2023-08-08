@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class LogMessageParams(
-val type: MessageType,
-val task: TaskId?,
-val originId: String?,
-val message: String)
-
+  val type: MessageType,
+  val task: TaskId?,
+  val originId: String?,
+  val message: String
+)

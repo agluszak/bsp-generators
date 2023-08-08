@@ -6,9 +6,9 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class SbtBuildTarget(
-val sbtVersion: String,
-val autoImports: List<String>,
-val scalaBuildTarget: ScalaBuildTarget,
-val parent: BuildTargetIdentifier?,
-val children: List<BuildTargetIdentifier>)
-
+  val sbtVersion: String,
+  val autoImports: List<String>,
+  val scalaBuildTarget: ScalaBuildTarget,
+  val parent: BuildTargetIdentifier?,
+  val children: List<BuildTargetIdentifier>
+)

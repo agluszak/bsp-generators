@@ -6,11 +6,11 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class InitializeBuildParams(
-val displayName: String,
-val version: String,
-val bspVersion: String,
-val rootUri: String,
-val capabilities: BuildClientCapabilities,
-val dataKind: String?,
-val data: JsonElement?)
-
+  val displayName: String,
+  val version: String,
+  val bspVersion: String,
+  val rootUri: String,
+  val capabilities: BuildClientCapabilities,
+  val dataKind: String?,
+  val data: JsonElement?
+)

@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class DiagnosticRelatedInformation(
-val location: Location,
-val message: String)
-
+  val location: Location,
+  val message: String
+)

@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CargoFeaturesStateResult(
-val packagesFeatures: PackageFeatures)
-
+  val packagesFeatures: PackageFeatures
+)

@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class DependencyModulesItem(
-val target: BuildTargetIdentifier,
-val modules: List<DependencyModule>)
-
+  val target: BuildTargetIdentifier,
+  val modules: List<DependencyModule>
+)

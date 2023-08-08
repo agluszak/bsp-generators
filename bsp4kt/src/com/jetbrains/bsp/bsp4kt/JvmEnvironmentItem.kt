@@ -6,10 +6,10 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class JvmEnvironmentItem(
-val target: BuildTargetIdentifier,
-val classpath: List<String>,
-val jvmOptions: List<String>,
-val workingDirectory: String,
-val environmentVariables: Map<String, String>,
-val mainClasses: List<JvmMainClass>?)
-
+  val target: BuildTargetIdentifier,
+  val classpath: List<String>,
+  val jvmOptions: List<String>,
+  val workingDirectory: String,
+  val environmentVariables: Map<String, String>,
+  val mainClasses: List<JvmMainClass>?
+)

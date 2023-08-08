@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class DependencyModule(
-val name: String,
-val version: String,
-val dataKind: String?,
-val data: JsonElement?)
-
+  val name: String,
+  val version: String,
+  val dataKind: String?,
+  val data: JsonElement?
+)

@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TestStart(
-val displayName: String,
-val location: Location?)
-
+  val displayName: String,
+  val location: Location?
+)

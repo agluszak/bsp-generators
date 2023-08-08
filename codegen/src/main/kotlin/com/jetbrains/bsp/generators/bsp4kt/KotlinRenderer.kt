@@ -70,7 +70,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     fun renderClosedEnum(def: Def.ClosedEnum<*>): CodegenFile {
         val name = def.name
         val values = def.values.map { value ->
-            "${value.name}(${value.value})"
+            renderEnumValueDef(def.enumType)(value)
         }
         val code = code {
             -"package $basepkg"
@@ -201,18 +201,9 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
                 -"object ${def.name}"
             } else {
                 paren("data class ${def.name}") {
-                    elements(def.fields.map { field ->
-                        CodeBlock(context).apply {
-                            include(renderKotlinField(field))
-                            removeNewline()
-                        }
-                    }, join = CodeBlock(noIndentContext).apply {
-                        removeNewline()
-                        -","
-                    })
+                    lines(def.fields.map { renderKotlinField(it).toString() }, join = ",")
                 }
             }
-            newline()
         }
 
         val fileName = "${def.name}.kt"

@@ -6,9 +6,9 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CppOptionsItem(
-val target: BuildTargetIdentifier,
-val copts: List<String>,
-val defines: List<String>,
-val linkopts: List<String>,
-val linkshared: Boolean?)
-
+  val target: BuildTargetIdentifier,
+  val copts: List<String>,
+  val defines: List<String>,
+  val linkopts: List<String>,
+  val linkshared: Boolean?
+)

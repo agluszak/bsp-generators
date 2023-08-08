@@ -18,7 +18,7 @@ interface Renderable {
 }
 
 @CodeMarker
-class CodeBlock(val context: RenderContext) : Renderable {
+class CodeBlock(var context: RenderContext) : Renderable {
     protected val children = arrayListOf<Renderable>()
 
     operator fun String?.unaryMinus() {
@@ -63,22 +63,32 @@ class CodeBlock(val context: RenderContext) : Renderable {
     val noIndentContext = RenderContext(context.settings, 0)
 
     fun lines(lines: List<String>, join: String? = null, end: String? = null) {
-        elements(lines.zip(lines.indices).map { (it, i) ->
-            CodeBlock(context).apply {
-                line(it)
-                if (join != null && (i < lines.size - 1 || end != null)) {
-                    removeNewline()
-                }
+        val linesWithoutLast = lines.dropLast(1)
+        val last = lines.lastOrNull()
+        for (l in linesWithoutLast) {
+            line(l)
+            join?.let {
+                val block = CodeBlock(noIndentContext)
+                block.removeNewline()
+                block.removeNewline()
+                block.line(it)
+                children.add(block)
             }
-        }, join?.let {
-            CodeBlock(noIndentContext).apply {
-                line(it)
+        }
+        if (last != null) {
+            line(last)
+            if (end == null) {
+                removeNewline()
+                removeNewline()
+                newline()
+            } else {
+                val block = CodeBlock(noIndentContext)
+                block.removeNewline()
+                block.removeNewline()
+                block.line(end)
+                children.add(block)
             }
-        }, end?.let {
-            CodeBlock(noIndentContext).apply {
-                line(it)
-            }
-        })
+        }
     }
 
     fun block(thisText: String, init: CodeBlock.() -> Unit) {
@@ -111,7 +121,8 @@ class CodeBlock(val context: RenderContext) : Renderable {
         children.add(block)
     }
 
-    fun include(other: Renderable) {
+    fun include(other: CodeBlock) {
+        other.context = context // TODO: refactor once again to fix it
         children.add(other)
     }
 

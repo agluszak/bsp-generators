@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class DidChangeBuildTarget(
-val changes: List<BuildTargetEvent>)
-
+  val changes: List<BuildTargetEvent>
+)

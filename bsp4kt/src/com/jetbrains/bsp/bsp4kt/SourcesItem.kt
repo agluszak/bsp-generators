@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class SourcesItem(
-val target: BuildTargetIdentifier,
-val sources: List<SourceItem>,
-val roots: List<String>?)
-
+  val target: BuildTargetIdentifier,
+  val sources: List<SourceItem>,
+  val roots: List<String>?
+)

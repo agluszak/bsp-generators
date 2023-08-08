@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = StatusCode.Companion::class)
 enum class StatusCode(override val value: Int) : IntEnum {
-  OK(1),
-  ERROR(2),
-  CANCELLED(3);
+  Ok(1),
+  Error(2),
+  Cancelled(3);
 
   companion object : KSerializer<StatusCode> by EnumAsIntSerializer(StatusCode::class)
 }

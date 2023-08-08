@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ResourcesItem(
-val target: BuildTargetIdentifier,
-val resources: List<String>)
-
+  val target: BuildTargetIdentifier,
+  val resources: List<String>
+)

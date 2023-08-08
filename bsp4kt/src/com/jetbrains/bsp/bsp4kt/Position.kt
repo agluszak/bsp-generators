@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class Position(
-val line: Int,
-val character: Int)
-
+  val line: Int,
+  val character: Int
+)

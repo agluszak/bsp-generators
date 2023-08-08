@@ -6,10 +6,10 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class InitializeBuildResult(
-val displayName: String,
-val version: String,
-val bspVersion: String,
-val capabilities: BuildServerCapabilities,
-val dataKind: String?,
-val data: JsonElement?)
-
+  val displayName: String,
+  val version: String,
+  val bspVersion: String,
+  val capabilities: BuildServerCapabilities,
+  val dataKind: String?,
+  val data: JsonElement?
+)

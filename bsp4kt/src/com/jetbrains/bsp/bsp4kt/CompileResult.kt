@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CompileResult(
-val originId: String?,
-val statusCode: StatusCode,
-val dataKind: String?,
-val data: JsonElement?)
-
+  val originId: String?,
+  val statusCode: StatusCode,
+  val dataKind: String?,
+  val data: JsonElement?
+)

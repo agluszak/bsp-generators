@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class PythonOptionsResult(
-val items: List<PythonOptionsItem>)
-
+  val items: List<PythonOptionsItem>
+)

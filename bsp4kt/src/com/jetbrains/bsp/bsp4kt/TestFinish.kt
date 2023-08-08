@@ -6,10 +6,10 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TestFinish(
-val displayName: String,
-val message: String?,
-val status: TestStatus,
-val location: Location?,
-val dataKind: String?,
-val data: JsonElement?)
-
+  val displayName: String,
+  val message: String?,
+  val status: TestStatus,
+  val location: Location?,
+  val dataKind: String?,
+  val data: JsonElement?
+)

@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class OutputPathsItem(
-val target: BuildTargetIdentifier,
-val outputPaths: List<OutputPathItem>)
-
+  val target: BuildTargetIdentifier,
+  val outputPaths: List<OutputPathItem>
+)

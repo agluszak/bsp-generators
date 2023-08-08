@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalacOptionsParams(
-val targets: List<BuildTargetIdentifier>)
-
+  val targets: List<BuildTargetIdentifier>
+)

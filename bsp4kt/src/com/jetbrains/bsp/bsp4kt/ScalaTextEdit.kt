@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaTextEdit(
-val range: Range,
-val newText: String)
-
+  val range: Range,
+  val newText: String
+)

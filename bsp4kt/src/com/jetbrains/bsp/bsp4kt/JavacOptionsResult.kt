@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class JavacOptionsResult(
-val items: List<JavacOptionsItem>)
-
+  val items: List<JavacOptionsItem>
+)

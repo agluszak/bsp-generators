@@ -6,9 +6,9 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class RunParams(
-val target: BuildTargetIdentifier,
-val originId: String?,
-val arguments: List<String>?,
-val dataKind: String?,
-val data: JsonElement?)
-
+  val target: BuildTargetIdentifier,
+  val originId: String?,
+  val arguments: List<String>?,
+  val dataKind: String?,
+  val data: JsonElement?
+)

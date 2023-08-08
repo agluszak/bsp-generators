@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class PythonOptionsItem(
-val target: BuildTargetIdentifier,
-val interpreterOptions: List<String>)
-
+  val target: BuildTargetIdentifier,
+  val interpreterOptions: List<String>
+)

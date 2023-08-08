@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class JavacOptionsItem(
-val target: BuildTargetIdentifier,
-val options: List<String>,
-val classpath: List<String>,
-val classDirectory: String)
-
+  val target: BuildTargetIdentifier,
+  val options: List<String>,
+  val classpath: List<String>,
+  val classDirectory: String
+)

@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class BuildTargetCapabilities(
-val canCompile: Boolean?,
-val canTest: Boolean?,
-val canRun: Boolean?,
-val canDebug: Boolean?)
-
+  val canCompile: Boolean?,
+  val canTest: Boolean?,
+  val canRun: Boolean?,
+  val canDebug: Boolean?
+)

@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = SourceItemKind.Companion::class)
 enum class SourceItemKind(override val value: Int) : IntEnum {
-  FILE(1),
-  DIRECTORY(2);
+  File(1),
+  Directory(2);
 
   companion object : KSerializer<SourceItemKind> by EnumAsIntSerializer(SourceItemKind::class)
 }

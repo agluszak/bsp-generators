@@ -6,8 +6,8 @@ import kotlinx.serialization.SerialName
 import java.util.concurrent.CompletableFuture
 
 interface PythonBuildServer {
-@JsonRequest("buildTarget/pythonOptions")
-fun buildTargetPythonOptions(params: PythonOptionsParams): CompletableFuture<PythonOptionsResult>
+  @JsonRequest("buildTarget/pythonOptions")
+  fun buildTargetPythonOptions(params: PythonOptionsParams): CompletableFuture<PythonOptionsResult>
 
 }
 

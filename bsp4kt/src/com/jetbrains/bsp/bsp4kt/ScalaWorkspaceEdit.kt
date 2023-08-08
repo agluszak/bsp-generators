@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaWorkspaceEdit(
-val changes: List<ScalaTextEdit>)
-
+  val changes: List<ScalaTextEdit>
+)

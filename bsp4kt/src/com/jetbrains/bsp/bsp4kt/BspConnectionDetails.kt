@@ -6,9 +6,9 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class BspConnectionDetails(
-val name: String,
-val argv: List<String>,
-val version: String,
-val bspVersion: String,
-val languages: List<String>)
-
+  val name: String,
+  val argv: List<String>,
+  val version: String,
+  val bspVersion: String,
+  val languages: List<String>
+)

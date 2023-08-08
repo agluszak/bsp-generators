@@ -6,4 +6,3 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 object ScalaAttachRemote
-

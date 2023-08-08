@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class JvmRunEnvironmentResult(
-val items: List<JvmEnvironmentItem>)
-
+  val items: List<JvmEnvironmentItem>
+)

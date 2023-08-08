@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CompileTask(
-val target: BuildTargetIdentifier)
-
+  val target: BuildTargetIdentifier
+)

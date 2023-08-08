@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = DiagnosticSeverity.Companion::class)
 enum class DiagnosticSeverity(override val value: Int) : IntEnum {
-  ERROR(1),
-  WARNING(2),
-  INFORMATION(3),
-  HINT(4);
+  Error(1),
+  Warning(2),
+  Information(3),
+  Hint(4);
 
   companion object : KSerializer<DiagnosticSeverity> by EnumAsIntSerializer(DiagnosticSeverity::class)
 }

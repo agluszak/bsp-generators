@@ -6,11 +6,11 @@ import kotlinx.serialization.SerialName
 import java.util.concurrent.CompletableFuture
 
 interface JvmBuildServer {
-@JsonRequest("buildTarget/jvmTestEnvironment")
-fun buildTargetJvmTestEnvironment(params: JvmTestEnvironmentParams): CompletableFuture<JvmTestEnvironmentResult>
+  @JsonRequest("buildTarget/jvmTestEnvironment")
+  fun buildTargetJvmTestEnvironment(params: JvmTestEnvironmentParams): CompletableFuture<JvmTestEnvironmentResult>
 
-@JsonRequest("buildTarget/jvmRunEnvironment")
-fun buildTargetJvmRunEnvironment(params: JvmRunEnvironmentParams): CompletableFuture<JvmRunEnvironmentResult>
+  @JsonRequest("buildTarget/jvmRunEnvironment")
+  fun buildTargetJvmRunEnvironment(params: JvmRunEnvironmentParams): CompletableFuture<JvmRunEnvironmentResult>
 
 }
 

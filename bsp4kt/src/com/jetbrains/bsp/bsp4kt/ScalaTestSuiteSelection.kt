@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaTestSuiteSelection(
-val className: String,
-val tests: List<String>)
-
+  val className: String,
+  val tests: List<String>
+)

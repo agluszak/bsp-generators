@@ -7,10 +7,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = MessageType.Companion::class)
 enum class MessageType(override val value: Int) : IntEnum {
-  ERROR(1),
-  WARNING(2),
-  INFO(3),
-  LOG(4);
+  Error(1),
+  Warning(2),
+  Info(3),
+  Log(4);
 
   companion object : KSerializer<MessageType> by EnumAsIntSerializer(MessageType::class)
 }

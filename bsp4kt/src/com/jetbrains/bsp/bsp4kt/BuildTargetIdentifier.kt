@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class BuildTargetIdentifier(
-val uri: String)
-
+  val uri: String
+)

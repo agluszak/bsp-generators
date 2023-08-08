@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class Location(
-val uri: String,
-val range: Range)
-
+  val uri: String,
+  val range: Range
+)

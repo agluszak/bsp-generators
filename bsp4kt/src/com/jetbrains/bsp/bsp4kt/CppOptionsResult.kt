@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class CppOptionsResult(
-val items: List<CppOptionsItem>)
-
+  val items: List<CppOptionsItem>
+)

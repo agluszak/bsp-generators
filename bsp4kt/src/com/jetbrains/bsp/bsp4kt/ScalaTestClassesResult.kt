@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaTestClassesResult(
-val items: List<ScalaTestClassesItem>)
-
+  val items: List<ScalaTestClassesItem>
+)

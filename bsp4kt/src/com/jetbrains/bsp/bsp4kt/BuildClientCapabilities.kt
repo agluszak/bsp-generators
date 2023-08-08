@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class BuildClientCapabilities(
-val languageIds: List<String>)
-
+  val languageIds: List<String>
+)

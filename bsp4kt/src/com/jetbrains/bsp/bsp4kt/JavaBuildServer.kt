@@ -6,8 +6,8 @@ import kotlinx.serialization.SerialName
 import java.util.concurrent.CompletableFuture
 
 interface JavaBuildServer {
-@JsonRequest("buildTarget/javacOptions")
-fun buildTargetJavacOptions(params: JavacOptionsParams): CompletableFuture<JavacOptionsResult>
+  @JsonRequest("buildTarget/javacOptions")
+  fun buildTargetJavacOptions(params: JavacOptionsParams): CompletableFuture<JavacOptionsResult>
 
 }
 

@@ -6,9 +6,9 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class MavenDependencyModule(
-val organization: String,
-val name: String,
-val version: String,
-val artifacts: List<MavenDependencyModuleArtifact>,
-val scope: String?)
-
+  val organization: String,
+  val name: String,
+  val version: String,
+  val artifacts: List<MavenDependencyModuleArtifact>,
+  val scope: String?
+)

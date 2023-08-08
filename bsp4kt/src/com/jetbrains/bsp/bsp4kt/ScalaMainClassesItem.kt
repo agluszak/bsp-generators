@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaMainClassesItem(
-val target: BuildTargetIdentifier,
-val classes: List<ScalaMainClass>)
-
+  val target: BuildTargetIdentifier,
+  val classes: List<ScalaMainClass>
+)
