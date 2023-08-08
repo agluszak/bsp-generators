@@ -1,9 +1,7 @@
 import com.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import com.jetbrains.bsp.generators.dsl.CodeBlock
 import com.jetbrains.bsp.generators.dsl.code
-import com.jetbrains.bsp.generators.ir.Field
-import com.jetbrains.bsp.generators.ir.Hint
-import com.jetbrains.bsp.generators.ir.Type
+import com.jetbrains.bsp.generators.ir.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.model.shapes.ShapeId
@@ -137,6 +135,59 @@ class Bsp4rsTest {
 
         for (case in cases) {
             assertEquals(case.expectedDocs, renderer.renderDocumentation(case.input))
+        }
+    }
+
+    @Test
+    fun renderOperation() {
+        data class TestCase(val input: Operation, val expected: CodeBlock)
+
+        val cases = listOf(
+            TestCase(
+                Operation(
+                    ShapeId.fromParts("test", "TestReq"),
+                    Type.Bool,
+                    Type.Ref(ShapeId.fromParts("test", "RequestResult")),
+                    JsonRpcMethodType.Request,
+                    "test-req",
+                    emptyList()
+                ),
+                code {
+                    -"#[derive(Debug)]"
+                    -"pub enum TestReq {}"
+                    newline()
+                    block("impl Request for TestReq") {
+                        -"type Params = bool;"
+                        -"type Result = RequestResult;"
+                        -"""const METHOD: &'static str = "test-req";"""
+                    }
+                    newline()
+                },
+            ),
+            TestCase(
+                Operation(
+                    ShapeId.fromParts("test", "TestNot"),
+                    Type.Unit,
+                    Type.Int,
+                    JsonRpcMethodType.Notification,
+                    "test-not",
+                    emptyList()
+                ),
+                code {
+                    -"#[derive(Debug)]"
+                    -"pub enum TestNot {}"
+                    newline()
+                    block("impl Notification for TestNot") {
+                        -"type Params = ();"
+                        -"""const METHOD: &'static str = "test-not";"""
+                    }
+                    newline()
+                },
+            ),
+        )
+
+        for (case in cases) {
+            assertEquals(case.expected, renderer.renderOperation(case.input))
         }
     }
 }

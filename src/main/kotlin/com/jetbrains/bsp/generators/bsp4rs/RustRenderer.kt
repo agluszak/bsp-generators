@@ -3,22 +3,39 @@ package com.jetbrains.bsp.generators.bsp4rs
 import com.jetbrains.bsp.generators.CodegenFile
 import com.jetbrains.bsp.generators.dsl.CodeBlock
 import com.jetbrains.bsp.generators.dsl.code
-import com.jetbrains.bsp.generators.ir.Def
-import com.jetbrains.bsp.generators.ir.Field
-import com.jetbrains.bsp.generators.ir.Hint
-import com.jetbrains.bsp.generators.ir.Type
+import com.jetbrains.bsp.generators.ir.*
 import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val definitions: List<Def>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
 
     fun render(): List<CodegenFile> {
-        return definitions.mapNotNull { renderDef(it) }
+        val defFiles = definitions.mapNotNull { renderDef(it) }
+        val libFile = CodegenFile(baseRelPath.resolve("lib.rs"), renderRpcTraits().toString())
+        return listOf(libFile) + defFiles
+    }
+
+    private fun renderRpcTraits(): CodeBlock {
+        return code {
+            code(renderImports())
+            block("pub trait Request") {
+                -"type Params: DeserializeOwned + Serialize;"
+                -"type Result: DeserializeOwned + Serialize;"
+                -"const METHOD: &'static str;"
+            }
+            newline()
+            block("pub trait Notification") {
+                -"type Params: DeserializeOwned + Serialize;"
+                -"const METHOD: &'static str;"
+            }
+            newline()
+        }
     }
 
     private fun renderDef(def: Def): CodegenFile? {
         return when (def) {
             is Def.Structure -> generateStructureFile(def)
+            is Def.Service -> generateServiceFile(def)
             else -> null
         }
     }
@@ -117,6 +134,46 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
             }
             newline()
         }
+    }
+
+    private fun renderJsonRpcMethodType(type: JsonRpcMethodType): String {
+        return when (type) {
+            JsonRpcMethodType.Notification -> "Notification"
+            JsonRpcMethodType.Request -> "Request"
+        }
+    }
+
+    fun renderOperation(op: Operation): CodeBlock {
+        val name = op.name
+        val output = when (op.jsonRpcMethodType) {
+            JsonRpcMethodType.Notification -> null
+            JsonRpcMethodType.Request -> "type Result = ${renderType(op.outputType, true)};"
+        }
+
+        return code {
+            -"#[derive(Debug)]"
+            -"pub enum $name {}"
+            newline()
+            block("impl ${renderJsonRpcMethodType(op.jsonRpcMethodType)} for $name") {
+                -"type Params = ${renderType(op.inputType, true)};"
+                -output
+                -"""const METHOD: &'static str = "${op.jsonRpcMethod}";"""
+            }
+            newline()
+        }
+    }
+
+    private fun generateServiceFile(def: Def.Service): CodegenFile {
+        val name = def.name
+        val code = code {
+            code(renderImports())
+            def.operations.forEach { operation ->
+                code(renderOperation(operation))
+            }
+        }
+
+        val fileName = "$name.rs"
+        return CodegenFile(baseRelPath.resolve(fileName), code.toString())
     }
 }
 
