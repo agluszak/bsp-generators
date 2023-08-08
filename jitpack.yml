@@ -2,6 +2,6 @@ jdk:
   - openjdk9
 before_install:
   - sdk install gradle
-  - cd bsp4kt
 install:
+  - cd bsp4kt
   - gradle clean publish
