@@ -1,8 +1,6 @@
 jdk:
   - openjdk9
 before_install:
-  - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  - brew install bazel
-  - brew install gcc
+  - cd bsp4kt
 install:
-  - ./bazel run --define "maven_repo=file://$HOME/.m2/repository" //bsp4kt:bsp4kt.publish
+  - gradle clean publish
