@@ -1,8 +1,8 @@
 jdk:
   - openjdk9
 before_install:
-  - wget https://github.com/bazelbuild/bazelisk/releases/download/v1.17.0/bazelisk-linux-amd64
-  - chmod +x bazelisk-linux-amd64
-  - mv bazelisk-linux-amd64 bazel
+  - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  - brew install bazel
+  - brew install gcc
 install:
   - ./bazel run --define "maven_repo=file://$HOME/.m2/repository" //bsp4kt:bsp4kt.publish
