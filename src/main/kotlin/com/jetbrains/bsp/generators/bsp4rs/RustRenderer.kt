@@ -39,18 +39,20 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
 
     private fun renderDef(def: Def): CodegenFile? {
         return when (def) {
-            is Def.Structure -> generateStructureFile(def)
+            is Def.Structure -> generateFile(renderStructure(def), def.name)
+            is Def.OpenEnum<*> -> generateFile(renderOpenEnum(def), def.name)
+            is Def.ClosedEnum<*> -> generateFile(renderClosedEnum(def), def.name)
             is Def.Service -> generateServiceFile(def)
             else -> null
         }
     }
 
-    private fun generateStructureFile(def: Def.Structure): CodegenFile {
+    private fun generateFile(content: CodeBlock, name: String): CodegenFile {
         val code = code {
             code(renderImports())
-            code(renderStructure(def))
+            code(content)
         }
-        return CodegenFile(rustFileName(def.name), code.toString())
+        return CodegenFile(rustFileName(name), code.toString())
     }
 
     fun renderDocumentation(hints: List<Hint>): CodeBlock {
@@ -102,15 +104,15 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         }
     }
 
-    fun renderFieldRaw(field: Field): String {
-        return "pub ${field.name.camelToSnakeCase()}: ${renderType(field.type, field.required)},"
+    fun renderStructFieldRaw(field: Field): String {
+        return "pub ${field.name.camelToSnakeCase()}: ${renderType(field.type, field.required)}"
     }
 
-    private fun renderRustField(field: Field): CodeBlock {
+    private fun renderStructField(field: Field): CodeBlock {
         return code {
             code(renderDocumentation(field.hints))
             -renderFieldSerialization(field)
-            -renderFieldRaw(field)
+            -"${renderStructFieldRaw(field)},"
         }
     }
 
@@ -132,7 +134,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
             -"""#[serde(rename_all = "camelCase")]"""
             block("pub struct ${def.name}") {
                 def.fields.forEach { field ->
-                    code(renderRustField(field))
+                    code(renderStructField(field))
                 }
             }
             newline()
@@ -150,17 +152,20 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         val name = op.name
         val output = when (op.jsonRpcMethodType) {
             JsonRpcMethodType.Notification -> null
-            JsonRpcMethodType.Request -> "type Result = ${renderType(op.outputType, true)};"
+            JsonRpcMethodType.Request -> "type Result = ${renderType(op.outputType, true)}"
         }
+        val operationProperties = listOfNotNull(
+            "type Params = ${renderType(op.inputType, true)}",
+            output,
+            """const METHOD: &'static str = "${op.jsonRpcMethod}""""
+        )
 
         return code {
             -"#[derive(Debug)]"
             -"pub enum $name {}"
             newline()
             block("impl ${renderJsonRpcMethodType(op.jsonRpcMethodType)} for $name") {
-                -"type Params = ${renderType(op.inputType, true)};"
-                -output
-                -"""const METHOD: &'static str = "${op.jsonRpcMethod}";"""
+                lines(operationProperties, join = ";", end = ";")
             }
             newline()
         }
@@ -176,9 +181,72 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
 
         return CodegenFile(rustFileName(def.name), code.toString())
     }
+
+    private fun renderEnumValue(enumType: EnumType<*>): (EnumValue<*>) -> String {
+        return when (enumType) {
+            EnumType.IntEnum -> { ev: EnumValue<*> -> "${ev.name.snakeToUpperCamelCase()} = ${ev.value}" }
+            EnumType.StringEnum -> { ev: EnumValue<*> -> ev.name.snakeToUpperCamelCase() }
+        }
+    }
+
+    private fun renderEnumSerialization(enumType: EnumType<*>): CodeBlock {
+        return when (enumType) {
+            EnumType.IntEnum -> code {
+                -"#[derive(Debug, PartialEq, Serialize_repr, Deserialize_repr, Clone)]"
+                -"#[repr(u8)]"
+            }
+
+            EnumType.StringEnum -> code {
+                -"#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]"
+                -"""#[serde(rename_all = "kebab-case")]"""
+            }
+        }
+    }
+
+    fun renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock {
+        val values = def.values.map { value ->
+            code {
+                code(renderDocumentation(value.hints))
+                -"${renderEnumValue(def.enumType)(value)},"
+            }
+        }
+        return code {
+            code(renderDocumentation(def.hints))
+            code(renderEnumSerialization(def.enumType))
+            block("pub enum ${def.name}") {
+                for (value in values) {
+                    code(value)
+                }
+            }
+        }
+    }
+
+    // TODO - this is a copy of renderClosedEnum, we need to figure out how it should be changed
+    fun renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
+        val values = def.values.map { value ->
+            code {
+                code(renderDocumentation(value.hints))
+                -"${renderEnumValue(def.enumType)(value)},"
+            }
+        }
+        return code {
+            code(renderDocumentation(def.hints))
+            code(renderEnumSerialization(def.enumType))
+            block("pub enum ${def.name}") {
+                for (value in values) {
+                    code(value)
+                }
+            }
+        }
+    }
 }
 
 fun String.camelToSnakeCase(): String {
-    val pattern = "(?<=.)[A-Z]".toRegex()
+    val pattern = "(?<=.)[^a-z]".toRegex()
     return this.replace(pattern, "_$0").lowercase()
+}
+
+fun String.snakeToUpperCamelCase(): String {
+    val pattern = "_(.)".toRegex()
+    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }.replaceFirstChar { it.uppercaseChar() }
 }

@@ -64,7 +64,7 @@ class Bsp4rsTest {
         )
 
         for (case in cases) {
-            assertEquals(case.expectedVal, renderer.renderFieldRaw(case.input))
+            assertEquals(case.expectedVal, renderer.renderStructFieldRaw(case.input))
         }
     }
 
