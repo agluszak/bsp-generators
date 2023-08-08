@@ -1,0 +1,6 @@
+jdk:
+  - openjdk9
+before_install:
+  - brew install bazelisk
+install:
+  - bazelisk run --define "maven_repo=file://$HOME/.m2/repository" //bsp4kt:bsp4kt.publish
