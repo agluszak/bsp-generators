@@ -1,6 +1,4 @@
 import com.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import com.jetbrains.bsp.generators.dsl.CodeBlock
-import com.jetbrains.bsp.generators.dsl.code
 import com.jetbrains.bsp.generators.ir.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -39,27 +37,27 @@ class Bsp4rsTest {
         val cases = listOf(
             TestCase(
                 Field("test1", Type.Bool, false, emptyList()),
-                "pub test1: Option<bool>,"
+                "pub test1: Option<bool>"
             ),
             TestCase(
                 Field("test2", Type.Bool, true, emptyList()),
-                "pub test2: bool,"
+                "pub test2: bool"
             ),
             TestCase(
                 Field("NameTest1", Type.Bool, true, emptyList()),
-                "pub name_test1: bool,"
+                "pub name_test1: bool"
             ),
             TestCase(
                 Field("nameTest2", Type.Bool, true, emptyList()),
-                "pub name_test2: bool,"
+                "pub name_test2: bool"
             ),
             TestCase(
                 Field("name_test_3", Type.Bool, true, emptyList()),
-                "pub name_test_3: bool,"
+                "pub name_test_3: bool"
             ),
             TestCase(
                 Field("name-test-4", Type.Bool, true, emptyList()),
-                "pub name-test-4: bool,"
+                "pub name-test-4: bool"
             ),
         )
 
@@ -101,14 +99,11 @@ class Bsp4rsTest {
     }
 
     @Test
-    fun renderDocumentation() {
-        data class TestCase(val input: List<Hint>, val expectedDocs: CodeBlock)
+    fun renderHints() {
+        data class TestCase(val input: List<Hint>, val expectedDocs: List<String>)
 
         val cases = listOf(
-            TestCase(
-                emptyList(),
-                code {},
-            ),
+            TestCase(emptyList(), emptyList()),
             TestCase(
                 listOf(
                     Hint.Deprecated("NO show"),
@@ -116,31 +111,22 @@ class Bsp4rsTest {
                     Hint.JsonRename("NO show"),
                     Hint.Documentation("One line comment 2"),
                 ),
-                code {
-                    -"/** One line comment 1 */"
-                    -"/** One line comment 2 */"
-                },
+                listOf("/** One line comment 1 */", "/** One line comment 2 */")
             ),
             TestCase(
-                listOf(
-                    Hint.Documentation("More\nlines\ncomment"),
-                ),
-                code {
-                    -"/** More"
-                    -"lines"
-                    -"comment */"
-                },
+                listOf(Hint.Documentation("More\nlines\ncomment")),
+                listOf("/** More", "lines", "comment */")
             ),
         )
 
         for (case in cases) {
-            assertEquals(case.expectedDocs, renderer.renderDocumentation(case.input))
+            assertEquals(case.expectedDocs, renderer.renderHints(case.input))
         }
     }
 
     @Test
     fun renderOperation() {
-        data class TestCase(val input: Operation, val expected: CodeBlock)
+        data class TestCase(val input: Operation, val expected: String)
 
         val cases = listOf(
             TestCase(
@@ -152,17 +138,18 @@ class Bsp4rsTest {
                     "test-req",
                     emptyList()
                 ),
-                code {
-                    -"#[derive(Debug)]"
-                    -"pub enum TestReq {}"
-                    newline()
-                    block("impl Request for TestReq") {
-                        -"type Params = bool;"
-                        -"type Result = RequestResult;"
-                        -"""const METHOD: &'static str = "test-req";"""
+                """
+                    #[derive(Debug)]
+                    pub enum TestReq {}
+                    
+                    impl Request for TestReq {
+                        type Params = bool;
+                        type Result = RequestResult;
+                        const METHOD: &'static str = "test-req";
                     }
-                    newline()
-                },
+                    
+                    
+                """.trimIndent()
             ),
             TestCase(
                 Operation(
@@ -173,21 +160,22 @@ class Bsp4rsTest {
                     "test-not",
                     emptyList()
                 ),
-                code {
-                    -"#[derive(Debug)]"
-                    -"pub enum TestNot {}"
-                    newline()
-                    block("impl Notification for TestNot") {
-                        -"type Params = ();"
-                        -"""const METHOD: &'static str = "test-not";"""
+                """
+                    #[derive(Debug)]
+                    pub enum TestNot {}
+                    
+                    impl Notification for TestNot {
+                        type Params = ();
+                        const METHOD: &'static str = "test-not";
                     }
-                    newline()
-                },
+                    
+                    
+                """.trimIndent()
             ),
         )
 
         for (case in cases) {
-            assertEquals(case.expected, renderer.renderOperation(case.input))
+            assertEquals(case.expected, renderer.renderOperation(case.input).toString())
         }
     }
 }

@@ -2,7 +2,7 @@ package com.jetbrains.bsp.generators.bsp4rs
 
 import com.jetbrains.bsp.generators.CodegenFile
 import com.jetbrains.bsp.generators.dsl.CodeBlock
-import com.jetbrains.bsp.generators.dsl.code
+import com.jetbrains.bsp.generators.dsl.rustCode
 import com.jetbrains.bsp.generators.ir.*
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -21,17 +21,18 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun renderRpcTraits(): CodeBlock {
-        return code {
+        val paramsStr = "type Params: DeserializeOwned + Serialize"
+        val resultStr = "type Result: DeserializeOwned + Serialize"
+        val methodStr = "const METHOD: &'static str"
+
+        return rustCode {
             include(renderImports())
             block("pub trait Request") {
-                -"type Params: DeserializeOwned + Serialize;"
-                -"type Result: DeserializeOwned + Serialize;"
-                -"const METHOD: &'static str;"
+                lines(listOf(paramsStr, resultStr, methodStr), ";", ";")
             }
             newline()
             block("pub trait Notification") {
-                -"type Params: DeserializeOwned + Serialize;"
-                -"const METHOD: &'static str;"
+                lines(listOf(paramsStr, methodStr), ";", ";")
             }
             newline()
         }
@@ -48,27 +49,36 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun generateFile(content: CodeBlock, name: String): CodegenFile {
-        val code = code {
+        val code = rustCode {
             include(renderImports())
             include(content)
         }
         return CodegenFile(rustFileName(name), code.toString())
     }
 
-    fun renderDocumentation(hints: List<Hint>): CodeBlock {
-        val doc = hints.filterIsInstance<Hint.Documentation>()
-
-        return code {
-            for (el in doc) {
-                val docLines = el.string.split("\n").toMutableList()
-                docLines[0] = docLines.first().let { "/** $it" }
-                docLines[docLines.lastIndex] = docLines.last().let { "$it */" }
-
-                for (line in docLines) {
-                    -line
-                }
-            }
+    private fun renderDocumentation(hints: List<Hint.Documentation>): List<String> {
+        return hints.flatMap { el ->
+            val docLines = el.string.split("\n").toMutableList()
+            docLines[0] = docLines.first().let { "/** $it" }
+            docLines[docLines.lastIndex] = docLines.last().let { "$it */" }
+            docLines
         }
+    }
+
+    //    TODO
+    private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
+        return emptyList()
+    }
+
+    //    TODO
+    private fun renderRename(hints: List<Hint.JsonRename>): List<String> {
+        return emptyList()
+    }
+
+    fun renderHints(hints: List<Hint>): List<String> {
+        return renderDocumentation(hints.filterIsInstance<Hint.Documentation>()) +
+                renderDeprecated(hints.filterIsInstance<Hint.Deprecated>()) +
+                renderRename(hints.filterIsInstance<Hint.JsonRename>())
     }
 
     fun renderFieldSerialization(field: Field): String? {
@@ -109,15 +119,15 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun renderStructField(field: Field): CodeBlock {
-        return code {
-            include(renderDocumentation(field.hints))
+        return rustCode {
+            lines(renderHints(field.hints))
             -renderFieldSerialization(field)
             -"${renderStructFieldRaw(field)},"
         }
     }
 
     private fun renderImports(): CodeBlock {
-        return code {
+        return rustCode {
             -"use cargo_metadata::Edition;"
             -"use serde::{Deserialize, Serialize};"
             -"use serde::de::DeserializeOwned;"
@@ -128,8 +138,8 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun renderStructure(def: Def.Structure): CodeBlock {
-        return code {
-            include(renderDocumentation(def.hints))
+        return rustCode {
+            lines(renderHints(def.hints))
             -"#[derive(Debug, PartialEq, Serialize, Deserialize, Default, Clone)]"
             -"""#[serde(rename_all = "camelCase")]"""
             block("pub struct ${def.name}") {
@@ -160,7 +170,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
             """const METHOD: &'static str = "${op.jsonRpcMethod}""""
         )
 
-        return code {
+        return rustCode {
             -"#[derive(Debug)]"
             -"pub enum $name {}"
             newline()
@@ -172,7 +182,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     private fun generateServiceFile(def: Def.Service): CodegenFile {
-        val code = code {
+        val code = rustCode {
             include(renderImports())
             def.operations.forEach { operation ->
                 include(renderOperation(operation))
@@ -191,12 +201,12 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
 
     private fun renderEnumSerialization(enumType: EnumType<*>): CodeBlock {
         return when (enumType) {
-            EnumType.IntEnum -> code {
+            EnumType.IntEnum -> rustCode {
                 -"#[derive(Debug, PartialEq, Serialize_repr, Deserialize_repr, Clone)]"
                 -"#[repr(u8)]"
             }
 
-            EnumType.StringEnum -> code {
+            EnumType.StringEnum -> rustCode {
                 -"#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]"
                 -"""#[serde(rename_all = "kebab-case")]"""
             }
@@ -205,13 +215,12 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
 
     fun renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock {
         val values = def.values.map { value ->
-            code {
-                include(renderDocumentation(value.hints))
-                -"${renderEnumValue(def.enumType)(value)},"
+            rustCode {
+                lines(renderHints(def.hints) + renderEnumValue(def.enumType)(value), end = ",")
             }
         }
-        return code {
-            include(renderDocumentation(def.hints))
+        return rustCode {
+            lines(renderHints(def.hints))
             include(renderEnumSerialization(def.enumType))
             block("pub enum ${def.name}") {
                 for (value in values) {
@@ -224,13 +233,12 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     // TODO - this is a copy of renderClosedEnum, we need to figure out how it should be changed
     fun renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
         val values = def.values.map { value ->
-            code {
-                include(renderDocumentation(value.hints))
-                -"${renderEnumValue(def.enumType)(value)},"
+            rustCode {
+                lines(renderHints(def.hints) + renderEnumValue(def.enumType)(value), end = ",")
             }
         }
-        return code {
-            include(renderDocumentation(def.hints))
+        return rustCode {
+            lines(renderHints(def.hints))
             include(renderEnumSerialization(def.enumType))
             block("pub enum ${def.name}") {
                 for (value in values) {
@@ -242,11 +250,12 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
 }
 
 fun String.camelToSnakeCase(): String {
-    val pattern = "(?<=.)[^a-z]".toRegex()
+    val pattern = "(?<=.)[A-Z]".toRegex()
     return this.replace(pattern, "_$0").lowercase()
 }
 
 fun String.snakeToUpperCamelCase(): String {
     val pattern = "_(.)".toRegex()
-    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }.replaceFirstChar { it.uppercaseChar() }
+    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
+        .replaceFirstChar { it.uppercaseChar() }
 }
