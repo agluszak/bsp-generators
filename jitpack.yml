@@ -1,0 +1,8 @@
+jdk:
+  - openjdk9
+before_install:
+  - sdk install gradle
+install:
+  - cp -r bsp4kt/* .
+  - gradle clean build publishToMavenLocal
+  - cp -r bsp4kt/* /tmp

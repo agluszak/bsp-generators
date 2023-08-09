@@ -1,25 +1,41 @@
-load("@io_bazel_rules_kotlin//kotlin:core.bzl", "define_kt_toolchain")
-
-define_kt_toolchain(
-    name = "kotlin_toolchain",
-    api_version = "1.8",
-    jvm_target = "17",
-    language_version = "1.8",
-)
-
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 
 alias(
     name = "codegen",
-    actual = "@//src/main/kotlin/com/jetbrains/bsp/generators:codegen",
+    actual = "//codegen/src/main/kotlin/com/jetbrains/bsp/generators:codegen",
     visibility = ["//visibility:public"],
 )
 
-kt_jvm_binary(
+java_binary(
+    name = "bsp4kt-generator",
+    main_class = "com.jetbrains.bsp.generators.bsp4kt.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":codegen",
+    ],
+)
+
+load("//rules/generator:generator.bzl", "library_generator")
+
+library_generator(
+    name = "generate-bsp4kt",
+    gen_tool = ":bsp4kt-generator",
+    library_name = "bsp4kt",
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
     name = "bsp4rs-generator",
     main_class = "com.jetbrains.bsp.generators.bsp4rs.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
         ":codegen",
     ],
+)
+
+library_generator(
+    name = "generate-bsp4rs",
+    gen_tool = ":bsp4rs-generator",
+    library_name = "bsp4rs",
+    visibility = ["//visibility:public"],
 )
