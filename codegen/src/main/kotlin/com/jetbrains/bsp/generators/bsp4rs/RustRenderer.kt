@@ -7,17 +7,55 @@ import com.jetbrains.bsp.generators.ir.*
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-class RustRenderer(basepkg: String, private val definitions: List<Def>, val version: String) {
+class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
+    val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
+
+    fun makeName(name: String): String {
+        return renames[name] ?: name
+    }
 
     fun render(): List<CodegenFile> {
-        val defFiles = definitions.mapNotNull { renderDef(it) }
-        val libFile = CodegenFile(rustFileName("lib"), renderRpcTraits().toString())
+        val defFiles = modules.flatMap { renderModule(it) }
+        val libFile = generateLibFile(modules.map { it.moduleName })
         return listOf(libFile) + defFiles
     }
 
-    private fun rustFileName(name: String): Path {
-        return baseRelPath.resolve("${name.camelToSnakeCase()}.rs")
+    fun renderModule(module: Module): List<CodegenFile> {
+        val files = module.definitions.mapNotNull {
+            renderDef(it)?.run {
+                val name = makeName(it.name).camelToSnakeCase()
+                Pair(generateFile(this, Path(module.moduleName), "$name.rs"), name)
+            }
+        }
+        val modFile = generateModFile(module.moduleName, files.map { it.second })
+        return files.unzip().first.toMutableList() + modFile
+    }
+
+    private fun createPath(namespacePath: Path, fileName: String): Path {
+        return baseRelPath.resolve(namespacePath).resolve(fileName)
+    }
+
+    private fun generateLibFile(modulesNames: List<String>): CodegenFile {
+        val code = rustCode {
+            lines(modulesNames.map { "pub mod $it" }, ";", ";")
+            newline()
+            lines(modulesNames.map { "use $it::*" }, ";", ";")
+            newline()
+            include(renderRpcTraits())
+        }
+
+        return generateFile(code, Path(""), "lib.rs")
+    }
+
+    private fun generateModFile(moduleName: String, filesNames: List<String>): CodegenFile {
+        val code = rustCode {
+            lines(filesNames.map { "mod $it" }, ";", ";")
+            newline()
+            lines(filesNames.map { "pub use $it::*" }, ";", ";")
+        }
+
+        return generateFile(code, Path(moduleName), "mod.rs")
     }
 
     private fun renderRpcTraits(): CodeBlock {
@@ -26,7 +64,6 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         val methodStr = "const METHOD: &'static str"
 
         return rustCode {
-            include(renderImports())
             block("pub trait Request") {
                 lines(listOf(paramsStr, resultStr, methodStr), ";", ";")
             }
@@ -38,22 +75,22 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         }
     }
 
-    private fun renderDef(def: Def): CodegenFile? {
+    private fun renderDef(def: Def): CodeBlock? {
         return when (def) {
-            is Def.Structure -> generateFile(renderStructure(def), def.name)
-            is Def.OpenEnum<*> -> generateFile(renderOpenEnum(def), def.name)
-            is Def.ClosedEnum<*> -> generateFile(renderClosedEnum(def), def.name)
-            is Def.Service -> generateServiceFile(def)
+            is Def.Structure -> renderStructure(def)
+            is Def.OpenEnum<*> -> renderOpenEnum(def)
+            is Def.ClosedEnum<*> -> renderClosedEnum(def)
+            is Def.Service -> renderServiceFile(def)
             else -> null
         }
     }
 
-    private fun generateFile(content: CodeBlock, name: String): CodegenFile {
+    private fun generateFile(content: CodeBlock, namespacePath: Path, fileName: String): CodegenFile {
         val code = rustCode {
-            include(renderImports())
+            include(renderImports(fileName != "lib.rs"))
             include(content)
         }
-        return CodegenFile(rustFileName(name), code.toString())
+        return CodegenFile(createPath(namespacePath, fileName), code.toString())
     }
 
     private fun renderDocumentation(hints: List<Hint.Documentation>): List<String> {
@@ -66,19 +103,18 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     //    TODO
-    private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
-        return emptyList()
-    }
+//    private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
+//        return emptyList()
+//    }
 
     //    TODO
-    private fun renderRename(hints: List<Hint.JsonRename>): List<String> {
-        return emptyList()
-    }
+//    private fun renderRename(hints: List<Hint.JsonRename>): List<String> {
+//        return emptyList()
+//    }
 
     fun renderHints(hints: List<Hint>): List<String> {
-        return renderDocumentation(hints.filterIsInstance<Hint.Documentation>()) +
-                renderDeprecated(hints.filterIsInstance<Hint.Deprecated>()) +
-                renderRename(hints.filterIsInstance<Hint.JsonRename>())
+        return renderDocumentation(hints.filterIsInstance<Hint.Documentation>())
+//                + renderDeprecated(hints.filterIsInstance<Hint.Deprecated>()) + renderRename(hints.filterIsInstance<Hint.JsonRename>())
     }
 
     fun renderFieldSerialization(field: Field): String? {
@@ -99,7 +135,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         is Type.List -> "Vec<${renderTypeName(type.member)}>"
         Type.Long -> "i64"
         is Type.Map -> "HashMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
-        is Type.Ref -> type.shapeId.name
+        is Type.Ref -> makeName(type.shapeId.name)
         is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "()"
@@ -115,7 +151,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     fun renderStructFieldRaw(field: Field): String {
-        return "pub ${field.name.camelToSnakeCase()}: ${renderType(field.type, field.required)}"
+        return "pub ${makeName(field.name).camelToSnakeCase()}: ${renderType(field.type, field.required)}"
     }
 
     private fun renderStructField(field: Field): CodeBlock {
@@ -126,13 +162,14 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         }
     }
 
-    private fun renderImports(): CodeBlock {
+    private fun renderImports(canImportCrate: Boolean): CodeBlock {
         return rustCode {
             -"use cargo_metadata::Edition;"
             -"use serde::{Deserialize, Serialize};"
             -"use serde::de::DeserializeOwned;"
             -"use serde_repr::{Deserialize_repr, Serialize_repr};"
             -"use std::collections::{BTreeSet, HashMap};"
+            -(if (canImportCrate) "use crate::*;" else null)
             newline()
         }
     }
@@ -140,7 +177,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     private fun renderStructure(def: Def.Structure): CodeBlock {
         return rustCode {
             lines(renderHints(def.hints))
-            -"#[derive(Debug, PartialEq, Serialize, Deserialize, Default, Clone)]"
+            -"#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]"
             -"""#[serde(rename_all = "camelCase")]"""
             block("pub struct ${def.name}") {
                 def.fields.forEach { field ->
@@ -159,7 +196,7 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
     }
 
     fun renderOperation(op: Operation): CodeBlock {
-        val name = op.name
+        val name = makeName(op.name)
         val output = when (op.jsonRpcMethodType) {
             JsonRpcMethodType.Notification -> null
             JsonRpcMethodType.Request -> "type Result = ${renderType(op.outputType, true)}"
@@ -181,21 +218,19 @@ class RustRenderer(basepkg: String, private val definitions: List<Def>, val vers
         }
     }
 
-    private fun generateServiceFile(def: Def.Service): CodegenFile {
-        val code = rustCode {
-            include(renderImports())
+    private fun renderServiceFile(def: Def.Service): CodeBlock {
+        return rustCode {
             def.operations.forEach { operation ->
                 include(renderOperation(operation))
             }
         }
-
-        return CodegenFile(rustFileName(def.name), code.toString())
     }
 
     private fun renderEnumValue(enumType: EnumType<*>): (EnumValue<*>) -> String {
+        val genName: (String) -> String = { makeName(it.snakeToUpperCamelCase()) }
         return when (enumType) {
-            EnumType.IntEnum -> { ev: EnumValue<*> -> "${ev.name.snakeToUpperCamelCase()} = ${ev.value}" }
-            EnumType.StringEnum -> { ev: EnumValue<*> -> ev.name.snakeToUpperCamelCase() }
+            EnumType.IntEnum -> { ev: EnumValue<*> -> "${genName(ev.name)} = ${ev.value}" }
+            EnumType.StringEnum -> { ev: EnumValue<*> -> genName(ev.name) }
         }
     }
 
