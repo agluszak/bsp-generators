@@ -8,7 +8,8 @@ class FilesGenerator(
     val name: String,
     val output: Path,
     private val generatorScript: File,
-    private val codegenFiles: List<CodegenFile>
+    private val codegenFiles: List<CodegenFile>,
+    private val languageSpecificActions: List<String> = emptyList()
 ) {
     fun run() {
         if (codegenFiles.isEmpty()) {
@@ -30,6 +31,9 @@ class FilesGenerator(
                 writer.appendLine("mkdir -p $targetPath/${it.path.parent}")
                 writer.appendLine("cp \$BUILD_WORKSPACE_DIRECTORY/${fullPath} $targetPath/${it.path}")
                 writer.appendLine("chmod u+rw $targetPath/${it.path}")
+            }
+            languageSpecificActions.forEach {
+                writer.appendLine(it)
             }
         }
 

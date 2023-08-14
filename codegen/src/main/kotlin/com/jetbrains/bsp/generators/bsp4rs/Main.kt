@@ -27,6 +27,9 @@ object Main {
 
         val codegenFiles = renderer.render()
 
-        FilesGenerator(name, output, generatorScript, codegenFiles).run()
+        val clippy = "cargo clippy --fix --lib -p $name --allow-no-vcs --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
+        val fmt = "cargo fmt --all --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
+
+        FilesGenerator(name, output, generatorScript, codegenFiles, listOf(clippy, fmt)).run()
     }
 }
