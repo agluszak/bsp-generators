@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 /** A list of predefined tags that can be used to categorize build targets. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum BuildTargetTag {
+    #[default]
     /** A list of predefined tags that can be used to categorize build targets. */
     Application,
     /** A list of predefined tags that can be used to categorize build targets. */

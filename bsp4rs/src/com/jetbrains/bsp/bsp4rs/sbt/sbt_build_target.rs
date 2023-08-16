@@ -16,7 +16,7 @@ the defined target and no parent.
 Clients can use this information to reconstruct the tree of sbt meta builds. The
 `parent` information can be defined from `children` but it's provided by the
 server to simplify the data processing on the client side. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SbtBuildTarget {
     pub sbt_version: String,

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 /** `JvmBuildTarget` is a basic data structure that contains jvm-specific
 metadata, specifically JDK reference. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct JvmBuildTarget {
     /** Uri representing absolute path to jdk

@@ -4,7 +4,7 @@ use crate::*;
 
 /** `MavenDependencyModule` is a basic data structure that contains maven-like
 metadata. This metadata is embedded in the `data: Option[Json]` field of the `DependencyModule` definition, when the `dataKind` field contains "maven". */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MavenDependencyModule {
     pub organization: String,

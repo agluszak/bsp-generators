@@ -174,10 +174,18 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
+    private fun renderBasicDerives(isDefault: Boolean): String {
+        return """Debug, PartialEq, Clone""" + if (isDefault) ", Default" else ""
+    }
+
+    private fun renderSerializeDerives(isDefault: Boolean): String {
+        return if (isDefault) """Serialize, Deserialize""" else "Serialize_repr, Deserialize_repr"
+    }
+
     private fun renderStructure(def: Def.Structure): CodeBlock {
         return rustCode {
             lines(renderHints(def.hints))
-            -"#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]"
+            -"#[derive(${renderBasicDerives(true)}, ${renderSerializeDerives(true)})]"
             -"""#[serde(rename_all = "camelCase")]"""
             block("pub struct ${def.name}") {
                 def.fields.forEach { field ->
@@ -234,15 +242,15 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun renderEnumSerialization(enumType: EnumType<*>): CodeBlock {
+    private fun renderEnumSerialization(isDefault: Boolean, enumType: EnumType<*>): CodeBlock {
         return when (enumType) {
             EnumType.IntEnum -> rustCode {
-                -"#[derive(Debug, PartialEq, Serialize_repr, Deserialize_repr, Clone)]"
+                -"#[derive(${renderBasicDerives(isDefault)}, ${renderSerializeDerives(false)})]"
                 -"#[repr(u8)]"
             }
 
             EnumType.StringEnum -> rustCode {
-                -"#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]"
+                -"#[derive(${renderBasicDerives(isDefault)}, ${renderSerializeDerives(true)})]"
                 -"""#[serde(rename_all = "kebab-case")]"""
             }
         }
@@ -254,10 +262,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 lines(renderHints(def.hints) + renderEnumValue(def.enumType)(value), end = ",")
             }
         }
+        val isDefault = values.isNotEmpty()
         return rustCode {
             lines(renderHints(def.hints))
-            include(renderEnumSerialization(def.enumType))
+            include(renderEnumSerialization(isDefault, def.enumType))
             block("pub enum ${def.name}") {
+                if (isDefault) {
+                    -"#[default]"
+                }
                 for (value in values) {
                     include(value)
                 }
@@ -272,10 +284,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 lines(renderHints(def.hints) + renderEnumValue(def.enumType)(value), end = ",")
             }
         }
+        val isDefault = values.isNotEmpty()
         return rustCode {
             lines(renderHints(def.hints))
-            include(renderEnumSerialization(def.enumType))
+            include(renderEnumSerialization(isDefault, def.enumType))
             block("pub enum ${def.name}") {
+                if (isDefault) {
+                    -"#[default]"
+                }
                 for (value in values) {
                     include(value)
                 }

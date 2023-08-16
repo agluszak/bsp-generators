@@ -13,7 +13,7 @@ use crate::*;
 * Bazel: a bazel target corresponds one-to-one with a BuildTarget
 
 The general idea is that the BuildTarget data structure should contain only information that is fast or cheap to compute. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTarget {
     /** The target’s unique identifier */

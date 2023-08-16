@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 /** `CppBuildTarget` is a basic data structure that contains c++-specific
 metadata, specifically compiler reference. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CppBuildTarget {
     /** The c++ version this target is supposed to use.

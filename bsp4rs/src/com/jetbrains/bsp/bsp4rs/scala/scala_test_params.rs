@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 
 /** `ScalaTestParams` contains scala-specific metadata for testing Scala targets. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScalaTestParams {
     /** The test classes to be run in this test execution.

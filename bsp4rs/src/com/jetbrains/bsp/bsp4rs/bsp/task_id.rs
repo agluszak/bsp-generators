@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /** The Task Id allows clients to _uniquely_ identify a BSP task and establish a client-parent relationship with another task id. */
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TaskId {
     /** A unique identifier */
