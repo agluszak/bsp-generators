@@ -64,7 +64,7 @@ sealed interface Type {
     data class List(val member: Type) : Type
     data class Map(val key: Type, val value: Type) : Type
     data class Ref(val shapeId: ShapeId) : Type
-
+    data class Alias(val shapeId: ShapeId, val underlying: Type) : Type
     // Should be data objects
     object Unit : Type
     object Bool : Type

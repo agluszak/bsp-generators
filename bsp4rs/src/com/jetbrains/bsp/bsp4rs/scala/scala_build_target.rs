@@ -17,7 +17,7 @@ pub struct ScalaBuildTarget {
     /** The target platform for this target */
     pub platform: ScalaPlatform,
     /** A sequence of Scala jars such as scala-library, scala-compiler and scala-reflect. */
-    pub jars: Vec<String>,
+    pub jars: Vec<URI>,
     /** The jvm build target describing jdk to be used */
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jvm_build_target: Option<JvmBuildTarget>,

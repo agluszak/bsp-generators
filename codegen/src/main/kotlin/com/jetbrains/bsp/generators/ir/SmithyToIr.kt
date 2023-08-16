@@ -211,8 +211,7 @@ class SmithyToIr(val model: Model) {
                 }
 
                 val dataKindDef = Def.OpenEnum(openEnumId, EnumType.StringEnum, values, hints)
-                val dataDef = Def.Alias(id, Type.Json, hints)
-                listOf(dataKindDef, dataDef)
+                listOf(dataKindDef)
             } else {
                 typeShape(shape)
             }
@@ -250,13 +249,30 @@ class SmithyToIr(val model: Model) {
     val toTypeVisitor = object : ShapeVisitor.Default<Type?>() {
         override fun getDefault(shape: Shape): Type? = null
 
-        override fun booleanShape(shape: BooleanShape): Type = Type.Bool
+        private fun primitiveShape(shape: Shape): Type? {
+            return when (shape) {
+                is BooleanShape -> Type.Bool
+                is IntegerShape -> Type.Int
+                is LongShape -> Type.Long
+                is StringShape -> Type.String
+                is DocumentShape -> Type.Json
+                else -> null
+            }
+        }
 
-        override fun integerShape(shape: IntegerShape): Type = Type.Int
+        private fun primitiveOrAliasShape(shape: Shape): Type? {
+            val id = shape.id
 
-        override fun longShape(shape: LongShape): Type = Type.Long
+            return primitiveShape(shape)?.let { if (id.namespace == "smithy.api") it else Type.Alias(id, it) }
+        }
 
-        override fun stringShape(shape: StringShape): Type = Type.String
+        override fun booleanShape(shape: BooleanShape): Type? = primitiveOrAliasShape(shape)
+
+        override fun integerShape(shape: IntegerShape): Type? = primitiveOrAliasShape(shape)
+
+        override fun longShape(shape: LongShape): Type? = primitiveOrAliasShape(shape)
+
+        override fun stringShape(shape: StringShape): Type? = primitiveOrAliasShape(shape)
 
         override fun documentShape(shape: DocumentShape): Type = Type.Json
 

@@ -7,5 +7,5 @@ use crate::*;
 pub struct ResourcesItem {
     pub target: BuildTargetIdentifier,
     /** List of resource files. */
-    pub resources: Vec<String>,
+    pub resources: Vec<URI>,
 }

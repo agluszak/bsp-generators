@@ -137,6 +137,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         is Type.Set -> "Set<${renderType(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "Unit"
+        else -> ""
     }
 
     fun renderOperation(op: Operation): CodeBlock {

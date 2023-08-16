@@ -7,7 +7,7 @@ use crate::*;
 pub struct TestResult {
     /** An optional request id to know the origin of this report. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_id: Option<String>,
+    pub origin_id: Option<Identifier>,
     /** A status code for the execution. */
     pub status_code: StatusCode,
     /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */

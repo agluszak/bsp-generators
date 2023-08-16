@@ -14,7 +14,7 @@ pub struct LogMessageParams {
     The originId field helps clients know which request originated a notification in case several requests are handled by the
     client at the same time. It will only be populated if the client defined it in the request that triggered this notification. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_id: Option<String>,
+    pub origin_id: Option<RequestId>,
     /** The actual message. */
     pub message: String,
 }

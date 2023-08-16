@@ -10,6 +10,7 @@ import kotlin.io.path.Path
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
     val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
+    val bannedAliases: List<String> = listOf("Integer", "Long")
 
     fun makeName(name: String): String {
         return renames[name] ?: name
@@ -30,6 +31,24 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
         val modFile = generateModFile(module.moduleName, files.map { it.second })
         return files.unzip().first.toMutableList() + modFile
+    }
+
+    private fun isAliasRenderable(def: Def.Alias): Boolean {
+        if (def.name in bannedAliases) return false
+        if (def.aliasedType is Type.List) return false
+
+        return true
+    }
+
+    //    TODO: change "pub type" to something else
+    private fun renderAlias(def: Def.Alias): CodeBlock? {
+        if (!isAliasRenderable(def)) return null
+
+        return rustCode {
+            lines(renderHints(def.hints))
+            -"pub type ${def.name} = ${renderType(def.aliasedType, true)};"
+            newline()
+        }
     }
 
     private fun createPath(namespacePath: Path, fileName: String): Path {
@@ -80,8 +99,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             is Def.Structure -> renderStructure(def)
             is Def.OpenEnum<*> -> renderOpenEnum(def)
             is Def.ClosedEnum<*> -> renderClosedEnum(def)
-            is Def.Service -> renderServiceFile(def)
-            else -> null
+            is Def.Service -> renderService(def)
+            is Def.Alias -> renderAlias(def)
         }
     }
 
@@ -139,6 +158,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "()"
+        is Type.Alias -> if (type.shapeId.name in bannedAliases) renderTypeName(type.underlying) else makeName(type.shapeId.name)
     }
 
     fun renderType(type: Type, isRequired: Boolean): String {
@@ -226,7 +246,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun renderServiceFile(def: Def.Service): CodeBlock {
+    private fun renderService(def: Def.Service): CodeBlock {
         return rustCode {
             def.operations.forEach { operation ->
                 include(renderOperation(operation))
@@ -301,7 +321,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 }
 
 fun String.camelToSnakeCase(): String {
-    val pattern = "(?<=.)[A-Z]".toRegex()
+    val pattern = "(?<=[^A-Z])[A-Z]".toRegex()
     return this.replace(pattern, "_$0").lowercase()
 }
 

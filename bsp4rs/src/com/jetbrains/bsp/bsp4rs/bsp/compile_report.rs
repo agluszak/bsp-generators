@@ -13,7 +13,7 @@ pub struct CompileReport {
     pub target: BuildTargetIdentifier,
     /** An optional request id to know the origin of this report. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_id: Option<String>,
+    pub origin_id: Option<Identifier>,
     /** The total number of reported errors compiling this target. */
     pub errors: i32,
     /** The total number of reported warnings compiling the target. */

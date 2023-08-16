@@ -12,7 +12,7 @@ pub struct InitializeBuildParams {
     /** The BSP version that the client speaks */
     pub bsp_version: String,
     /** The rootUri of the workspace */
-    pub root_uri: String,
+    pub root_uri: URI,
     /** The capabilities of the client */
     pub capabilities: BuildClientCapabilities,
     /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */

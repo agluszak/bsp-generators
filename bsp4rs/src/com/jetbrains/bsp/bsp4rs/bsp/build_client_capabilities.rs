@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::*;
+
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildClientCapabilities {
@@ -7,5 +9,5 @@ pub struct BuildClientCapabilities {
     The ID strings for each language is defined in the LSP.
     The server must never respond with build targets for other
     languages than those that appear in this list. */
-    pub language_ids: Vec<String>,
+    pub language_ids: Vec<LanguageId>,
 }

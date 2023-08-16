@@ -9,5 +9,5 @@ pub struct DependencySourcesItem {
     /** List of resources containing source files of the
     target's dependencies.
     Can be source files, jar files, zip files, or directories. */
-    pub sources: Vec<String>,
+    pub sources: Vec<URI>,
 }

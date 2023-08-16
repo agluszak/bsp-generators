@@ -6,7 +6,7 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct TestReport {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_id: Option<String>,
+    pub origin_id: Option<Identifier>,
     /** The build target that was compiled. */
     pub target: BuildTargetIdentifier,
     /** The total number of successful tests. */

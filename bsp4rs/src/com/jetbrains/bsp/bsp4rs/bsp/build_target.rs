@@ -28,7 +28,7 @@ pub struct BuildTarget {
     to the same base directory, and a build target is not required to have a base directory.
     A base directory does not determine the sources of a target, see buildTarget/sources. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub base_directory: Option<String>,
+    pub base_directory: Option<URI>,
     /** Free-form string tags to categorize or label this build target.
     For example, can be used by the client to:
     - customize how the target should be translated into the client's project model.
@@ -39,7 +39,7 @@ pub struct BuildTarget {
     pub tags: Vec<String>,
     /** The set of languages that this target contains.
     The ID string for each language is defined in the LSP. */
-    pub language_ids: Vec<String>,
+    pub language_ids: Vec<LanguageId>,
     /** The direct upstream build target dependencies of this build target */
     pub dependencies: Vec<BuildTargetIdentifier>,
     /** The capabilities of this build target. */
