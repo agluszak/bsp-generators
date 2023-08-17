@@ -34,6 +34,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return CodegenFile(baseRelPath.resolve("Bsp4Kt.kt"), code.toString())
     }
 
+    // TODO: handle DataKinds
     fun renderDef(def: Def): CodegenFile? {
         return when (def) {
             is Def.Alias -> null
@@ -41,6 +42,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             is Def.OpenEnum<*> -> renderOpenEnum(def)
             is Def.Service -> renderService(def)
             is Def.Structure -> renderStructure(def)
+            else -> null
         }
     }
 
@@ -126,6 +128,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
+    // TODO: handle aliases
     fun renderType(type: Type): String = when (type) {
         Type.Bool -> "Boolean"
         Type.Int -> "Int"

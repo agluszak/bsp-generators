@@ -14,11 +14,8 @@ pub struct RunParams {
     /** Optional arguments to the executed application. */
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub arguments: Vec<String>,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Language-specific metadata for this execution.
     See ScalaMainClass as an example. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<RunParamsData>,
 }

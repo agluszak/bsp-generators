@@ -15,11 +15,8 @@ pub struct TestFinish {
     /** Source location of the test, as LSP location. */
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Optionally, structured metadata about the test completion.
     For example: stack traces, expected/actual values. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<TestFinishData>,
 }

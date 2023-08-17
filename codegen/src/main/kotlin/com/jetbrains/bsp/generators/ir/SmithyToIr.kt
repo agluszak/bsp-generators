@@ -121,9 +121,6 @@ class SmithyToIr(val model: Model) {
 
         fun getType(shapeId: ShapeId?): Type? = shapeId?.let { model.expectShape(it).accept(toTypeVisitor) }
 
-        fun dataKindShapeId(dataTypeShapeId: ShapeId): ShapeId =
-            ShapeId.fromParts(dataTypeShapeId.namespace, dataTypeShapeId.name + "Kind")
-
         override fun structureShape(shape: StructureShape): List<Def> {
             // Skip shapes that are used as mixins.
             if (shape.hasTrait(MixinTrait::class.java)) {
@@ -132,34 +129,7 @@ class SmithyToIr(val model: Model) {
 
             val fields = shape.members().mapNotNull { toField(it) }
 
-            fun fieldIsData(field: Field): Boolean =
-                field.name == "data" && field.type == Type.Json
-
-            fun makeDiscriminatorField(dataField: Field): Field {
-                val doc =
-                    "Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified."
-                val hints = listOf(Hint.Documentation(doc))
-                if (dataField.type != Type.Json) {
-                    throw RuntimeException("Expected document type")
-                }
-                return Field("dataKind", Type.String, false, hints)
-            }
-
-            fun insertDiscriminator(fields: List<Field>): List<Field> {
-                val mutableFields = fields.toMutableList()
-
-                val dataIndex = fields.indexOfFirst { fieldIsData(it) }
-                if (dataIndex != -1) {
-                    val newField = makeDiscriminatorField(fields[dataIndex])
-                    mutableFields.add(dataIndex, newField)
-                }
-
-                return mutableFields
-            }
-
-            val updatedFields = insertDiscriminator(fields)
-
-            return listOf(Def.Structure(shape.id, updatedFields, getHints(shape)))
+            return listOf(Def.Structure(shape.id, fields, getHints(shape)))
         }
 
         override fun intEnumShape(shape: IntEnumShape): List<Def> {
@@ -201,17 +171,11 @@ class SmithyToIr(val model: Model) {
             // and one for the data kind (an enum).
             return if (shape.hasTrait(DataTrait::class.java)) {
                 val id = shape.id
-
-                val allKnownInhabitants = allDataKindAnnotated[id]!!
-                val openEnumId = dataKindShapeId(id)
-                val values = allKnownInhabitants.map { (disc, member) ->
-                    val snakeCased = disc.replace('-', '_').uppercase(Locale.getDefault())
-                    val memberDoc = "`data` field must contain a ${member.name} object."
-                    EnumValue(snakeCased, disc, listOf(Hint.Documentation(memberDoc)))
+                val dataKinds = allDataKindAnnotated[id]!!.mapNotNull { polyDataKind ->
+                    getType(polyDataKind.shapeId)?.let { PolymorphicData(polyDataKind.kind, it) }
                 }
 
-                val dataKindDef = Def.OpenEnum(openEnumId, EnumType.StringEnum, values, hints)
-                listOf(dataKindDef)
+                listOf(Def.Data(id, dataKinds, hints))
             } else {
                 typeShape(shape)
             }
@@ -224,6 +188,7 @@ class SmithyToIr(val model: Model) {
                 is IntegerShape -> listOf(Def.Alias(shape.getId(), Type.Int, hints))
                 is LongShape -> listOf(Def.Alias(shape.getId(), Type.Long, hints))
                 is StringShape -> listOf(Def.Alias(shape.getId(), Type.String, hints))
+                is DocumentShape -> listOf(Def.Alias(shape.getId(), Type.Json, hints))
                 is ListShape -> listOfNotNull(
                     toTypeVisitor.listShape(shape)?.let { Def.Alias(shape.getId(), it, hints) })
 
@@ -274,7 +239,13 @@ class SmithyToIr(val model: Model) {
 
         override fun stringShape(shape: StringShape): Type? = primitiveOrAliasShape(shape)
 
-        override fun documentShape(shape: DocumentShape): Type = Type.Json
+        override fun documentShape(shape: DocumentShape): Type? {
+            return if (shape.hasTrait(DataTrait::class.java)) {
+                Type.Ref(shape.id)
+            } else {
+                primitiveOrAliasShape(shape)
+            }
+        }
 
         override fun listShape(shape: ListShape): Type? {
             return shape.member.accept(this)?.let { memberType ->

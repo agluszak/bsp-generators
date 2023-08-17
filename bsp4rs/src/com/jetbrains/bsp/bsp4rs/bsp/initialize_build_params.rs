@@ -15,10 +15,7 @@ pub struct InitializeBuildParams {
     pub root_uri: URI,
     /** The capabilities of the client */
     pub capabilities: BuildClientCapabilities,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Additional metadata about the client */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<InitializeBuildParamsData>,
 }

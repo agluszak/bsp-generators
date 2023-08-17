@@ -33,6 +33,12 @@ sealed interface Def {
         val operations: List<Operation>,
         override val hints: List<Hint>
     ) : Def
+
+    data class Data(
+        override val shapeId: ShapeId,
+        val kinds: List<PolymorphicData>,
+        override val hints: List<Hint>
+    ) : Def
 }
 
 sealed interface JsonRpcMethodType {
@@ -82,6 +88,7 @@ data class Field(
     val hints: List<Hint>
 )
 
+data class PolymorphicData(val kind: String, val type: Type)
 data class PolymorphicDataKind(val kind: String, val shapeId: ShapeId)
 
 sealed interface Hint {

@@ -1,5 +1,5 @@
 use serde::de::DeserializeOwned;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 pub mod bsp;
 pub mod cargo;
@@ -18,7 +18,7 @@ use java::*;
 use jvm::*;
 use maven::*;
 use python::*;
-
+use sbt::*;
 use scala::*;
 
 pub trait Request {
@@ -30,4 +30,11 @@ pub trait Request {
 pub trait Notification {
     type Params: DeserializeOwned + Serialize;
     const METHOD: &'static str;
+}
+
+#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OtherData {
+    pub data_kind: String,
+    pub data: serde_json::Value,
 }

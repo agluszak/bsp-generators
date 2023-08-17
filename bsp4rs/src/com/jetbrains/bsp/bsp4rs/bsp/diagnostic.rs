@@ -24,11 +24,8 @@ pub struct Diagnostic {
     a scope collide all definitions can be marked via this property. */
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub related_information: Vec<DiagnosticRelatedInformation>,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** A data entry field that is preserved between a `textDocument/publishDiagnostics` notification
     and a `textDocument/codeAction` request. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<DiagnosticData>,
 }

@@ -44,11 +44,8 @@ pub struct BuildTarget {
     pub dependencies: Vec<BuildTargetIdentifier>,
     /** The capabilities of this build target. */
     pub capabilities: BuildTargetCapabilities,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Language-specific metadata about this target.
     See ScalaBuildTarget as an example. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<BuildTargetData>,
 }

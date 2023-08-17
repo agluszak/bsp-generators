@@ -10,11 +10,8 @@ pub struct TestResult {
     pub origin_id: Option<Identifier>,
     /** A status code for the execution. */
     pub status_code: StatusCode,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Language-specific metadata about the test result.
     See ScalaTestParams as an example. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<TestResultData>,
 }

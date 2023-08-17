@@ -33,6 +33,40 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return files.unzip().first.toMutableList() + modFile
     }
 
+    private fun renderData(def: Def.Data): CodeBlock {
+        val dataKinds = def.kinds.map { kind ->
+            val name = makeName(kind.kind.kebabToUpperCamelCase())
+            val dataType = renderType(kind.type, true)
+            Pair(name, dataType)
+        }
+
+        val namedName = "Named${def.name}"
+
+        return rustCode {
+            -"#[derive(${renderBasicDerives(false)}, ${renderSerializeDerives(true)})]"
+            -"""#[serde(rename_all = "kebab-case", tag = "dataKind", content = "data")]"""
+            block("pub enum $namedName") {
+                lines(dataKinds.map { "${it.first}(${it.second})" }, ",", ",")
+            }
+            newline()
+            lines(renderHints(def.hints))
+            -"#[derive(${renderBasicDerives(false)}, ${renderSerializeDerives(true)})]"
+            -"""# [serde(untagged)]"""
+            block("pub enum ${def.name}") {
+                -"Named($namedName),"
+                -"Other(OtherData),"
+            }
+            newline()
+            block("impl ${def.name}") {
+                dataKinds.forEach { dataKind ->
+                    block("pub fn ${dataKind.first.camelToSnakeCase()}(data: ${dataKind.second}) -> Self") {
+                        -"${def.name}::Named($namedName::${dataKind.first}(data))"
+                    }
+                }
+            }
+        }
+    }
+
     private fun isAliasRenderable(def: Def.Alias): Boolean {
         if (def.name in bannedAliases) return false
         if (def.aliasedType is Type.List) return false
@@ -62,6 +96,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             lines(modulesNames.map { "use $it::*" }, ";", ";")
             newline()
             include(renderRpcTraits())
+            newline()
+            include(renderOtherDataStruct())
         }
 
         return generateFile(code, Path(""), "lib.rs")
@@ -90,7 +126,17 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             block("pub trait Notification") {
                 lines(listOf(paramsStr, methodStr), ";", ";")
             }
-            newline()
+        }
+    }
+
+    private fun renderOtherDataStruct(): CodeBlock {
+        return rustCode {
+            -"#[derive(${renderBasicDerives(true)}, ${renderSerializeDerives(true)})]"
+            -"""#[serde(rename_all = "camelCase")]"""
+            block("pub struct OtherData") {
+                -"pub data_kind: String,"
+                -"pub data: serde_json::Value,"
+            }
         }
     }
 
@@ -101,6 +147,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             is Def.ClosedEnum<*> -> renderClosedEnum(def)
             is Def.Service -> renderService(def)
             is Def.Alias -> renderAlias(def)
+            is Def.Data -> renderData(def)
         }
     }
 
@@ -339,6 +386,12 @@ fun String.camelToSnakeCase(): String {
 
 fun String.snakeToUpperCamelCase(): String {
     val pattern = "_(.)".toRegex()
+    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
+        .replaceFirstChar { it.uppercaseChar() }
+}
+
+fun String.kebabToUpperCamelCase(): String {
+    val pattern = "-(.)".toRegex()
     return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
         .replaceFirstChar { it.uppercaseChar() }
 }

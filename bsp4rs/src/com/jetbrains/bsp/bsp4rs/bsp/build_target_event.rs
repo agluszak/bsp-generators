@@ -10,10 +10,7 @@ pub struct BuildTargetEvent {
     /** The kind of change for this build target */
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<BuildTargetEventKind>,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Any additional metadata about what information changed. */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<BuildTargetEventData>,
 }

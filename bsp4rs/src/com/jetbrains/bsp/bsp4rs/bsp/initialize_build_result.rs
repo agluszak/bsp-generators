@@ -13,10 +13,7 @@ pub struct InitializeBuildResult {
     pub bsp_version: String,
     /** The capabilities of the build server */
     pub capabilities: BuildServerCapabilities,
-    /** Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified. */
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data_kind: Option<String>,
     /** Additional metadata about the server */
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<serde_json::Value>,
+    pub data: Option<InitializeBuildResultData>,
 }
