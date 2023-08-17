@@ -9,10 +9,10 @@ import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
-    val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
-    val bannedAliases: List<String> = listOf("Integer", "Long")
+    private val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
+    private val bannedAliases: List<String> = listOf("Integer", "Long")
 
-    fun makeName(name: String): String {
+    private fun makeName(name: String): String {
         return renames[name] ?: name
     }
 
@@ -22,7 +22,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return listOf(libFile) + defFiles
     }
 
-    fun renderModule(module: Module): List<CodegenFile> {
+    private fun renderModule(module: Module): List<CodegenFile> {
         val files = module.definitions.mapNotNull {
             renderDef(it)?.run {
                 val name = makeName(it.name).camelToSnakeCase()
@@ -254,16 +254,20 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun renderEnumValue(enumType: EnumType<*>): (EnumValue<*>) -> String {
-        val genName: (String) -> String = { makeName(it.snakeToUpperCamelCase()) }
-        return when (enumType) {
-            EnumType.IntEnum -> { ev: EnumValue<*> -> "${genName(ev.name)} = ${ev.value}" }
-            EnumType.StringEnum -> { ev: EnumValue<*> -> genName(ev.name) }
-        }
-    }
+    private fun renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock {
+        val isDefault = def.values.isNotEmpty()
 
-    private fun renderEnumSerialization(isDefault: Boolean, enumType: EnumType<*>): CodeBlock {
-        return when (enumType) {
+        val genName: (String) -> String = { makeName(it.snakeToUpperCamelCase()) }
+        fun renderEnumValue(ev: EnumValue<*>): String = when (def.enumType) {
+            EnumType.IntEnum -> "${genName(ev.name)} = ${ev.value}"
+            EnumType.StringEnum -> genName(ev.name)
+        }
+
+        val values = def.values.map { value ->
+            rustCode { lines(renderHints(value.hints) + renderEnumValue(value), end = ",") }
+        }
+
+        val renderEnumSerialization: CodeBlock = when (def.enumType) {
             EnumType.IntEnum -> rustCode {
                 -"#[derive(${renderBasicDerives(isDefault)}, ${renderSerializeDerives(false)})]"
                 -"#[repr(u8)]"
@@ -274,18 +278,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 -"""#[serde(rename_all = "kebab-case")]"""
             }
         }
-    }
 
-    fun renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock {
-        val values = def.values.map { value ->
-            rustCode {
-                lines(renderHints(def.hints) + renderEnumValue(def.enumType)(value), end = ",")
-            }
-        }
-        val isDefault = values.isNotEmpty()
         return rustCode {
             lines(renderHints(def.hints))
-            include(renderEnumSerialization(isDefault, def.enumType))
+            include(renderEnumSerialization)
             block("pub enum ${def.name}") {
                 if (isDefault) {
                     -"#[default]"
@@ -297,24 +293,40 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    // TODO - this is a copy of renderClosedEnum, we need to figure out how it should be changed
-    fun renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
-        val values = def.values.map { value ->
-            rustCode {
-                lines(renderHints(def.hints) + renderEnumValue(def.enumType)(value), end = ",")
-            }
+    private fun renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
+        val name = def.name
+
+        fun renderValue(ev: EnumValue<*>): String = when (def.enumType) {
+            EnumType.IntEnum -> "${ev.value}"
+            EnumType.StringEnum -> """"${ev.value}""""
         }
-        val isDefault = values.isNotEmpty()
+
+        fun renderEnumValue(ev: EnumValue<*>): String =
+            "pub const ${makeName(ev.name.uppercase())}: $name = $name::new(${renderValue(ev)})"
+
+        val values = def.values.map { value ->
+            rustCode { lines(renderHints(value.hints) + renderEnumValue(value), end = ";") }
+        }
+        val type = when (def.enumType) {
+            EnumType.IntEnum -> "i32"
+            EnumType.StringEnum -> "std::borrow::Cow<'static, str>"
+        }
+        val newFun = when (def.enumType) {
+            EnumType.IntEnum -> "pub const fn new(tag: i32) -> Self { $name(tag) }"
+            EnumType.StringEnum -> "pub const fn new(tag: &'static str) -> Self { $name(std::borrow::Cow::Borrowed(tag)) }"
+        }
+
         return rustCode {
             lines(renderHints(def.hints))
-            include(renderEnumSerialization(isDefault, def.enumType))
-            block("pub enum ${def.name}") {
-                if (isDefault) {
-                    -"#[default]"
-                }
+            -"#[derive(${renderBasicDerives(true)}, ${renderSerializeDerives(true)})]"
+            -"#[serde(transparent)]"
+            -"pub struct $name(pub $type);"
+            block("impl $name") {
                 for (value in values) {
                     include(value)
                 }
+                newline()
+                -newFun
             }
         }
     }

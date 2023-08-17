@@ -6,13 +6,10 @@ reindexing or update the user interface with the new information. */
 #[repr(u8)]
 pub enum BuildTargetEventKind {
     #[default]
-    /** The `BuildTargetEventKind` information can be used by clients to trigger
-    reindexing or update the user interface with the new information. */
+    /** The build target is new. */
     Created = 1,
-    /** The `BuildTargetEventKind` information can be used by clients to trigger
-    reindexing or update the user interface with the new information. */
+    /** The build target has changed. */
     Changed = 2,
-    /** The `BuildTargetEventKind` information can be used by clients to trigger
-    reindexing or update the user interface with the new information. */
+    /** The build target has been deleted. */
     Deleted = 3,
 }
