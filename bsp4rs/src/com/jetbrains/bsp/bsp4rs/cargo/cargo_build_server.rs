@@ -10,19 +10,10 @@ impl Request for CargoFeaturesState {
 }
 
 #[derive(Debug)]
-pub enum EnableCargoFeatures {}
+pub enum SetCargoFeatures {}
 
-impl Request for EnableCargoFeatures {
-    type Params = EnableCargoFeaturesParams;
-    type Result = ();
-    const METHOD: &'static str = "workspace/enableCargoFeatures";
-}
-
-#[derive(Debug)]
-pub enum DisableCargoFeatures {}
-
-impl Request for DisableCargoFeatures {
-    type Params = DisableCargoFeaturesParams;
-    type Result = ();
-    const METHOD: &'static str = "workspace/disableCargoFeatures";
+impl Request for SetCargoFeatures {
+    type Params = SetCargoFeaturesParams;
+    type Result = SetCargoFeaturesResult;
+    const METHOD: &'static str = "workspace/setCargoFeatures";
 }

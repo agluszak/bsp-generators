@@ -5,6 +5,7 @@ use crate::*;
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case", tag = "dataKind", content = "data")]
 pub enum NamedBuildTargetData {
+    Cargo(CargoBuildTarget),
     Cpp(CppBuildTarget),
     Jvm(JvmBuildTarget),
     Python(PythonBuildTarget),
@@ -20,6 +21,9 @@ pub enum BuildTargetData {
 }
 
 impl BuildTargetData {
+    pub fn cargo(data: CargoBuildTarget) -> Self {
+        BuildTargetData::Named(NamedBuildTargetData::Cargo(data))
+    }
     pub fn cpp(data: CppBuildTarget) -> Self {
         BuildTargetData::Named(NamedBuildTargetData::Cpp(data))
     }

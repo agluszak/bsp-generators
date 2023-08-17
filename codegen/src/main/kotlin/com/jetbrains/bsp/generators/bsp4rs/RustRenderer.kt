@@ -231,7 +231,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderImports(canImportCrate: Boolean): CodeBlock {
         return rustCode {
-            -"use cargo_metadata::Edition;"
             -"use serde::{Deserialize, Serialize};"
             -"use serde::de::DeserializeOwned;"
             -"use serde_repr::{Deserialize_repr, Serialize_repr};"
