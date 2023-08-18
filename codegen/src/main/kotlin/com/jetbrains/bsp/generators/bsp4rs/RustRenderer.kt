@@ -200,7 +200,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         Type.Json -> "serde_json::Value"
         is Type.List -> "Vec<${renderTypeName(type.member)}>"
         Type.Long -> "i64"
-        is Type.Map -> "HashMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
+        is Type.Map -> "BTreeMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
         is Type.Ref -> makeName(type.shapeId.name)
         is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
         Type.String -> "String"
@@ -234,7 +234,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -"use serde::{Deserialize, Serialize};"
             -"use serde::de::DeserializeOwned;"
             -"use serde_repr::{Deserialize_repr, Serialize_repr};"
-            -"use std::collections::{BTreeSet, HashMap};"
+            -"use std::collections::{BTreeSet, BTreeMap};"
             -(if (canImportCrate) "use crate::*;" else null)
             newline()
         }

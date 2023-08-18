@@ -1,3 +1,3 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
-pub type EnvironmentVariables = HashMap<String, String>;
+pub type EnvironmentVariables = BTreeMap<String, String>;
