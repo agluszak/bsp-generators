@@ -36,7 +36,7 @@ pub struct BuildTarget {
     - display icons or colors in the user interface.
     Pre-defined tags are listed in `BuildTargetTag` but clients and servers
     are free to define new tags for custom purposes. */
-    pub tags: Vec<String>,
+    pub tags: Vec<BuildTargetTag>,
     /** The set of languages that this target contains.
     The ID string for each language is defined in the LSP. */
     pub language_ids: Vec<LanguageId>,

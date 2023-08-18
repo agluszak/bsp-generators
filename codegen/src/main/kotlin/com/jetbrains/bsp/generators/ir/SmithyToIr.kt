@@ -264,21 +264,9 @@ class SmithyToIr(val model: Model) {
 
         override fun structureShape(shape: StructureShape): Type = Type.Ref(shape.id)
 
-        fun enumUniversal(shape: Shape, openType: Type): Type {
-            val enumKind = shape.expectTrait(EnumKindTrait::class.java).enumKind
-            return when (enumKind) {
-                EnumKindTrait.EnumKind.OPEN -> openType
-                EnumKindTrait.EnumKind.CLOSED -> Type.Ref(shape.id)
-            }
-        }
+        override fun enumShape(shape: EnumShape): Type = Type.Ref(shape.id)
 
-        override fun enumShape(shape: EnumShape): Type {
-            return enumUniversal(shape, Type.String)
-        }
-
-        override fun intEnumShape(shape: IntEnumShape): Type {
-            return enumUniversal(shape, Type.Int)
-        }
+        override fun intEnumShape(shape: IntEnumShape): Type = Type.Ref(shape.id)
 
         override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
     }
