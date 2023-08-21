@@ -11,11 +11,12 @@ whereas ScalaAction is intended to be returned as `Diagnostics.data.actions`. */
 #[serde(rename_all = "camelCase")]
 pub struct ScalaAction {
     /** A short, human-readable, title for this code action. */
+    #[serde(default)]
     pub title: String,
     /** A description that may be shown to the user client side to explain the action. */
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /** The workspace edit this code action performs. */
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub edit: Option<ScalaWorkspaceEdit>,
 }

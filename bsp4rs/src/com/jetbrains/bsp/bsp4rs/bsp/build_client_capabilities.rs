@@ -9,5 +9,6 @@ pub struct BuildClientCapabilities {
     The ID strings for each language is defined in the LSP.
     The server must never respond with build targets for other
     languages than those that appear in this list. */
+    #[serde(default)]
     pub language_ids: Vec<LanguageId>,
 }

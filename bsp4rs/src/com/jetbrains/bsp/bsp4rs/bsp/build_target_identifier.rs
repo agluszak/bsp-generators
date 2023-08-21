@@ -8,5 +8,6 @@ Clients should not infer metadata out of the URI structure such as the path or q
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetIdentifier {
     /** The target’s Uri */
+    #[serde(default)]
     pub uri: URI,
 }

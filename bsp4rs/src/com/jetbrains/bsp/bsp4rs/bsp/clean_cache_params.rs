@@ -6,5 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct CleanCacheParams {
     /** The build targets to clean. */
+    #[serde(default)]
     pub targets: Vec<BuildTargetIdentifier>,
 }

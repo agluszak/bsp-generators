@@ -19,10 +19,14 @@ server to simplify the data processing on the client side. */
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SbtBuildTarget {
+    #[serde(default)]
     pub sbt_version: String,
+    #[serde(default)]
     pub auto_imports: Vec<String>,
+    #[serde(default)]
     pub scala_build_target: ScalaBuildTarget,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent: Option<BuildTargetIdentifier>,
+    #[serde(default)]
     pub children: Vec<BuildTargetIdentifier>,
 }

@@ -184,14 +184,22 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     fun renderFieldSerialization(field: Field): String? {
-        if (field.required) return null
+        var serdeOpt = "default"
 
-        return when (field.type) {
-            is Type.List -> """#[serde(default, skip_serializing_if = "Vec::is_empty")]"""
-            is Type.Map -> """#[serde(default, skip_serializing_if = "HashMap::is_empty")]"""
-            is Type.Set -> """#[serde(default, skip_serializing_if = "BTreeSet::is_empty")]"""
-            else -> """#[serde(skip_serializing_if = "Option::is_none")]"""
+        if (field.name == "data") {
+            serdeOpt += ", flatten"
         }
+
+        if (!field.required) {
+            serdeOpt += when (field.type) {
+                is Type.List -> """, skip_serializing_if = "Vec::is_empty""""
+                is Type.Map -> """, skip_serializing_if = "HashMap::is_empty""""
+                is Type.Set -> """, skip_serializing_if = "BTreeSet::is_empty""""
+                else -> """, skip_serializing_if = "Option::is_none""""
+            }
+        }
+
+        return """#[serde($serdeOpt)]"""
     }
 
     private fun renderTypeName(type: Type): String = when (type) {

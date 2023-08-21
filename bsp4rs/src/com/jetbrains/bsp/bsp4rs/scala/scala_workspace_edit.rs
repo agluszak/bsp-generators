@@ -6,5 +6,6 @@ use crate::*;
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScalaWorkspaceEdit {
+    #[serde(default)]
     pub changes: Vec<ScalaTextEdit>,
 }

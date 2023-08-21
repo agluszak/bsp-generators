@@ -9,5 +9,6 @@ include a `CompileTask` object: */
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CompileTask {
+    #[serde(default)]
     pub target: BuildTargetIdentifier,
 }

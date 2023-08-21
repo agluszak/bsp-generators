@@ -5,7 +5,9 @@ use crate::*;
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ResourcesItem {
+    #[serde(default)]
     pub target: BuildTargetIdentifier,
     /** List of resource files. */
+    #[serde(default)]
     pub resources: Vec<URI>,
 }

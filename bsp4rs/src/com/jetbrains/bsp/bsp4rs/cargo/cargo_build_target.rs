@@ -7,6 +7,8 @@ cargo-specific metadata. */
 #[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CargoBuildTarget {
+    #[serde(default)]
     pub edition: Edition,
+    #[serde(default)]
     pub required_features: Vec<String>,
 }
