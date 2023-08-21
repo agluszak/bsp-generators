@@ -18,6 +18,8 @@ service CargoBuildServer {
     ]
 }
 
+// TODO: what about `Feature` alias?
+
 /// `CargoBuildTarget` is a basic data structure that contains
 /// cargo-specific metadata.
 @dataKind(kind: "cargo", extends: [BuildTargetData])
@@ -28,6 +30,7 @@ structure CargoBuildTarget {
     required_features: Features
 }
 
+// TODO: decide if it should be open or closed
 /// The Rust edition.
 /// As of writing this comment rust editions 2024, 2027 and 2030 are not
 /// actually a thing yet but are parsed nonetheless for future proofing.
@@ -56,6 +59,7 @@ structure CargoFeaturesStateResult {
     packagesFeatures: PackagesFeatures
 }
 
+// TODO: trait `set`?
 list Features {
     member: String
 }

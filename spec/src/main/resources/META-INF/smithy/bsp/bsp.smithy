@@ -9,6 +9,8 @@ use traits#jsonNotification
 use traits#jsonRPC
 use traits#jsonRequest
 
+// TODO: cancel notif?
+
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
 integer Integer
 
@@ -136,6 +138,7 @@ list BuildTargetTags {
     member: BuildTargetTag
 }
 
+// TODO: why the fields are not required?
 /// Clients can use these capabilities to notify users what BSP endpoints can and
 /// cannot be used and why.
 structure BuildTargetCapabilities {
@@ -703,6 +706,7 @@ structure PublishDiagnosticsParams {
 @data
 document DiagnosticData
 
+// TODO: why it is different from lsp one, and why it has coomented out fields
 structure Diagnostic {
     /// The range at which the message applies.
     @required
