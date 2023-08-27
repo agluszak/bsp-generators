@@ -142,7 +142,11 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     fun renderOperation(op: Operation): CodeBlock {
         val output = when (op.jsonRpcMethodType) {
             JsonRpcMethodType.Notification -> "Unit"
-            JsonRpcMethodType.Request -> "CompletableFuture<${renderType(op.outputType)}>"
+            JsonRpcMethodType.Request -> renderType(op.outputType)
+        }
+        val maybeSuspend = when (op.jsonRpcMethodType) {
+            JsonRpcMethodType.Notification -> ""
+            JsonRpcMethodType.Request -> "suspend "
         }
         val input = when (op.inputType) {
             Type.Unit -> ""
@@ -160,7 +164,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return code {
             -maybeDeprecated
             -rpcAnnotation
-            -"fun $name($input): $output"
+            -"fun $maybeSuspend$name($input): $output"
             newline()
         }
     }
@@ -173,7 +177,6 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             -"import org.jetbrains.jsonrpc4kt.services.JsonNotification"
             -"import org.jetbrains.jsonrpc4kt.services.JsonRequest"
             -"import kotlinx.serialization.SerialName"
-            -"import java.util.concurrent.CompletableFuture"
             newline()
             block("interface $name") {
                 def.operations.forEach { operation ->
