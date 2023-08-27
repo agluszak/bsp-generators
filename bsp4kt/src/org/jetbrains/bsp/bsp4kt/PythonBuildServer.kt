@@ -6,6 +6,6 @@ import kotlinx.serialization.SerialName
 
 interface PythonBuildServer {
   @JsonRequest("buildTarget/pythonOptions")
-  fun suspend buildTargetPythonOptions(params: PythonOptionsParams): PythonOptionsResult
+  suspend fun buildTargetPythonOptions(params: PythonOptionsParams): PythonOptionsResult
 
 }

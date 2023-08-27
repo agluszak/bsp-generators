@@ -6,6 +6,6 @@ import kotlinx.serialization.SerialName
 
 interface CppBuildServer {
   @JsonRequest("buildTarget/cppOptions")
-  fun suspend buildTargetCppOptions(params: CppOptionsParams): CppOptionsResult
+  suspend fun buildTargetCppOptions(params: CppOptionsParams): CppOptionsResult
 
 }

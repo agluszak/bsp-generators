@@ -6,12 +6,12 @@ import kotlinx.serialization.SerialName
 
 interface CargoBuildServer {
   @JsonRequest("workspace/cargoFeaturesState")
-  fun suspend cargoFeaturesState(): CargoFeaturesStateResult
+  suspend fun cargoFeaturesState(): CargoFeaturesStateResult
 
   @JsonRequest("workspace/enableCargoFeatures")
-  fun suspend enableCargoFeatures(params: EnableCargoFeaturesParams): Unit
+  suspend fun enableCargoFeatures(params: EnableCargoFeaturesParams): Unit
 
   @JsonRequest("workspace/disableCargoFeatures")
-  fun suspend disableCargoFeatures(params: DisableCargoFeaturesParams): Unit
+  suspend fun disableCargoFeatures(params: DisableCargoFeaturesParams): Unit
 
 }

@@ -6,9 +6,9 @@ import kotlinx.serialization.SerialName
 
 interface JvmBuildServer {
   @JsonRequest("buildTarget/jvmTestEnvironment")
-  fun suspend buildTargetJvmTestEnvironment(params: JvmTestEnvironmentParams): JvmTestEnvironmentResult
+  suspend fun buildTargetJvmTestEnvironment(params: JvmTestEnvironmentParams): JvmTestEnvironmentResult
 
   @JsonRequest("buildTarget/jvmRunEnvironment")
-  fun suspend buildTargetJvmRunEnvironment(params: JvmRunEnvironmentParams): JvmRunEnvironmentResult
+  suspend fun buildTargetJvmRunEnvironment(params: JvmRunEnvironmentParams): JvmRunEnvironmentResult
 
 }

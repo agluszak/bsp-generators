@@ -6,6 +6,6 @@ import kotlinx.serialization.SerialName
 
 interface JavaBuildServer {
   @JsonRequest("buildTarget/javacOptions")
-  fun suspend buildTargetJavacOptions(params: JavacOptionsParams): JavacOptionsResult
+  suspend fun buildTargetJavacOptions(params: JavacOptionsParams): JavacOptionsResult
 
 }

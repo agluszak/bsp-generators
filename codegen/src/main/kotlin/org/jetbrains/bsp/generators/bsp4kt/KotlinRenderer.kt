@@ -164,7 +164,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return code {
             -maybeDeprecated
             -rpcAnnotation
-            -"fun $maybeSuspend$name($input): $output"
+            -"${maybeSuspend}fun $name($input): $output"
             newline()
         }
     }
