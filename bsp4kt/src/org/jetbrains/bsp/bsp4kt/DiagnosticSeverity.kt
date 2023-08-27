@@ -1,7 +1,7 @@
 package org.jetbrains.bsp.bsp4kt
 
-import com.jetbrains.jsonrpc4kt.IntEnum
-import com.jetbrains.jsonrpc4kt.json.serializers.EnumAsIntSerializer
+import org.jetbrains.jsonrpc4kt.IntEnum
+import org.jetbrains.jsonrpc4kt.json.serializers.EnumAsIntSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 

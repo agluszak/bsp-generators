@@ -74,8 +74,8 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         val code = code {
             -"package $basepkg"
             newline()
-            -"import com.jetbrains.jsonrpc4kt.IntEnum"
-            -"import com.jetbrains.jsonrpc4kt.json.serializers.EnumAsIntSerializer"
+            -"import org.jetbrains.jsonrpc4kt.IntEnum"
+            -"import org.jetbrains.jsonrpc4kt.json.serializers.EnumAsIntSerializer"
             -"import kotlinx.serialization.KSerializer"
             -"import kotlinx.serialization.Serializable"
             newline()
@@ -170,8 +170,8 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         val code = code {
             -"package $basepkg"
             newline()
-            -"import com.jetbrains.jsonrpc4kt.services.JsonNotification"
-            -"import com.jetbrains.jsonrpc4kt.services.JsonRequest"
+            -"import org.jetbrains.jsonrpc4kt.services.JsonNotification"
+            -"import org.jetbrains.jsonrpc4kt.services.JsonRequest"
             -"import kotlinx.serialization.SerialName"
             -"import java.util.concurrent.CompletableFuture"
             newline()

@@ -1,7 +1,7 @@
 package org.jetbrains.bsp.bsp4kt
 
-import com.jetbrains.jsonrpc4kt.services.JsonNotification
-import com.jetbrains.jsonrpc4kt.services.JsonRequest
+import org.jetbrains.jsonrpc4kt.services.JsonNotification
+import org.jetbrains.jsonrpc4kt.services.JsonRequest
 import kotlinx.serialization.SerialName
 import java.util.concurrent.CompletableFuture
 
