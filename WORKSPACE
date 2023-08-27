@@ -59,7 +59,7 @@ maven_install(
 
         # bsp4kt
         "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1",
-        "com.github.agluszak:jsonrpc4kt:main-SNAPSHOT"
+        "com.github.agluszak:jsonrpc4kt:f4d0c972f8"
 
     ],
     fetch_sources = True,

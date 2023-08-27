@@ -16,8 +16,11 @@ jobs:
           path: "~/.cache/bazel"
           key: bazel
 
-      - name: generate
+      - name: Generate
         run: bazel run :generate-bsp4kt
+
+      - name: Build
+        run: bazel build //...
 
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@v16
