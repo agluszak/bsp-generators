@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use std::collections::BTreeSet;
+
 #[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SetCargoFeaturesParams {
@@ -8,5 +10,5 @@ pub struct SetCargoFeaturesParams {
     pub package_id: String,
     /** The list of features to be set as a new state. */
     #[serde(default)]
-    pub features: Vec<String>,
+    pub features: BTreeSet<String>,
 }

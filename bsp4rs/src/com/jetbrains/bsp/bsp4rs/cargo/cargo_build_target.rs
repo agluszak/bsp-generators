@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
+use std::collections::BTreeSet;
 
 /** `CargoBuildTarget` is a basic data structure that contains
 cargo-specific metadata. */
@@ -10,5 +11,5 @@ pub struct CargoBuildTarget {
     #[serde(default)]
     pub edition: Edition,
     #[serde(default)]
-    pub required_features: Vec<String>,
+    pub required_features: BTreeSet<String>,
 }

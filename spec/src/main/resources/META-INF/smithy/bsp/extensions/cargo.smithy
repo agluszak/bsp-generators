@@ -9,6 +9,7 @@ use traits#dataKind
 use traits#enumKind
 use traits#jsonRPC
 use traits#jsonRequest
+use traits#set
 
 @jsonRPC
 service CargoBuildServer {
@@ -59,13 +60,9 @@ structure CargoFeaturesStateResult {
     packagesFeatures: PackagesFeatures
 }
 
-// TODO: trait `set`?
+@set
 list Features {
     member: String
-}
-
-list FeaturesDependencyGraph {
-    member: FeatureDependencyGraph
 }
 
 /// The feature dependency graph is a mapping between
@@ -84,7 +81,7 @@ structure PackageFeatures {
     targets: BuildTargetIdentifiers
     /// The list of available features for the Cargo package.
     @required
-    availableFeatures: FeaturesDependencyGraph
+    availableFeatures: FeatureDependencyGraph
     /// The list of enabled features for the Cargo package.
     @required
     enabledFeatures: Features
