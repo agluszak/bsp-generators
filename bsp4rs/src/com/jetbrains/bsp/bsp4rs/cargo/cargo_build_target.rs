@@ -11,5 +11,5 @@ pub struct CargoBuildTarget {
     #[serde(default)]
     pub edition: Edition,
     #[serde(default)]
-    pub required_features: BTreeSet<String>,
+    pub required_features: BTreeSet<Feature>,
 }

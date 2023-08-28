@@ -72,7 +72,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         if (name in bannedAliases) return false
         if (underlying is Type.List) return false
         if (underlying is Type.Set) return false
-        if (underlying is Type.Map) return false
 
         return true
     }

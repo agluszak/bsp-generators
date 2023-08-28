@@ -14,8 +14,8 @@ pub struct PackageFeatures {
     pub targets: Vec<BuildTargetIdentifier>,
     /** The list of available features for the Cargo package. */
     #[serde(default)]
-    pub available_features: BTreeMap<String, BTreeSet<String>>,
+    pub available_features: BTreeMap<Feature, BTreeSet<Feature>>,
     /** The list of enabled features for the Cargo package. */
     #[serde(default)]
-    pub enabled_features: BTreeSet<String>,
+    pub enabled_features: BTreeSet<Feature>,
 }
