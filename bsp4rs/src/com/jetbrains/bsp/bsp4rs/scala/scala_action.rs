@@ -7,7 +7,7 @@ See also [LSP: Code Action Request](https://microsoft.github.io/language-server-
 
 **Note**: In LSP, `CodeAction` appears only as a response to a `textDocument/codeAction` request,
 whereas ScalaAction is intended to be returned as `Diagnostics.data.actions`. */
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScalaAction {
     /** A short, human-readable, title for this code action. */

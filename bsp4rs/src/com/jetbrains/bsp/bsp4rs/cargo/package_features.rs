@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::BTreeMap;
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PackageFeatures {
     /** The Cargo package identifier. */

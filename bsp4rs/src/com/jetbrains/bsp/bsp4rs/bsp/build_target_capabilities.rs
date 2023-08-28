@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 /** Clients can use these capabilities to notify users what BSP endpoints can and
 cannot be used and why. */
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetCapabilities {
     /** This target can be compiled by the BSP server. */

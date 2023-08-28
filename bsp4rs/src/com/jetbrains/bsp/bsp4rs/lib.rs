@@ -32,7 +32,7 @@ pub trait Notification {
     const METHOD: &'static str;
 }
 
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OtherData {
     pub data_kind: String,

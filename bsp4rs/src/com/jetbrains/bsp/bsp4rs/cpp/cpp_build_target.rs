@@ -4,7 +4,7 @@ use crate::*;
 
 /** `CppBuildTarget` is a basic data structure that contains c++-specific
 metadata, specifically compiler reference. */
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CppBuildTarget {
     /** The c++ version this target is supposed to use.

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /** A list of predefined tags that can be used to categorize build targets. */
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct BuildTargetTag(pub std::borrow::Cow<'static, str>);
 impl BuildTargetTag {

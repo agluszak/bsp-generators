@@ -50,6 +50,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             }
             newline()
             lines(renderHints(def.hints))
+            -"#[allow(clippy::large_enum_variant)]"
             -"#[derive(${renderBasicDerives(false)}, ${renderSerializeDerives(true)})]"
             -"""# [serde(untagged)]"""
             block("pub enum ${def.name}") {
@@ -67,16 +68,18 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun isAliasRenderable(def: Def.Alias): Boolean {
-        if (def.name in bannedAliases) return false
-        if (def.aliasedType is Type.List) return false
+    private fun isAliasRenderable(name: String, underlying: Type): Boolean {
+        if (name in bannedAliases) return false
+        if (underlying is Type.List) return false
+        if (underlying is Type.Set) return false
+        if (underlying is Type.Map) return false
 
         return true
     }
 
     //    TODO: change "pub type" to something else
     private fun renderAlias(def: Def.Alias): CodeBlock? {
-        if (!isAliasRenderable(def)) return null
+        if (!isAliasRenderable(def.name, def.aliasedType)) return null
 
         return rustCode {
             lines(renderHints(def.hints))
@@ -213,7 +216,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "()"
-        is Type.Alias -> if (type.shapeId.name in bannedAliases) renderTypeName(type.underlying) else makeName(type.shapeId.name)
+        is Type.Alias -> if (isAliasRenderable(type.shapeId.name, type.underlying)) makeName(type.shapeId.name) else renderTypeName(type.underlying)
     }
 
     fun renderType(type: Type, isRequired: Boolean): String {
@@ -249,7 +252,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     private fun renderBasicDerives(isDefault: Boolean): String {
-        return """Debug, PartialEq, Clone""" + if (isDefault) ", Default" else ""
+        return """Debug, PartialEq, Eq, Clone""" + if (isDefault) ", Default" else ""
     }
 
     private fun renderSerializeDerives(isDefault: Boolean): String {

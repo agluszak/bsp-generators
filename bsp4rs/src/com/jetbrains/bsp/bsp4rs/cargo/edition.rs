@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 /** The Rust edition.
 As of writing this comment rust editions 2024, 2027 and 2030 are not
 actually a thing yet but are parsed nonetheless for future proofing. */
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct Edition(pub std::borrow::Cow<'static, str>);
 impl Edition {

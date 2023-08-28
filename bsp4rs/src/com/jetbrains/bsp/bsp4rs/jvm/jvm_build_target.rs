@@ -4,7 +4,7 @@ use crate::*;
 
 /** `JvmBuildTarget` is a basic data structure that contains jvm-specific
 metadata, specifically JDK reference. */
-#[derive(Debug, PartialEq, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct JvmBuildTarget {
     /** Uri representing absolute path to jdk
