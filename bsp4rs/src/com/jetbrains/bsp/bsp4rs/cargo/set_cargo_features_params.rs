@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::BTreeSet;
 
-#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SetCargoFeaturesParams {
     /** Package ID for which new features state will be set. */

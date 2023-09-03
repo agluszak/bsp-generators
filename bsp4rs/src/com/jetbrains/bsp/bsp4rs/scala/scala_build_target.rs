@@ -4,7 +4,7 @@ use crate::*;
 
 /** `ScalaBuildTarget` is a basic data structure that contains scala-specific
 metadata for compiling a target containing Scala sources. */
-#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScalaBuildTarget {
     /** The Scala organization that is used for a target. */

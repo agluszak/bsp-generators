@@ -7,14 +7,15 @@ import com.jetbrains.bsp.generators.ir.*
 import com.jetbrains.bsp.generators.utils.camelToSnakeCase
 import com.jetbrains.bsp.generators.utils.kebabToUpperCamelCase
 import com.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
+import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
 import kotlin.io.path.Path
-import software.amazon.smithy.model.shapes.ShapeId
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
     private val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
     private val bannedAliases: List<String> = listOf("Integer", "Long")
+    private val deriveRenderer = DeriveRenderer(modules.flatMap { it.definitions }.associateBy { it.shapeId })
 
     private fun makeName(name: String): String {
         return renames[name] ?: name
@@ -47,7 +48,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         val namedName = "Named${def.name}"
 
         return rustCode {
-            -"#[derive(${renderBasicDerives(false)}, ${renderSerializeDerives(true)})]"
+            -deriveRenderer.renderForDef(def)
             -"""#[serde(rename_all = "kebab-case", tag = "dataKind", content = "data")]"""
             block("pub enum $namedName") {
                 lines(dataKinds.map { "${it.first}(${it.second})" }, ",", ",")
@@ -55,8 +56,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             newline()
             lines(renderHints(def.hints))
             -"#[allow(clippy::large_enum_variant)]"
-            -"#[derive(${renderBasicDerives(false)}, ${renderSerializeDerives(true)})]"
-            -"""# [serde(untagged)]"""
+            -deriveRenderer.renderForDef(def)
+            -"""#[serde(untagged)]"""
             block("pub enum ${def.name}") {
                 -"Named($namedName),"
                 -"Other(OtherData),"
@@ -139,8 +140,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         val def = Def.Structure(
             ShapeId.fromParts("bsp", "OtherData"),
             listOf(
-                Field("dataKind", Type.String, true, listOf(),),
-                Field("data", Type.Json, true, listOf(),)
+                Field("dataKind", Type.String, true, listOf()),
+                Field("data", Type.Json, true, listOf())
             ),
             listOf()
         )
@@ -221,7 +222,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "()"
-        is Type.Alias -> if (isAliasRenderable(type.shapeId.name, type.underlying)) makeName(type.shapeId.name) else renderTypeName(type.underlying)
+        is Type.Alias ->
+            if (isAliasRenderable(type.shapeId.name, type.underlying))
+                makeName(type.shapeId.name)
+            else renderTypeName(type.underlying)
     }
 
     fun renderType(type: Type, isRequired: Boolean): String {
@@ -250,24 +254,17 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -"use serde::{Deserialize, Serialize};"
             -"use serde::de::DeserializeOwned;"
             -"use serde_repr::{Deserialize_repr, Serialize_repr};"
+            -"use serde_enum_str::{Deserialize_enum_str, Serialize_enum_str};"
             -"use std::collections::{BTreeSet, BTreeMap};"
             -(if (canImportCrate) "use crate::*;" else null)
             newline()
         }
     }
 
-    private fun renderBasicDerives(isDefault: Boolean): String {
-        return """Debug, PartialEq, Eq, Clone""" + if (isDefault) ", Default" else ""
-    }
-
-    private fun renderSerializeDerives(isDefault: Boolean): String {
-        return if (isDefault) """Serialize, Deserialize""" else "Serialize_repr, Deserialize_repr"
-    }
-
     private fun renderStructure(def: Def.Structure): CodeBlock {
         return rustCode {
             lines(renderHints(def.hints))
-            -"#[derive(${renderBasicDerives(true)}, ${renderSerializeDerives(true)})]"
+            -deriveRenderer.renderForDef(def)
             -"""#[serde(rename_all = "camelCase")]"""
             block("pub struct ${def.name}") {
                 def.fields.forEach { field ->
@@ -298,7 +295,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         )
 
         return rustCode {
-            -"#[derive(Debug)]"
+            -deriveRenderer.renderForOp()
             -"pub enum $name {}"
             newline()
             block("impl ${renderJsonRpcMethodType(op.jsonRpcMethodType)} for $name") {
@@ -331,12 +328,12 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
         val renderEnumSerialization: CodeBlock = when (def.enumType) {
             EnumType.IntEnum -> rustCode {
-                -"#[derive(${renderBasicDerives(isDefault)}, ${renderSerializeDerives(false)})]"
+                -deriveRenderer.renderForDef(def)
                 -"#[repr(u8)]"
             }
 
             EnumType.StringEnum -> rustCode {
-                -"#[derive(${renderBasicDerives(isDefault)}, ${renderSerializeDerives(true)})]"
+                -deriveRenderer.renderForDef(def)
                 -"""#[serde(rename_all = "kebab-case")]"""
             }
         }
@@ -380,7 +377,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
         return rustCode {
             lines(renderHints(def.hints))
-            -"#[derive(${renderBasicDerives(true)}, ${renderSerializeDerives(true)})]"
+            -deriveRenderer.renderForDef(def)
             -"#[serde(transparent)]"
             -"pub struct $name(pub $type);"
             block("impl $name") {

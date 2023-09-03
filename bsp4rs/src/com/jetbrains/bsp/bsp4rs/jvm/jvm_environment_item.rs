@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::BTreeMap;
 
-#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct JvmEnvironmentItem {
     #[serde(default)]

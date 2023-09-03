@@ -5,7 +5,7 @@ use crate::*;
 /** The capabilities of the build server.
 Clients can use these capabilities to notify users what BSP endpoints can and
 cannot be used and why. */
-#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildServerCapabilities {
     /** The languages the server supports compilation via method buildTarget/compile. */

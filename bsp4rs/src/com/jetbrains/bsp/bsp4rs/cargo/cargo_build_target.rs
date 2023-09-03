@@ -5,7 +5,7 @@ use std::collections::BTreeSet;
 
 /** `CargoBuildTarget` is a basic data structure that contains
 cargo-specific metadata. */
-#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CargoBuildTarget {
     #[serde(default)]

@@ -6,7 +6,7 @@ use crate::*;
 `build/taskFinish` notification. When the compilation unit is a build target,
 the notification's `dataKind` field must be `compile-report` and the `data`
 field must include a `CompileReport` object: */
-#[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CompileReport {
     /** The build target that was compiled. */
