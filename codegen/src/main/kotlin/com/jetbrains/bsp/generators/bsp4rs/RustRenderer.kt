@@ -6,6 +6,7 @@ import com.jetbrains.bsp.generators.dsl.rustCode
 import com.jetbrains.bsp.generators.ir.*
 import java.nio.file.Path
 import kotlin.io.path.Path
+import software.amazon.smithy.model.shapes.ShapeId
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
@@ -132,14 +133,16 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     private fun renderOtherDataStruct(): CodeBlock {
-        return rustCode {
-            -"#[derive(${renderBasicDerives(true)}, ${renderSerializeDerives(true)})]"
-            -"""#[serde(rename_all = "camelCase")]"""
-            block("pub struct OtherData") {
-                -"pub data_kind: String,"
-                -"pub data: serde_json::Value,"
-            }
-        }
+        val def = Def.Structure(
+            ShapeId.fromParts("bsp", "OtherData"),
+            listOf(
+                Field("dataKind", Type.String, true, listOf(),),
+                Field("data", Type.Json, true, listOf(),)
+            ),
+            listOf()
+        )
+
+        return renderStructure(def)
     }
 
     private fun renderDef(def: Def): CodeBlock? {

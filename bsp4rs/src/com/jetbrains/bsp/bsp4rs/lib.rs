@@ -35,6 +35,8 @@ pub trait Notification {
 #[derive(Debug, PartialEq, Eq, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OtherData {
+    #[serde(default)]
     pub data_kind: String,
+    #[serde(default, flatten)]
     pub data: serde_json::Value,
 }
