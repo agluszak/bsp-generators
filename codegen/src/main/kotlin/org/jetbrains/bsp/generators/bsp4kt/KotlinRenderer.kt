@@ -11,6 +11,7 @@ import com.jetbrains.bsp.generators.ir.Hint
 import com.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import com.jetbrains.bsp.generators.ir.Operation
 import com.jetbrains.bsp.generators.ir.Type
+import com.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import kotlin.io.path.Path
 
 class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val version: String) {
@@ -51,18 +52,10 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun String.toUpperCamelCase(): String {
-        return this.lowercase().split("_").joinToString("") { word ->
-            word.replaceFirstChar {
-                it.uppercase()
-            }
-        }
-    }
-
     fun renderEnumValueDef(enumType: EnumType<*>): (EnumValue<*>) -> String {
         return when (enumType) {
-            EnumType.IntEnum -> { ev: EnumValue<*> -> "${ev.name.toUpperCamelCase()}(${ev.value})" }
-            EnumType.StringEnum -> { ev: EnumValue<*> -> """${ev.name.toUpperCamelCase()}("${ev.value}")""" }
+            EnumType.IntEnum -> { ev: EnumValue<*> -> "${ev.name.snakeToUpperCamelCase()}(${ev.value})" }
+            EnumType.StringEnum -> { ev: EnumValue<*> -> """${ev.name.snakeToUpperCamelCase()}("${ev.value}")""" }
         }
     }
 
@@ -92,8 +85,8 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
 
     fun renderStaticValue(enumType: EnumType<*>): (EnumValue<*>) -> String {
         return when (enumType) {
-            EnumType.IntEnum -> { ev: EnumValue<*> -> "${ev.name.toUpperCamelCase()} = ${ev.value}" }
-            EnumType.StringEnum -> { ev: EnumValue<*> -> """${ev.name.toUpperCamelCase()} = "${ev.value}"""" }
+            EnumType.IntEnum -> { ev: EnumValue<*> -> "${ev.name.snakeToUpperCamelCase()} = ${ev.value}" }
+            EnumType.StringEnum -> { ev: EnumValue<*> -> """${ev.name.snakeToUpperCamelCase()} = "${ev.value}"""" }
         }
     }
 
