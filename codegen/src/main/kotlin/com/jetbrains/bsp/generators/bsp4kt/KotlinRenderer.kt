@@ -11,6 +11,7 @@ import com.jetbrains.bsp.generators.ir.Hint
 import com.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import com.jetbrains.bsp.generators.ir.Operation
 import com.jetbrains.bsp.generators.ir.Type
+import com.jetbrains.bsp.generators.utils.toUpperCamelCase
 import kotlin.io.path.Path
 
 class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val version: String) {
@@ -50,14 +51,6 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return when (enumType) {
             is EnumType.IntEnum -> "Int"
             EnumType.StringEnum -> "String"
-        }
-    }
-
-    fun String.toUpperCamelCase(): String {
-        return this.lowercase().split("_").joinToString("") { word ->
-            word.replaceFirstChar {
-                it.uppercase()
-            }
         }
     }
 

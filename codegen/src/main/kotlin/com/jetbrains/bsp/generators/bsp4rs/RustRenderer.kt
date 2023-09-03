@@ -4,6 +4,9 @@ import com.jetbrains.bsp.generators.CodegenFile
 import com.jetbrains.bsp.generators.dsl.CodeBlock
 import com.jetbrains.bsp.generators.dsl.rustCode
 import com.jetbrains.bsp.generators.ir.*
+import com.jetbrains.bsp.generators.utils.camelToSnakeCase
+import com.jetbrains.bsp.generators.utils.kebabToUpperCamelCase
+import com.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import java.nio.file.Path
 import kotlin.io.path.Path
 import software.amazon.smithy.model.shapes.ShapeId
@@ -391,19 +394,4 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 }
 
-fun String.camelToSnakeCase(): String {
-    val pattern = "(?<=[^A-Z])[A-Z]".toRegex()
-    return this.replace(pattern, "_$0").lowercase()
-}
 
-fun String.snakeToUpperCamelCase(): String {
-    val pattern = "_(.)".toRegex()
-    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
-        .replaceFirstChar { it.uppercaseChar() }
-}
-
-fun String.kebabToUpperCamelCase(): String {
-    val pattern = "-(.)".toRegex()
-    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
-        .replaceFirstChar { it.uppercaseChar() }
-}
