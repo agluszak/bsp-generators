@@ -220,17 +220,9 @@ class SmithyToIr(val model: Model) {
 
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
-            return when (shape) {
-                is BooleanShape -> listOf(Def.Alias(shape.getId(), Type.Bool, hints))
-                is IntegerShape -> listOf(Def.Alias(shape.getId(), Type.Int, hints))
-                is LongShape -> listOf(Def.Alias(shape.getId(), Type.Long, hints))
-                is StringShape -> listOf(Def.Alias(shape.getId(), Type.String, hints))
-                is ListShape -> listOfNotNull(
-                    toTypeVisitor.listShape(shape)?.let { Def.Alias(shape.getId(), it, hints) })
+            val type = shape.accept(toTypeVisitor)
 
-                is MapShape -> listOfNotNull(toTypeVisitor.mapShape(shape)?.let { Def.Alias(shape.getId(), it, hints) })
-                else -> emptyList()
-            }
+            return listOfNotNull(type?.let { Def.Alias(shape.id, it, hints) })
         }
 
         override fun booleanShape(shape: BooleanShape): List<Def> = typeShape(shape)
