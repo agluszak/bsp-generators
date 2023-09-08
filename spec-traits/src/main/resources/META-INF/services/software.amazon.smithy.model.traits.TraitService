@@ -6,3 +6,4 @@ traits.UntaggedUnionTrait$Provider
 traits.DataKindTrait$Provider
 traits.DataTrait$Provider
 traits.DocsPriorityTrait$Provider
+traits.SetTrait$Provider
