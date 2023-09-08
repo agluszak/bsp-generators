@@ -40,6 +40,7 @@ enum enumKind {
     CLOSED = "closed"
 }
 
+/// Represents lists which are meant to be treated as sets
 @trait(selector: "list")
 structure set {
 }
