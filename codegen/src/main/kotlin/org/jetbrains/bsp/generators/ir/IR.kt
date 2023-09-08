@@ -78,6 +78,7 @@ sealed interface Type {
 data class Field(
     val name: String,
     val type: Type,
+    val typeShapeId: ShapeId,
     val required: Boolean,
     val hints: List<Hint>
 )

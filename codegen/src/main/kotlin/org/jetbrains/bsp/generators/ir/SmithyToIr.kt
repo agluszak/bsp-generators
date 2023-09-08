@@ -114,8 +114,9 @@ class SmithyToIr(val model: Model) {
         fun toField(member: MemberShape): Field? {
             val required = member.hasTrait(RequiredTrait::class.java)
             val name = member.memberName
-            return getType(member.target)?.let {
-                Field(name, it, required, getHints(member))
+            val shapeId = member.target
+            return getType(shapeId)?.let {
+                Field(name, it, shapeId, required, getHints(member))
             }
         }
 
@@ -142,7 +143,7 @@ class SmithyToIr(val model: Model) {
                 if (dataField.type != Type.Json) {
                     throw RuntimeException("Expected document type")
                 }
-                return Field("dataKind", Type.String, false, hints)
+                return Field("dataKind", Type.String, dataKindShapeId(dataField.typeShapeId),false, hints)
             }
 
             fun insertDiscriminator(fields: List<Field>): List<Field> {
