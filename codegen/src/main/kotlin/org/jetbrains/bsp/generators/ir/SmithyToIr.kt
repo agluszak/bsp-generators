@@ -32,7 +32,10 @@ import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
 class SmithyToIr(val model: Model) {
-    val allDataKindAnnotated: Map<ShapeId, List<PolymorphicDataKind>> = run {
+
+    data class PolymorphicData(val kind: String, val shapeId: ShapeId)
+
+    val allDataKindAnnotated: Map<ShapeId, List<PolymorphicData>> = run {
         val allExtendableTypes = model.getShapesWithTrait(DataTrait::class.java).toList()
         val allExtendableTypeIds = allExtendableTypes.map { it.id }.toSet()
 
@@ -61,7 +64,7 @@ class SmithyToIr(val model: Model) {
             .groupBy { (_, _, referencedShapeId) -> referencedShapeId }
             .map { (dataType, shapeAndTraits) ->
                 dataType to shapeAndTraits.map { (shape, dataKind, _) ->
-                    PolymorphicDataKind(dataKind, shape.id)
+                    PolymorphicData(dataKind, shape.id)
                 }
             }.toMap()
 
@@ -157,6 +160,8 @@ class SmithyToIr(val model: Model) {
                 return mutableFields
             }
 
+            // this adds a "dataKind" field to the structure, it if contains a "data" (dataWithKind) field
+            // ideally, we would like to delete this logic and take care of it in according generators
             val updatedFields = insertDiscriminator(fields)
 
             return listOf(Def.Structure(shape.id, updatedFields, getHints(shape)))
@@ -204,15 +209,14 @@ class SmithyToIr(val model: Model) {
 
                 val allKnownInhabitants = allDataKindAnnotated[id]!!
                 val openEnumId = dataKindShapeId(id)
-                val values = allKnownInhabitants.map { (disc, member) ->
-                    val snakeCased = disc.replace('-', '_').uppercase(Locale.getDefault())
-                    val memberDoc = "`data` field must contain a ${member.name} object."
-                    EnumValue(snakeCased, disc, listOf(Hint.Documentation(memberDoc)))
+                val values = allKnownInhabitants.map { (kind, memberId) ->
+                    val snakeCased = kind.replace('-', '_').uppercase(Locale.getDefault())
+                    val memberDoc = "`data` field must contain a ${memberId.name} object."
+                    PolymorphicDataKind(kind, memberId, snakeCased, getType(memberId)!!, listOf(Hint.Documentation(memberDoc)))
                 }
 
-                val dataKindDef = Def.OpenEnum(openEnumId, EnumType.StringEnum, values, hints)
-                val dataDef = Def.Alias(id, Type.Json, hints)
-                listOf(dataKindDef, dataDef)
+                val dataKinds = Def.DataKinds(id, openEnumId, values, hints)
+                listOf(dataKinds)
             } else {
                 typeShape(shape)
             }

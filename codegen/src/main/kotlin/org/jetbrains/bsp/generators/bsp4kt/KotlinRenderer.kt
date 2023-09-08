@@ -42,6 +42,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             is Def.OpenEnum<*> -> renderOpenEnum(def)
             is Def.Service -> renderService(def)
             is Def.Structure -> renderStructure(def)
+            is Def.DataKinds -> renderData(def)
         }
     }
 
@@ -103,6 +104,13 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
 
         return CodegenFile(baseRelPath.resolve("$name.kt"), code.toString())
+    }
+
+    private fun renderData(def: Def.DataKinds): CodegenFile {
+        val values = def.kinds.map { polyData -> EnumValue(polyData.name, polyData.kindStr, polyData.hints)}
+        val dataKindDef = Def.OpenEnum(def.kindsEnumId, EnumType.StringEnum, values, def.hints)
+
+        return renderOpenEnum(dataKindDef)
     }
 
     fun renderFieldRaw(field: Field): String {
