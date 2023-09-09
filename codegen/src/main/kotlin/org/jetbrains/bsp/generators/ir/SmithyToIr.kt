@@ -1,4 +1,4 @@
-package com.jetbrains.bsp.generators.ir
+package org.jetbrains.bsp.generators.ir
 
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes.BooleanShape

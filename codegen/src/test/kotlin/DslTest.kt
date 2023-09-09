@@ -1,5 +1,5 @@
-import com.jetbrains.bsp.generators.dsl.CodeBlock
-import com.jetbrains.bsp.generators.dsl.code
+import org.jetbrains.bsp.generators.dsl.CodeBlock
+import org.jetbrains.bsp.generators.dsl.code
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
