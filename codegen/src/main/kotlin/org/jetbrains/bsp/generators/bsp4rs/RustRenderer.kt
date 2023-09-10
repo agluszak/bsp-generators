@@ -81,14 +81,42 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return true
     }
 
-    //    TODO: change "pub type" to something else
     private fun renderAlias(def: Def.Alias): CodeBlock? {
         if (!isAliasRenderable(def.name, def.aliasedType)) return null
+        val name = def.name
+        val type = renderType(def.aliasedType, true)
+
+        val derefBlock = rustCode {
+            block("""impl std::ops::Deref for $name""") {
+                -"""type Target = $type;"""
+                newline()
+                block("fn deref(&self) -> &Self::Target") {
+                    -"&self.0"
+                }
+            }
+        }
+
+        fun from(fromType: String, mod: String): CodeBlock {
+            return rustCode {
+                block("""impl From<$fromType> for $name""") {
+                    block("fn from(input: $fromType) -> Self") {
+                        -"$name(input$mod)"
+                    }
+                }
+            }
+        }
 
         return rustCode {
             lines(renderHints(def.hints))
-            -"pub type ${def.name} = ${renderType(def.aliasedType, true)};"
+            -deriveRenderer.renderForDef(def)
+            -"""#[serde(transparent)]"""
+            -"""pub struct $name(pub $type);"""
             newline()
+            include(derefBlock)
+            newline()
+            include(from(type, ""))
+            newline()
+            if (def.aliasedType.type == InnerType.String) include(from("&str", ".to_string()"))
         }
     }
 
@@ -177,12 +205,12 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    //    TODO
+//    TODO
 //    private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
 //        return emptyList()
 //    }
 
-    //    TODO
+//    TODO
 //    private fun renderRename(hints: List<Hint.JsonRename>): List<String> {
 //        return emptyList()
 //    }
