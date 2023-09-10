@@ -8,6 +8,7 @@ import com.jetbrains.bsp.generators.ir.EnumType
 import com.jetbrains.bsp.generators.ir.EnumValue
 import com.jetbrains.bsp.generators.ir.Field
 import com.jetbrains.bsp.generators.ir.Hint
+import com.jetbrains.bsp.generators.ir.InnerType
 import com.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import com.jetbrains.bsp.generators.ir.Operation
 import com.jetbrains.bsp.generators.ir.Type
@@ -126,17 +127,19 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun renderType(type: Type): String = when (type) {
-        Type.Bool -> "Boolean"
-        Type.Int -> "Int"
-        Type.Json -> "JsonElement"
-        is Type.List -> "List<${renderType(type.member)}>"
-        Type.Long -> "Long"
-        is Type.Map -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
-        is Type.Ref -> type.shapeId.name
-        is Type.Set -> "Set<${renderType(type.member)}>"
-        Type.String -> "String"
-        Type.Unit -> "Unit"
+    fun renderType(type: Type): String {
+        return when (val innerType = type.type) {
+            InnerType.Bool -> "Boolean"
+            InnerType.Int -> "Int"
+            InnerType.Json -> "JsonElement"
+            is InnerType.List -> "List<${renderType(innerType.member)}>"
+            InnerType.Long -> "Long"
+            is InnerType.Map -> "Map<${renderType(innerType.key)}, ${renderType(innerType.value)}>"
+            is InnerType.Ref -> type.shapeId.name
+            is InnerType.Set -> "Set<${renderType(innerType.member)}>"
+            InnerType.String -> "String"
+            InnerType.Unit -> "Unit"
+        }
     }
 
     fun renderOperation(op: Operation): CodeBlock {
