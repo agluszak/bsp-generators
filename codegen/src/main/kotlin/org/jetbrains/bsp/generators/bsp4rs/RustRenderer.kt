@@ -195,7 +195,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     fun renderFieldSerialization(field: Field): String? {
         var serdeOpt = "default"
 
-        if (field.name == "data") {
+        if (field.type.type == InnerType.Json && field.name == "data"
+            && field.type.shapeId.namespace.startsWith("bsp")
+        ) {
             serdeOpt += ", flatten"
         }
 

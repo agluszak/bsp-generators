@@ -37,6 +37,6 @@ pub trait Notification {
 pub struct OtherData {
     #[serde(default)]
     pub data_kind: String,
-    #[serde(default, flatten)]
+    #[serde(default)]
     pub data: serde_json::Value,
 }
