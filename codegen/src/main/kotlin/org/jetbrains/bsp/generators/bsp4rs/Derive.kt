@@ -1,9 +1,6 @@
 package com.jetbrains.bsp.generators.bsp4rs
 
-import com.jetbrains.bsp.generators.ir.Def
-import com.jetbrains.bsp.generators.ir.EnumType
-import com.jetbrains.bsp.generators.ir.Field
-import com.jetbrains.bsp.generators.ir.Type
+import com.jetbrains.bsp.generators.ir.*
 import software.amazon.smithy.model.shapes.ShapeId
 
 class DeriveRenderer(val defs: Map<ShapeId, Def>) {
@@ -20,13 +17,12 @@ class DeriveRenderer(val defs: Map<ShapeId, Def>) {
     }
 
     private fun typeToBlackList(type: Type): Set<DeriveOption> {
-        return when (type) {
-            is Type.Json -> setOf(DeriveOption.HASH, DeriveOption.ORD)
-            is Type.Ref -> defToBlackList(defs[type.shapeId]!!)
-            is Type.Alias -> defToBlackList(defs[type.shapeId]!!)
-            is Type.List -> typeToBlackList(type.member)
-            is Type.Set -> typeToBlackList(type.member)
-            is Type.Map -> typeToBlackList(type.key).plus(typeToBlackList(type.value))
+        return when (val innerType = type.type) {
+            is InnerType.Json -> setOf(DeriveOption.HASH, DeriveOption.ORD)
+            is InnerType.Ref -> defToBlackList(defs[type.shapeId]!!)
+            is InnerType.List -> typeToBlackList(innerType.member)
+            is InnerType.Set -> typeToBlackList(innerType.member)
+            is InnerType.Map -> typeToBlackList(innerType.key).plus(typeToBlackList(innerType.value))
             else -> emptySet()
         }
     }
@@ -45,7 +41,7 @@ class DeriveRenderer(val defs: Map<ShapeId, Def>) {
             is Def.ClosedEnum<*> -> if (def.values.isEmpty()) setOf(DeriveOption.DEFAULT) else emptySet()
             is Def.Service -> emptySet()
             is Def.Alias -> emptySet()
-            is Def.Data -> setOf(DeriveOption.DEFAULT, DeriveOption.HASH, DeriveOption.ORD)
+            is Def.DataKinds -> setOf(DeriveOption.DEFAULT, DeriveOption.HASH, DeriveOption.ORD)
         }
     }
 

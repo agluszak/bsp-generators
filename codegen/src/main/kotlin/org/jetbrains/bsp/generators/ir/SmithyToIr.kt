@@ -226,7 +226,9 @@ class SmithyToIr(val model: Model) {
             val hints = getHints(shape)
             val type = shape.accept(toTypeVisitor)
 
-            return listOfNotNull(type?.let { Def.Alias(shape.id, it, hints) })
+            return listOfNotNull(type?.let {
+                Def.Alias(shape.id, Type(ShapeId.fromParts("alias", it.shapeId.name), it.type), hints)
+            })
         }
 
         override fun booleanShape(shape: BooleanShape): List<Def> = typeShape(shape)
@@ -282,11 +284,11 @@ class SmithyToIr(val model: Model) {
         }
 
         override fun enumShape(shape: EnumShape): Type {
-            return enumUniversal(shape, Type.String)
+            return enumUniversal(shape, Type(shape.id, InnerType.String))
         }
 
         override fun intEnumShape(shape: IntEnumShape): Type {
-            return enumUniversal(shape, Type.Int)
+            return enumUniversal(shape, Type(shape.id, InnerType.Int))
         }
 
         override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)

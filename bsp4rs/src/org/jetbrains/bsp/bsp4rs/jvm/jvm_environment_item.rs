@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
-use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -15,7 +14,7 @@ pub struct JvmEnvironmentItem {
     #[serde(default)]
     pub working_directory: String,
     #[serde(default)]
-    pub environment_variables: BTreeMap<String, String>,
+    pub environment_variables: EnvironmentVariables,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub main_classes: Vec<JvmMainClass>,
 }

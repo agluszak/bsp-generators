@@ -38,9 +38,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return files.unzip().first.toMutableList() + modFile
     }
 
-    private fun renderData(def: Def.Data): CodeBlock {
+    private fun renderData(def: Def.DataKinds): CodeBlock {
         val dataKinds = def.kinds.map { kind ->
-            val name = makeName(kind.kind.kebabToUpperCamelCase())
+            val name = makeName(kind.kindStr.kebabToUpperCamelCase())
             val dataType = renderType(kind.type, true)
             Pair(name, dataType)
         }
@@ -73,10 +73,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun isAliasRenderable(name: String, underlying: Type): Boolean {
+    private fun isAliasRenderable(name: String, type: Type): Boolean {
         if (name in bannedAliases) return false
-        if (underlying is Type.List) return false
-        if (underlying is Type.Set) return false
+        if (type.type is InnerType.List) return false
+        if (type.type is InnerType.Set) return false
 
         return true
     }
@@ -156,7 +156,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             is Def.ClosedEnum<*> -> renderClosedEnum(def)
             is Def.Service -> renderService(def)
             is Def.Alias -> renderAlias(def)
-            is Def.Data -> renderData(def)
+            is Def.DataKinds -> renderData(def)
         }
     }
 
@@ -200,10 +200,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
 
         if (!field.required) {
-            serdeOpt += when (field.type) {
-                is Type.List -> """, skip_serializing_if = "Vec::is_empty""""
-                is Type.Map -> """, skip_serializing_if = "HashMap::is_empty""""
-                is Type.Set -> """, skip_serializing_if = "BTreeSet::is_empty""""
+            serdeOpt += when (field.type.type) {
+                is InnerType.List -> """, skip_serializing_if = "Vec::is_empty""""
+                is InnerType.Map -> """, skip_serializing_if = "HashMap::is_empty""""
+                is InnerType.Set -> """, skip_serializing_if = "BTreeSet::is_empty""""
                 else -> """, skip_serializing_if = "Option::is_none""""
             }
         }
@@ -211,28 +211,30 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return """#[serde($serdeOpt)]"""
     }
 
-    private fun renderTypeName(type: Type): String = when (type) {
-        Type.Bool -> "bool"
-        Type.Int -> "i32"
-        Type.Json -> "serde_json::Value"
-        is Type.List -> "Vec<${renderTypeName(type.member)}>"
-        Type.Long -> "i64"
-        is Type.Map -> "BTreeMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
-        is Type.Ref -> makeName(type.shapeId.name)
-        is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
-        Type.String -> "String"
-        Type.Unit -> "()"
-        is Type.Alias ->
-            if (isAliasRenderable(type.shapeId.name, type.underlying))
-                makeName(type.shapeId.name)
-            else renderTypeName(type.underlying)
+    private fun renderTypeName(type: Type): String {
+        if (type.shapeId.namespace.startsWith("bsp") && isAliasRenderable(type.shapeId.name, type)) {
+            return makeName(type.shapeId.name)
+        }
+
+        return when (val innerType = type.type) {
+            InnerType.Bool -> "bool"
+            InnerType.Int -> "i32"
+            InnerType.Json -> "serde_json::Value"
+            is InnerType.List -> "Vec<${renderTypeName(innerType.member)}>"
+            InnerType.Long -> "i64"
+            is InnerType.Map -> "BTreeMap<${renderTypeName(innerType.key)}, ${renderTypeName(innerType.value)}>"
+            is InnerType.Ref -> makeName(type.shapeId.name)
+            is InnerType.Set -> "BTreeSet<${renderTypeName(innerType.member)}>"
+            InnerType.String -> "String"
+            InnerType.Unit -> "()"
+        }
     }
 
     fun renderType(type: Type, isRequired: Boolean): String {
         if (isRequired) return renderTypeName(type)
 
-        return when (type) {
-            is Type.List, is Type.Map, is Type.Set -> renderTypeName(type)
+        return when (type.type) {
+            is InnerType.List, is InnerType.Map, is InnerType.Set -> renderTypeName(type)
             else -> "Option<${renderTypeName(type)}>"
         }
     }
@@ -242,6 +244,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     private fun renderStructField(field: Field): CodeBlock {
+        if (field.name == "dataKind" && field.type != Type.String) {
+            return rustCode { }
+        }
+
         return rustCode {
             lines(renderHints(field.hints))
             -renderFieldSerialization(field)

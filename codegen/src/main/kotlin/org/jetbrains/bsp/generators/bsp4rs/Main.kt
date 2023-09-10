@@ -2,7 +2,6 @@ package com.jetbrains.bsp.generators.bsp4rs
 
 import com.jetbrains.bsp.generators.FilesGenerator
 import com.jetbrains.bsp.generators.Loader
-import com.jetbrains.bsp.generators.bsp4rs.Module
 import com.jetbrains.bsp.generators.ir.SmithyToIr
 import java.io.File
 import kotlin.io.path.Path
@@ -23,11 +22,12 @@ object Main {
         val ir = SmithyToIr(model)
         val definitions = namespaces.map { Module(it.removePrefix("bsp."), ir.definitions(it)) }
         val version = Loader.protocolVersion
-        val renderer = RustRenderer("com.jetbrains.bsp.bsp4rs", definitions, version)
+        val renderer = RustRenderer("org.jetbrains.bsp.bsp4rs", definitions, version)
 
         val codegenFiles = renderer.render()
 
-        val clippy = "cargo clippy --fix --lib -p $name --allow-no-vcs --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
+        val clippy =
+            "cargo clippy --fix --lib -p $name --allow-no-vcs --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
         val fmt = "cargo fmt --all --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
 
         FilesGenerator(name, output, generatorScript, codegenFiles, listOf(clippy, fmt)).run()

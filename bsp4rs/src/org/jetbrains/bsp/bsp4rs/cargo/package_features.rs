@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -14,7 +14,7 @@ pub struct PackageFeatures {
     pub targets: Vec<BuildTargetIdentifier>,
     /** The list of available features for the Cargo package. */
     #[serde(default)]
-    pub available_features: BTreeMap<Feature, BTreeSet<Feature>>,
+    pub available_features: FeatureDependencyGraph,
     /** The list of enabled features for the Cargo package. */
     #[serde(default)]
     pub enabled_features: BTreeSet<Feature>,

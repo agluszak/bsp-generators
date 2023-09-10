@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-path = "src/com/jetbrains/bsp/bsp4rs/lib.rs"
+path = "src/org/jetbrains/bsp/bsp4rs/lib.rs"
 
 [dependencies]
 cargo_metadata = "0.17.0"
