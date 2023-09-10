@@ -59,26 +59,57 @@ sealed interface EnumType<A> {
 
 data class EnumValue<A>(val name: String, val value: A, val hints: List<Hint>)
 
-sealed interface Type {
-    data class Set(val member: Type) : Type
-    data class List(val member: Type) : Type
-    data class Map(val key: Type, val value: Type) : Type
-    data class Ref(val shapeId: ShapeId) : Type
+sealed interface InnerType {
+    data class Set(val member: Type) : InnerType
+    data class List(val member: Type) : InnerType
+    data class Map(val key: Type, val value: Type) : InnerType
+    object Ref : InnerType
 
     // Should be data objects
-    object Unit : Type
-    object Bool : Type
-    object String : Type
-    object Int : Type
-    object Long : Type
-    object Json : Type
+    object Unit : InnerType
+    object Bool : InnerType
+    object String : InnerType
+    object Int : InnerType
+    object Long : InnerType
+    object Json : InnerType
 }
 
+open class Type(open val shapeId: ShapeId, val type: InnerType) {
+    companion object {
+        val Unit: Type
+            get() = Type(ShapeId.from("smithy.api#Unit"), InnerType.Unit)
+
+        val Bool: Type
+            get() = Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
+
+        val String: Type
+            get() = Type(ShapeId.from("smithy.api#String"), InnerType.String)
+
+        val Int: Type
+            get() = Type(ShapeId.from("smithy.api#Integer"), InnerType.Int)
+
+        val Long: Type
+            get() = Type(ShapeId.from("smithy.api#Long"), InnerType.Long)
+
+        val Json: Type
+            get() = Type(ShapeId.from("smithy.api#Document"), InnerType.Json)
+
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Type) return false
+
+        if (shapeId != other.shapeId) return false
+        if (type != other.type) return false
+
+        return true
+    }
+}
 
 data class Field(
     val name: String,
     val type: Type,
-    val typeShapeId: ShapeId,
     val required: Boolean,
     val hints: List<Hint>
 )
