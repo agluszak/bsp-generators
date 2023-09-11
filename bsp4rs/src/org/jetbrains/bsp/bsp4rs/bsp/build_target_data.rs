@@ -9,6 +9,7 @@ pub enum NamedBuildTargetData {
     Cpp(CppBuildTarget),
     Jvm(JvmBuildTarget),
     Python(PythonBuildTarget),
+    Rust(RustBuildTarget),
     Sbt(SbtBuildTarget),
     Scala(ScalaBuildTarget),
 }
@@ -33,6 +34,9 @@ impl BuildTargetData {
     }
     pub fn python(data: PythonBuildTarget) -> Self {
         BuildTargetData::Named(NamedBuildTargetData::Python(data))
+    }
+    pub fn rust(data: RustBuildTarget) -> Self {
+        BuildTargetData::Named(NamedBuildTargetData::Rust(data))
     }
     pub fn sbt(data: SbtBuildTarget) -> Self {
         BuildTargetData::Named(NamedBuildTargetData::Sbt(data))

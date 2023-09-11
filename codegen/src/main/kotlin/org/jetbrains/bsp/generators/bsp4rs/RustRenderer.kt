@@ -232,7 +232,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         if (!field.required) {
             serdeOpt += when (field.type.type) {
                 is InnerType.List -> """, skip_serializing_if = "Vec::is_empty""""
-                is InnerType.Map -> """, skip_serializing_if = "HashMap::is_empty""""
+                is InnerType.Map -> """, skip_serializing_if = "BTreeMap::is_empty""""
                 is InnerType.Set -> """, skip_serializing_if = "BTreeSet::is_empty""""
                 else -> """, skip_serializing_if = "Option::is_none""""
             }

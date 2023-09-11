@@ -8,6 +8,7 @@ pub mod java;
 pub mod jvm;
 pub mod maven;
 pub mod python;
+pub mod rust;
 pub mod sbt;
 pub mod scala;
 
@@ -18,6 +19,7 @@ use java::*;
 use jvm::*;
 use maven::*;
 use python::*;
+use rust::*;
 use sbt::*;
 use scala::*;
 

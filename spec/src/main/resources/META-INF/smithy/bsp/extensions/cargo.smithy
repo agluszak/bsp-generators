@@ -6,10 +6,10 @@ use bsp#BuildTargetData
 use bsp#BuildTargetIdentifiers
 use bsp#StatusCode
 use traits#dataKind
+use traits#set
 use traits#enumKind
 use traits#jsonRPC
 use traits#jsonRequest
-use traits#set
 
 @jsonRPC
 service CargoBuildServer {
@@ -24,7 +24,7 @@ service CargoBuildServer {
 @dataKind(kind: "cargo", extends: [BuildTargetData])
 structure CargoBuildTarget {
     @required
-    edition: Edition
+    edition: RustEdition
     @required
     required_features: Features
 }
@@ -38,7 +38,7 @@ list Features {
 
 /// The Rust edition.
 @enumKind("open")
-enum Edition {
+enum RustEdition {
     E2015 = "2015"
     E2018 = "2018"
     E2021 = "2021"
@@ -103,7 +103,7 @@ structure SetCargoFeaturesParams {
     features: Features
 }
 
-structure  SetCargoFeaturesResult {
+structure SetCargoFeaturesResult {
     /// The status code of the operation.
     @required
     statusCode: StatusCode
