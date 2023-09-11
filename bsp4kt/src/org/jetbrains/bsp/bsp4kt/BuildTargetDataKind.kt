@@ -5,6 +5,7 @@ object BuildTargetDataKind {
   const val Cpp = "cpp"
   const val Jvm = "jvm"
   const val Python = "python"
+  const val Rust = "rust"
   const val Sbt = "sbt"
   const val Scala = "scala"
 }
