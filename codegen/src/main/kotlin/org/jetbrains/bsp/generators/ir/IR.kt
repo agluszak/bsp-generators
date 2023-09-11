@@ -81,7 +81,7 @@ sealed interface InnerType {
     object Json : InnerType
 }
 
-open class Type(open val shapeId: ShapeId, val type: InnerType) {
+data class Type(val shapeId: ShapeId, val type: InnerType) {
     companion object {
         val Unit: Type = Type(ShapeId.from("smithy.api#Unit"), InnerType.Unit)
         val Bool: Type= Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
