@@ -16,6 +16,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     private val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
     private val bannedAliases: List<String> = listOf("Integer", "Long")
     private val deriveRenderer = DeriveRenderer(modules.flatMap { it.definitions }.associateBy { it.shapeId })
+    private val serializationRenderer = SerializationRenderer()
 
     private fun makeName(name: String): String {
         return renames[name] ?: name
@@ -49,7 +50,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
         return rustCode {
             -deriveRenderer.renderForDef(def)
-            -"""#[serde(rename_all = "kebab-case", tag = "dataKind", content = "data")]"""
+            lines(serializationRenderer.renderForDef(def))
             block("pub enum $namedName") {
                 lines(dataKinds.map { "${it.first}(${it.second})" }, ",", ",")
             }
@@ -57,7 +58,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             lines(renderHints(def.hints))
             -"#[allow(clippy::large_enum_variant)]"
             -deriveRenderer.renderForDef(def)
-            -"""#[serde(untagged)]"""
+            lines(serializationRenderer.renderForDef(def.copy(shapeId = ShapeId.fromParts("wrap", def.name))))
             block("pub enum ${def.name}") {
                 -"Named($namedName),"
                 -"Other(OtherData),"
@@ -109,7 +110,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return rustCode {
             lines(renderHints(def.hints))
             -deriveRenderer.renderForDef(def)
-            -"""#[serde(transparent)]"""
+            lines(serializationRenderer.renderForDef(def))
             -"""pub struct $name(pub $type);"""
             newline()
             include(derefBlock)
@@ -209,36 +210,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return hints.map { """#[deprecated(note = "${it.message}")]""" }
     }
 
-//    TODO
-//    private fun renderRename(hints: List<Hint.JsonRename>): List<String> {
-//        return emptyList()
-//    }
-
     fun renderHints(hints: List<Hint>): List<String> {
         return renderDocumentation(hints.filterIsInstance<Hint.Documentation>()) +
                 renderDeprecated(hints.filterIsInstance<Hint.Deprecated>())
-//        + renderRename(hints.filterIsInstance<Hint.JsonRename>())
-    }
-
-    fun renderFieldSerialization(field: Field): String? {
-        var serdeOpt = "default"
-
-        if (field.type.type == InnerType.Json && field.name == "data"
-            && field.type.shapeId.namespace.startsWith("bsp")
-        ) {
-            serdeOpt += ", flatten"
-        }
-
-        if (!field.required) {
-            serdeOpt += when (field.type.type) {
-                is InnerType.List -> """, skip_serializing_if = "Vec::is_empty""""
-                is InnerType.Map -> """, skip_serializing_if = "BTreeMap::is_empty""""
-                is InnerType.Set -> """, skip_serializing_if = "BTreeSet::is_empty""""
-                else -> """, skip_serializing_if = "Option::is_none""""
-            }
-        }
-
-        return """#[serde($serdeOpt)]"""
     }
 
     private fun renderTypeName(type: Type): String {
@@ -280,7 +254,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
         return rustCode {
             lines(renderHints(field.hints))
-            -renderFieldSerialization(field)
+            lines(serializationRenderer.renderForField(field))
             -"${renderStructFieldRaw(field)},"
         }
     }
@@ -301,7 +275,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return rustCode {
             lines(renderHints(def.hints))
             -deriveRenderer.renderForDef(def)
-            -"""#[serde(rename_all = "camelCase")]"""
+            lines(serializationRenderer.renderForDef(def))
             block("pub struct ${def.name}") {
                 def.fields.forEach { field ->
                     include(renderStructField(field))
@@ -363,21 +337,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             rustCode { lines(renderHints(value.hints) + renderEnumValue(value), end = ",") }
         }
 
-        val renderEnumSerialization: CodeBlock = when (def.enumType) {
-            EnumType.IntEnum -> rustCode {
-                -deriveRenderer.renderForDef(def)
-                -"#[repr(u8)]"
-            }
-
-            EnumType.StringEnum -> rustCode {
-                -deriveRenderer.renderForDef(def)
-                -"""#[serde(rename_all = "kebab-case")]"""
-            }
-        }
-
         return rustCode {
             lines(renderHints(def.hints))
-            include(renderEnumSerialization)
+            -deriveRenderer.renderForDef(def)
+            lines(serializationRenderer.renderForDef(def))
             block("pub enum ${def.name}") {
                 if (isDefault) {
                     -"#[default]"
@@ -415,7 +378,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return rustCode {
             lines(renderHints(def.hints))
             -deriveRenderer.renderForDef(def)
-            -"#[serde(transparent)]"
+            lines(serializationRenderer.renderForDef(def))
             -"pub struct $name(pub $type);"
             block("impl $name") {
                 for (value in values) {
