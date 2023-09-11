@@ -205,10 +205,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-//    TODO
-//    private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
-//        return emptyList()
-//    }
+    private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
+        return hints.map { """#[deprecated(note = "${it.message}")]""" }
+    }
 
 //    TODO
 //    private fun renderRename(hints: List<Hint.JsonRename>): List<String> {
@@ -216,8 +215,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 //    }
 
     fun renderHints(hints: List<Hint>): List<String> {
-        return renderDocumentation(hints.filterIsInstance<Hint.Documentation>())
-//                + renderDeprecated(hints.filterIsInstance<Hint.Deprecated>()) + renderRename(hints.filterIsInstance<Hint.JsonRename>())
+        return renderDocumentation(hints.filterIsInstance<Hint.Documentation>()) +
+                renderDeprecated(hints.filterIsInstance<Hint.Deprecated>())
+//        + renderRename(hints.filterIsInstance<Hint.JsonRename>())
     }
 
     fun renderFieldSerialization(field: Field): String? {
@@ -334,6 +334,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -deriveRenderer.renderForOp()
             -"pub enum $name {}"
             newline()
+            lines(renderHints(op.hints))
             block("impl ${renderJsonRpcMethodType(op.jsonRpcMethodType)} for $name") {
                 lines(operationProperties, join = ";", end = ";")
             }
