@@ -83,34 +83,12 @@ sealed interface InnerType {
 
 open class Type(open val shapeId: ShapeId, val type: InnerType) {
     companion object {
-        val Unit: Type
-            get() = Type(ShapeId.from("smithy.api#Unit"), InnerType.Unit)
-
-        val Bool: Type
-            get() = Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
-
-        val String: Type
-            get() = Type(ShapeId.from("smithy.api#String"), InnerType.String)
-
-        val Int: Type
-            get() = Type(ShapeId.from("smithy.api#Integer"), InnerType.Int)
-
-        val Long: Type
-            get() = Type(ShapeId.from("smithy.api#Long"), InnerType.Long)
-
-        val Json: Type
-            get() = Type(ShapeId.from("smithy.api#Document"), InnerType.Json)
-
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Type) return false
-
-        if (shapeId != other.shapeId) return false
-        if (type != other.type) return false
-
-        return true
+        val Unit: Type = Type(ShapeId.from("smithy.api#Unit"), InnerType.Unit)
+        val Bool: Type= Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
+        val String: Type = Type(ShapeId.from("smithy.api#String"), InnerType.String)
+        val Int: Type = Type(ShapeId.from("smithy.api#Integer"), InnerType.Int)
+        val Long: Type = Type(ShapeId.from("smithy.api#Long"), InnerType.Long)
+        val Json: Type = Type(ShapeId.from("smithy.api#Document"), InnerType.Json)
     }
 }
 
