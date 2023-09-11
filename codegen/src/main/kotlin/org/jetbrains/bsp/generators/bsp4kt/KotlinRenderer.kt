@@ -11,6 +11,7 @@ import org.jetbrains.bsp.generators.ir.Hint
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
 import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.ir.InnerType
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import kotlin.io.path.Path
 
@@ -107,7 +108,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     }
 
     private fun renderData(def: Def.DataKinds): CodegenFile {
-        val values = def.kinds.map { polyData -> EnumValue(polyData.name, polyData.kindStr, polyData.hints)}
+        val values = def.kinds.map { polyData -> EnumValue(polyData.name, polyData.kindStr, polyData.hints) }
         val dataKindDef = Def.OpenEnum(def.kindsEnumId, EnumType.StringEnum, values, def.hints)
 
         return renderOpenEnum(dataKindDef)
@@ -127,19 +128,17 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun renderType(type: Type): String {
-        return when (val innerType = type.type) {
-            InnerType.Bool -> "Boolean"
-            InnerType.Int -> "Int"
-            InnerType.Json -> "JsonElement"
-            is InnerType.List -> "List<${renderType(innerType.member)}>"
-            InnerType.Long -> "Long"
-            is InnerType.Map -> "Map<${renderType(innerType.key)}, ${renderType(innerType.value)}>"
-            is InnerType.Ref -> type.shapeId.name
-            is InnerType.Set -> "Set<${renderType(innerType.member)}>"
-            InnerType.String -> "String"
-            InnerType.Unit -> "Unit"
-        }
+    fun renderType(type: Type): String = when (val innerType = type.type) {
+        InnerType.Bool -> "Boolean"
+        InnerType.Int -> "Int"
+        InnerType.Json -> "JsonElement"
+        is InnerType.List -> "List<${renderType(innerType.member)}>"
+        InnerType.Long -> "Long"
+        is InnerType.Map -> "Map<${renderType(innerType.key)}, ${renderType(innerType.value)}>"
+        is InnerType.Ref -> type.shapeId.name
+        is InnerType.Set -> "Set<${renderType(innerType.member)}>"
+        InnerType.String -> "String"
+        InnerType.Unit -> "Unit"
     }
 
     fun renderOperation(op: Operation): CodeBlock {

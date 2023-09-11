@@ -145,7 +145,7 @@ class SmithyToIr(val model: Model) {
                 if (dataField.type.type != InnerType.Json) {
                     throw RuntimeException("Expected document type")
                 }
-                return Field("dataKind", Type(dataKindShapeId(dataField.type.shapeId), InnerType.String),false, hints)
+                return Field("dataKind", Type(dataKindShapeId(dataField.type.shapeId), InnerType.String), false, hints)
             }
 
             fun insertDiscriminator(fields: List<Field>): List<Field> {
@@ -212,7 +212,13 @@ class SmithyToIr(val model: Model) {
                 val values = allKnownInhabitants.map { (kind, memberId) ->
                     val snakeCased = kind.replace('-', '_').uppercase(Locale.getDefault())
                     val memberDoc = "`data` field must contain a ${memberId.name} object."
-                    PolymorphicDataKind(kind, memberId, snakeCased, getType(memberId)!!, listOf(Hint.Documentation(memberDoc)))
+                    PolymorphicDataKind(
+                        kind,
+                        memberId,
+                        snakeCased,
+                        getType(memberId)!!,
+                        listOf(Hint.Documentation(memberDoc))
+                    )
                 }
 
                 val dataKinds = Def.DataKinds(id, openEnumId, values, hints)
@@ -227,7 +233,7 @@ class SmithyToIr(val model: Model) {
             val type = shape.accept(toTypeVisitor)
 
             return listOfNotNull(type?.let {
-                Def.Alias(shape.id, Type(ShapeId.fromParts("alias", it.shapeId.name), it.type), hints)
+                Def.Alias(shape.id, it, hints)
             })
         }
 
