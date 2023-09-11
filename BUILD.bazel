@@ -1,5 +1,4 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
-
 load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_compiler_plugin")
 
 kt_compiler_plugin(
@@ -16,12 +15,11 @@ kt_jvm_library(
     name = "kotlin_serialization",
     srcs = [],
     exported_compiler_plugins = [":serialization_plugin"],
+    visibility = ["//visibility:public"],
     exports = [
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_core_jvm",
     ],
-    visibility = ["//visibility:public"],
 )
-
 
 alias(
     name = "codegen",
@@ -31,7 +29,7 @@ alias(
 
 java_binary(
     name = "bsp4kt-generator",
-    main_class = "com.jetbrains.bsp.generators.bsp4kt.Main",
+    main_class = "org.jetbrains.bsp.generators.bsp4kt.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
         ":codegen",
@@ -42,7 +40,7 @@ load("//rules/generator:generator.bzl", "library_generator")
 
 library_generator(
     name = "generate-bsp4kt",
-    library_name = "bsp4kt",
     gen_tool = ":bsp4kt-generator",
+    library_name = "bsp4kt",
     visibility = ["//visibility:public"],
 )

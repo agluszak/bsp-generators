@@ -1,4 +1,4 @@
-package com.jetbrains.bsp.generators.utils
+package org.jetbrains.bsp.generators.utils
 
 fun String.camelToSnakeCase(): String {
     val pattern = "(?<=[^A-Z])[A-Z]".toRegex()

@@ -1,4 +1,4 @@
-package com.jetbrains.bsp.generators
+package org.jetbrains.bsp.generators
 
 import software.amazon.smithy.model.Model
 
