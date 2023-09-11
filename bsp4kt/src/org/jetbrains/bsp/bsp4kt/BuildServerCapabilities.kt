@@ -18,5 +18,6 @@ data class BuildServerCapabilities(
   val buildTargetChangedProvider: Boolean? = null,
   val jvmRunEnvironmentProvider: Boolean? = null,
   val jvmTestEnvironmentProvider: Boolean? = null,
+  val cargoFeaturesProvider: Boolean? = null,
   val canReload: Boolean? = null
 )
