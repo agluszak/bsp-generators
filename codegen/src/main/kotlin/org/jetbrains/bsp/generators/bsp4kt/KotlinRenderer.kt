@@ -3,7 +3,15 @@ package org.jetbrains.bsp.generators.bsp4kt
 import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.code
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumType
+import org.jetbrains.bsp.generators.ir.EnumValue
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.IrShape
+import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
+import org.jetbrains.bsp.generators.ir.Operation
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.kebabToScreamingSnakeCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import kotlin.io.path.Path
@@ -124,17 +132,17 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun renderType(type: Type): String = when (val innerType = type.type) {
-        InnerType.Bool -> "Boolean"
-        InnerType.Int -> "Int"
-        InnerType.Json -> "JsonElement"
-        is InnerType.List -> "List<${renderType(innerType.member)}>"
-        InnerType.Long -> "Long"
-        is InnerType.Map -> "Map<${renderType(innerType.key)}, ${renderType(innerType.value)}>"
-        is InnerType.Ref -> type.shapeId.name
-        is InnerType.Set -> "Set<${renderType(innerType.member)}>"
-        InnerType.String -> "String"
-        InnerType.Unit -> "Unit"
+    fun renderType(irShape: IrShape): String = when (val type = irShape.type) {
+        Type.Bool -> "Boolean"
+        Type.Int -> "Int"
+        Type.Json -> "JsonElement"
+        is Type.List -> "List<${renderType(type.member)}>"
+        Type.Long -> "Long"
+        is Type.Map -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
+        is Type.Ref -> irShape.shapeId.name
+        is Type.Set -> "Set<${renderType(type.member)}>"
+        Type.String -> "String"
+        Type.Unit -> "Unit"
     }
 
     fun renderOperation(op: Operation): CodeBlock {
@@ -147,7 +155,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             JsonRpcMethodType.Request -> "suspend "
         }
         val input = when (op.inputType) {
-            Type.Unit -> ""
+            IrShape.Unit -> ""
             else -> "params: ${renderType(op.inputType)}"
         }
         val rpcMethod = op.jsonRpcMethod

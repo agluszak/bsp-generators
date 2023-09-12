@@ -49,8 +49,8 @@ sealed interface JsonRpcMethodType {
 
 data class Operation(
     val shapeId: ShapeId,
-    val inputType: Type,
-    val outputType: Type,
+    val inputType: IrShape,
+    val outputType: IrShape,
     val jsonRpcMethodType: JsonRpcMethodType,
     val jsonRpcMethod: String,
     val hints: List<Hint>
@@ -66,42 +66,42 @@ sealed interface EnumType<A> {
 
 data class EnumValue<A>(val name: String, val value: A, val hints: List<Hint>)
 
-sealed interface InnerType {
-    data class Set(val member: Type) : InnerType
-    data class List(val member: Type) : InnerType
-    data class Map(val key: Type, val value: Type) : InnerType
-    object Ref : InnerType
+sealed interface Type {
+    data class Set(val member: IrShape) : Type
+    data class List(val member: IrShape) : Type
+    data class Map(val key: IrShape, val value: IrShape) : Type
+    object Ref : Type
 
     // Should be data objects
-    object Unit : InnerType
-    object Bool : InnerType
-    object String : InnerType
-    object Int : InnerType
-    object Long : InnerType
-    object Json : InnerType
+    object Unit : Type
+    object Bool : Type
+    object String : Type
+    object Int : Type
+    object Long : Type
+    object Json : Type
 }
 
-data class Type(val shapeId: ShapeId, val type: InnerType) {
+data class IrShape(val shapeId: ShapeId, val type: Type) {
     companion object {
-        val Unit: Type = Type(ShapeId.from("smithy.api#Unit"), InnerType.Unit)
-        val Bool: Type = Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
-        val String: Type = Type(ShapeId.from("smithy.api#String"), InnerType.String)
-        val Int: Type = Type(ShapeId.from("smithy.api#Integer"), InnerType.Int)
-        val Long: Type = Type(ShapeId.from("smithy.api#Long"), InnerType.Long)
-        val Json: Type = Type(ShapeId.from("smithy.api#Document"), InnerType.Json)
+        val Unit: IrShape = IrShape(ShapeId.from("smithy.api#Unit"), Type.Unit)
+        val Bool: IrShape = IrShape(ShapeId.from("smithy.api#Boolean"), Type.Bool)
+        val String: IrShape = IrShape(ShapeId.from("smithy.api#String"), Type.String)
+        val Int: IrShape = IrShape(ShapeId.from("smithy.api#Integer"), Type.Int)
+        val Long: IrShape = IrShape(ShapeId.from("smithy.api#Long"), Type.Long)
+        val Json: IrShape = IrShape(ShapeId.from("smithy.api#Document"), Type.Json)
     }
 }
 
 data class Field(
     val name: String,
-    val type: Type,
+    val type: IrShape,
     val required: Boolean,
     val hints: List<Hint>
 )
 
 data class PolymorphicDataKind(
     val kind: String,
-    val type: Type,
+    val shape: IrShape,
     val hints: List<Hint>
 )
 

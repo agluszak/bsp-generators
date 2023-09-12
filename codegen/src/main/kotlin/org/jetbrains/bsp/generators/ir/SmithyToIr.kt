@@ -1,12 +1,32 @@
 package org.jetbrains.bsp.generators.ir
 
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.*
+import software.amazon.smithy.model.shapes.BooleanShape
+import software.amazon.smithy.model.shapes.DocumentShape
+import software.amazon.smithy.model.shapes.EnumShape
+import software.amazon.smithy.model.shapes.IntEnumShape
+import software.amazon.smithy.model.shapes.IntegerShape
+import software.amazon.smithy.model.shapes.ListShape
+import software.amazon.smithy.model.shapes.LongShape
+import software.amazon.smithy.model.shapes.MapShape
+import software.amazon.smithy.model.shapes.MemberShape
+import software.amazon.smithy.model.shapes.OperationShape
+import software.amazon.smithy.model.shapes.ServiceShape
+import software.amazon.smithy.model.shapes.Shape
+import software.amazon.smithy.model.shapes.ShapeId
+import software.amazon.smithy.model.shapes.ShapeVisitor
+import software.amazon.smithy.model.shapes.StringShape
+import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
 import software.amazon.smithy.model.traits.MixinTrait
 import software.amazon.smithy.model.traits.RequiredTrait
-import traits.*
+import traits.DataKindTrait
+import traits.DataTrait
+import traits.EnumKindTrait
+import traits.JsonNotificationTrait
+import traits.JsonRequestTrait
+import traits.SetTrait
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
@@ -78,8 +98,8 @@ class SmithyToIr(val model: Model) {
             }
 
             return maybeMethod?.let { (methodName, methodType) ->
-                val inputType = getType(op.input.getOrNull()) ?: Type.Unit
-                val outputType = getType(op.output.getOrNull()) ?: Type.Unit
+                val inputType = getType(op.input.getOrNull()) ?: IrShape.Unit
+                val outputType = getType(op.output.getOrNull()) ?: IrShape.Unit
                 val hints = getHints(op)
                 Operation(op.id, inputType, outputType, methodType, methodName, hints)
             }
@@ -101,7 +121,7 @@ class SmithyToIr(val model: Model) {
             }
         }
 
-        fun getType(shapeId: ShapeId?): Type? = shapeId?.let { model.expectShape(it).accept(toTypeVisitor) }
+        fun getType(shapeId: ShapeId?): IrShape? = shapeId?.let { model.expectShape(it).accept(toIrShapeVisitor) }
 
         fun dataKindShapeId(dataTypeShapeId: ShapeId): ShapeId =
             ShapeId.fromParts(dataTypeShapeId.namespace, dataTypeShapeId.name + "Kind")
@@ -115,16 +135,16 @@ class SmithyToIr(val model: Model) {
             val fields = shape.members().mapNotNull { toField(it) }
 
             fun fieldIsData(field: Field): Boolean =
-                field.name == "data" && field.type.type == InnerType.Json
+                field.name == "data" && field.type.type == Type.Json
 
             fun makeDiscriminatorField(dataField: Field): Field {
                 val doc =
                     "Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified."
                 val hints = listOf(Hint.Documentation(doc))
-                if (dataField.type.type != InnerType.Json) {
+                if (dataField.type.type != Type.Json) {
                     throw RuntimeException("Expected document type")
                 }
-                return Field("dataKind", Type(dataKindShapeId(dataField.type.shapeId), InnerType.String), false, hints)
+                return Field("dataKind", IrShape(dataKindShapeId(dataField.type.shapeId), Type.String), false, hints)
             }
 
             fun insertDiscriminator(fields: List<Field>): List<Field> {
@@ -190,11 +210,7 @@ class SmithyToIr(val model: Model) {
                 val openEnumId = dataKindShapeId(id)
                 val values = allKnownInhabitants.map { (kind, memberId) ->
                     val memberDoc = "`data` field must contain a ${memberId.name} object."
-                    PolymorphicDataKind(
-                        kind,
-                        getType(memberId)!!,
-                        listOf(Hint.Documentation(memberDoc))
-                    )
+                    PolymorphicDataKind(kind, getType(memberId)!!, listOf(Hint.Documentation(memberDoc)))
                 }
 
                 val dataKinds = Def.DataKinds(id, openEnumId, values, hints)
@@ -206,10 +222,10 @@ class SmithyToIr(val model: Model) {
 
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
-            val type = shape.accept(toTypeVisitor)
+            val irShape = shape.accept(toIrShapeVisitor)
 
-            return listOfNotNull(type?.let {
-                Def.Alias(shape.id, it, hints)
+            return listOfNotNull(irShape?.let {
+                Def.Alias(shape.id, it.type, hints)
             })
         }
 
@@ -227,63 +243,58 @@ class SmithyToIr(val model: Model) {
 
     }
 
-    val toTypeVisitor = object : ShapeVisitor.Default<Type?>() {
-        override fun getDefault(shape: Shape): Type? = null
+    val toIrShapeVisitor = object : ShapeVisitor.Default<IrShape?>() {
+        override fun getDefault(shape: Shape): IrShape? = null
 
-        override fun booleanShape(shape: BooleanShape): Type = Type(shape.id, InnerType.Bool)
+        override fun booleanShape(shape: BooleanShape): IrShape = IrShape(shape.id, Type.Bool)
 
-        override fun integerShape(shape: IntegerShape): Type = Type(shape.id, InnerType.Int)
+        override fun integerShape(shape: IntegerShape): IrShape = IrShape(shape.id, Type.Int)
 
-        override fun longShape(shape: LongShape): Type = Type(shape.id, InnerType.Long)
+        override fun longShape(shape: LongShape): IrShape = IrShape(shape.id, Type.Long)
 
-        override fun stringShape(shape: StringShape): Type = Type(shape.id, InnerType.String)
+        override fun stringShape(shape: StringShape): IrShape = IrShape(shape.id, Type.String)
 
-        override fun documentShape(shape: DocumentShape): Type = Type(shape.id, InnerType.Json)
+        override fun documentShape(shape: DocumentShape): IrShape = IrShape(shape.id, Type.Json)
 
-        override fun listShape(shape: ListShape): Type? {
+        override fun listShape(shape: ListShape): IrShape? {
             return shape.member.accept(this)?.let { memberType ->
-                if (shape.hasTrait(SetTrait::class.java)) Type(shape.id, InnerType.Set(memberType))
-                else Type(shape.id, InnerType.List(memberType))
+                if (shape.hasTrait(SetTrait::class.java)) IrShape(shape.id, Type.Set(memberType))
+                else IrShape(shape.id, Type.List(memberType))
             }
         }
 
-        override fun mapShape(shape: MapShape): Type? {
+        override fun mapShape(shape: MapShape): IrShape? {
             return shape.key.accept(this)?.let { key ->
                 shape.value.accept(this)?.let { value ->
-                    Type(shape.id, InnerType.Map(key, value))
+                    IrShape(shape.id, Type.Map(key, value))
                 }
             }
         }
 
-        override fun structureShape(shape: StructureShape): Type = Type(shape.id, InnerType.Ref)
+        override fun structureShape(shape: StructureShape): IrShape = IrShape(shape.id, Type.Ref)
 
-        fun enumUniversal(shape: Shape, openType: Type): Type {
+        fun enumUniversal(shape: Shape, openType: Type): IrShape {
             val enumKind = shape.expectTrait(EnumKindTrait::class.java).enumKind
             return when (enumKind) {
-                EnumKindTrait.EnumKind.OPEN -> openType
-                EnumKindTrait.EnumKind.CLOSED -> Type(shape.id, InnerType.Ref)
+                EnumKindTrait.EnumKind.OPEN -> IrShape(shape.id, openType)
+                EnumKindTrait.EnumKind.CLOSED -> IrShape(shape.id, Type.Ref)
             }
         }
 
-        override fun enumShape(shape: EnumShape): Type {
-            return enumUniversal(shape, Type(shape.id, InnerType.String))
+        override fun enumShape(shape: EnumShape): IrShape {
+            return enumUniversal(shape, Type.String)
         }
 
-        override fun intEnumShape(shape: IntEnumShape): Type {
-            return enumUniversal(shape, Type(shape.id, InnerType.Int))
+        override fun intEnumShape(shape: IntEnumShape): IrShape {
+            return enumUniversal(shape, Type.Int)
         }
 
-        override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
+        override fun memberShape(shape: MemberShape): IrShape? = model.expectShape(shape.target).accept(this)
     }
 
     fun getHints(shape: Shape): List<Hint> {
-        val documentation = shape
-            .getTrait(DocumentationTrait::class.java)
-            .map { Hint.Documentation(it.value) }
-
-        val deprecated = shape
-            .getTrait(DeprecatedTrait::class.java)
-            .map { Hint.Deprecated(it.message.orElse("")) }
+        val documentation = shape.getTrait(DocumentationTrait::class.java).map { Hint.Documentation(it.value) }
+        val deprecated = shape.getTrait(DeprecatedTrait::class.java).map { Hint.Deprecated(it.message.orElse("")) }
 
         return listOf(documentation, deprecated).mapNotNull { it.getOrNull() }
     }
