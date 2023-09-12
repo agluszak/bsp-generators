@@ -3,15 +3,8 @@ package org.jetbrains.bsp.generators.bsp4kt
 import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.code
-import org.jetbrains.bsp.generators.ir.Def
-import org.jetbrains.bsp.generators.ir.EnumType
-import org.jetbrains.bsp.generators.ir.EnumValue
-import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
-import org.jetbrains.bsp.generators.ir.Operation
-import org.jetbrains.bsp.generators.ir.Type
-import org.jetbrains.bsp.generators.ir.InnerType
+import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.utils.kebabToScreamingSnakeCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import kotlin.io.path.Path
 
@@ -108,7 +101,10 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     }
 
     private fun renderData(def: Def.DataKinds): CodegenFile {
-        val values = def.kinds.map { polyData -> EnumValue(polyData.name, polyData.kindStr, polyData.hints) }
+        val values = def.kinds.map { polyData ->
+            val snakeCased = polyData.kind.kebabToScreamingSnakeCase()
+            EnumValue(snakeCased, polyData.kind, polyData.hints)
+        }
         val dataKindDef = Def.OpenEnum(def.kindsEnumId, EnumType.StringEnum, values, def.hints)
 
         return renderOpenEnum(dataKindDef)

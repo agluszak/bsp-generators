@@ -1,33 +1,12 @@
 package org.jetbrains.bsp.generators.ir
 
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.BooleanShape
-import software.amazon.smithy.model.shapes.DocumentShape
-import software.amazon.smithy.model.shapes.EnumShape
-import software.amazon.smithy.model.shapes.IntEnumShape
-import software.amazon.smithy.model.shapes.IntegerShape
-import software.amazon.smithy.model.shapes.ListShape
-import software.amazon.smithy.model.shapes.LongShape
-import software.amazon.smithy.model.shapes.MapShape
-import software.amazon.smithy.model.shapes.MemberShape
-import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.Shape
-import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.shapes.ShapeVisitor
-import software.amazon.smithy.model.shapes.StringShape
-import software.amazon.smithy.model.shapes.StructureShape
+import software.amazon.smithy.model.shapes.*
 import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
 import software.amazon.smithy.model.traits.MixinTrait
 import software.amazon.smithy.model.traits.RequiredTrait
-import traits.DataKindTrait
-import traits.DataTrait
-import traits.EnumKindTrait
-import traits.JsonNotificationTrait
-import traits.JsonRequestTrait
-import traits.SetTrait
-import java.util.Locale
+import traits.*
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
@@ -210,12 +189,9 @@ class SmithyToIr(val model: Model) {
                 val allKnownInhabitants = allDataKindAnnotated[id]!!
                 val openEnumId = dataKindShapeId(id)
                 val values = allKnownInhabitants.map { (kind, memberId) ->
-                    val snakeCased = kind.replace('-', '_').uppercase(Locale.getDefault())
                     val memberDoc = "`data` field must contain a ${memberId.name} object."
                     PolymorphicDataKind(
                         kind,
-                        memberId,
-                        snakeCased,
                         getType(memberId)!!,
                         listOf(Hint.Documentation(memberDoc))
                     )

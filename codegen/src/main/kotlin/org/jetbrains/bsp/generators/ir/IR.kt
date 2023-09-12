@@ -84,7 +84,7 @@ sealed interface InnerType {
 data class Type(val shapeId: ShapeId, val type: InnerType) {
     companion object {
         val Unit: Type = Type(ShapeId.from("smithy.api#Unit"), InnerType.Unit)
-        val Bool: Type= Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
+        val Bool: Type = Type(ShapeId.from("smithy.api#Boolean"), InnerType.Bool)
         val String: Type = Type(ShapeId.from("smithy.api#String"), InnerType.String)
         val Int: Type = Type(ShapeId.from("smithy.api#Integer"), InnerType.Int)
         val Long: Type = Type(ShapeId.from("smithy.api#Long"), InnerType.Long)
@@ -100,9 +100,7 @@ data class Field(
 )
 
 data class PolymorphicDataKind(
-    val kindStr: String,
-    val shapeId: ShapeId,
-    val name: String,
+    val kind: String,
     val type: Type,
     val hints: List<Hint>
 )
