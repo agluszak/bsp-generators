@@ -13,8 +13,8 @@ import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
-    private val deriveRenderer = DeriveRenderer(modules.flatMap { it.definitions }.associateBy { it.shapeId })
-    private val serializationRenderer = SerializationRenderer()
+    val deriveRenderer = DeriveRenderer(modules.flatMap { it.definitions }.associateBy { it.shapeId })
+    val serializationRenderer = SerializationRenderer()
 
     fun makeName(name: String): String {
         val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
@@ -152,7 +152,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     fun generateFile(content: CodeBlock, namespacePath: Path, fileName: String): CodegenFile {
         val code = rustCode {
             include(renderImports(fileName != "lib.rs"))
+            newline()
             include(content)
+            newline()
         }
         return CodegenFile(createPath(namespacePath, fileName), code.toString())
     }
@@ -175,22 +177,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 renderDeprecated(hints.filterIsInstance<Hint.Deprecated>())
     }
 
-    private fun renderStructFieldRaw(field: Field): String {
-        return "pub ${makeName(field.name).camelToSnakeCase()}: ${renderIrShape(field.type, field.required)}"
-    }
-
-    private fun renderStructField(field: Field): CodeBlock {
-        if (field.name == "dataKind" && field.type != IrShape.String) {
-            return rustCode { }
-        }
-
-        return rustCode {
-            lines(renderHints(field.hints))
-            lines(serializationRenderer.renderForField(field))
-            -"${renderStructFieldRaw(field)},"
-        }
-    }
-
     private fun renderImports(canImportCrate: Boolean): CodeBlock {
         return rustCode {
             -"use serde::{Deserialize, Serialize};"
@@ -199,21 +185,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -"use serde_enum_str::{Deserialize_enum_str, Serialize_enum_str};"
             -"use std::collections::{BTreeSet, BTreeMap};"
             -(if (canImportCrate) "use crate::*;" else null)
-            newline()
-        }
-    }
-
-    fun renderStructure(def: Def.Structure): CodeBlock {
-        return rustCode {
-            lines(renderHints(def.hints))
-            -deriveRenderer.renderForDef(def)
-            lines(serializationRenderer.renderForDef(def))
-            block("pub struct ${def.name}") {
-                def.fields.forEach { field ->
-                    include(renderStructField(field))
-                }
-            }
-            newline()
         }
     }
 
