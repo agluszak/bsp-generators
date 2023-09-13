@@ -1,12 +1,12 @@
-package com.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs
 
-import com.jetbrains.bsp.generators.CodegenFile
-import com.jetbrains.bsp.generators.dsl.CodeBlock
-import com.jetbrains.bsp.generators.dsl.rustCode
-import com.jetbrains.bsp.generators.ir.*
-import com.jetbrains.bsp.generators.utils.camelToSnakeCase
-import com.jetbrains.bsp.generators.utils.kebabToUpperCamelCase
-import com.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
+import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.dsl.CodeBlock
+import org.jetbrains.bsp.generators.dsl.rustCode
+import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.utils.camelToSnakeCase
+import org.jetbrains.bsp.generators.utils.kebabToUpperCamelCase
+import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
 import kotlin.io.path.Path

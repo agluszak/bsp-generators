@@ -1,4 +1,4 @@
-package com.jetbrains.bsp.generators.utils
+package org.jetbrains.bsp.generators.utils
 
 fun String.camelToSnakeCase(): String {
     val pattern = "(?<=[^A-Z])[A-Z]".toRegex()
@@ -6,19 +6,15 @@ fun String.camelToSnakeCase(): String {
 }
 
 fun String.snakeToUpperCamelCase(): String {
-    val pattern = "_(.)".toRegex()
-    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
-        .replaceFirstChar { it.uppercaseChar() }
+    return this.toUpperCamelCase("_")
 }
 
 fun String.kebabToUpperCamelCase(): String {
-    val pattern = "-(.)".toRegex()
-    return this.lowercase().replace(pattern) { it.groupValues[1].uppercase() }
-        .replaceFirstChar { it.uppercaseChar() }
+    return this.toUpperCamelCase("-")
 }
 
-fun String.toUpperCamelCase(): String {
-    return this.lowercase().split("_").joinToString("") { word ->
+private fun String.toUpperCamelCase(splitStr: String): String {
+    return this.lowercase().split(splitStr).joinToString("") { word ->
         word.replaceFirstChar {
             it.uppercase()
         }

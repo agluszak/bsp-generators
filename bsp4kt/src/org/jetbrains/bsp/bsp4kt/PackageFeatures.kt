@@ -8,6 +8,6 @@ import kotlinx.serialization.json.JsonElement
 data class PackageFeatures(
   val packageId: String,
   val targets: List<BuildTargetIdentifier>,
-  val availableFeatures: List<String>,
-  val enabledFeatures: List<String>
+  val availableFeatures: Map<String, Set<String>>,
+  val enabledFeatures: Set<String>
 )

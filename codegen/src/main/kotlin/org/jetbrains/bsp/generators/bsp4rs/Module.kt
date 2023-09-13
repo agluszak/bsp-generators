@@ -1,5 +1,5 @@
-package com.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs
 
-import com.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.Def
 
 data class Module(val moduleName: String, val definitions: List<Def>)

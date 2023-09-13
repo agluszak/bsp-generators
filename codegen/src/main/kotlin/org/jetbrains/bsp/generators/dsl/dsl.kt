@@ -1,4 +1,4 @@
-package com.jetbrains.bsp.generators.dsl
+package org.jetbrains.bsp.generators.dsl
 
 @DslMarker
 annotation class CodeMarker

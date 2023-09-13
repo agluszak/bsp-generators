@@ -1,6 +1,6 @@
-package com.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs
 
-import com.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.*
 import software.amazon.smithy.model.shapes.ShapeId
 
 class DeriveRenderer(val defs: Map<ShapeId, Def>) {

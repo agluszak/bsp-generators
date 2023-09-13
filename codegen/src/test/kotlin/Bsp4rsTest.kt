@@ -1,5 +1,5 @@
-import com.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import com.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
+import org.jetbrains.bsp.generators.ir.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import software.amazon.smithy.model.shapes.ShapeId

@@ -1,6 +1,6 @@
-package com.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs
 
-import com.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.*
 
 class SerializationRenderer() {
     private var serdeSet: Set<SerdeOption> = emptySet()

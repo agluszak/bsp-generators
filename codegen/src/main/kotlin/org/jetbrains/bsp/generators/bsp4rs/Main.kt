@@ -1,8 +1,8 @@
-package com.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs
 
-import com.jetbrains.bsp.generators.FilesGenerator
-import com.jetbrains.bsp.generators.Loader
-import com.jetbrains.bsp.generators.ir.SmithyToIr
+import org.jetbrains.bsp.generators.FilesGenerator
+import org.jetbrains.bsp.generators.Loader
+import org.jetbrains.bsp.generators.ir.SmithyToIr
 import java.io.File
 import kotlin.io.path.Path
 
