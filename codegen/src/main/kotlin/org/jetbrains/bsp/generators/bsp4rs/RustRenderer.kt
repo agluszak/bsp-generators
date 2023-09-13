@@ -5,7 +5,6 @@ import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.*
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
-import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -110,34 +109,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -"use serde_enum_str::{Deserialize_enum_str, Serialize_enum_str};"
             -"use std::collections::{BTreeSet, BTreeMap};"
             -(if (canImportCrate) "use crate::*;" else null)
-        }
-    }
-
-    private fun renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock {
-        val isDefault = def.values.isNotEmpty()
-
-        val genName: (String) -> String = { makeName(it.snakeToUpperCamelCase()) }
-        fun renderEnumValue(ev: EnumValue<*>): String = when (def.enumType) {
-            EnumType.IntEnum -> "${genName(ev.name)} = ${ev.value}"
-            EnumType.StringEnum -> genName(ev.name)
-        }
-
-        val values = def.values.map { value ->
-            rustCode { lines(renderHints(value.hints) + renderEnumValue(value), end = ",") }
-        }
-
-        return rustCode {
-            lines(renderHints(def.hints))
-            -deriveRenderer.renderForDef(def)
-            lines(serializationRenderer.renderForDef(def))
-            block("pub enum ${def.name}") {
-                if (isDefault) {
-                    -"#[default]"
-                }
-                for (value in values) {
-                    include(value)
-                }
-            }
         }
     }
 
