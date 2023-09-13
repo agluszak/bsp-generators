@@ -2,7 +2,7 @@ package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.ir.*
 
-class SerializationRenderer() {
+class SerializationRenderer {
     private var serdeSet: Set<SerdeOption> = emptySet()
     private var reprSet: Set<ReprOption> = emptySet()
 
@@ -94,11 +94,11 @@ class SerializationRenderer() {
         object Transparent : SerdeOption("transparent", "")
         object Untagged : SerdeOption("untagged", "")
         object Flatten : SerdeOption("flatten", "")
-        class Rename(val name: String) : SerdeOption("rename", name)
-        class RenameAll(val case: String) : SerdeOption("rename_all", case)
-        class SkipSerialization(val fn: String) : SerdeOption("skip_serializing_if", fn)
-        class Tag(val tag: String) : SerdeOption("tag", tag)
-        class Content(val content: String) : SerdeOption("content", content)
+        class Rename(name: String) : SerdeOption("rename", name)
+        class RenameAll(case: String) : SerdeOption("rename_all", case)
+        class SkipSerialization(fn: String) : SerdeOption("skip_serializing_if", fn)
+        class Tag(tag: String) : SerdeOption("tag", tag)
+        class Content(content: String) : SerdeOption("content", content)
 
         companion object {
             val RenameAllCamelCase = RenameAll(""""camelCase"""")

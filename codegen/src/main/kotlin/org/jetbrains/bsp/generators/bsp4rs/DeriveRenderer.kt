@@ -3,7 +3,7 @@ package org.jetbrains.bsp.generators.bsp4rs
 import org.jetbrains.bsp.generators.ir.*
 import software.amazon.smithy.model.shapes.ShapeId
 
-class DeriveRenderer(val defs: Map<ShapeId, Def>) {
+class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
     private var derivesSet: Set<DeriveOption> = emptySet()
 
     private fun defToSerializeList(def: Def) = when (def) {

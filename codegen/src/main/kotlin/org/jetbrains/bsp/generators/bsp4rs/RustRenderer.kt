@@ -13,12 +13,12 @@ import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
-    private val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
-    private val bannedAliases: List<String> = listOf("Integer", "Long")
     private val deriveRenderer = DeriveRenderer(modules.flatMap { it.definitions }.associateBy { it.shapeId })
     private val serializationRenderer = SerializationRenderer()
 
-    private fun makeName(name: String): String {
+    fun makeName(name: String): String {
+        val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
+
         return renames[name] ?: name
     }
 
@@ -42,7 +42,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     private fun renderData(def: Def.DataKinds): CodeBlock {
         val dataKinds = def.kinds.map { kind ->
             val name = makeName(kind.kind.kebabToUpperCamelCase())
-            val dataType = renderType(kind.shape, true)
+            val dataType = renderIrShapeType(kind.shape)
             Pair(name, dataType)
         }
 
@@ -74,8 +74,11 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun isAliasRenderable(name: String, type: Type): Boolean {
-        if (name in bannedAliases) return false
+    fun isAliasRenderable(shapeId: ShapeId, type: Type): Boolean {
+        val bannedAliases: List<String> = listOf("Integer", "Long")
+
+        if (!shapeId.namespace.startsWith("bsp")) return false
+        if (shapeId.name in bannedAliases) return false
         if (type is Type.List) return false
         if (type is Type.Set) return false
 
@@ -83,9 +86,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     private fun renderAlias(def: Def.Alias): CodeBlock? {
-        if (!isAliasRenderable(def.name, def.aliasedType)) return null
+        if (!isAliasRenderable(def.shapeId, def.aliasedType)) return null
         val name = def.name
-        val type = renderBuiltInType(def.aliasedType)
+        val type = renderType(def.aliasedType)
 
         val derefBlock = rustCode {
             block("""impl std::ops::Deref for $name""") {
@@ -215,36 +218,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 renderDeprecated(hints.filterIsInstance<Hint.Deprecated>())
     }
 
-    private fun renderBuiltInType(type: Type): String = when (type) {
-        Type.Bool -> "bool"
-        Type.Int -> "i32"
-        Type.Json -> "serde_json::Value"
-        is Type.List -> "Vec<${renderTypeName(type.member)}>"
-        Type.Long -> "i64"
-        is Type.Map -> "BTreeMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
-        is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
-        Type.String -> "String"
-        Type.Unit -> "()"
-        else -> ""
-    }
-
-    private fun renderTypeName(irShape: IrShape): String =
-        if (irShape.type is Type.Ref) makeName(irShape.shapeId.name)
-        else if (irShape.shapeId.namespace.startsWith("bsp") && isAliasRenderable(irShape.shapeId.name, irShape.type))
-            makeName(irShape.shapeId.name)
-        else renderBuiltInType(irShape.type)
-
-    fun renderType(shape: IrShape, isRequired: Boolean): String {
-        if (isRequired) return renderTypeName(shape)
-
-        return when (shape.type) {
-            is Type.List, is Type.Map, is Type.Set -> renderTypeName(shape)
-            else -> "Option<${renderTypeName(shape)}>"
-        }
-    }
-
-    fun renderStructFieldRaw(field: Field): String {
-        return "pub ${makeName(field.name).camelToSnakeCase()}: ${renderType(field.type, field.required)}"
+    private fun renderStructFieldRaw(field: Field): String {
+        return "pub ${makeName(field.name).camelToSnakeCase()}: ${renderIrShape(field.type, field.required)}"
     }
 
     private fun renderStructField(field: Field): CodeBlock {
@@ -292,14 +267,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    fun renderOperation(op: Operation): CodeBlock {
+    private fun renderOperation(op: Operation): CodeBlock {
         val name = makeName(op.name)
         val output = when (op.jsonRpcMethodType) {
             JsonRpcMethodType.Notification -> null
-            JsonRpcMethodType.Request -> "type Result = ${renderType(op.outputType, true)}"
+            JsonRpcMethodType.Request -> "type Result = ${renderIrShapeType(op.outputType)}"
         }
         val operationProperties = listOfNotNull(
-            "type Params = ${renderType(op.inputType, true)}",
+            "type Params = ${renderIrShapeType(op.inputType)}",
             output,
             """const METHOD: &'static str = "${op.jsonRpcMethod}""""
         )
