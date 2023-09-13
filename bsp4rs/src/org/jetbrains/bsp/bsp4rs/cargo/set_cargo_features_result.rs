@@ -6,6 +6,5 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct SetCargoFeaturesResult {
     /** The status code of the operation. */
-    #[serde(default)]
     pub status_code: StatusCode,
 }

@@ -11,9 +11,7 @@ import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 
 fun RustRenderer.renderStructure(def: Def.Structure): CodeBlock {
     return rustCode {
-        include(renderHints(def.hints))
-        include(deriveRenderer.renderForDef(def))
-        include(serializationRenderer.renderForDef(def))
+        include(renderPreDef(def))
         block("pub struct ${def.name}") {
             def.fields.forEach { field ->
                 include(renderStructField(field))

@@ -7,7 +7,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct TaskId {
     /** A unique identifier */
-    #[serde(default)]
     pub id: Identifier,
     /** The parent task ids, if any. A non-empty parents field means
     this task is a sub-task of every parent task id. The child-parent

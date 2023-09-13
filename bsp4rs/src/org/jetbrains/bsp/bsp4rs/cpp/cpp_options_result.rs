@@ -6,6 +6,5 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct CppOptionsResult {
     /** The list of options for each target. */
-    #[serde(default)]
     pub items: Vec<CppOptionsItem>,
 }

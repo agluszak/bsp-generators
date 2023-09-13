@@ -9,18 +9,34 @@ class SerializationRenderer {
     private var reprSet: Set<ReprOption> = emptySet()
 
     fun renderForDef(def: Def, untagged: Boolean = false): CodeBlock {
-        serdeSet = setOf()
+        prepareSerdeSet(def.hints)
         serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
-        val serdeLine = this.printSerde()
 
         reprSet = setOf()
         reprSet = reprSet.plus(defToReprList(def))
-        val reprLine = this.printRepr()
 
         return rustCode {
-            -serdeLine
-            -reprLine
+            -printSerde()
+            -printRepr()
         }
+    }
+
+    fun renderForField(field: Field): CodeBlock {
+        prepareSerdeSet(field.hints)
+        serdeSet = serdeSet.plus(fieldToSerdeList(field))
+
+        return rustCode {
+            -printSerde()
+        }
+    }
+
+    private fun prepareSerdeSet(hints: List<Hint>) {
+        val rename = hints.find { it is Hint.JsonRename }
+
+        return if (rename is Hint.JsonRename)
+            serdeSet = setOf(SerdeOption.Rename(rename.name))
+        else
+            serdeSet = emptySet()
     }
 
     private fun defToSerdeList(def: Def, untagged: Boolean) = when (def) {
@@ -48,16 +64,6 @@ class SerializationRenderer {
         else -> emptySet()
     }
 
-    fun renderForField(field: Field): CodeBlock {
-        serdeSet = setOf(SerdeOption.Default)
-        serdeSet = serdeSet.plus(fieldToSerdeList(field))
-        val serdeLine = this.printSerde()
-
-        return rustCode {
-            -serdeLine
-        }
-    }
-
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
         fun optionalToSerdeList(irShape: IrShape) = when (irShape.type) {
             is Type.List -> SerdeOption.SkipVector
@@ -68,11 +74,6 @@ class SerializationRenderer {
 
         var serdeOpt = emptySet<SerdeOption>()
 
-        val rename = field.hints.find { it is Hint.JsonRename }
-        if (rename is Hint.JsonRename) {
-            serdeOpt = serdeOpt.plus(SerdeOption.Rename(rename.name))
-        }
-
         if (field.type.type is Type.Json && field.name == "data"
             && field.type.shapeId.namespace.startsWith("bsp")
         ) {
@@ -80,6 +81,7 @@ class SerializationRenderer {
         }
 
         if (!field.required) {
+            serdeOpt = serdeOpt.plus(SerdeOption.Default)
             serdeOpt = serdeOpt.plus(optionalToSerdeList(field.type))
         }
 

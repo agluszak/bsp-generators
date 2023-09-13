@@ -6,7 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct RustDependency {
     /** The Package ID of the dependency. */
-    #[serde(default)]
     pub pkg: String,
     /** The name of the dependency's library target.
     If this is a renamed dependency, this is the new name. */

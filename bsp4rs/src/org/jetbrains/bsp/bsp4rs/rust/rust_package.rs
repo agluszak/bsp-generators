@@ -19,41 +19,31 @@ However, it must contain at least one crate, whether that’s a library or binar
 #[serde(rename_all = "camelCase")]
 pub struct RustPackage {
     /** The package’s unique identifier */
-    #[serde(default)]
     pub id: String,
     /** The package's root path. */
-    #[serde(default)]
     pub root_url: URI,
     /** The name of the package. */
-    #[serde(default)]
     pub name: String,
     /** The version of the package. */
-    #[serde(default)]
     pub version: String,
     /** Defines a reason a package is in a project. */
-    #[serde(default)]
     pub origin: RustPackageOrigin,
     /** Code edition of the package. */
-    #[serde(default)]
     pub edition: RustEdition,
     /** The source ID of the dependency, `null` for the root package and path dependencies. */
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
     /** Corresponds to source files which can be compiled into a crate from this package.
     Contains only resolved targets without conflicts. */
-    #[serde(default)]
     pub resolved_targets: Vec<RustBuildTarget>,
     /** Same as `targets`, but contains all targets from this package.
     `targets` should be the subset of `allTargets`. */
-    #[serde(default)]
     pub all_targets: Vec<RustBuildTarget>,
     /** Set of features defined for the package.
     Each feature maps to an array of features or dependencies it enables.
     The entry named "default" defines which features are enabled by default. */
-    #[serde(default)]
     pub features: BTreeSet<RustFeature>,
     /** Array of features enabled on this package. */
-    #[serde(default)]
     pub enabled_features: Vec<String>,
     /** Conditional compilation flags that can be set based on certain conditions.
     They can be used to enable or disable certain sections of code during the build process.

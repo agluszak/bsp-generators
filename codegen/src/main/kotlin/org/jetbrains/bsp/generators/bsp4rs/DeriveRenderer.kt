@@ -8,7 +8,7 @@ import software.amazon.smithy.model.shapes.ShapeId
 class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
     private var derivesSet: Set<DeriveOption> = emptySet()
 
-    fun renderForOp(): CodeBlock {
+    fun renderForOperation(): CodeBlock {
         derivesSet = setOf(DeriveOption.DEBUG)
 
         return this.render()

@@ -6,6 +6,5 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentIdentifier {
     /** The text document's URI. */
-    #[serde(default)]
     pub uri: URI,
 }

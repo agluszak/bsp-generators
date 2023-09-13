@@ -6,7 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct MavenDependencyModuleArtifact {
     /** Path to jar */
-    #[serde(default)]
     pub uri: URI,
     /** Empty or `sources`|`docs` */
     #[serde(default, skip_serializing_if = "Option::is_none")]

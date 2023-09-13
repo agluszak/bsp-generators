@@ -98,6 +98,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return true
     }
 
+    fun renderPreDef(def: Def, hints: Boolean = true, untagged: Boolean = false): CodeBlock =
+        rustCode {
+            if (hints)
+                include(renderHints(def.hints))
+            include(deriveRenderer.renderForDef(def))
+            include(serializationRenderer.renderForDef(def, untagged))
+        }
+
     fun renderHints(hints: List<Hint>): CodeBlock =
         rustCode {
             lines(renderDocumentation(hints.filterIsInstance<Hint.Documentation>()))

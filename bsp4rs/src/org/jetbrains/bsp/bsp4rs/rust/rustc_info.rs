@@ -7,16 +7,12 @@ use crate::*;
 pub struct RustcInfo {
     /** Root directory where the Rust compiler looks for standard libraries and other
     essential components when building Rust projects. */
-    #[serde(default)]
     pub sysroot_path: URI,
     /** Source code for the Rust standard library. */
-    #[serde(default)]
     pub src_sysroot_path: URI,
     /** `rustc` SemVer (Semantic Versioning) version. */
-    #[serde(default)]
     pub version: String,
     /** Target architecture and operating system of the Rust compiler.
     Used by [`intellij-rust`] for checking if given toolchain is supported. */
-    #[serde(default)]
     pub host: String,
 }

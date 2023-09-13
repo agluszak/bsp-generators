@@ -6,7 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct RustRawDependency {
     /** The name of the dependency. */
-    #[serde(default)]
     pub name: String,
     /** Name to which this dependency is renamed when declared in Cargo.toml. */
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -18,12 +17,9 @@ pub struct RustRawDependency {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
     /** Indicates whether this is an optional dependency. */
-    #[serde(default)]
     pub optional: bool,
     /** Indicates whether default features are enabled. */
-    #[serde(default)]
     pub uses_default_features: bool,
     /** A sequence of enabled features. */
-    #[serde(default)]
     pub features: Vec<String>,
 }

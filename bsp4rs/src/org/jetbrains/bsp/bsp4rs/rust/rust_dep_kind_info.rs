@@ -6,7 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct RustDepKindInfo {
     /** The dependency kind. */
-    #[serde(default)]
     pub kind: RustDepKind,
     /** The target platform for the dependency. */
     #[serde(default, skip_serializing_if = "Option::is_none")]

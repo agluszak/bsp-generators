@@ -6,7 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct LogMessageParams {
     /** the message type. */
-    #[serde(default)]
     pub r#type: MessageType,
     /** The task id if any. */
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -17,6 +16,5 @@ pub struct LogMessageParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<RequestId>,
     /** The actual message. */
-    #[serde(default)]
     pub message: String,
 }

@@ -6,7 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct TaskProgressParams {
     /** Unique id of the task with optional reference to parent task id */
-    #[serde(default)]
     pub task_id: TaskId,
     /** Timestamp of when the event started in milliseconds since Epoch. */
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -25,6 +24,6 @@ pub struct TaskProgressParams {
     pub unit: Option<String>,
     /** Optional metadata about the task.
     Objects for specific tasks like compile, test, etc are specified in the protocol. */
-    #[serde(default, flatten, skip_serializing_if = "Option::is_none")]
+    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     pub data: Option<TaskProgressData>,
 }

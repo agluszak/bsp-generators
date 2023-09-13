@@ -9,6 +9,5 @@ include a `TestTask` object. */
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TestTask {
-    #[serde(default)]
     pub target: BuildTargetIdentifier,
 }

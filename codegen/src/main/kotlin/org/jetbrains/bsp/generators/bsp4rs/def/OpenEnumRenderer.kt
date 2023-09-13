@@ -11,9 +11,7 @@ fun RustRenderer.renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
     val name = def.name
 
     return rustCode {
-        include(renderHints(def.hints))
-        include(deriveRenderer.renderForDef(def))
-        include(serializationRenderer.renderForDef(def))
+        include(renderPreDef(def))
         -"pub struct $name(pub ${renderType(def.enumType)});"
         newline()
         block("impl $name") {

@@ -6,6 +6,5 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct RustToolchainResult {
     /** A sequence of Rust toolchains. */
-    #[serde(default)]
     pub toolchains: Vec<RustToolchainItem>,
 }

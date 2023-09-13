@@ -7,18 +7,14 @@ metadata. This metadata is embedded in the `data: Option[Json]` field of the `De
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MavenDependencyModule {
-    #[serde(default)]
     pub organization: String,
-    #[serde(default)]
     pub name: String,
-    #[serde(default)]
     pub version: String,
     /** List of module's artifacts with different classifiers.
     For example: [
       {uri = "../scala-library-2.13.5.jar"},
       {uri = "../scala-library-2.13.5-sources.jar", classifier = "sources"}
     ] */
-    #[serde(default)]
     pub artifacts: Vec<MavenDependencyModuleArtifact>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,

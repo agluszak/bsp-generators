@@ -10,9 +10,7 @@ pub struct RustToolchainItem {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rust_std_lib: Option<RustcInfo>,
     /** Path to Cargo executable. */
-    #[serde(default)]
     pub cargo_bin_path: URI,
     /** Location of the source code of procedural macros in the Rust toolchain. */
-    #[serde(default)]
     pub proc_macro_srv_path: URI,
 }

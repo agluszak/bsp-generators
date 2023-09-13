@@ -14,9 +14,7 @@ fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
     val type = this.renderType(def.aliasedType)
 
     return rustCode {
-        include(renderHints(def.hints))
-        include(deriveRenderer.renderForDef(def))
-        include(serializationRenderer.renderForDef(def))
+        include(renderPreDef(def))
         -"""pub struct $name(pub $type);"""
         newline()
         include(renderDerefForAlias(name, type))

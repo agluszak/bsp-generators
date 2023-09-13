@@ -6,6 +6,5 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct RustToolchainParams {
     /** A sequence of build targets for toolchain resolution. */
-    #[serde(default)]
     pub targets: Vec<BuildTargetIdentifier>,
 }
