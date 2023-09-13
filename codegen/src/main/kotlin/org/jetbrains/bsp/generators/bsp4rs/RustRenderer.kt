@@ -188,45 +188,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun renderJsonRpcMethodType(type: JsonRpcMethodType): String {
-        return when (type) {
-            JsonRpcMethodType.Notification -> "Notification"
-            JsonRpcMethodType.Request -> "Request"
-        }
-    }
-
-    private fun renderOperation(op: Operation): CodeBlock {
-        val name = makeName(op.name)
-        val output = when (op.jsonRpcMethodType) {
-            JsonRpcMethodType.Notification -> null
-            JsonRpcMethodType.Request -> "type Result = ${renderIrShapeType(op.outputType)}"
-        }
-        val operationProperties = listOfNotNull(
-            "type Params = ${renderIrShapeType(op.inputType)}",
-            output,
-            """const METHOD: &'static str = "${op.jsonRpcMethod}""""
-        )
-
-        return rustCode {
-            -deriveRenderer.renderForOp()
-            -"pub enum $name {}"
-            newline()
-            lines(renderHints(op.hints))
-            block("impl ${renderJsonRpcMethodType(op.jsonRpcMethodType)} for $name") {
-                lines(operationProperties, join = ";", end = ";")
-            }
-            newline()
-        }
-    }
-
-    private fun renderService(def: Def.Service): CodeBlock {
-        return rustCode {
-            def.operations.forEach { operation ->
-                include(renderOperation(operation))
-            }
-        }
-    }
-
     private fun renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock {
         val isDefault = def.values.isNotEmpty()
 
