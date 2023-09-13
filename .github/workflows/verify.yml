@@ -16,8 +16,11 @@ jobs:
           path: "~/.cache/bazel"
           key: bazel
 
-      - name: Generate
+      - name: Generate bsp4kt
         run: bazel run :generate-bsp4kt
+
+      - name: Generate bsp4rs
+        run: bazel run :generate-bsp4rs
 
       - name: Build
         run: bazel build //...
@@ -28,6 +31,7 @@ jobs:
         with:
           files: |
             **/*.kt
+            **/*.rs
 
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'
