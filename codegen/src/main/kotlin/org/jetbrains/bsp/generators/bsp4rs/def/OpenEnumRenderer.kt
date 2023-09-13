@@ -32,7 +32,7 @@ private fun renderType(type: EnumType<*>): String = when (type) {
 }
 
 private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, enumName: String): CodeBlock {
-    val enumValueName = makeName(ev.name.uppercase())
+    val enumValueName =  makeName(ev.name).uppercase()
 
     val enumValue = when (ev.value) {
         is Int -> "${ev.value}"

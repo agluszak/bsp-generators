@@ -32,7 +32,7 @@ fun RustRenderer.renderDataKinds(def: Def.DataKinds): CodeBlock {
 
 private fun RustRenderer.makeDataKindsList(irKinds: List<PolymorphicDataKind>): List<Pair<String, String>> =
     irKinds.map { kind ->
-        val name = makeName(kind.kind.kebabToUpperCamelCase())
+        val name = makeName(kind.kind).kebabToUpperCamelCase()
         val dataType = renderIrShapeType(kind.shape)
 
         Pair(name, dataType)

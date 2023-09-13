@@ -23,7 +23,7 @@ fun RustRenderer.renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock =
     }
 
 private fun RustRenderer.renderEnumValue(ev: EnumValue<*>): CodeBlock {
-    val enumValueName = makeName(ev.name.snakeToUpperCamelCase())
+    val enumValueName = makeName(ev.name).snakeToUpperCamelCase()
 
     val enumVal = when (ev.value) {
         is Int -> "$enumValueName = ${ev.value}"
