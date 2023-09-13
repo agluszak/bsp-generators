@@ -16,12 +16,12 @@ impl std::ops::Deref for URI {
 
 impl From<String> for URI {
     fn from(input: String) -> Self {
-        URI(input)
+        Self(input)
     }
 }
 
 impl From<&str> for URI {
     fn from(input: &str) -> Self {
-        URI(input.to_string())
+        Self(input.to_string())
     }
 }

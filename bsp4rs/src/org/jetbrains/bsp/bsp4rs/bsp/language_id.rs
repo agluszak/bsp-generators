@@ -16,12 +16,12 @@ impl std::ops::Deref for LanguageId {
 
 impl From<String> for LanguageId {
     fn from(input: String) -> Self {
-        LanguageId(input)
+        Self(input)
     }
 }
 
 impl From<&str> for LanguageId {
     fn from(input: &str) -> Self {
-        LanguageId(input.to_string())
+        Self(input.to_string())
     }
 }

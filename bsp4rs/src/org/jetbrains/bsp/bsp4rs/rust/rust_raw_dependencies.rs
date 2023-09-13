@@ -17,6 +17,6 @@ impl std::ops::Deref for RustRawDependencies {
 
 impl From<BTreeMap<String, Vec<RustRawDependency>>> for RustRawDependencies {
     fn from(input: BTreeMap<String, Vec<RustRawDependency>>) -> Self {
-        RustRawDependencies(input)
+        Self(input)
     }
 }

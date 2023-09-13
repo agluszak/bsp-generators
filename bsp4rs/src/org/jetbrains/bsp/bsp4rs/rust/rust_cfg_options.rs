@@ -16,6 +16,6 @@ impl std::ops::Deref for RustCfgOptions {
 
 impl From<BTreeMap<String, Vec<String>>> for RustCfgOptions {
     fn from(input: BTreeMap<String, Vec<String>>) -> Self {
-        RustCfgOptions(input)
+        Self(input)
     }
 }

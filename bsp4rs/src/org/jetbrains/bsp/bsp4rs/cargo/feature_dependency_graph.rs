@@ -19,6 +19,6 @@ impl std::ops::Deref for FeatureDependencyGraph {
 
 impl From<BTreeMap<Feature, BTreeSet<Feature>>> for FeatureDependencyGraph {
     fn from(input: BTreeMap<Feature, BTreeSet<Feature>>) -> Self {
-        FeatureDependencyGraph(input)
+        Self(input)
     }
 }

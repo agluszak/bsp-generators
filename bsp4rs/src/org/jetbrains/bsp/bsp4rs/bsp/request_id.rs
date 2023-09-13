@@ -15,12 +15,12 @@ impl std::ops::Deref for RequestId {
 
 impl From<String> for RequestId {
     fn from(input: String) -> Self {
-        RequestId(input)
+        Self(input)
     }
 }
 
 impl From<&str> for RequestId {
     fn from(input: &str) -> Self {
-        RequestId(input.to_string())
+        Self(input.to_string())
     }
 }

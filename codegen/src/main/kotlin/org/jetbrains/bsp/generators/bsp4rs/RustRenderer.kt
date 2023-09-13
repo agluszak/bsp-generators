@@ -85,45 +85,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return true
     }
 
-    private fun renderAlias(def: Def.Alias): CodeBlock? {
-        if (!isAliasRenderable(def.shapeId, def.aliasedType)) return null
-        val name = def.name
-        val type = renderType(def.aliasedType)
-
-        val derefBlock = rustCode {
-            block("""impl std::ops::Deref for $name""") {
-                -"""type Target = $type;"""
-                newline()
-                block("fn deref(&self) -> &Self::Target") {
-                    -"&self.0"
-                }
-            }
-        }
-
-        fun from(fromType: String, mod: String): CodeBlock {
-            return rustCode {
-                block("""impl From<$fromType> for $name""") {
-                    block("fn from(input: $fromType) -> Self") {
-                        -"$name(input$mod)"
-                    }
-                }
-            }
-        }
-
-        return rustCode {
-            lines(renderHints(def.hints))
-            -deriveRenderer.renderForDef(def)
-            lines(serializationRenderer.renderForDef(def))
-            -"""pub struct $name(pub $type);"""
-            newline()
-            include(derefBlock)
-            newline()
-            include(from(type, ""))
-            newline()
-            if (def.aliasedType is Type.String) include(from("&str", ".to_string()"))
-        }
-    }
-
     private fun createPath(namespacePath: Path, fileName: String): Path {
         return baseRelPath.resolve(namespacePath).resolve(fileName)
     }

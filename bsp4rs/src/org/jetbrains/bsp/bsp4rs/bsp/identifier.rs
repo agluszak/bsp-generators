@@ -14,12 +14,12 @@ impl std::ops::Deref for Identifier {
 
 impl From<String> for Identifier {
     fn from(input: String) -> Self {
-        Identifier(input)
+        Self(input)
     }
 }
 
 impl From<&str> for Identifier {
     fn from(input: &str) -> Self {
-        Identifier(input.to_string())
+        Self(input.to_string())
     }
 }

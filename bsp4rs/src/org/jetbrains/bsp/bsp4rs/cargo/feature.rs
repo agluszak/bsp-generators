@@ -14,12 +14,12 @@ impl std::ops::Deref for Feature {
 
 impl From<String> for Feature {
     fn from(input: String) -> Self {
-        Feature(input)
+        Self(input)
     }
 }
 
 impl From<&str> for Feature {
     fn from(input: &str) -> Self {
-        Feature(input.to_string())
+        Self(input.to_string())
     }
 }

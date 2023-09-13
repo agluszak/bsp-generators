@@ -16,6 +16,6 @@ impl std::ops::Deref for EnvironmentVariables {
 
 impl From<BTreeMap<String, String>> for EnvironmentVariables {
     fn from(input: BTreeMap<String, String>) -> Self {
-        EnvironmentVariables(input)
+        Self(input)
     }
 }
