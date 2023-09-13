@@ -8,10 +8,7 @@ interface CargoBuildServer {
   @JsonRequest("workspace/cargoFeaturesState")
   suspend fun cargoFeaturesState(): CargoFeaturesStateResult
 
-  @JsonRequest("workspace/enableCargoFeatures")
-  suspend fun enableCargoFeatures(params: EnableCargoFeaturesParams): Unit
-
-  @JsonRequest("workspace/disableCargoFeatures")
-  suspend fun disableCargoFeatures(params: DisableCargoFeaturesParams): Unit
+  @JsonRequest("workspace/setCargoFeatures")
+  suspend fun setCargoFeatures(params: SetCargoFeaturesParams): SetCargoFeaturesResult
 
 }
