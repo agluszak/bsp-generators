@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::{BTreeMap, BTreeSet};
 
-/** The feature dependency graph is a mapping between
-feature and the features it turns on */
+/// The feature dependency graph is a mapping between
+/// feature and the features it turns on
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct FeatureDependencyGraph(pub BTreeMap<Feature, BTreeSet<Feature>>);

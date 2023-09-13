@@ -6,14 +6,14 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[repr(u8)]
 pub enum TestStatus {
     #[default]
-    /** The test passed successfully. */
+    /// The test passed successfully.
     Passed = 1,
-    /** The test failed. */
+    /// The test failed.
     Failed = 2,
-    /** The test was marked as ignored. */
+    /// The test was marked as ignored.
     Ignored = 3,
-    /** The test execution was cancelled. */
+    /// The test execution was cancelled.
     Cancelled = 4,
-    /** The was not included in execution. */
+    /// The was not included in execution.
     Skipped = 5,
 }

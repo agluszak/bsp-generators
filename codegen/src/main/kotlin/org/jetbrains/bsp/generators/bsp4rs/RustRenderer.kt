@@ -114,10 +114,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderDocumentation(hints: List<Hint.Documentation>): List<String> {
         return hints.flatMap { el ->
-            val docLines = el.string.split("\n").toMutableList()
-            docLines[0] = docLines.first().let { "/** $it" }
-            docLines[docLines.lastIndex] = docLines.last().let { "$it */" }
-            docLines
+            el.string.split("\n").map { it.prependIndent("/// ") }
         }
     }
 

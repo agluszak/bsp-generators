@@ -1,7 +1,7 @@
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-/** Crate types (`lib`, `rlib`, `dylib`, `cdylib`, `staticlib`) are listed for
-`lib` and `example` target kinds. For other target kinds `bin` crate type is listed. */
+/// Crate types (`lib`, `rlib`, `dylib`, `cdylib`, `staticlib`) are listed for
+/// `lib` and `example` target kinds. For other target kinds `bin` crate type is listed.
 #[derive(
     Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize_repr, Deserialize_repr,
 )]

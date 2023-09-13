@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-/** Represents the identifier of a BSP request. */
+/// Represents the identifier of a BSP request.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct RequestId(pub String);

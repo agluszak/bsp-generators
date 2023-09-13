@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-/** A resource identifier that is a valid URI according to rfc3986:
-https://tools.ietf.org/html/rfc3986 */
+/// A resource identifier that is a valid URI according to rfc3986:
+/// https://tools.ietf.org/html/rfc3986
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct URI(pub String);

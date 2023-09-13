@@ -6,18 +6,18 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[repr(u8)]
 pub enum RustTargetKind {
     #[default]
-    /** For lib targets. */
+    /// For lib targets.
     Lib = 1,
-    /** For binaries. */
+    /// For binaries.
     Bin = 2,
-    /** For integration tests. */
+    /// For integration tests.
     Test = 3,
-    /** For examples. */
+    /// For examples.
     Example = 4,
-    /** For benchmarks. */
+    /// For benchmarks.
     Bench = 5,
-    /** For build scripts. */
+    /// For build scripts.
     Custombuild = 6,
-    /** For unknown targets. */
+    /// For unknown targets.
     Unknown = 7,
 }

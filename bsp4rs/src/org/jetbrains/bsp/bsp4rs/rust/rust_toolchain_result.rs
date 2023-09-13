@@ -5,6 +5,6 @@ use crate::*;
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RustToolchainResult {
-    /** A sequence of Rust toolchains. */
+    /// A sequence of Rust toolchains.
     pub toolchains: Vec<RustToolchainItem>,
 }

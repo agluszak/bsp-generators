@@ -6,6 +6,6 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct ResourcesItem {
     pub target: BuildTargetIdentifier,
-    /** List of resource files. */
+    /// List of resource files.
     pub resources: Vec<URI>,
 }

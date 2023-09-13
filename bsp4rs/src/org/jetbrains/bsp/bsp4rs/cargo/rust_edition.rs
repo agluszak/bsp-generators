@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-/** The Rust edition. */
+/// The Rust edition.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct RustEdition(pub std::borrow::Cow<'static, str>);

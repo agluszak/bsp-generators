@@ -5,13 +5,13 @@ use serde::{Deserialize, Serialize};
 pub struct RustDepKind(pub std::borrow::Cow<'static, str>);
 
 impl RustDepKind {
-    /** For [build-dependencies]. */
+    /// For [build-dependencies].
     pub const BUILD: RustDepKind = RustDepKind::new("build");
-    /** For [dev-dependencies]. */
+    /// For [dev-dependencies].
     pub const DEV: RustDepKind = RustDepKind::new("dev");
-    /** For [dependencies]. */
+    /// For [dependencies].
     pub const NORMAL: RustDepKind = RustDepKind::new("normal");
-    /** For old Cargo versions prior to `1.41.0`. */
+    /// For old Cargo versions prior to `1.41.0`.
     pub const UNCLASSIFIED: RustDepKind = RustDepKind::new("unclassified");
 
     pub const fn new(tag: &'static str) -> Self {

@@ -7,19 +7,19 @@ use crate::*;
 pub struct TestReport {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<Identifier>,
-    /** The build target that was compiled. */
+    /// The build target that was compiled.
     pub target: BuildTargetIdentifier,
-    /** The total number of successful tests. */
+    /// The total number of successful tests.
     pub passed: i32,
-    /** The total number of failed tests. */
+    /// The total number of failed tests.
     pub failed: i32,
-    /** The total number of ignored tests. */
+    /// The total number of ignored tests.
     pub ignored: i32,
-    /** The total number of cancelled tests. */
+    /// The total number of cancelled tests.
     pub cancelled: i32,
-    /** The total number of skipped tests. */
+    /// The total number of skipped tests.
     pub skipped: i32,
-    /** The total number of milliseconds tests take to run (e.g. doesn't include compile times). */
+    /// The total number of milliseconds tests take to run (e.g. doesn't include compile times).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub time: Option<i64>,
 }
