@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class CargoFeaturesStateResult(
-  val packagesFeatures: List<PackageFeatures>
+data class SetCargoFeaturesParams(
+  val packageId: String,
+  val features: Set<String>
 )

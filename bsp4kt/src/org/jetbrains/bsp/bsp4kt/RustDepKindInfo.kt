@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class EnableCargoFeaturesParams(
-  val packageId: String,
-  val features: List<String>
+data class RustDepKindInfo(
+  val kind: String,
+  val target: String? = null
 )

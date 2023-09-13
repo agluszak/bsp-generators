@@ -5,6 +5,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class CargoFeaturesStateResult(
-  val packagesFeatures: List<PackageFeatures>
+data class RustToolchainItem(
+  val rustStdLib: RustcInfo? = null,
+  val cargoBinPath: String,
+  val procMacroSrvPath: String
 )
