@@ -1,5 +1,7 @@
-package org.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs.def
 
+import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
+import org.jetbrains.bsp.generators.bsp4rs.renderIrShapeType
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def

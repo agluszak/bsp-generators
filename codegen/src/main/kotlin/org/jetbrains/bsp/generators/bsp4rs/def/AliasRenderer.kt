@@ -1,5 +1,7 @@
-package org.jetbrains.bsp.generators.bsp4rs
+package org.jetbrains.bsp.generators.bsp4rs.def
 
+import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
+import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -9,7 +11,7 @@ fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
     if (!isAliasRenderable(def.shapeId, def.aliasedType)) return null
 
     val name = def.name
-    val type = renderType(def.aliasedType)
+    val type = this.renderType(def.aliasedType)
 
     return rustCode {
         lines(renderHints(def.hints))

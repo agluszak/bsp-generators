@@ -1,10 +1,25 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumType
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.IrShape
+import org.jetbrains.bsp.generators.ir.Type
 
 class SerializationRenderer {
     private var serdeSet: Set<SerdeOption> = emptySet()
     private var reprSet: Set<ReprOption> = emptySet()
+
+    fun renderForDef(def: Def, untagged: Boolean = false): List<String> {
+        serdeSet = setOf()
+        serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
+
+        reprSet = setOf()
+        reprSet = reprSet.plus(defToReprList(def))
+
+        return listOfNotNull(this.printSerde(), this.printRepr())
+    }
 
     private fun defToSerdeList(def: Def, untagged: Boolean) = when (def) {
         is Def.Structure -> setOf(SerdeOption.RenameAllCamelCase)
@@ -31,6 +46,12 @@ class SerializationRenderer {
         else -> emptySet()
     }
 
+    fun renderForField(field: Field): List<String> {
+        serdeSet = setOf(SerdeOption.Default)
+        serdeSet = serdeSet.plus(fieldToSerdeList(field))
+
+        return listOfNotNull(this.printSerde())
+    }
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
         fun optionalToSerdeList(irShape: IrShape) = when (irShape.type) {
@@ -58,23 +79,6 @@ class SerializationRenderer {
         }
 
         return serdeOpt
-    }
-
-    fun renderForDef(def: Def, untagged: Boolean = false): List<String> {
-        serdeSet = setOf()
-        serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
-
-        reprSet = setOf()
-        reprSet = reprSet.plus(defToReprList(def))
-
-        return listOfNotNull(this.printSerde(), this.printRepr())
-    }
-
-    fun renderForField(field: Field): List<String> {
-        serdeSet = setOf(SerdeOption.Default)
-        serdeSet = serdeSet.plus(fieldToSerdeList(field))
-
-        return listOfNotNull(this.printSerde())
     }
 
     private fun printSerde() =

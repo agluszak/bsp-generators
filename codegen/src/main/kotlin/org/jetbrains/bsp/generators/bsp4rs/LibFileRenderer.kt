@@ -1,6 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def

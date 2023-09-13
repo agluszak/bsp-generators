@@ -1,9 +1,12 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.bsp4rs.def.*
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
@@ -112,3 +115,5 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 }
+
+data class Module(val moduleName: String, val definitions: List<Def>)
