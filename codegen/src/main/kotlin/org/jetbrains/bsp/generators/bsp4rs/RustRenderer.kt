@@ -41,8 +41,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderData(def: Def.DataKinds): CodeBlock {
         val dataKinds = def.kinds.map { kind ->
-            val name = makeName(kind.kindStr.kebabToUpperCamelCase())
-            val dataType = renderType(kind.type, true)
+            val name = makeName(kind.kind.kebabToUpperCamelCase())
+            val dataType = renderType(kind.shape, true)
             Pair(name, dataType)
         }
 
@@ -76,8 +76,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun isAliasRenderable(name: String, type: Type): Boolean {
         if (name in bannedAliases) return false
-        if (type.type is InnerType.List) return false
-        if (type.type is InnerType.Set) return false
+        if (type is Type.List) return false
+        if (type is Type.Set) return false
 
         return true
     }
@@ -85,7 +85,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     private fun renderAlias(def: Def.Alias): CodeBlock? {
         if (!isAliasRenderable(def.name, def.aliasedType)) return null
         val name = def.name
-        val type = renderType(def.aliasedType, true)
+        val type = renderBuiltInType(def.aliasedType)
 
         val derefBlock = rustCode {
             block("""impl std::ops::Deref for $name""") {
@@ -117,7 +117,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             newline()
             include(from(type, ""))
             newline()
-            if (def.aliasedType.type == InnerType.String) include(from("&str", ".to_string()"))
+            if (def.aliasedType is Type.String) include(from("&str", ".to_string()"))
         }
     }
 
@@ -169,8 +169,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         val def = Def.Structure(
             ShapeId.fromParts("bsp", "OtherData"),
             listOf(
-                Field("dataKind", Type.String, true, listOf()),
-                Field("data", Type.Json, true, listOf())
+                Field("dataKind", IrShape.String, true, listOf()),
+                Field("data", IrShape.Json, true, listOf())
             ),
             listOf()
         )
@@ -215,31 +215,31 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 renderDeprecated(hints.filterIsInstance<Hint.Deprecated>())
     }
 
-    private fun renderTypeName(type: Type): String {
-        if (type.shapeId.namespace.startsWith("bsp") && isAliasRenderable(type.shapeId.name, type)) {
-            return makeName(type.shapeId.name)
-        }
-
-        return when (val innerType = type.type) {
-            InnerType.Bool -> "bool"
-            InnerType.Int -> "i32"
-            InnerType.Json -> "serde_json::Value"
-            is InnerType.List -> "Vec<${renderTypeName(innerType.member)}>"
-            InnerType.Long -> "i64"
-            is InnerType.Map -> "BTreeMap<${renderTypeName(innerType.key)}, ${renderTypeName(innerType.value)}>"
-            is InnerType.Ref -> makeName(type.shapeId.name)
-            is InnerType.Set -> "BTreeSet<${renderTypeName(innerType.member)}>"
-            InnerType.String -> "String"
-            InnerType.Unit -> "()"
-        }
+    private fun renderBuiltInType(type: Type): String = when (type) {
+        Type.Bool -> "bool"
+        Type.Int -> "i32"
+        Type.Json -> "serde_json::Value"
+        is Type.List -> "Vec<${renderTypeName(type.member)}>"
+        Type.Long -> "i64"
+        is Type.Map -> "BTreeMap<${renderTypeName(type.key)}, ${renderTypeName(type.value)}>"
+        is Type.Set -> "BTreeSet<${renderTypeName(type.member)}>"
+        Type.String -> "String"
+        Type.Unit -> "()"
+        else -> ""
     }
 
-    fun renderType(type: Type, isRequired: Boolean): String {
-        if (isRequired) return renderTypeName(type)
+    private fun renderTypeName(irShape: IrShape): String =
+        if (irShape.type is Type.Ref) makeName(irShape.shapeId.name)
+        else if (irShape.shapeId.namespace.startsWith("bsp") && isAliasRenderable(irShape.shapeId.name, irShape.type))
+            makeName(irShape.shapeId.name)
+        else renderBuiltInType(irShape.type)
 
-        return when (type.type) {
-            is InnerType.List, is InnerType.Map, is InnerType.Set -> renderTypeName(type)
-            else -> "Option<${renderTypeName(type)}>"
+    fun renderType(shape: IrShape, isRequired: Boolean): String {
+        if (isRequired) return renderTypeName(shape)
+
+        return when (shape.type) {
+            is Type.List, is Type.Map, is Type.Set -> renderTypeName(shape)
+            else -> "Option<${renderTypeName(shape)}>"
         }
     }
 
@@ -248,7 +248,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     private fun renderStructField(field: Field): CodeBlock {
-        if (field.name == "dataKind" && field.type != Type.String) {
+        if (field.name == "dataKind" && field.type != IrShape.String) {
             return rustCode { }
         }
 

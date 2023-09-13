@@ -5,6 +5,10 @@ fun String.camelToSnakeCase(): String {
     return this.replace(pattern, "_$0").lowercase()
 }
 
+fun String.kebabToScreamingSnakeCase(): String {
+    return this.replace('-', '_').uppercase()
+}
+
 fun String.snakeToUpperCamelCase(): String {
     return this.toUpperCamelCase("_")
 }

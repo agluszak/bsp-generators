@@ -33,10 +33,10 @@ class SerializationRenderer() {
 
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
-        fun optionalToSerdeList(type: Type) = when (type.type) {
-            is InnerType.List -> SerdeOption.SkipVector
-            is InnerType.Map -> SerdeOption.SkipMap
-            is InnerType.Set -> SerdeOption.SkipSet
+        fun optionalToSerdeList(irShape: IrShape) = when (irShape.type) {
+            is Type.List -> SerdeOption.SkipVector
+            is Type.Map -> SerdeOption.SkipMap
+            is Type.Set -> SerdeOption.SkipSet
             else -> SerdeOption.SkipOption
         }
 
@@ -47,7 +47,7 @@ class SerializationRenderer() {
             serdeOpt = serdeOpt.plus(SerdeOption.Rename(rename.name))
         }
 
-        if (field.type.type == InnerType.Json && field.name == "data"
+        if (field.type.type is Type.Json && field.name == "data"
             && field.type.shapeId.namespace.startsWith("bsp")
         ) {
             serdeOpt = serdeOpt.plus(SerdeOption.Flatten)

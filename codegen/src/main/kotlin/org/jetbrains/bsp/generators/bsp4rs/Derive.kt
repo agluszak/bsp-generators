@@ -16,13 +16,13 @@ class DeriveRenderer(val defs: Map<ShapeId, Def>) {
         else -> setOf(DeriveOption.STANDARD_SERIALIZE)
     }
 
-    private fun typeToBlackList(type: Type): Set<DeriveOption> {
-        return when (val innerType = type.type) {
-            is InnerType.Json -> setOf(DeriveOption.HASH, DeriveOption.ORD)
-            is InnerType.Ref -> defToBlackList(defs[type.shapeId]!!)
-            is InnerType.List -> typeToBlackList(innerType.member)
-            is InnerType.Set -> typeToBlackList(innerType.member)
-            is InnerType.Map -> typeToBlackList(innerType.key).plus(typeToBlackList(innerType.value))
+    private fun typeToBlackList(shape: IrShape): Set<DeriveOption> {
+        return when (val type = shape.type) {
+            is Type.Json -> setOf(DeriveOption.HASH, DeriveOption.ORD)
+            is Type.Ref -> defToBlackList(defs[shape.shapeId]!!)
+            is Type.List -> typeToBlackList(type.member)
+            is Type.Set -> typeToBlackList(type.member)
+            is Type.Map -> typeToBlackList(type.key).plus(typeToBlackList(type.value))
             else -> emptySet()
         }
     }
