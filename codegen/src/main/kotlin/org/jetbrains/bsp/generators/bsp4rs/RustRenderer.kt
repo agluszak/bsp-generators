@@ -128,20 +128,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return baseRelPath.resolve(namespacePath).resolve(fileName)
     }
 
-    private fun generateLibFile(modulesNames: List<String>): CodegenFile {
-        val code = rustCode {
-            lines(modulesNames.map { "pub mod $it" }, ";", ";")
-            newline()
-            lines(modulesNames.map { "use $it::*" }, ";", ";")
-            newline()
-            include(renderRpcTraits())
-            newline()
-            include(renderOtherDataStruct())
-        }
-
-        return generateFile(code, Path(""), "lib.rs")
-    }
-
     private fun generateModFile(moduleName: String, filesNames: List<String>): CodegenFile {
         val code = rustCode {
             lines(filesNames.map { "mod $it" }, ";", ";")
@@ -150,35 +136,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
 
         return generateFile(code, Path(moduleName), "mod.rs")
-    }
-
-    private fun renderRpcTraits(): CodeBlock {
-        val paramsStr = "type Params: DeserializeOwned + Serialize"
-        val resultStr = "type Result: DeserializeOwned + Serialize"
-        val methodStr = "const METHOD: &'static str"
-
-        return rustCode {
-            block("pub trait Request") {
-                lines(listOf(paramsStr, resultStr, methodStr), ";", ";")
-            }
-            newline()
-            block("pub trait Notification") {
-                lines(listOf(paramsStr, methodStr), ";", ";")
-            }
-        }
-    }
-
-    private fun renderOtherDataStruct(): CodeBlock {
-        val def = Def.Structure(
-            ShapeId.fromParts("bsp", "OtherData"),
-            listOf(
-                Field("dataKind", IrShape.String, true, listOf()),
-                Field("data", IrShape.Json, true, listOf())
-            ),
-            listOf()
-        )
-
-        return renderStructure(def)
     }
 
     private fun renderDef(def: Def): CodeBlock? {
@@ -192,7 +149,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun generateFile(content: CodeBlock, namespacePath: Path, fileName: String): CodegenFile {
+    fun generateFile(content: CodeBlock, namespacePath: Path, fileName: String): CodegenFile {
         val code = rustCode {
             include(renderImports(fileName != "lib.rs"))
             include(content)
@@ -246,7 +203,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun renderStructure(def: Def.Structure): CodeBlock {
+    fun renderStructure(def: Def.Structure): CodeBlock {
         return rustCode {
             lines(renderHints(def.hints))
             -deriveRenderer.renderForDef(def)
@@ -365,5 +322,3 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 }
-
-

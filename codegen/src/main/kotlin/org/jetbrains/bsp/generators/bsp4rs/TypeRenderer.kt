@@ -34,4 +34,3 @@ fun RustRenderer.renderType(type: Type): String = when (type) {
     is Type.Unit -> "()"
     else -> ""
 }
-
