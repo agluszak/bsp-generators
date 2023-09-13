@@ -33,6 +33,13 @@ sealed interface Def {
         val operations: List<Operation>,
         override val hints: List<Hint>
     ) : Def
+
+    data class DataKinds(
+        override val shapeId: ShapeId,
+        val kindsEnumId: ShapeId,
+        val kinds: List<PolymorphicDataKind>,
+        override val hints: List<Hint>
+    ) : Def
 }
 
 sealed interface JsonRpcMethodType {
@@ -42,8 +49,8 @@ sealed interface JsonRpcMethodType {
 
 data class Operation(
     val shapeId: ShapeId,
-    val inputType: Type,
-    val outputType: Type,
+    val inputType: IrShape,
+    val outputType: IrShape,
     val jsonRpcMethodType: JsonRpcMethodType,
     val jsonRpcMethod: String,
     val hints: List<Hint>
@@ -60,10 +67,10 @@ sealed interface EnumType<A> {
 data class EnumValue<A>(val name: String, val value: A, val hints: List<Hint>)
 
 sealed interface Type {
-    data class Set(val member: Type) : Type
-    data class List(val member: Type) : Type
-    data class Map(val key: Type, val value: Type) : Type
-    data class Ref(val shapeId: ShapeId) : Type
+    data class Set(val member: IrShape) : Type
+    data class List(val member: IrShape) : Type
+    data class Map(val key: IrShape, val value: IrShape) : Type
+    object Ref : Type
 
     // Should be data objects
     object Unit : Type
@@ -74,15 +81,29 @@ sealed interface Type {
     object Json : Type
 }
 
+data class IrShape(val shapeId: ShapeId, val type: Type) {
+    companion object {
+        val Unit: IrShape = IrShape(ShapeId.from("smithy.api#Unit"), Type.Unit)
+        val Bool: IrShape = IrShape(ShapeId.from("smithy.api#Boolean"), Type.Bool)
+        val String: IrShape = IrShape(ShapeId.from("smithy.api#String"), Type.String)
+        val Int: IrShape = IrShape(ShapeId.from("smithy.api#Integer"), Type.Int)
+        val Long: IrShape = IrShape(ShapeId.from("smithy.api#Long"), Type.Long)
+        val Json: IrShape = IrShape(ShapeId.from("smithy.api#Document"), Type.Json)
+    }
+}
 
 data class Field(
     val name: String,
-    val type: Type,
+    val type: IrShape,
     val required: Boolean,
     val hints: List<Hint>
 )
 
-data class PolymorphicDataKind(val kind: String, val shapeId: ShapeId)
+data class PolymorphicDataKind(
+    val kind: String,
+    val shape: IrShape,
+    val hints: List<Hint>
+)
 
 sealed interface Hint {
     data class Documentation(val string: String) : Hint
