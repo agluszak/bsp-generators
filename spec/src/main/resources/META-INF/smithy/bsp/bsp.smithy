@@ -9,7 +9,7 @@ use traits#jsonNotification
 use traits#jsonRPC
 use traits#jsonRequest
 
-// TODO: cancel notif?
+// TODO: add cancel notif
 
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
 integer Integer
@@ -138,7 +138,6 @@ list BuildTargetTags {
     member: BuildTargetTag
 }
 
-// TODO: why the fields are not required?
 /// Clients can use these capabilities to notify users what BSP endpoints can and
 /// cannot be used and why.
 structure BuildTargetCapabilities {
@@ -204,6 +203,13 @@ list Argv {
 
 list Languages {
     member: String
+}
+
+/// Map representing the environment variables used in BSP extensions.
+/// Each key represents an environment variable name and each value represents the corresponding value to be set.
+map EnvironmentVariables {
+    key: String
+    value: String
 }
 
 /// Structure describing how to start a BSP server and the capabilities it supports.
@@ -706,7 +712,7 @@ structure PublishDiagnosticsParams {
 @data
 document DiagnosticData
 
-// TODO: why it is different from lsp one, and why it has coomented out fields
+// TODO: update structure from lsp, like this one
 structure Diagnostic {
     /// The range at which the message applies.
     @required

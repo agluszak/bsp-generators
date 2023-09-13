@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
+use std::collections::BTreeSet;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -21,5 +22,5 @@ pub struct RustRawDependency {
     /// Indicates whether default features are enabled.
     pub uses_default_features: bool,
     /// A sequence of enabled features.
-    pub features: Vec<String>,
+    pub features: BTreeSet<Feature>,
 }

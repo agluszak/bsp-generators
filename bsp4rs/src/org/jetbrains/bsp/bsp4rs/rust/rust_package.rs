@@ -42,9 +42,9 @@ pub struct RustPackage {
     /// Set of features defined for the package.
     /// Each feature maps to an array of features or dependencies it enables.
     /// The entry named "default" defines which features are enabled by default.
-    pub features: BTreeSet<RustFeature>,
+    pub features: FeatureDependencyGraph,
     /// Array of features enabled on this package.
-    pub enabled_features: Vec<String>,
+    pub enabled_features: BTreeSet<Feature>,
     /// Conditional compilation flags that can be set based on certain conditions.
     /// They can be used to enable or disable certain sections of code during the build process.
     /// `cfgs` in Rust can take one of two forms: "cfg1" or "cfg2=\"string\"".
@@ -55,7 +55,7 @@ pub struct RustPackage {
     pub cfg_options: RustCfgOptions,
     /// Environment variables for the package.
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub env: RustEnvironmentVariables,
+    pub env: EnvironmentVariables,
     /// An absolute path which is used as a value of `OUT_DIR` environmental
     /// variable when compiling current package.
     #[serde(default, skip_serializing_if = "Option::is_none")]

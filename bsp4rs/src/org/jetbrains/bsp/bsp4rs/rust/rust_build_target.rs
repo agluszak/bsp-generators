@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
+use std::collections::BTreeSet;
 
 /// This structure is embedded in the `data?: BuildTargetData` field, when the
 /// `dataKind` field contains "rust".
@@ -23,6 +24,6 @@ pub struct RustBuildTarget {
     /// the target is compatible with doc testing.
     pub doctest: bool,
     /// A sequence of required features.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub required_features: Vec<String>,
+    #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
+    pub required_features: BTreeSet<Feature>,
 }

@@ -4,7 +4,10 @@ namespace bsp.rust
 
 use bsp#BuildTargetData
 use bsp#BuildTargetIdentifiers
+use bsp#EnvironmentVariables
 use bsp#URI
+use bsp.cargo#FeatureDependencyGraph
+use bsp.cargo#Features
 use traits#enumKind
 use traits#dataKind
 use traits#jsonRPC
@@ -26,18 +29,21 @@ service RustBuildServer {
 ///
 /// The request may take a long time, as it may require building a project to some extent
 /// (for example with `cargo check` command).
+@unstable
 @jsonRequest("buildTarget/rustWorkspace")
 operation RustWorkspace {
     input: RustWorkspaceParams
     output: RustWorkspaceResult
 }
 
+@unstable
 structure RustWorkspaceParams {
     /// A sequence of build targets for workspace resolution.
     @required
     targets: BuildTargetIdentifiers
 }
 
+@unstable
 structure RustWorkspaceResult {
     /// Packages of given targets.
     @required
@@ -103,10 +109,10 @@ structure RustPackage {
     /// Each feature maps to an array of features or dependencies it enables.
     /// The entry named "default" defines which features are enabled by default.
     @required
-    features: RustFeatures
+    features: FeatureDependencyGraph
     /// Array of features enabled on this package.
     @required
-    enabledFeatures: RustPackageEnabledFeatures
+    enabledFeatures: Features
     /// Conditional compilation flags that can be set based on certain conditions.
     /// They can be used to enable or disable certain sections of code during the build process.
     /// `cfgs` in Rust can take one of two forms: "cfg1" or "cfg2=\"string\"".
@@ -115,7 +121,7 @@ structure RustPackage {
     /// For "cfg1" the value is empty.
     cfgOptions: RustCfgOptions
     /// Environment variables for the package.
-    env: RustEnvironmentVariables
+    env: EnvironmentVariables
     /// An absolute path which is used as a value of `OUT_DIR` environmental
     /// variable when compiling current package.
     outDirUrl: URI
@@ -123,10 +129,6 @@ structure RustPackage {
     /// Procedural macros are macros that generate code at compile time.
     /// Contains files with file extensions: `.dll`, `.so` or `.dylib`.
     procMacroArtifact: String
-}
-
-list RustPackageEnabledFeatures {
-    member: String
 }
 
 list RustTargets {
@@ -157,7 +159,7 @@ structure RustBuildTarget {
     @required
     doctest: Boolean
     /// A sequence of required features.
-    requiredFeatures: RustPackageRequiredFeatures
+    requiredFeatures: Features
 }
 
 list RustCrateTypes {
@@ -191,34 +193,9 @@ intEnum RustTargetKind {
     /// For benchmarks.
     BENCH = 5
     /// For build scripts.
-    CUSTOMBUILD = 6
+    CUSTOM_BUILD = 6
     /// For unknown targets.
     UNKNOWN = 7
-}
-
-list RustPackageRequiredFeatures {
-    member: String
-}
-
-@set
-list RustFeatures {
-    member: RustFeature
-}
-
-// TODO to be deleted once "Add cargo extension" PR is merged that defines this enum
-string Feature
-
-structure RustFeature {
-    /// Name of the feature.
-    @required
-    name: Feature
-    /// Feature's dependencies.
-    @required
-    dependencies: RustFeatureDependencies
-}
-
-list RustFeatureDependencies {
-    member: Feature
 }
 
 map RustCfgOptions {
@@ -228,11 +205,6 @@ map RustCfgOptions {
 
 list RustCfgValues {
     member: String
-}
-
-map RustEnvironmentVariables {
-    key: String
-    value: String
 }
 
 map RustRawDependencies {
@@ -263,11 +235,7 @@ structure RustRawDependency {
     usesDefaultFeatures: Boolean
     /// A sequence of enabled features.
     @required
-    features: RustRawDependencyFeatures
-}
-
-list RustRawDependencyFeatures {
-    member: String
+    features: Features
 }
 
 map RustDependencies {
@@ -339,18 +307,21 @@ enum RustPackageOrigin {
 /// the information about project's toolchain for the given list of build targets.
 ///
 /// The request is essential to connect and work with `intellij-rust` plugin.
+@unstable
 @jsonRequest("buildTarget/rustToolchain")
 operation RustToolchain {
     input: RustToolchainParams
     output: RustToolchainResult
 }
 
+@unstable
 structure RustToolchainParams {
     /// A sequence of build targets for toolchain resolution.
     @required
     targets: BuildTargetIdentifiers
 }
 
+@unstable
 structure RustToolchainResult {
     /// A sequence of Rust toolchains.
     @required
