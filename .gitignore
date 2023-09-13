@@ -3,6 +3,4 @@ projectview.bazelproject
 .bsp
 .bazelbsp
 bazel-*
-bsp4rs/Cargo.lock
 bsp4rs/target
-bsp4rs/.idea
