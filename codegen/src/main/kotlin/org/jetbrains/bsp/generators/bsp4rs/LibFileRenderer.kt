@@ -16,12 +16,22 @@ fun RustRenderer.generateLibFile(modulesNames: List<String>): CodegenFile {
         newline()
         lines(modulesNames.map { "use $it::*" }, ";", ";")
         newline()
+        include(renderConsts())
+        newline()
         include(renderRpcTraits())
         newline()
         include(renderOtherDataStruct())
     }
 
     return generateFile(code, Path(""), "lib.rs")
+}
+
+private fun RustRenderer.renderConsts(): CodeBlock {
+    val versionStr = """pub const PROTOCOL_VERSION: &str = "$version";"""
+
+    return rustCode {
+        -versionStr
+    }
 }
 
 private fun renderRpcTraits(): CodeBlock {
