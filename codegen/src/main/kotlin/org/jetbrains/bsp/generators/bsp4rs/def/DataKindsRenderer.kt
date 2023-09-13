@@ -16,14 +16,14 @@ fun RustRenderer.renderDataKinds(def: Def.DataKinds): CodeBlock {
     val derives = deriveRenderer.renderForDef(def)
 
     return rustCode {
-        -derives
-        lines(serializationRenderer.renderForDef(def))
+        include(derives)
+        include(serializationRenderer.renderForDef(def))
         include(renderDataKindsEnum(namedName, dataKinds))
         newline()
-        lines(renderHints(def.hints))
+        include(renderHints(def.hints))
         -"#[allow(clippy::large_enum_variant)]"
-        -derives
-        lines(serializationRenderer.renderForDef(def, true))
+        include(derives)
+        include(serializationRenderer.renderForDef(def, true))
         include(renderDataKindsEnum(def.name, wrapperEnum))
         newline()
         include(renderDataKindsImpl(def.name, namedName, dataKinds))

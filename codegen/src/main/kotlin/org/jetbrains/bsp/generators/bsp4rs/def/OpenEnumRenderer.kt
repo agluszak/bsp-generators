@@ -11,9 +11,9 @@ fun RustRenderer.renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
     val name = def.name
 
     return rustCode {
-        lines(renderHints(def.hints))
-        -deriveRenderer.renderForDef(def)
-        lines(serializationRenderer.renderForDef(def))
+        include(renderHints(def.hints))
+        include(deriveRenderer.renderForDef(def))
+        include(serializationRenderer.renderForDef(def))
         -"pub struct $name(pub ${renderType(def.enumType)});"
         newline()
         block("impl $name") {
@@ -32,7 +32,7 @@ private fun renderType(type: EnumType<*>): String = when (type) {
 }
 
 private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, enumName: String): CodeBlock {
-    val enumValueName =  makeName(ev.name).uppercase()
+    val enumValueName = makeName(ev.name).uppercase()
 
     val enumValue = when (ev.value) {
         is Int -> "${ev.value}"
@@ -41,7 +41,7 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, enumName: String): Co
     }
 
     return rustCode {
-        lines(renderHints(ev.hints))
+        include(renderHints(ev.hints))
         -"pub const $enumValueName: $enumName = $enumName::new($enumValue);"
     }
 }

@@ -1,24 +1,26 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
-import org.jetbrains.bsp.generators.ir.Def
-import org.jetbrains.bsp.generators.ir.EnumType
-import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.IrShape
-import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.dsl.CodeBlock
+import org.jetbrains.bsp.generators.dsl.rustCode
+import org.jetbrains.bsp.generators.ir.*
 
 class SerializationRenderer {
     private var serdeSet: Set<SerdeOption> = emptySet()
     private var reprSet: Set<ReprOption> = emptySet()
 
-    fun renderForDef(def: Def, untagged: Boolean = false): List<String> {
+    fun renderForDef(def: Def, untagged: Boolean = false): CodeBlock {
         serdeSet = setOf()
         serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
+        val serdeLine = this.printSerde()
 
         reprSet = setOf()
         reprSet = reprSet.plus(defToReprList(def))
+        val reprLine = this.printRepr()
 
-        return listOfNotNull(this.printSerde(), this.printRepr())
+        return rustCode {
+            -serdeLine
+            -reprLine
+        }
     }
 
     private fun defToSerdeList(def: Def, untagged: Boolean) = when (def) {
@@ -46,11 +48,14 @@ class SerializationRenderer {
         else -> emptySet()
     }
 
-    fun renderForField(field: Field): List<String> {
+    fun renderForField(field: Field): CodeBlock {
         serdeSet = setOf(SerdeOption.Default)
         serdeSet = serdeSet.plus(fieldToSerdeList(field))
+        val serdeLine = this.printSerde()
 
-        return listOfNotNull(this.printSerde())
+        return rustCode {
+            -serdeLine
+        }
     }
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {

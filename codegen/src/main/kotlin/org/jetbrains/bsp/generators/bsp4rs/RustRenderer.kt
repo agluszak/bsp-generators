@@ -98,10 +98,11 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return true
     }
 
-    fun renderHints(hints: List<Hint>): List<String> {
-        return renderDocumentation(hints.filterIsInstance<Hint.Documentation>()) +
-                renderDeprecated(hints.filterIsInstance<Hint.Deprecated>())
-    }
+    fun renderHints(hints: List<Hint>): CodeBlock =
+        rustCode {
+            lines(renderDocumentation(hints.filterIsInstance<Hint.Documentation>()))
+            lines(renderDeprecated(hints.filterIsInstance<Hint.Deprecated>()))
+        }
 
     private fun renderDocumentation(hints: List<Hint.Documentation>): List<String> {
         return hints.flatMap { el ->

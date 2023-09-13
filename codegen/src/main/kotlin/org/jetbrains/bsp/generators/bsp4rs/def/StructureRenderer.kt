@@ -11,9 +11,9 @@ import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 
 fun RustRenderer.renderStructure(def: Def.Structure): CodeBlock {
     return rustCode {
-        lines(renderHints(def.hints))
-        -deriveRenderer.renderForDef(def)
-        lines(serializationRenderer.renderForDef(def))
+        include(renderHints(def.hints))
+        include(deriveRenderer.renderForDef(def))
+        include(serializationRenderer.renderForDef(def))
         block("pub struct ${def.name}") {
             def.fields.forEach { field ->
                 include(renderStructField(field))
@@ -28,8 +28,8 @@ private fun RustRenderer.renderStructField(field: Field): CodeBlock {
     }
 
     return rustCode {
-        lines(renderHints(field.hints))
-        lines(serializationRenderer.renderForField(field))
+        include(renderHints(field.hints))
+        include(serializationRenderer.renderForField(field))
         -"${renderStructFieldRaw(field)},"
     }
 }

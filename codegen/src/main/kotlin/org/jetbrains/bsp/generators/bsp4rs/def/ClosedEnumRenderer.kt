@@ -9,9 +9,9 @@ import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 
 fun RustRenderer.renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock =
     rustCode {
-        lines(renderHints(def.hints))
-        -deriveRenderer.renderForDef(def)
-        lines(serializationRenderer.renderForDef(def))
+        include(renderHints(def.hints))
+        include(deriveRenderer.renderForDef(def))
+        include(serializationRenderer.renderForDef(def))
         block("pub enum ${def.name}") {
             if (def.values.isNotEmpty())
                 -"#[default]"
@@ -32,7 +32,7 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>): CodeBlock {
     }
 
     return rustCode {
-        lines(renderHints(ev.hints))
+        include(renderHints(ev.hints))
         -"$enumVal,"
     }
 }

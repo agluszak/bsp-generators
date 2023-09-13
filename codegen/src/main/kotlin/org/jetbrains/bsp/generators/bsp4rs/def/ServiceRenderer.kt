@@ -21,10 +21,10 @@ private fun RustRenderer.renderOperation(op: Operation): CodeBlock {
     val traitName = renderJsonRpcMethodType(op.jsonRpcMethodType)
 
     return rustCode {
-        -deriveRenderer.renderForOp()
+        include(deriveRenderer.renderForOp())
         block("pub enum $name") {}
         newline()
-        lines(renderHints(op.hints))
+        include(renderHints(op.hints))
         block("impl $traitName for $name") {
             include(renderOperationTraitProperties(op))
         }

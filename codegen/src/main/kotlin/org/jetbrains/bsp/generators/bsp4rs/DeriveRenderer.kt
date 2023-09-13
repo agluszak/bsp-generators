@@ -1,22 +1,20 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
-import org.jetbrains.bsp.generators.ir.Def
-import org.jetbrains.bsp.generators.ir.EnumType
-import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.IrShape
-import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.dsl.CodeBlock
+import org.jetbrains.bsp.generators.dsl.rustCode
+import org.jetbrains.bsp.generators.ir.*
 import software.amazon.smithy.model.shapes.ShapeId
 
 class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
     private var derivesSet: Set<DeriveOption> = emptySet()
 
-    fun renderForOp(): String {
+    fun renderForOp(): CodeBlock {
         derivesSet = setOf(DeriveOption.DEBUG)
 
-        return this.print()
+        return this.render()
     }
 
-    fun renderForDef(def: Def): String {
+    fun renderForDef(def: Def): CodeBlock {
         derivesSet = setOf(
             DeriveOption.CLONE,
             DeriveOption.DEBUG,
@@ -28,7 +26,7 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
         derivesSet = derivesSet.plus(defToSerializeList(def))
         derivesSet = derivesSet.minus(defToBlackList(def).toSet())
 
-        return this.print()
+        return this.render()
     }
 
     private fun defToSerializeList(def: Def) = when (def) {
@@ -70,8 +68,8 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
         }
     }
 
-    private fun print(): String {
-        return "#[derive(${derivesSet.joinToString(", ") { it.print }})]"
+    private fun render(): CodeBlock = rustCode {
+        -"#[derive(${derivesSet.joinToString(", ") { it.print }})]"
     }
 
     enum class DeriveOption(val print: String) {
