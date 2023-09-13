@@ -26,12 +26,12 @@ pub enum TaskStartData {
 
 impl TaskStartData {
     pub fn compile_task(data: CompileTask) -> Self {
-        TaskStartData::Named(NamedTaskStartData::CompileTask(data))
+        Self::Named(NamedTaskStartData::CompileTask(data))
     }
     pub fn test_start(data: TestStart) -> Self {
-        TaskStartData::Named(NamedTaskStartData::TestStart(data))
+        Self::Named(NamedTaskStartData::TestStart(data))
     }
     pub fn test_task(data: TestTask) -> Self {
-        TaskStartData::Named(NamedTaskStartData::TestTask(data))
+        Self::Named(NamedTaskStartData::TestTask(data))
     }
 }

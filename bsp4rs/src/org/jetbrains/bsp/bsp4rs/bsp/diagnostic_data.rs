@@ -18,6 +18,6 @@ pub enum DiagnosticData {
 
 impl DiagnosticData {
     pub fn scala(data: ScalaDiagnostic) -> Self {
-        DiagnosticData::Named(NamedDiagnosticData::Scala(data))
+        Self::Named(NamedDiagnosticData::Scala(data))
     }
 }

@@ -24,24 +24,24 @@ pub enum BuildTargetData {
 
 impl BuildTargetData {
     pub fn cargo(data: CargoBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Cargo(data))
+        Self::Named(NamedBuildTargetData::Cargo(data))
     }
     pub fn cpp(data: CppBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Cpp(data))
+        Self::Named(NamedBuildTargetData::Cpp(data))
     }
     pub fn jvm(data: JvmBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Jvm(data))
+        Self::Named(NamedBuildTargetData::Jvm(data))
     }
     pub fn python(data: PythonBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Python(data))
+        Self::Named(NamedBuildTargetData::Python(data))
     }
     pub fn rust(data: RustBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Rust(data))
+        Self::Named(NamedBuildTargetData::Rust(data))
     }
     pub fn sbt(data: SbtBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Sbt(data))
+        Self::Named(NamedBuildTargetData::Sbt(data))
     }
     pub fn scala(data: ScalaBuildTarget) -> Self {
-        BuildTargetData::Named(NamedBuildTargetData::Scala(data))
+        Self::Named(NamedBuildTargetData::Scala(data))
     }
 }

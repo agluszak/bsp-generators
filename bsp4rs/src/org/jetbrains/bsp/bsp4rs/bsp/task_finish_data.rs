@@ -26,12 +26,12 @@ pub enum TaskFinishData {
 
 impl TaskFinishData {
     pub fn compile_report(data: CompileReport) -> Self {
-        TaskFinishData::Named(NamedTaskFinishData::CompileReport(data))
+        Self::Named(NamedTaskFinishData::CompileReport(data))
     }
     pub fn test_finish(data: TestFinish) -> Self {
-        TaskFinishData::Named(NamedTaskFinishData::TestFinish(data))
+        Self::Named(NamedTaskFinishData::TestFinish(data))
     }
     pub fn test_report(data: TestReport) -> Self {
-        TaskFinishData::Named(NamedTaskFinishData::TestReport(data))
+        Self::Named(NamedTaskFinishData::TestReport(data))
     }
 }

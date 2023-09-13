@@ -18,6 +18,6 @@ pub enum TestParamsData {
 
 impl TestParamsData {
     pub fn scala_test(data: ScalaTestParams) -> Self {
-        TestParamsData::Named(NamedTestParamsData::ScalaTest(data))
+        Self::Named(NamedTestParamsData::ScalaTest(data))
     }
 }

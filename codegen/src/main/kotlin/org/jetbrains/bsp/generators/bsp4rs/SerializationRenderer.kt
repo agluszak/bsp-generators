@@ -6,7 +6,7 @@ class SerializationRenderer {
     private var serdeSet: Set<SerdeOption> = emptySet()
     private var reprSet: Set<ReprOption> = emptySet()
 
-    private fun defToSerdeList(def: Def) = when (def) {
+    private fun defToSerdeList(def: Def, untagged: Boolean) = when (def) {
         is Def.Structure -> setOf(SerdeOption.RenameAllCamelCase)
         is Def.OpenEnum<*> -> setOf(SerdeOption.Transparent)
         is Def.ClosedEnum<*> -> when (def.enumType) {
@@ -16,7 +16,7 @@ class SerializationRenderer {
 
         is Def.Alias -> setOf(SerdeOption.Transparent)
         is Def.DataKinds ->
-            if (def.shapeId.namespace.startsWith("wrap")) setOf(SerdeOption.Untagged)
+            if (untagged) setOf(SerdeOption.Untagged)
             else setOf(SerdeOption.RenameAllKebabCase, SerdeOption.TagDataKind, SerdeOption.ContentData)
 
         else -> emptySet()
@@ -60,9 +60,9 @@ class SerializationRenderer {
         return serdeOpt
     }
 
-    fun renderForDef(def: Def): List<String> {
+    fun renderForDef(def: Def, untagged: Boolean = false): List<String> {
         serdeSet = setOf()
-        serdeSet = serdeSet.plus(defToSerdeList(def))
+        serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
 
         reprSet = setOf()
         reprSet = reprSet.plus(defToReprList(def))

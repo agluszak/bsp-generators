@@ -21,15 +21,15 @@ pub enum DebugSessionParamsData {
 
 impl DebugSessionParamsData {
     pub fn scala_attach_remote(data: ScalaAttachRemote) -> Self {
-        DebugSessionParamsData::Named(NamedDebugSessionParamsData::ScalaAttachRemote(data))
+        Self::Named(NamedDebugSessionParamsData::ScalaAttachRemote(data))
     }
     pub fn scala_main_class(data: ScalaMainClass) -> Self {
-        DebugSessionParamsData::Named(NamedDebugSessionParamsData::ScalaMainClass(data))
+        Self::Named(NamedDebugSessionParamsData::ScalaMainClass(data))
     }
     pub fn scala_test_suites(data: Vec<String>) -> Self {
-        DebugSessionParamsData::Named(NamedDebugSessionParamsData::ScalaTestSuites(data))
+        Self::Named(NamedDebugSessionParamsData::ScalaTestSuites(data))
     }
     pub fn scala_test_suites_selection(data: ScalaTestSuites) -> Self {
-        DebugSessionParamsData::Named(NamedDebugSessionParamsData::ScalaTestSuitesSelection(data))
+        Self::Named(NamedDebugSessionParamsData::ScalaTestSuitesSelection(data))
     }
 }

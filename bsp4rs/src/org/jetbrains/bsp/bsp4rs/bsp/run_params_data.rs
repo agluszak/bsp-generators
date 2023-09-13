@@ -18,6 +18,6 @@ pub enum RunParamsData {
 
 impl RunParamsData {
     pub fn scala_main_class(data: ScalaMainClass) -> Self {
-        RunParamsData::Named(NamedRunParamsData::ScalaMainClass(data))
+        Self::Named(NamedRunParamsData::ScalaMainClass(data))
     }
 }

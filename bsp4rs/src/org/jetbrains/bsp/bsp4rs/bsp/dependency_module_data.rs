@@ -18,6 +18,6 @@ pub enum DependencyModuleData {
 
 impl DependencyModuleData {
     pub fn maven(data: MavenDependencyModule) -> Self {
-        DependencyModuleData::Named(NamedDependencyModuleData::Maven(data))
+        Self::Named(NamedDependencyModuleData::Maven(data))
     }
 }

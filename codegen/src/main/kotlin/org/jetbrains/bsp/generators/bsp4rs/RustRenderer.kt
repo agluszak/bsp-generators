@@ -5,7 +5,6 @@ import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.*
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
-import org.jetbrains.bsp.generators.utils.kebabToUpperCamelCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
@@ -37,41 +36,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
         val modFile = generateModFile(module.moduleName, files.map { it.second })
         return files.unzip().first.toMutableList() + modFile
-    }
-
-    private fun renderData(def: Def.DataKinds): CodeBlock {
-        val dataKinds = def.kinds.map { kind ->
-            val name = makeName(kind.kind.kebabToUpperCamelCase())
-            val dataType = renderIrShapeType(kind.shape)
-            Pair(name, dataType)
-        }
-
-        val namedName = "Named${def.name}"
-
-        return rustCode {
-            -deriveRenderer.renderForDef(def)
-            lines(serializationRenderer.renderForDef(def))
-            block("pub enum $namedName") {
-                lines(dataKinds.map { "${it.first}(${it.second})" }, ",", ",")
-            }
-            newline()
-            lines(renderHints(def.hints))
-            -"#[allow(clippy::large_enum_variant)]"
-            -deriveRenderer.renderForDef(def)
-            lines(serializationRenderer.renderForDef(def.copy(shapeId = ShapeId.fromParts("wrap", def.name))))
-            block("pub enum ${def.name}") {
-                -"Named($namedName),"
-                -"Other(OtherData),"
-            }
-            newline()
-            block("impl ${def.name}") {
-                dataKinds.forEach { dataKind ->
-                    block("pub fn ${dataKind.first.camelToSnakeCase()}(data: ${dataKind.second}) -> Self") {
-                        -"${def.name}::Named($namedName::${dataKind.first}(data))"
-                    }
-                }
-            }
-        }
     }
 
     fun isAliasRenderable(shapeId: ShapeId, type: Type): Boolean {
@@ -106,7 +70,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             is Def.ClosedEnum<*> -> renderClosedEnum(def)
             is Def.Service -> renderService(def)
             is Def.Alias -> renderAlias(def)
-            is Def.DataKinds -> renderData(def)
+            is Def.DataKinds -> renderDataKinds(def)
         }
     }
 
