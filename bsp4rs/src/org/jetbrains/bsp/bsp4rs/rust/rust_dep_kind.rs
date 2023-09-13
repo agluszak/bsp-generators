@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct RustDepKind(pub std::borrow::Cow<'static, str>);
+
 impl RustDepKind {
     /** For [build-dependencies]. */
     pub const BUILD: RustDepKind = RustDepKind::new("build");
@@ -14,6 +15,6 @@ impl RustDepKind {
     pub const UNCLASSIFIED: RustDepKind = RustDepKind::new("unclassified");
 
     pub const fn new(tag: &'static str) -> Self {
-        RustDepKind(std::borrow::Cow::Borrowed(tag))
+        Self(std::borrow::Cow::Borrowed(tag))
     }
 }

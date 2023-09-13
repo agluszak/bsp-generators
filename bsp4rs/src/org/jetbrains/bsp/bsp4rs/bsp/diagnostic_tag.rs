@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct DiagnosticTag(pub i32);
+
 impl DiagnosticTag {
     /** Unused or unnecessary code.
 
@@ -14,6 +15,6 @@ impl DiagnosticTag {
     pub const DEPRECATED: DiagnosticTag = DiagnosticTag::new(2);
 
     pub const fn new(tag: i32) -> Self {
-        DiagnosticTag(tag)
+        Self(tag)
     }
 }

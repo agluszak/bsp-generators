@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct BuildTargetTag(pub std::borrow::Cow<'static, str>);
+
 impl BuildTargetTag {
     /** Target contains source code for producing any kind of application, may have
     but does not require the `canRun` capability. */
@@ -35,6 +36,6 @@ impl BuildTargetTag {
     pub const TEST: BuildTargetTag = BuildTargetTag::new("test");
 
     pub const fn new(tag: &'static str) -> Self {
-        BuildTargetTag(std::borrow::Cow::Borrowed(tag))
+        Self(std::borrow::Cow::Borrowed(tag))
     }
 }
