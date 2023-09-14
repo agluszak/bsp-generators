@@ -1,7 +1,55 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-rules_kotlin_version = "1.8"
+bazel_skylib_version = "1.4.1"
+bazel_skylib_sha = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7"
 
+http_archive(
+    name = "bazel_skylib",
+    sha256 = bazel_skylib_sha,
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/%s/bazel-skylib-%s.tar.gz" % (bazel_skylib_version, bazel_skylib_version),
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/%s/bazel-skylib-%s.tar.gz" % (bazel_skylib_version, bazel_skylib_version),
+    ],
+)
+
+rules_scala_version = "6.1.0"
+rules_scala_sha = "cc590e644b2d5c6a87344af5e2c683017fdc85516d9d64b37f15d33badf2e84c"
+
+http_archive(
+    name = "io_bazel_rules_scala",
+    sha256 = rules_scala_sha,
+    strip_prefix = "rules_scala-%s" % rules_scala_version,
+    url = "https://github.com/bazelbuild/rules_scala/releases/download/v%s/rules_scala-v%s.tar.gz" % (rules_scala_version, rules_scala_version),
+)
+
+
+load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
+# Stores Scala version and other configuration
+# 2.12 is a default version, other versions can be use by passing them explicitly:
+# scala_config(scala_version = "2.11.12")
+# Scala 3 requires extras...
+#   3.2 should be supported on master. Please note that Scala artifacts for version (3.2.2) are not defined in
+#   Rules Scala, they need to be provided by your WORKSPACE. You can use external loader like
+#   https://github.com/bazelbuild/rules_jvm_external
+scala_config()
+
+load("@io_bazel_rules_scala//scala:scala.bzl", "rules_scala_setup", "rules_scala_toolchain_deps_repositories")
+
+# loads other rules Rules Scala depends on
+rules_scala_setup()
+
+# Loads Maven deps like Scala compiler and standard libs. On production projects you should consider
+# defining a custom deps toolchains to use your project libs instead
+rules_scala_toolchain_deps_repositories(fetch_sources = True)
+
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+rules_proto_dependencies()
+rules_proto_toolchains()
+
+load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
+scala_register_toolchains()
+
+rules_kotlin_version = "1.8"
 rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
 
 http_archive(
