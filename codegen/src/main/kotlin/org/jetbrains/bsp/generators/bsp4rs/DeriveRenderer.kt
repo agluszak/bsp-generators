@@ -24,7 +24,7 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
             DeriveOption.ORD,
         )
         derivesSet = derivesSet.plus(defToSerializeList(def))
-        derivesSet = derivesSet.minus(defToBlackList(def).toSet())
+        derivesSet = derivesSet.minus(defToDenyList(def).toSet())
 
         return this.render()
     }
@@ -39,9 +39,9 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
         else -> setOf(DeriveOption.STANDARD_SERIALIZE)
     }
 
-    private fun defToBlackList(def: Def): Set<DeriveOption> {
+    private fun defToDenyList(def: Def): Set<DeriveOption> {
         return when (def) {
-            is Def.Structure -> def.fields.flatMap { fieldToBlackList(it) }.toSet()
+            is Def.Structure -> def.fields.flatMap { fieldToDenyList(it) }.toSet()
             is Def.OpenEnum<*> -> emptySet()
             is Def.ClosedEnum<*> -> if (def.values.isEmpty()) setOf(DeriveOption.DEFAULT) else emptySet()
             is Def.Service -> emptySet()
@@ -50,20 +50,20 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
         }
     }
 
-    private fun fieldToBlackList(field: Field): Set<DeriveOption> {
-        return typeToBlackList(field.type).minus(
+    private fun fieldToDenyList(field: Field): Set<DeriveOption> {
+        return typeToDenyList(field.type).minus(
             if (field.required) emptySet()
             else setOf(DeriveOption.DEFAULT)
         )
     }
 
-    private fun typeToBlackList(shape: IrShape): Set<DeriveOption> {
+    private fun typeToDenyList(shape: IrShape): Set<DeriveOption> {
         return when (val type = shape.type) {
             is Type.Json -> setOf(DeriveOption.HASH, DeriveOption.ORD)
-            is Type.Ref -> defToBlackList(defs[shape.shapeId]!!)
-            is Type.List -> typeToBlackList(type.member)
-            is Type.Set -> typeToBlackList(type.member)
-            is Type.Map -> typeToBlackList(type.key).plus(typeToBlackList(type.value))
+            is Type.Ref -> defToDenyList(defs[shape.shapeId]!!)
+            is Type.List -> typeToDenyList(type.member)
+            is Type.Set -> typeToDenyList(type.member)
+            is Type.Map -> typeToDenyList(type.key).plus(typeToDenyList(type.value))
             else -> emptySet()
         }
     }
