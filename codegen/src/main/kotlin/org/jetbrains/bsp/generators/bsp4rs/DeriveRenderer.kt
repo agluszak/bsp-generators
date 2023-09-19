@@ -2,7 +2,11 @@ package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumType
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.IrShape
+import org.jetbrains.bsp.generators.ir.Type
 import software.amazon.smithy.model.shapes.ShapeId
 
 class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
@@ -29,7 +33,7 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
         return this.render()
     }
 
-    private fun defToSerializeList(def: Def) = when (def) {
+    private fun defToSerializeList(def: Def): Set<DeriveOption> = when (def) {
         is Def.Service -> emptySet()
         is Def.ClosedEnum<*> -> when (def.enumType) {
             is EnumType.IntEnum -> setOf(DeriveOption.ENUM_INT_SERIALIZE)

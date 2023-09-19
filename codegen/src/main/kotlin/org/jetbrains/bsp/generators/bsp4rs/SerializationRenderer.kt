@@ -2,7 +2,12 @@ package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumType
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.IrShape
+import org.jetbrains.bsp.generators.ir.Type
 
 class SerializationRenderer {
     private var serdeSet: Set<SerdeOption> = emptySet()
@@ -33,13 +38,10 @@ class SerializationRenderer {
     private fun prepareSerdeSet(hints: List<Hint>) {
         val rename = hints.find { it is Hint.JsonRename }
 
-        return if (rename is Hint.JsonRename)
-            serdeSet = setOf(SerdeOption.Rename(rename.name))
-        else
-            serdeSet = emptySet()
+        serdeSet = if (rename is Hint.JsonRename) setOf(SerdeOption.Rename(rename.name)) else emptySet()
     }
 
-    private fun defToSerdeList(def: Def, untagged: Boolean) = when (def) {
+    private fun defToSerdeList(def: Def, untagged: Boolean): Set<SerdeOption> = when (def) {
         is Def.Structure -> setOf(SerdeOption.RenameAllCamelCase)
         is Def.OpenEnum<*> -> setOf(SerdeOption.Transparent)
         is Def.ClosedEnum<*> -> when (def.enumType) {
@@ -55,7 +57,7 @@ class SerializationRenderer {
         else -> emptySet()
     }
 
-    private fun defToReprList(def: Def) = when (def) {
+    private fun defToReprList(def: Def): Set<ReprOption> = when (def) {
         is Def.ClosedEnum<*> -> when (def.enumType) {
             is EnumType.IntEnum -> setOf(ReprOption.U8)
             else -> emptySet()
@@ -65,7 +67,7 @@ class SerializationRenderer {
     }
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
-        fun optionalToSerdeList(irShape: IrShape) = when (irShape.type) {
+        fun optionalToSerdeList(irShape: IrShape): SerdeOption = when (irShape.type) {
             is Type.List -> SerdeOption.SkipVector
             is Type.Map -> SerdeOption.SkipMap
             is Type.Set -> SerdeOption.SkipSet
@@ -88,11 +90,11 @@ class SerializationRenderer {
         return serdeOpt
     }
 
-    private fun printSerde() =
+    private fun printSerde(): String? =
         if (serdeSet.isEmpty()) null
         else "#[serde(${serdeSet.joinToString(", ") { it.print() }})]"
 
-    private fun printRepr() =
+    private fun printRepr(): String? =
         if (reprSet.isEmpty()) null
         else "#[repr(${reprSet.joinToString(", ") { it.print }})]"
 
