@@ -6,6 +6,7 @@ use bsp#Arguments
 use bsp#BuildTargetData
 use bsp#BuildTargetIdentifier
 use bsp#BuildTargetIdentifiers
+use bsp#EnvironmentVariables
 use bsp#Identifier
 use bsp#URI
 use traits#dataKind
@@ -105,11 +106,6 @@ list JvmMainClasses {
     member: JvmMainClass
 }
 
-map EnvironmentVariables {
-    key: String,
-    value: String
-}
-
 list Classpath {
     member: String
 }
@@ -117,6 +113,3 @@ list Classpath {
 list JvmOptions {
     member: String
 }
-
-
-

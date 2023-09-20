@@ -12,5 +12,5 @@ data class RustBuildTarget(
   val crateTypes: List<RustCrateType>? = null,
   val edition: String,
   val doctest: Boolean,
-  val requiredFeatures: List<String>? = null
+  val requiredFeatures: Set<String>? = null
 )
