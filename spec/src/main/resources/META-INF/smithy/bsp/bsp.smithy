@@ -1216,8 +1216,7 @@ structure CompileReport {
     target: BuildTargetIdentifier
 
     /// An optional request id to know the origin of this report.
-    /// Deprecated: use the field in TaskFinishParams instead.
-    @deprecated
+    @deprecated(message: "Use the field in TaskFinishParams instead")
     originId: Identifier
 
     /// The total number of reported errors compiling this target.
@@ -1284,8 +1283,7 @@ structure TestTask {
 
 @dataKind(kind: "test-report", extends: [TaskFinishData])
 structure TestReport {
-    /// Deprecated: use the field in TaskFinishParams instead.
-    @deprecated
+    @deprecated(message: "Use the field in TaskFinishParams instead")
     originId: Identifier
     /// The build target that was compiled.
     @required
