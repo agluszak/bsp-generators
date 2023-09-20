@@ -110,5 +110,6 @@ sealed interface Hint {
     data class Deprecated(val message: String) : Hint
 
     data class JsonRename(val name: String) : Hint
+    object Unstable: Hint
 }
 
