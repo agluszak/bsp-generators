@@ -9,6 +9,10 @@ use traits#jsonNotification
 use traits#jsonRPC
 use traits#jsonRequest
 
+// TODO: add cancel notif
+// TODO: add WorkspaceLibraries endpoint
+// TODO: update structures from lsp (eg. Diagnostic)
+
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
 integer Integer
 

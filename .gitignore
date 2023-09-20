@@ -3,3 +3,4 @@ projectview.bazelproject
 .bsp
 .bazelbsp
 bazel-*
+bsp4rs/target
