@@ -8,8 +8,6 @@ use crate::*;
 pub enum NamedDebugSessionParamsData {
     ScalaAttachRemote(ScalaAttachRemote),
     ScalaMainClass(ScalaMainClass),
-    ScalaTestSuites(Vec<String>),
-    ScalaTestSuitesSelection(ScalaTestSuites),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -25,11 +23,5 @@ impl DebugSessionParamsData {
     }
     pub fn scala_main_class(data: ScalaMainClass) -> Self {
         Self::Named(NamedDebugSessionParamsData::ScalaMainClass(data))
-    }
-    pub fn scala_test_suites(data: Vec<String>) -> Self {
-        Self::Named(NamedDebugSessionParamsData::ScalaTestSuites(data))
-    }
-    pub fn scala_test_suites_selection(data: ScalaTestSuites) -> Self {
-        Self::Named(NamedDebugSessionParamsData::ScalaTestSuitesSelection(data))
     }
 }

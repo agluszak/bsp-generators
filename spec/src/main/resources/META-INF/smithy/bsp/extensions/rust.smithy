@@ -12,7 +12,6 @@ use traits#enumKind
 use traits#dataKind
 use traits#jsonRPC
 use traits#jsonRequest
-use traits#set
 
 @jsonRPC
 service RustBuildServer {

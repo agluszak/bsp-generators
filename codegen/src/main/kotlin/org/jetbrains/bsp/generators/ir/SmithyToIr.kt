@@ -19,8 +19,10 @@ import software.amazon.smithy.model.shapes.StringShape
 import software.amazon.smithy.model.shapes.StructureShape
 import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
+import software.amazon.smithy.model.traits.JsonNameTrait
 import software.amazon.smithy.model.traits.MixinTrait
 import software.amazon.smithy.model.traits.RequiredTrait
+import software.amazon.smithy.model.traits.UnstableTrait
 import traits.DataKindTrait
 import traits.DataTrait
 import traits.EnumKindTrait
@@ -295,7 +297,9 @@ class SmithyToIr(val model: Model) {
     fun getHints(shape: Shape): List<Hint> {
         val documentation = shape.getTrait(DocumentationTrait::class.java).map { Hint.Documentation(it.value) }
         val deprecated = shape.getTrait(DeprecatedTrait::class.java).map { Hint.Deprecated(it.message.orElse("")) }
+        val rename = shape.getTrait(JsonNameTrait::class.java).map { Hint.JsonRename(it.value) }
+        val unstable = shape.getTrait(UnstableTrait::class.java).map { Hint.Unstable }
 
-        return listOf(documentation, deprecated).mapNotNull { it.getOrNull() }
+        return listOf(documentation, deprecated, rename, unstable).mapNotNull { it.getOrNull() }
     }
 }

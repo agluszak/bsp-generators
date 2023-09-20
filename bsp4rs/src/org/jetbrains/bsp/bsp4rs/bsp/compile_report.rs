@@ -12,6 +12,7 @@ pub struct CompileReport {
     /// The build target that was compiled.
     pub target: BuildTargetIdentifier,
     /// An optional request id to know the origin of this report.
+    #[deprecated(note = "Use the field in TaskFinishParams instead")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<Identifier>,
     /// The total number of reported errors compiling this target.

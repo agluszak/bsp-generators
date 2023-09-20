@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "camelCase")]
 pub struct ScalaMainClass {
     /// The main class to run.
+    #[serde(rename = "class")]
     pub class_name: String,
     /// The user arguments to the main entrypoint.
     pub arguments: Vec<String>,

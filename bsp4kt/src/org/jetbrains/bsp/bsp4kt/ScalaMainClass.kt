@@ -6,7 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class ScalaMainClass(
-  val className: String,
+  @SerialName("class")
+val className: String,
   val arguments: List<String>,
   val jvmOptions: List<String>,
   val environmentVariables: List<String>? = null

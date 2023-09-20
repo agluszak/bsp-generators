@@ -5,6 +5,7 @@ use crate::*;
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TestReport {
+    #[deprecated(note = "Use the field in TaskFinishParams instead")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<Identifier>,
     /// The build target that was compiled.
