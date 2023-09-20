@@ -10,6 +10,8 @@ use traits#jsonRPC
 use traits#jsonRequest
 
 // TODO: add cancel notif
+// TODO: add WorkspaceLibraries endpoint
+// TODO: update structures from lsp (eg. Diagnostic)
 
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
 integer Integer
@@ -714,7 +716,6 @@ structure PublishDiagnosticsParams {
 @data
 document DiagnosticData
 
-// TODO: update structure from lsp, like this one
 structure Diagnostic {
     /// The range at which the message applies.
     @required
