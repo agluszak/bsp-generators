@@ -38,7 +38,7 @@ class SerializationRenderer {
     private fun prepareSerdeSet(hints: List<Hint>) {
         val rename = hints.find { it is Hint.JsonRename }
 
-        serdeSet = if (rename is Hint.JsonRename) setOf(SerdeOption.Rename(rename.name)) else emptySet()
+        serdeSet = if (rename is Hint.JsonRename) setOf(SerdeOption.Rename(""""${rename.name}"""")) else emptySet()
     }
 
     private fun defToSerdeList(def: Def, untagged: Boolean): Set<SerdeOption> = when (def) {
