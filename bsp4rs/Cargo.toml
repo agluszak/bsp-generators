@@ -2,6 +2,8 @@
 name = "bsp4rs"
 version = "0.1.0"
 edition = "2021"
+description = "Types for interaction with a build server, using Build Server Protocol"
+license = "MIT OR Apache-2.0"
 
 [lib]
 path = "src/org/jetbrains/bsp/bsp4rs/lib.rs"

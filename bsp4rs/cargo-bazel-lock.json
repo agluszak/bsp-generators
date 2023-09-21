@@ -1,5 +1,5 @@
 {
-  "checksum": "dc106f3cbd09e8816e39effcc6ce0fd3aca5d5b611f05d871c675ef8b342622a",
+  "checksum": "acdd9a8c5545b648b2c2d005b016d497f8f0a8082eb4e54478bdd78ad71f7416",
   "crates": {
     "bitflags 1.3.2": {
       "name": "bitflags",
@@ -90,7 +90,7 @@
         },
         "version": "0.1.0"
       },
-      "license": null
+      "license": "MIT OR Apache-2.0"
     },
     "darling 0.14.4": {
       "name": "darling",
