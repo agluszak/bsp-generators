@@ -9,6 +9,8 @@ data class TestParams(
   val targets: List<BuildTargetIdentifier>,
   val originId: String? = null,
   val arguments: List<String>? = null,
+  val environmentVariables: Map<String, String>? = null,
+  val workingDirectory: String? = null,
   val dataKind: String? = null,
   val data: JsonElement? = null
 )

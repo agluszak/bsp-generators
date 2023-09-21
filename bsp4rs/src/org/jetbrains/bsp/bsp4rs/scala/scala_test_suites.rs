@@ -10,5 +10,6 @@ pub struct ScalaTestSuites {
     /// Additional jvmOptions which will be passed to the forked JVM
     pub jvm_options: Vec<String>,
     /// Enviroment variables should be an array of strings in format KEY=VALUE
+    #[deprecated(note = "Use `buildTarget/test` params instead")]
     pub environment_variables: Vec<String>,
 }
