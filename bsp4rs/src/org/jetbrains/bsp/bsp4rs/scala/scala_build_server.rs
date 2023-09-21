@@ -1,19 +1,16 @@
 use crate::*;
 
-#[derive(Debug)]
-pub enum BuildTargetScalacOptions {}
-
 /// The build target scalac options request is sent from the client to the server to
 /// query for the list of compiler options necessary to compile in a given list of
 /// targets.
+#[derive(Debug)]
+pub enum BuildTargetScalacOptions {}
+
 impl Request for BuildTargetScalacOptions {
     type Params = ScalacOptionsParams;
     type Result = ScalacOptionsResult;
     const METHOD: &'static str = "buildTarget/scalacOptions";
 }
-
-#[derive(Debug)]
-pub enum BuildTargetScalaTestClasses {}
 
 /// The Scala build target test classes request is sent from the client to the
 /// server to query for the list of fully qualified names of test classes in a given
@@ -38,15 +35,16 @@ pub enum BuildTargetScalaTestClasses {}
 ///
 /// The client will get a `originId` field in `ScalaTestClassesResult` if the
 /// `originId` field in the `ScalaTestClassesParams` is defined.
+#[deprecated(note = "Use buildTarget/jvmTestEnvironment instead")]
+#[derive(Debug)]
+pub enum BuildTargetScalaTestClasses {}
 
+#[allow(deprecated)]
 impl Request for BuildTargetScalaTestClasses {
     type Params = ScalaTestClassesParams;
     type Result = ScalaTestClassesResult;
     const METHOD: &'static str = "buildTarget/scalaTestClasses";
 }
-
-#[derive(Debug)]
-pub enum BuildTargetScalaMainClasses {}
 
 /// The build target main classes request is sent from the client to the server to
 /// query for the list of main classes that can be fed as arguments to
@@ -58,7 +56,11 @@ pub enum BuildTargetScalaMainClasses {}
 /// notifications during compilation before completing the response.
 /// The client will get a `originId` field in `ScalaMainClassesResult` if the
 /// `originId` field in the `ScalaMainClassesParams` is defined.
+#[deprecated(note = "Use buildTarget/jvmRunEnvironment instead")]
+#[derive(Debug)]
+pub enum BuildTargetScalaMainClasses {}
 
+#[allow(deprecated)]
 impl Request for BuildTargetScalaMainClasses {
     type Params = ScalaMainClassesParams;
     type Result = ScalaMainClassesResult;

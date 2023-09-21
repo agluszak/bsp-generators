@@ -5,6 +5,7 @@ import org.jetbrains.bsp.generators.bsp4rs.renderIrShapeType
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.Hint
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
 
@@ -21,10 +22,11 @@ private fun RustRenderer.renderOperation(op: Operation): CodeBlock {
     val traitName = renderJsonRpcMethodType(op.jsonRpcMethodType)
 
     return rustCode {
+        include(renderHints(op.hints))
         include(deriveRenderer.renderForOperation())
         block("pub enum $name") {}
         newline()
-        include(renderHints(op.hints))
+        if (op.hints.count { it is Hint.Deprecated } > 0) -"#[allow(deprecated)]"
         block("impl $traitName for $name") {
             include(renderOperationTraitProperties(op))
         }
