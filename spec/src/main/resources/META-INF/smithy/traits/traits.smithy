@@ -7,7 +7,6 @@ namespace traits
 @default(0)
 integer docsPriority
 
-
 /// the JSON-RPC protocol,
 /// see https:/// www.jsonrpc.org/specification
 @protocolDefinition(traits: [

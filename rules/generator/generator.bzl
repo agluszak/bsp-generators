@@ -20,6 +20,6 @@ library_generator = rule(
             executable = True,
             allow_files = True,
             cfg = "exec",
-        )
-    }
+        ),
+    },
 )

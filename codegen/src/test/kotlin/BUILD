@@ -8,3 +8,13 @@ kt_test(
         "//:codegen",
     ],
 )
+
+kt_test(
+    name = "Bsp4rsTest",
+    src = "Bsp4rsTest.kt",
+    classname = "Bsp4rsTest",
+    deps = [
+        "//:codegen",
+        "@maven//:software_amazon_smithy_smithy_model",
+    ],
+)

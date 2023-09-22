@@ -12,7 +12,7 @@ enum class RustTargetKind(override val value: Int) : IntEnum {
   Test(3),
   Example(4),
   Bench(5),
-  Custombuild(6),
+  CustomBuild(6),
   Unknown(7);
 
   companion object : KSerializer<RustTargetKind> by EnumAsIntSerializer(RustTargetKind::class)

@@ -26,4 +26,10 @@ interface BuildClient {
   @JsonNotification("build/taskFinish")
   fun onBuildTaskFinish(params: TaskFinishParams): Unit
 
+  @JsonNotification("run/printStdout")
+  fun onRunPrintStdout(params: PrintParams): Unit
+
+  @JsonNotification("run/printStderr")
+  fun onRunPrintStderr(params: PrintParams): Unit
+
 }

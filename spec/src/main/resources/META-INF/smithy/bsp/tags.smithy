@@ -28,4 +28,4 @@ apply BuildTargetCapabilities @tags(["basic"])
 
 apply BuildTargetTag @tags(["basic"])
 
-
+apply EnvironmentVariables @tags(["basic"])

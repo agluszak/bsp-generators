@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class TaskProgressParams(
   val taskId: TaskId,
+  val originId: String? = null,
   val eventTime: Long? = null,
   val message: String? = null,
   val total: Long? = null,

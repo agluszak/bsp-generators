@@ -228,12 +228,14 @@ structure ScalaMainClass {
     className: String
     /// The user arguments to the main entrypoint.
     @required
+    @deprecated(message: "Use `buildTarget/run` params instead", since: "2.2.0")
     arguments: Arguments
     /// The jvm options for the application.
     @required
     jvmOptions: JvmOptions
     /// The environment variables for the application.
-    environmentVariables: EnvironmentVariablesList // TODO: inconsistent, `EnvironmentVariables` should be used instead
+    @deprecated(message: "Use `buildTarget/run` params instead", since: "2.2.0")
+    environmentVariables: EnvironmentVariablesList
 }
 
 list ScalaMainClassesList {
@@ -248,12 +250,13 @@ list ScalaTestSuiteSelections {
     member: ScalaTestSuiteSelection
 }
 
+@deprecated(message: "Use `EnvironmentVariables` (a map) instead", since: "2.2.0")
 list EnvironmentVariablesList {
     member: String
 }
 
 /// Each element of this array is a fully qualified class name.
-@dataKind(kind: "scala-test-suites", extends: [DebugSessionParamsData])
+@dataKind(kind: "scala-test-suites", extends: [TestParamsData])
 list ScalaTestSuiteClasses {
     member: String
 }
@@ -263,7 +266,7 @@ list ScalaTestSuiteClasses {
 structure ScalaAttachRemote {
 }
 
-@dataKind(kind: "scala-test-suites-selection", extends: [DebugSessionParamsData])
+@dataKind(kind: "scala-test-suites-selection", extends: [TestParamsData])
 structure ScalaTestSuites {
     /// The fully qualified names of the test classes in this target and the tests in this test classes
     @required
@@ -273,7 +276,8 @@ structure ScalaTestSuites {
     jvmOptions: JvmOptions
     /// Enviroment variables should be an array of strings in format KEY=VALUE
     @required
-    environmentVariables: EnvironmentVariablesList // TODO: inconsistent, `EnvironmentVariables` should be used instead
+    @deprecated(message: "Use `buildTarget/test` params instead", since: "2.2.0")
+    environmentVariables: EnvironmentVariablesList
 }
 
 list ScalaTestSuiteSelectionTests {

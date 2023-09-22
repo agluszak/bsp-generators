@@ -8,9 +8,11 @@ import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
 import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.utils.kebabToScreamingSnakeCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import kotlin.io.path.Path
 
@@ -42,6 +44,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             is Def.OpenEnum<*> -> renderOpenEnum(def)
             is Def.Service -> renderService(def)
             is Def.Structure -> renderStructure(def)
+            is Def.DataKinds -> renderData(def)
         }
     }
 
@@ -105,6 +108,16 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return CodegenFile(baseRelPath.resolve("$name.kt"), code.toString())
     }
 
+    private fun renderData(def: Def.DataKinds): CodegenFile {
+        val values = def.kinds.map { polyData ->
+            val snakeCased = polyData.kind.kebabToScreamingSnakeCase()
+            EnumValue(snakeCased, polyData.kind, polyData.hints)
+        }
+        val dataKindDef = Def.OpenEnum(def.kindsEnumId, EnumType.StringEnum, values, def.hints)
+
+        return renderOpenEnum(dataKindDef)
+    }
+
     fun renderFieldRaw(field: Field): String {
         return "val ${field.name}: ${renderType(field.type)}${if (field.required) "" else "? = null"}"
     }
@@ -119,14 +132,14 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun renderType(type: Type): String = when (type) {
+    fun renderType(irShape: IrShape): String = when (val type = irShape.type) {
         Type.Bool -> "Boolean"
         Type.Int -> "Int"
         Type.Json -> "JsonElement"
         is Type.List -> "List<${renderType(type.member)}>"
         Type.Long -> "Long"
         is Type.Map -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
-        is Type.Ref -> type.shapeId.name
+        is Type.Ref -> irShape.shapeId.name
         is Type.Set -> "Set<${renderType(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "Unit"
@@ -142,7 +155,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             JsonRpcMethodType.Request -> "suspend "
         }
         val input = when (op.inputType) {
-            Type.Unit -> ""
+            IrShape.Unit -> ""
             else -> "params: ${renderType(op.inputType)}"
         }
         val rpcMethod = op.jsonRpcMethod

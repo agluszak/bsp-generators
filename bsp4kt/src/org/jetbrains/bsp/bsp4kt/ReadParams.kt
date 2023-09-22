@@ -5,7 +5,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class RustFeature(
-  val name: String,
-  val dependencies: List<String>
+data class ReadParams(
+  val originId: String,
+  val task: TaskId? = null,
+  val message: String
 )

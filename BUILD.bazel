@@ -44,3 +44,19 @@ library_generator(
     library_name = "bsp4kt",
     visibility = ["//visibility:public"],
 )
+
+java_binary(
+    name = "bsp4rs-generator",
+    main_class = "org.jetbrains.bsp.generators.bsp4rs.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":codegen",
+    ],
+)
+
+library_generator(
+    name = "generate-bsp4rs",
+    gen_tool = ":bsp4rs-generator",
+    library_name = "bsp4rs",
+    visibility = ["//visibility:public"],
+)
