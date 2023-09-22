@@ -1,13 +1,13 @@
 package bsp.codegen.bsp4s
 
-import bsp.codegen._
+import bsp.codegen.{CodegenFile, Lines}
 import bsp.codegen.dsl.{block, empty, lines, newline, paren}
 import bsp.codegen.ir.Def._
 import bsp.codegen.ir.EnumType.{IntEnum, StringEnum}
 import bsp.codegen.ir.Primitive._
 import bsp.codegen.ir.Type._
 import bsp.codegen.ir._
-import bsp.codegen.ir.Hint.{Documentation, Deprecated}
+import bsp.codegen.ir.Hint.{Deprecated, Documentation}
 import cats.implicits.toFoldableOps
 import os.RelPath
 import software.amazon.smithy.model.shapes.ShapeId
@@ -262,7 +262,7 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
 
   def renderPrimitive(prim: Primitive, shapeId: ShapeId): String = {
     // Special handling for URI
-    if (shapeId == ShapeId.fromParts("bsp", "URI")) {
+    if (shapeId == ShapeId.fromParts("old-scala-codegen/src/bsp", "URI")) {
       "Uri"
     } else
       prim match {

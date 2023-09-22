@@ -1,13 +1,13 @@
 package bsp.codegen.ir
 
-import bsp.codegen.docs._
+import bsp.codegen.docs.{DocNode, DocTree, OperationDocNode, ServiceDocNode, StructureDocNode}
 import bsp.codegen.ir.Primitive._
 import bsp.codegen.ir.Type._
-import bsp.traits.EnumKindTrait.EnumKind.{CLOSED, OPEN}
-import bsp.traits._
+import traits.EnumKindTrait.EnumKind.{CLOSED, OPEN}
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes._
 import software.amazon.smithy.model.traits._
+import traits.{DataKindTrait, DataTrait, DocsPriorityTrait, EnumKindTrait, JsonNotificationTrait, JsonRequestTrait, SetTrait, UntaggedUnionTrait}
 
 import java.util.Optional
 import scala.collection.mutable.{Map => MMap}

@@ -1,14 +1,8 @@
 package bsp.codegen.bsp4j
 
 import bsp.codegen.bsp4j.Codegen.run
-import bsp.codegen.{
-  CodegenFile,
-  ExtensionLoader,
-  FilesGenerator,
-  ModelLoader,
-  ProtocolVersionLoader
-}
 import bsp.codegen.ir.SmithyToIR
+import bsp.codegen.{CodegenFile, ExtensionLoader, FilesGenerator, ModelLoader, ProtocolVersionLoader}
 
 object Codegen {
   def run(): List[CodegenFile] = {
@@ -22,4 +16,4 @@ object Codegen {
   }
 }
 
-object Main extends FilesGenerator(run()) {}
+object Main extends FilesGenerator(Codegen.run()) {}

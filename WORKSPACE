@@ -31,7 +31,7 @@ load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
 #   3.2 should be supported on master. Please note that Scala artifacts for version (3.2.2) are not defined in
 #   Rules Scala, they need to be provided by your WORKSPACE. You can use external loader like
 #   https://github.com/bazelbuild/rules_jvm_external
-scala_config()
+scala_config(scala_version = "2.13.6")
 
 load("@io_bazel_rules_scala//scala:scala.bzl", "rules_scala_setup", "rules_scala_toolchain_deps_repositories")
 
@@ -48,6 +48,10 @@ rules_proto_toolchains()
 
 load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
 scala_register_toolchains()
+
+load("@io_bazel_rules_scala//testing:scalatest.bzl", "scalatest_repositories", "scalatest_toolchain")
+scalatest_repositories()
+scalatest_toolchain()
 
 rules_kotlin_version = "1.8"
 rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
@@ -100,6 +104,7 @@ maven_install(
     artifacts = [
         "software.amazon.smithy:smithy-model:1.34.0",
         "software.amazon.smithy:smithy-codegen-core:1.34.0",
+        "software.amazon.smithy:smithy-utils:1.34.0",
 
         # tests
         "org.junit.jupiter:junit-jupiter:5.10.0",
@@ -111,11 +116,22 @@ maven_install(
         # bsp4kt
         "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1",
         "com.github.agluszak:jsonrpc4kt:f4d0c972f8",
+
+        # scala
+        "org.scala-lang.modules:scala-collection-compat_2.13:2.11.0",
+        "com.lihaoyi:os-lib_2.13:0.9.1",
+        "com.monovore:decline_2.13:2.4.1",
+        "org.typelevel:cats-core_2.13:2.9.0",
+
+        # idk why but for scala dependencies we have to declare transitive dependencies explicitly
+        "org.typelevel:cats-kernel_2.13:2.9.0",
+        "com.lihaoyi:geny_2.13:1.0.0",
     ],
     fetch_sources = True,
     repositories = [
         "https://maven.google.com",
         "https://repo.maven.apache.org/maven2",
+        "https://repo1.maven.org/maven2",
         "https://jitpack.io",
     ],
 )

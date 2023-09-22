@@ -1,13 +1,7 @@
 package bsp.codegen.bsp4s
 
-import bsp.codegen.{
-  CodegenFile,
-  ExtensionLoader,
-  FilesGenerator,
-  ModelLoader,
-  ProtocolVersionLoader
-}
 import bsp.codegen.ir.SmithyToIR
+import bsp.codegen.{CodegenFile, ExtensionLoader, FilesGenerator, ModelLoader, ProtocolVersionLoader}
 
 object Codegen {
   def run(): List[CodegenFile] = {

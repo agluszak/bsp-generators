@@ -1,6 +1,6 @@
 package bsp.codegen.docs
 
-import bsp.codegen._
+import bsp.codegen.Lines
 import bsp.codegen.dsl._
 import bsp.codegen.ir.Def._
 import bsp.codegen.ir.EnumType.{IntEnum, StringEnum}

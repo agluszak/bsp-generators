@@ -1,7 +1,8 @@
 package bsp.codegen.docs
 
-import bsp.codegen._
-import bsp.codegen.ir.Hint.{Documentation, Deprecated}
+import bsp.codegen.Lines.fromToLines
+import bsp.codegen.{Lines, ProtocolVersionLoader}
+import bsp.codegen.ir.Hint.{Deprecated, Documentation}
 import bsp.codegen.ir.JsonRPCMethodType.{Notification, Request}
 import bsp.codegen.ir.{Def, Hint, Operation, PolymorphicDataKind}
 import cats.syntax.all._
@@ -27,7 +28,7 @@ object MarkdownRenderer {
 
 class MarkdownRenderer private (tree: DocTree, visited: MSet[ShapeId], protocolVersion: String) {
   import bsp.codegen.Settings.typescript
-  import dsl._
+  import bsp.codegen.dsl._
 
   val tsRenderer = new TypescriptRenderer
 

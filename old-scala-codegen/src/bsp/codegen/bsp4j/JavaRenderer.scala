@@ -1,6 +1,6 @@
 package bsp.codegen.bsp4j
 
-import bsp.codegen._
+import bsp.codegen.{CodegenFile, Lines}
 import bsp.codegen.dsl.{block, empty, lines, newline}
 import bsp.codegen.ir.Def._
 import bsp.codegen.ir.EnumType.{IntEnum, StringEnum}
@@ -67,7 +67,7 @@ class JavaRenderer(basepkg: String, definitions: List[Def], version: String) {
       renderImports(fields),
       newline,
       "@JsonRpcData",
-      block(s"class ${shapeId.getName()}")(
+      block(s"class ${shapeId.getName}")(
         lines(fields.map(renderJavaField)),
         newline, {
           val params = requiredFields.map(renderParam).mkString(", ")
@@ -78,7 +78,7 @@ class JavaRenderer(basepkg: String, definitions: List[Def], version: String) {
       newline
     )
 
-    val fileName = shapeId.getName() + ".xtend"
+    val fileName = shapeId.getName + ".xtend"
     CodegenFile(baseRelPath / fileName, allLines.render)
   }
 
