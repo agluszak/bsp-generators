@@ -22,6 +22,12 @@ jobs:
       - name: Generate bsp4rs
         run: bazel run :generate-bsp4rs
 
+      - name: Generate bsp4s
+        run: bazel run :generate-bsp4s
+
+      - name: Generate bsp4j
+        run: bazel run :generate-bsp4j
+
       - name: Build
         run: bazel build //...
 
@@ -32,10 +38,12 @@ jobs:
           files: |
             **/*.kt
             **/*.rs
+            **/*.scala
+            **/*.java
 
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
           echo "Detected changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
-          echo "Make sure to run 'bazel run :generate-bsp4kt' before pushing."
+          echo "Make sure to run 'bazel run :generate-bsp4{j,kt,rs,s}' before pushing."
           exit 1
