@@ -1,11 +1,11 @@
 package bsp.codegen.docs
 
-import bsp.codegen.ModelLoader
 import bsp.codegen.ir.SmithyToIR
+import org.jetbrains.bsp.generators.Loader
 
 object Codegen {
   def docs(namespace: String): String = {
-    val model = ModelLoader.loadModel()
+    val model = Loader.INSTANCE.getModel
     val docTree = new SmithyToIR(model).docTree(namespace)
     MarkdownRenderer.render(docTree)
   }

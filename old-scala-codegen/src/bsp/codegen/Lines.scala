@@ -13,7 +13,7 @@ object Settings {
 abstract class Lines(implicit val settings: RenderSettings) { self =>
   def get: List[String]
 
-  def render = get.mkString(System.lineSeparator())
+  def render: String = get.mkString(System.lineSeparator())
 
   def map(f: String => String) = Lines(get.map(f))
 

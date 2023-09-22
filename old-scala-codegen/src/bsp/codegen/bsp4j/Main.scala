@@ -1,19 +1,37 @@
 package bsp.codegen.bsp4j
 
-import bsp.codegen.bsp4j.Codegen.run
+import scala.jdk.CollectionConverters._
 import bsp.codegen.ir.SmithyToIR
-import bsp.codegen.{CodegenFile, ExtensionLoader, FilesGenerator, ModelLoader, ProtocolVersionLoader}
+import org.jetbrains.bsp.generators.{FilesGenerator, Loader}
 
-object Codegen {
-  def run(): List[CodegenFile] = {
-    val model = ModelLoader.loadModel()
-    val namespaces = ExtensionLoader.namespaces()
+import java.util
+import java.io.File
+import java.nio.file.Path
+
+object Main {
+  def main(args: Array[String]): Unit = {
+    if (args.length != 3) {
+      println("Usage: bsp4s <name> <output directory> <generator script path>")
+      return
+    }
+
+    val model = Loader.INSTANCE.getModel
+    val namespaces = Loader.INSTANCE.getNamespaces.asScala.toList
     val ir = new SmithyToIR(model)
     val definitions = namespaces.flatMap(ir.definitions)
-    val version = ProtocolVersionLoader.version()
+    val version = Loader.INSTANCE.getProtocolVersion
     val renderer = new JavaRenderer("ch.epfl.scala.bsp4j", definitions, version)
-    renderer.render()
+
+    val codegenFiles = renderer.render().asJava
+
+    val name = args(0)
+    val output = Path.of(args(1))
+    val generatorScript = new File(args(2))
+
+    val additionalCommands = List().asJava
+
+    new FilesGenerator(name, output, generatorScript, codegenFiles, additionalCommands).run()
+
   }
 }
 
-object Main extends FilesGenerator(Codegen.run()) {}

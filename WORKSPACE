@@ -122,6 +122,8 @@ maven_install(
         "com.lihaoyi:os-lib_2.13:0.9.1",
         "com.monovore:decline_2.13:2.4.1",
         "org.typelevel:cats-core_2.13:2.9.0",
+        "org.eclipse.xtend:org.eclipse.xtend.core:2.32.0",
+        "org.eclipse.xtend:org.eclipse.xtend.lib:2.32.0",
 
         # idk why but for scala dependencies we have to declare transitive dependencies explicitly
         "org.typelevel:cats-kernel_2.13:2.9.0",

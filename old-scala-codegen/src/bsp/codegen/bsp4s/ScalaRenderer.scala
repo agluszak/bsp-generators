@@ -1,6 +1,6 @@
 package bsp.codegen.bsp4s
 
-import bsp.codegen.{CodegenFile, Lines}
+import bsp.codegen.Lines
 import bsp.codegen.dsl.{block, empty, lines, newline, paren}
 import bsp.codegen.ir.Def._
 import bsp.codegen.ir.EnumType.{IntEnum, StringEnum}
@@ -9,20 +9,23 @@ import bsp.codegen.ir.Type._
 import bsp.codegen.ir._
 import bsp.codegen.ir.Hint.{Deprecated, Documentation}
 import cats.implicits.toFoldableOps
+import org.jetbrains.bsp.generators.CodegenFile
 import os.RelPath
 import software.amazon.smithy.model.shapes.ShapeId
+
+import java.nio.file.Path
 
 class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
   import bsp.codegen.Settings.scala
 
-  val baseRelPath: RelPath = os.rel / basepkg.split('.')
+  val baseRelPath: Path = Path.of(basepkg.replace(".", "/"))
 
   def render(): List[CodegenFile] = {
     List(renderEndpoints(), renderDefinitions())
   }
 
   def renderDefinitions(): CodegenFile = {
-    val filePath = baseRelPath / "Bsp.scala"
+    val filePath = baseRelPath.resolve("Bsp.scala")
 
     val renderedDefinitions = lines(definitions.map {
       case Alias(_, _, _)                   => Lines.empty
@@ -79,11 +82,11 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
       renderedDefinitions
     )
 
-    CodegenFile(filePath, contents.render)
+    new CodegenFile(filePath, contents.render)
   }
 
   def renderEndpoints(): CodegenFile = {
-    val endpointsPath = baseRelPath / "endpoints" / "Endpoints.scala"
+    val endpointsPath = baseRelPath.resolve("endpoints").resolve("Endpoints.scala")
 
     val operations = definitions.collect { case Service(shapeId, operations, _) =>
       operations
@@ -102,7 +105,7 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
       renderedOperations
     )
 
-    CodegenFile(endpointsPath, contents.render)
+    new CodegenFile(endpointsPath, contents.render)
 
   }
 
@@ -262,7 +265,7 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
 
   def renderPrimitive(prim: Primitive, shapeId: ShapeId): String = {
     // Special handling for URI
-    if (shapeId == ShapeId.fromParts("old-scala-codegen/src/bsp", "URI")) {
+    if (shapeId == ShapeId.fromParts("bsp", "URI")) {
       "Uri"
     } else
       prim match {
