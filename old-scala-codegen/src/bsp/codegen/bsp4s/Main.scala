@@ -31,6 +31,8 @@ object Main {
     val output = Path.of(args(1))
     val generatorScript = new File(args(2))
 
-    new FilesGenerator(name, output, generatorScript, codegenFiles, new util.ArrayList[String]()).writeScript()
+    val generator = new FilesGenerator(name, output, generatorScript, codegenFiles, new util.ArrayList[String]())
+    generator.generateFiles()
+    generator.writeScript()
   }
 }
