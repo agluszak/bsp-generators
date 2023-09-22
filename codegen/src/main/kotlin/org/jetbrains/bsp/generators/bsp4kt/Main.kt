@@ -26,6 +26,6 @@ object Main {
 
         val codegenFiles = renderer.render()
 
-        FilesGenerator(name, output, generatorScript, codegenFiles).run()
+        FilesGenerator(name, output, generatorScript, codegenFiles).writeScript()
     }
 }

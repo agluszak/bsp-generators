@@ -120,14 +120,28 @@ maven_install(
         # scala
         "org.scala-lang.modules:scala-collection-compat_2.13:2.11.0",
         "com.lihaoyi:os-lib_2.13:0.9.1",
+        "com.lihaoyi:geny_2.13:1.0.0",
         "com.monovore:decline_2.13:2.4.1",
         "org.typelevel:cats-core_2.13:2.9.0",
-        "org.eclipse.xtend:org.eclipse.xtend.core:2.32.0",
-        "org.eclipse.xtend:org.eclipse.xtend.lib:2.32.0",
-
-        # idk why but for scala dependencies we have to declare transitive dependencies explicitly
         "org.typelevel:cats-kernel_2.13:2.9.0",
-        "com.lihaoyi:geny_2.13:1.0.0",
+
+        # scala runtime libs
+        "com.github.plokhotnyuk.jsoniter-scala:jsoniter-scala-core_2.13:2.23.2",
+        "com.github.plokhotnyuk.jsoniter-scala:jsoniter-scala-macros_2.13:2.23.2",
+        "me.vican.jorge:jsonrpc4s_2.13:0.1.0",
+
+        # lsp4j 21.1 causes "b = new (this);" bug (missing ToStringBuilder)
+        "org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1",
+        "org.eclipse.lsp4j:org.eclipse.lsp4j.generator:0.20.1",
+        "org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1",
+
+        # lsp4j deps versions must be aligned with lsp4j version
+        "org.eclipse.xtend:org.eclipse.xtend.core:2.28.0",
+        "org.eclipse.xtend:org.eclipse.xtend.lib:2.28.0",
+        "org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.28.0",
+        "com.google.guava:guava:30.1.1-jre",
+        "com.google.inject:guice:7.0.0",
+
     ],
     fetch_sources = True,
     repositories = [

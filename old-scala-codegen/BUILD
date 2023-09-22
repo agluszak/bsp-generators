@@ -3,7 +3,7 @@ load("@io_bazel_rules_scala//scala:scala.bzl", "scala_library")
 scala_library(
     name = "old-codegen",
     srcs = glob(["**/*.scala"]),
-    resources = ["@//spec"] + glob(["resources/**/*"]),
+    resources = glob(["resources/**/*"]), # "@//spec" is not here because a copy is already in the new codegen
     visibility = ["//visibility:public"],
     deps = [
         "@//spec-traits",
@@ -16,6 +16,15 @@ scala_library(
         "@maven//:com_lihaoyi_geny_2_13",
         "@maven//:com_monovore_decline_2_13",
         "@maven//:org_typelevel_cats_core_2_13",
-        "@maven//:org_typelevel_cats_kernel_2_13"
+        "@maven//:org_typelevel_cats_kernel_2_13",
+        # xtend deps
+        "@maven//:com_google_guava_guava",
+        "@maven//:com_google_inject_guice",
+        "@maven//:org_eclipse_xtend_org_eclipse_xtend_lib",
+        "@maven//:org_eclipse_xtend_org_eclipse_xtend_core",
+        "@maven//:org_eclipse_xtext_org_eclipse_xtext_xbase_lib",
+        "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j",
+        "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_jsonrpc",
+        "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_generator",
     ],
 )
