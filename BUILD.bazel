@@ -1,7 +1,18 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_compiler_plugin")
 load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary")
+load("@rules_multirun//:defs.bzl", "multirun")
 load("//rules/generator:generator.bzl", "library_generator")
+
+multirun(
+    name = "generate",
+    commands = [
+        "//:generate-bsp4kt_command",
+        "//:generate-bsp4s_command",
+        "//:generate-bsp4j_command",
+        "//:generate-bsp4rs_command",
+    ],
+)
 
 kt_compiler_plugin(
     name = "serialization_plugin",

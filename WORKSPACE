@@ -184,3 +184,10 @@ crates_repository(
 load("@crate_index//:defs.bzl", "crate_repositories")
 
 crate_repositories()
+
+http_archive(
+    name = "rules_multirun",
+    sha256 = "9cd384e42b2da00104f0e18f25e66285aa21f64b573c667638a7a213206885ab",
+    strip_prefix = "rules_multirun-0.6.1",
+    url = "https://github.com/keith/rules_multirun/archive/refs/tags/0.6.1.tar.gz",
+)
