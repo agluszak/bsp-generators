@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
+use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -14,6 +15,12 @@ pub struct RunParams {
     /// Optional arguments to the executed application.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub arguments: Vec<String>,
+    /// Optional environment variables to set before running the application.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub environment_variables: EnvironmentVariables,
+    /// Optional working directory
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<URI>,
     /// Language-specific metadata for this execution.
     /// See ScalaMainClass as an example.
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
