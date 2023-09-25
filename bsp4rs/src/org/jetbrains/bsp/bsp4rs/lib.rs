@@ -1,6 +1,7 @@
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
+pub mod bazel;
 pub mod bsp;
 pub mod cargo;
 pub mod cpp;
@@ -12,6 +13,7 @@ pub mod rust;
 pub mod sbt;
 pub mod scala;
 
+use bazel::*;
 use bsp::*;
 use cargo::*;
 use cpp::*;

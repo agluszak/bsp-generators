@@ -593,6 +593,16 @@ object JvmTestEnvironmentResult {
   implicit val codec: JsonValueCodec[JvmTestEnvironmentResult] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
+final case class LibraryItem (
+  id: BuildTargetIdentifier,
+  dependencies: List[BuildTargetIdentifier],
+  jars: List[String],
+)
+
+object LibraryItem {
+  implicit val codec: JsonValueCodec[LibraryItem] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
 final case class Location (
   uri: Uri,
   range: Range,
@@ -1563,4 +1573,12 @@ final case class WorkspaceBuildTargetsResult (
 
 object WorkspaceBuildTargetsResult {
   implicit val codec: JsonValueCodec[WorkspaceBuildTargetsResult] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
+final case class WorkspaceLibrariesResult (
+  libraries: List[LibraryItem],
+)
+
+object WorkspaceLibrariesResult {
+  implicit val codec: JsonValueCodec[WorkspaceLibrariesResult] = JsonCodecMaker.makeWithRequiredCollectionFields
 }

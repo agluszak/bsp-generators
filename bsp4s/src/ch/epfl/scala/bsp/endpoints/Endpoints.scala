@@ -50,6 +50,7 @@ trait BuildTarget {
 }
 object Workspace extends Workspace
 trait Workspace {
+  object libraries extends Endpoint[Unit, WorkspaceLibrariesResult]("workspace/libraries")
   object buildTargets extends Endpoint[Unit, WorkspaceBuildTargetsResult]("workspace/buildTargets")
   object reload extends Endpoint[Unit, Unit]("workspace/reload")
   object cargoFeaturesState extends Endpoint[Unit, CargoFeaturesStateResult]("workspace/cargoFeaturesState")
