@@ -4,3 +4,4 @@ projectview.bazelproject
 .bazelbsp
 bazel-*
 bsp4rs/target
+.aspect
