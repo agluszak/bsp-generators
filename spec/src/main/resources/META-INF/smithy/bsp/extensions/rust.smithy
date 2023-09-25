@@ -6,12 +6,11 @@ use bsp#BuildTargetData
 use bsp#BuildTargetIdentifiers
 use bsp#EnvironmentVariables
 use bsp#URI
-use bsp.cargo#FeatureDependencyGraph
-use bsp.cargo#Features
 use traits#enumKind
 use traits#dataKind
 use traits#jsonRPC
 use traits#jsonRequest
+use traits#set
 
 @jsonRPC
 service RustBuildServer {
@@ -206,6 +205,20 @@ list RustCfgValues {
     member: String
 }
 
+string Feature
+
+@set
+list Features {
+    member: Feature
+}
+
+/// The feature dependency graph is a mapping between
+/// feature and the features it turns on
+map FeatureDependencyGraph {
+    key: Feature,
+    value: Features
+}
+
 map RustRawDependencies {
     /// Package id
     key: String
@@ -282,7 +295,6 @@ enum RustDepKind {
     BUILD = "build"
 }
 
-// TODO to be deleted once "Add cargo extension" PR is merged that defines this enum
 @enumKind("open")
 enum RustEdition {
     E2015 = "2015"

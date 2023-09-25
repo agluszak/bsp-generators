@@ -1,5 +1,18 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_compiler_plugin")
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary")
+load("@rules_multirun//:defs.bzl", "multirun")
+load("//rules/generator:generator.bzl", "library_generator")
+
+multirun(
+    name = "generate",
+    commands = [
+        "//:generate-bsp4kt_command",
+        "//:generate-bsp4s_command",
+        "//:generate-bsp4j_command",
+        "//:generate-bsp4rs_command",
+    ],
+)
 
 kt_compiler_plugin(
     name = "serialization_plugin",
@@ -27,6 +40,12 @@ alias(
     visibility = ["//visibility:public"],
 )
 
+alias(
+    name = "old-codegen",
+    actual = "//old-scala-codegen:old-codegen",
+    visibility = ["//visibility:public"],
+)
+
 java_binary(
     name = "bsp4kt-generator",
     main_class = "org.jetbrains.bsp.generators.bsp4kt.Main",
@@ -36,12 +55,42 @@ java_binary(
     ],
 )
 
-load("//rules/generator:generator.bzl", "library_generator")
-
 library_generator(
     name = "generate-bsp4kt",
     gen_tool = ":bsp4kt-generator",
     library_name = "bsp4kt",
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
+    name = "bsp4s-generator",
+    main_class = "bsp.codegen.bsp4s.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":old-codegen",
+    ],
+)
+
+library_generator(
+    name = "generate-bsp4s",
+    gen_tool = ":bsp4s-generator",
+    library_name = "bsp4s",
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
+    name = "bsp4j-generator",
+    main_class = "bsp.codegen.bsp4j.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        ":old-codegen",
+    ],
+)
+
+library_generator(
+    name = "generate-bsp4j",
+    gen_tool = ":bsp4j-generator",
+    library_name = "bsp4j",
     visibility = ["//visibility:public"],
 )
 

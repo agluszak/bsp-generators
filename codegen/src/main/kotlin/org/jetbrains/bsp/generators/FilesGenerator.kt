@@ -11,12 +11,20 @@ class FilesGenerator(
     private val codegenFiles: List<CodegenFile>,
     private val languageSpecificActions: List<String> = emptyList()
 ) {
-    fun run() {
+    
+    fun generateFiles() {
         if (codegenFiles.isEmpty()) {
-            System.err.println("No files to generate")
-            return
+            throw RuntimeException("No files to generate")
         }
 
+        codegenFiles.forEach {
+            val fullPath = output.resolve(it.path)
+            fullPath.parent.toFile().mkdirs()
+            fullPath.toFile().writeText(it.contents)
+        }
+    }
+    
+    fun writeScript() {
         val updateScript = FileWriter(generatorScript)
         updateScript.use { writer ->
             writer.appendLine("#!/bin/bash")
@@ -26,8 +34,6 @@ class FilesGenerator(
             writer.appendLine("mkdir -p $targetPath")
             codegenFiles.forEach {
                 val fullPath = output.resolve(it.path)
-                fullPath.parent.toFile().mkdirs()
-                fullPath.toFile().writeText(it.contents)
                 writer.appendLine("mkdir -p $targetPath/${it.path.parent}")
                 writer.appendLine("cp \$BUILD_WORKSPACE_DIRECTORY/${fullPath} $targetPath/${it.path}")
                 writer.appendLine("chmod u+rw $targetPath/${it.path}")

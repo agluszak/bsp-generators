@@ -1,3 +1,5 @@
+mod feature;
+mod feature_dependency_graph;
 mod rust_build_server;
 mod rust_build_target;
 mod rust_cfg_options;
@@ -19,6 +21,8 @@ mod rust_workspace_params;
 mod rust_workspace_result;
 mod rustc_info;
 
+pub use feature::*;
+pub use feature_dependency_graph::*;
 pub use rust_build_server::*;
 pub use rust_build_target::*;
 pub use rust_cfg_options::*;
