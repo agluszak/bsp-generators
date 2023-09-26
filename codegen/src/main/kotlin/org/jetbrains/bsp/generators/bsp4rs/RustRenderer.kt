@@ -44,7 +44,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Def.Service -> renderService(def)
         is Def.Alias -> renderAlias(def)
         is Def.DataKinds -> renderDataKinds(def)
-        is Def.UntaggedUnion -> TODO()
+        is Def.UntaggedUnion -> renderUntaggedUnion(def)
     }
 
     private fun generateModFile(modulePath: Path, filesNames: List<String>): CodegenFile {
@@ -86,6 +86,13 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     fun makeName(name: String): String =
         renames[name] ?: name
+
+    fun renderVariantsEnum(name: String, values: List<Pair<String, String>>): CodeBlock =
+        rustCode {
+            block("pub enum $name") {
+                lines(values.map { "${it.first}(${it.second})" }, ",", ",")
+            }
+        }
 
     fun renderPreDef(def: Def, hints: Boolean = true, untagged: Boolean = false): CodeBlock =
         rustCode {

@@ -13,7 +13,7 @@ class SerializationRenderer {
     private var reprSet: Set<ReprOption> = emptySet()
 
     fun renderForDef(def: Def, untagged: Boolean = false): CodeBlock {
-        prepareSerdeSet(def.hints)
+        prepareSerdeSet(def.hints, untagged)
         serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
 
         reprSet = setOf()
@@ -34,10 +34,15 @@ class SerializationRenderer {
         }
     }
 
-    private fun prepareSerdeSet(hints: List<Hint>) {
-        val rename = hints.find { it is Hint.JsonRename }
+    private fun prepareSerdeSet(hints: List<Hint>, untagged: Boolean = false) {
+        serdeSet = emptySet()
 
-        serdeSet = if (rename is Hint.JsonRename) setOf(SerdeOption.Rename(""""${rename.name}"""")) else emptySet()
+        val rename = hints.find { it is Hint.JsonRename }
+        if (rename is Hint.JsonRename)
+            serdeSet = serdeSet.plus(SerdeOption.Rename(""""${rename.name}""""))
+
+        if (untagged)
+            serdeSet = serdeSet.plus(SerdeOption.Untagged)
     }
 
     private fun defToSerdeList(def: Def, untagged: Boolean): Set<SerdeOption> = when (def) {

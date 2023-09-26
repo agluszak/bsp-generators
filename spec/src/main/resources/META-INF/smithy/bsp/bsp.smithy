@@ -8,6 +8,7 @@ use traits#enumKind
 use traits#jsonNotification
 use traits#jsonRPC
 use traits#jsonRequest
+use traits#untaggedUnion
 
 // TODO: add cancel notif
 // TODO: add WorkspaceLibraries endpoint
@@ -776,6 +777,7 @@ intEnum DiagnosticSeverity {
     HINT = 4
 }
 
+@untaggedUnion
 union Code {
     string: String
     integer: Integer

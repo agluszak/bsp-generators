@@ -18,10 +18,10 @@ fun RustRenderer.renderDataKinds(def: Def.DataKinds): CodeBlock {
         -"#[allow(clippy::large_enum_variant)]"
         newline()
         include(renderPreDef(def, hints = false))
-        include(renderDataKindsEnum(namedName, dataKinds))
+        include(renderVariantsEnum(namedName, dataKinds))
         newline()
         include(renderPreDef(def, untagged = true))
-        include(renderDataKindsEnum(def.name, wrapperEnum))
+        include(renderVariantsEnum(def.name, wrapperEnum))
         newline()
         include(renderDataKindsImpl(def.name, namedName, dataKinds))
     }
@@ -33,13 +33,6 @@ private fun RustRenderer.makeDataKindsList(irKinds: List<PolymorphicDataKind>): 
         val dataType = renderType(kind.shape)
 
         Pair(name, dataType)
-    }
-
-private fun renderDataKindsEnum(name: String, values: List<Pair<String, String>>): CodeBlock =
-    rustCode {
-        block("pub enum $name") {
-            lines(values.map { "${it.first}(${it.second})" }, ",", ",")
-        }
     }
 
 private fun renderDataKindsImpl(
