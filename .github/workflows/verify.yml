@@ -10,13 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Mount bazel cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/bazel
-            ~/.cache/coursier
-          key: bazel
 
       - name: Generate
         run: bazel run :generate
@@ -33,6 +26,7 @@ jobs:
             **/*.rs
             **/*.scala
             **/*.java
+            **/*.md
 
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'
