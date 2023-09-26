@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class SourceItem(
-  val uri: String,
+  val uri: URI,
   val kind: SourceItemKind,
   val generated: Boolean
 )

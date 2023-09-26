@@ -8,5 +8,5 @@ import kotlinx.serialization.json.JsonElement
 data class SourcesItem(
   val target: BuildTargetIdentifier,
   val sources: List<SourceItem>,
-  val roots: List<String>? = null
+  val roots: List<URI>? = null
 )

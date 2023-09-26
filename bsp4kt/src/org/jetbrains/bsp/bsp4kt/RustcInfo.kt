@@ -6,8 +6,8 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class RustcInfo(
-  val sysrootPath: String,
-  val srcSysrootPath: String,
+  val sysrootPath: URI,
+  val srcSysrootPath: URI,
   val version: String,
   val host: String
 )

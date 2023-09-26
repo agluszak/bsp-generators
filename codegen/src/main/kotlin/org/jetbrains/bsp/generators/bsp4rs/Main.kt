@@ -2,7 +2,10 @@ package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.FilesGenerator
 import org.jetbrains.bsp.generators.Loader
+import org.jetbrains.bsp.generators.ir.DefinitionLevel
+import org.jetbrains.bsp.generators.ir.IrConfig
 import org.jetbrains.bsp.generators.ir.SmithyToIr
+import org.jetbrains.bsp.generators.ir.TypeAliasing
 import java.io.File
 import kotlin.io.path.Path
 
@@ -19,7 +22,13 @@ object Main {
         val generatorScript = File(args[2])
         val model = Loader.model
         val namespaces = Loader.namespaces
-        val ir = SmithyToIr(model)
+        val irConfig = IrConfig(
+            strings = TypeAliasing.Aliased,
+            maps = TypeAliasing.Aliased,
+            dataWithKind = TypeAliasing.Aliased,
+            openEnum = DefinitionLevel.AsDef
+        )
+        val ir = SmithyToIr(model, irConfig)
         val definitions = namespaces.map { Module(it.removePrefix("bsp."), ir.definitions(it)) }
         val version = Loader.protocolVersion
         val renderer = RustRenderer("org.jetbrains.bsp.bsp4rs", definitions, version)

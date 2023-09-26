@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class CompileReport(
   val target: BuildTargetIdentifier,
-  val originId: String? = null,
+  val originId: Identifier? = null,
   val errors: Int,
   val warnings: Int,
   val time: Long? = null,

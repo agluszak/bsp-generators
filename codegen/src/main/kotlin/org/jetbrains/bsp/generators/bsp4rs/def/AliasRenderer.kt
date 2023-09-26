@@ -8,8 +8,6 @@ import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Type
 
 fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
-    if (!isAliasRenderable(def.shapeId, def.aliasedType)) return null
-
     val name = def.name
     val type = this.renderType(def.aliasedType)
 
@@ -20,7 +18,7 @@ fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
         include(renderDerefForAlias(name, type))
         newline()
         include(renderFromForAlias(type, name, ""))
-        if (def.aliasedType is Type.String) {
+        if (def.aliasedType is Type.TString) {
             newline()
             include(renderFromForAlias("&str", name, ".to_string()"))
         }

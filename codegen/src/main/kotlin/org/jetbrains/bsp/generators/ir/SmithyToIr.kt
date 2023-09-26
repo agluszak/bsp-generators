@@ -32,7 +32,7 @@ import traits.SetTrait
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
-class SmithyToIr(val model: Model) {
+class SmithyToIr(val model: Model, val config: IrConfig) {
 
     data class PolymorphicData(val kind: String, val shapeId: ShapeId)
 
@@ -100,8 +100,8 @@ class SmithyToIr(val model: Model) {
             }
 
             return maybeMethod?.let { (methodName, methodType) ->
-                val inputType = getType(op.input.getOrNull()) ?: IrShape.Unit
-                val outputType = getType(op.output.getOrNull()) ?: IrShape.Unit
+                val inputType = getType(op.input.getOrNull()) ?: Type.TUnit
+                val outputType = getType(op.output.getOrNull()) ?: Type.TUnit
                 val hints = getHints(op)
                 Operation(op.id, inputType, outputType, methodType, methodName, hints)
             }
@@ -123,7 +123,7 @@ class SmithyToIr(val model: Model) {
             }
         }
 
-        fun getType(shapeId: ShapeId?): IrShape? = shapeId?.let { model.expectShape(it).accept(toIrShapeVisitor) }
+        fun getType(shapeId: ShapeId?): Type? = shapeId?.let { model.expectShape(it).accept(toTypeVisitor) }
 
         fun dataKindShapeId(dataTypeShapeId: ShapeId): ShapeId =
             ShapeId.fromParts(dataTypeShapeId.namespace, dataTypeShapeId.name + "Kind")
@@ -137,16 +137,16 @@ class SmithyToIr(val model: Model) {
             val fields = shape.members().mapNotNull { toField(it) }
 
             fun fieldIsData(field: Field): Boolean =
-                field.name == "data" && field.type.type == Type.Json
+                field.name == "data" && field.type == Type.TJson
 
             fun makeDiscriminatorField(dataField: Field): Field {
                 val doc =
                     "Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified."
                 val hints = listOf(Hint.Documentation(doc))
-                if (dataField.type.type != Type.Json) {
+                if (dataField.type != Type.TJson) {
                     throw RuntimeException("Expected document type")
                 }
-                return Field("dataKind", IrShape(dataKindShapeId(dataField.type.shapeId), Type.String), false, hints)
+                return Field("dataKind", Type.TString, false, hints)
             }
 
             fun insertDiscriminator(fields: List<Field>): List<Field> {
@@ -224,74 +224,83 @@ class SmithyToIr(val model: Model) {
 
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
-            val irShape = shape.accept(toIrShapeVisitor)
-
-            return listOfNotNull(irShape?.let {
-                Def.Alias(shape.id, it.type, hints)
-            })
+            return when (shape) {
+                is StringShape -> listOf(Def.Alias(shape.getId(), Type.TString, hints))
+                is MapShape -> listOfNotNull(pureMapType(shape)?.let { Def.Alias(shape.getId(), it, hints) })
+                else -> emptyList()
+            }
         }
 
-        override fun booleanShape(shape: BooleanShape): List<Def> = typeShape(shape)
+        override fun stringShape(shape: StringShape): List<Def> =
+            if (config.strings == TypeAliasing.Aliased) typeShape(shape) else emptyList()
 
-        override fun integerShape(shape: IntegerShape): List<Def> = typeShape(shape)
-
-        override fun longShape(shape: LongShape): List<Def> = typeShape(shape)
-
-        override fun stringShape(shape: StringShape): List<Def> = typeShape(shape)
-
-        override fun listShape(shape: ListShape): List<Def> = typeShape(shape)
-
-        override fun mapShape(shape: MapShape): List<Def> = typeShape(shape)
+        override fun mapShape(shape: MapShape): List<Def> =
+            if (config.maps == TypeAliasing.Aliased) typeShape(shape) else emptyList()
 
     }
 
-    val toIrShapeVisitor = object : ShapeVisitor.Default<IrShape?>() {
-        override fun getDefault(shape: Shape): IrShape? = null
+    fun pureMapType(shape: MapShape): Type? = shape.key.accept(toTypeVisitor)?.let { key ->
+        shape.value.accept(toTypeVisitor)?.let { value ->
+            Type.TMap(key, value)
+        }
+    }
 
-        override fun booleanShape(shape: BooleanShape): IrShape = IrShape(shape.id, Type.Bool)
+    val toTypeVisitor = object : ShapeVisitor.Default<Type?>() {
+        override fun getDefault(shape: Shape): Type? = null
 
-        override fun integerShape(shape: IntegerShape): IrShape = IrShape(shape.id, Type.Int)
+        override fun booleanShape(shape: BooleanShape): Type = Type.TBool
 
-        override fun longShape(shape: LongShape): IrShape = IrShape(shape.id, Type.Long)
+        override fun integerShape(shape: IntegerShape): Type = Type.TInt
 
-        override fun stringShape(shape: StringShape): IrShape = IrShape(shape.id, Type.String)
+        override fun longShape(shape: LongShape): Type = Type.TLong
 
-        override fun documentShape(shape: DocumentShape): IrShape = IrShape(shape.id, Type.Json)
+        override fun stringShape(shape: StringShape): Type =
+            if (config.strings == TypeAliasing.Aliased && aliased(shape.id))
+                Type.TRef(shape.id)
+            else
+                Type.TString
 
-        override fun listShape(shape: ListShape): IrShape? {
+        override fun documentShape(shape: DocumentShape): Type =
+            if (shape.hasTrait(DataTrait::class.java) && config.dataWithKind == TypeAliasing.Aliased)
+                Type.TRef(shape.id)
+            else
+                Type.TJson
+
+        override fun listShape(shape: ListShape): Type? {
             return shape.member.accept(this)?.let { memberType ->
-                if (shape.hasTrait(SetTrait::class.java)) IrShape(shape.id, Type.Set(memberType))
-                else IrShape(shape.id, Type.List(memberType))
+                if (shape.hasTrait(SetTrait::class.java)) Type.TSet(memberType)
+                else Type.TList(memberType)
             }
         }
 
-        override fun mapShape(shape: MapShape): IrShape? {
-            return shape.key.accept(this)?.let { key ->
-                shape.value.accept(this)?.let { value ->
-                    IrShape(shape.id, Type.Map(key, value))
-                }
-            }
+        override fun mapShape(shape: MapShape): Type? {
+            return if (config.maps == TypeAliasing.Aliased) Type.TRef(shape.id) else pureMapType(shape)
         }
 
-        override fun structureShape(shape: StructureShape): IrShape = IrShape(shape.id, Type.Ref)
+        override fun structureShape(shape: StructureShape): Type = Type.TRef(shape.id)
 
-        fun enumUniversal(shape: Shape, openType: Type): IrShape {
+        fun enumUniversal(shape: Shape, openType: Type): Type {
             val enumKind = shape.expectTrait(EnumKindTrait::class.java).enumKind
             return when (enumKind) {
-                EnumKindTrait.EnumKind.OPEN -> IrShape(shape.id, openType)
-                EnumKindTrait.EnumKind.CLOSED -> IrShape(shape.id, Type.Ref)
+                EnumKindTrait.EnumKind.OPEN ->
+                    if (config.openEnum == DefinitionLevel.AsType) openType
+                    else Type.TRef(shape.id)
+
+                EnumKindTrait.EnumKind.CLOSED -> Type.TRef(shape.id)
             }
         }
 
-        override fun enumShape(shape: EnumShape): IrShape {
-            return enumUniversal(shape, Type.String)
+        override fun enumShape(shape: EnumShape): Type {
+            return enumUniversal(shape, Type.TString)
         }
 
-        override fun intEnumShape(shape: IntEnumShape): IrShape {
-            return enumUniversal(shape, Type.Int)
+        override fun intEnumShape(shape: IntEnumShape): Type {
+            return enumUniversal(shape, Type.TInt)
         }
 
-        override fun memberShape(shape: MemberShape): IrShape? = model.expectShape(shape.target).accept(this)
+        override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
+
+        fun aliased(shapeId: ShapeId): Boolean = shapeId.namespace.startsWith("bsp")
     }
 
     fun getHints(shape: Shape): List<Hint> {

@@ -8,7 +8,6 @@ import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
 import org.jetbrains.bsp.generators.ir.Type
@@ -132,17 +131,17 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun renderType(irShape: IrShape): String = when (val type = irShape.type) {
-        Type.Bool -> "Boolean"
-        Type.Int -> "Int"
-        Type.Json -> "JsonElement"
-        is Type.List -> "List<${renderType(type.member)}>"
-        Type.Long -> "Long"
-        is Type.Map -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
-        is Type.Ref -> irShape.shapeId.name
-        is Type.Set -> "Set<${renderType(type.member)}>"
-        Type.String -> "String"
-        Type.Unit -> "Unit"
+    fun renderType(type: Type): String = when (type) {
+        Type.TBool -> "Boolean"
+        Type.TInt -> "Int"
+        Type.TJson -> "JsonElement"
+        is Type.TList -> "List<${renderType(type.member)}>"
+        Type.TLong -> "Long"
+        is Type.TMap -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
+        is Type.TRef -> type.shapeId.name
+        is Type.TSet -> "Set<${renderType(type.member)}>"
+        Type.TString -> "String"
+        Type.TUnit -> "Unit"
     }
 
     fun renderOperation(op: Operation): CodeBlock {
@@ -155,7 +154,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             JsonRpcMethodType.Request -> "suspend "
         }
         val input = when (op.inputType) {
-            IrShape.Unit -> ""
+            Type.TUnit -> ""
             else -> "params: ${renderType(op.inputType)}"
         }
         val rpcMethod = op.jsonRpcMethod

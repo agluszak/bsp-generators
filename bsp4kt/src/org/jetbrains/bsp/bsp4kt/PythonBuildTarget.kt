@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class PythonBuildTarget(
   val version: String? = null,
-  val interpreter: String? = null
+  val interpreter: URI? = null
 )

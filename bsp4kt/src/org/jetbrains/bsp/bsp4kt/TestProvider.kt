@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TestProvider(
-  val languageIds: List<String>
+  val languageIds: List<LanguageId>
 )

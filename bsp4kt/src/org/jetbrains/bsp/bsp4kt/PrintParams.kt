@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class PrintParams(
-  val originId: String,
+  val originId: Identifier,
   val task: TaskId? = null,
   val message: String
 )

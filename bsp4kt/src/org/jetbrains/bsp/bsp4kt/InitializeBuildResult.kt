@@ -10,6 +10,5 @@ data class InitializeBuildResult(
   val version: String,
   val bspVersion: String,
   val capabilities: BuildServerCapabilities,
-  val dataKind: String? = null,
-  val data: JsonElement? = null
+  val data: InitializeBuildResultData? = null
 )

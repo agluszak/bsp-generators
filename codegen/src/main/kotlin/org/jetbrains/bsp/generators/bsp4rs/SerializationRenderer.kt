@@ -6,7 +6,6 @@ import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.Type
 
 class SerializationRenderer {
@@ -67,18 +66,16 @@ class SerializationRenderer {
     }
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
-        fun optionalToSerdeList(irShape: IrShape): SerdeOption = when (irShape.type) {
-            is Type.List -> SerdeOption.SkipVector
-            is Type.Map -> SerdeOption.SkipMap
-            is Type.Set -> SerdeOption.SkipSet
+        fun optionalToSerdeList(type: Type): SerdeOption = when (type) {
+            is Type.TList -> SerdeOption.SkipVector
+            is Type.TMap -> SerdeOption.SkipMap
+            is Type.TSet -> SerdeOption.SkipSet
             else -> SerdeOption.SkipOption
         }
 
         var serdeOpt = emptySet<SerdeOption>()
 
-        if (field.type.type is Type.Json && field.name == "data"
-            && field.type.shapeId.namespace.startsWith("bsp")
-        ) {
+        if (field.type is Type.TRef && field.name == "data") {
             serdeOpt = serdeOpt.plus(SerdeOption.Flatten)
         }
 

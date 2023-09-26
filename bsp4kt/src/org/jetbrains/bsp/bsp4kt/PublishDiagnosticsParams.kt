@@ -8,7 +8,7 @@ import kotlinx.serialization.json.JsonElement
 data class PublishDiagnosticsParams(
   val textDocument: TextDocumentIdentifier,
   val buildTarget: BuildTargetIdentifier,
-  val originId: String? = null,
+  val originId: RequestId? = null,
   val diagnostics: List<Diagnostic>,
   val reset: Boolean
 )

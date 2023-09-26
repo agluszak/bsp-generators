@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class SetCargoFeaturesParams(
   val packageId: String,
-  val features: Set<String>
+  val features: Set<Feature>
 )

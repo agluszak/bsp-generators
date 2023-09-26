@@ -7,10 +7,9 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class RunParams(
   val target: BuildTargetIdentifier,
-  val originId: String? = null,
+  val originId: Identifier? = null,
   val arguments: List<String>? = null,
-  val environmentVariables: Map<String, String>? = null,
-  val workingDirectory: String? = null,
-  val dataKind: String? = null,
-  val data: JsonElement? = null
+  val environmentVariables: EnvironmentVariables? = null,
+  val workingDirectory: URI? = null,
+  val data: RunParamsData? = null
 )

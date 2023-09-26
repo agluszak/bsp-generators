@@ -6,7 +6,7 @@ import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.IrShape
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 
 fun RustRenderer.renderStructure(def: Def.Structure): CodeBlock {
@@ -21,7 +21,7 @@ fun RustRenderer.renderStructure(def: Def.Structure): CodeBlock {
 }
 
 private fun RustRenderer.renderStructField(field: Field): CodeBlock {
-    if (field.name == "dataKind" && field.type != IrShape.String) {
+    if (field.name == "dataKind" && field.type != Type.TString) {
         return rustCode { }
     }
 

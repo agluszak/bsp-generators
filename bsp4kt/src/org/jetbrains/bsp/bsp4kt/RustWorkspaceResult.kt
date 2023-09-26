@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class RustWorkspaceResult(
   val packages: List<RustPackage>,
-  val rawDependencies: Map<String, List<RustRawDependency>>,
-  val dependencies: Map<String, List<RustDependency>>,
+  val rawDependencies: RustRawDependencies,
+  val dependencies: RustDependencies,
   val resolvedTargets: List<BuildTargetIdentifier>
 )

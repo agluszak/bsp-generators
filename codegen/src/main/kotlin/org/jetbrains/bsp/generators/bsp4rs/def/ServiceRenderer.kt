@@ -1,7 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import org.jetbrains.bsp.generators.bsp4rs.renderIrShapeType
+import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -38,10 +38,10 @@ private fun renderJsonRpcMethodType(type: JsonRpcMethodType): String =
     }
 
 private fun RustRenderer.renderOperationTraitProperties(op: Operation): CodeBlock {
-    val input = "type Params = ${renderIrShapeType(op.inputType)}"
+    val input = "type Params = ${renderType(op.inputType)}"
     val output = when (op.jsonRpcMethodType) {
         JsonRpcMethodType.Notification -> null
-        JsonRpcMethodType.Request -> "type Result = ${renderIrShapeType(op.outputType)}"
+        JsonRpcMethodType.Request -> "type Result = ${renderType(op.outputType)}"
     }
     val method = """const METHOD: &'static str = "${op.jsonRpcMethod}""""
 

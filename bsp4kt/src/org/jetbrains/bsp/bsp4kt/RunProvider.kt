@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class RunProvider(
-  val languageIds: List<String>
+  val languageIds: List<LanguageId>
 )

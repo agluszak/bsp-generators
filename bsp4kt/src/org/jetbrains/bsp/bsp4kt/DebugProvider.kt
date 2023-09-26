@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class DebugProvider(
-  val languageIds: List<String>
+  val languageIds: List<LanguageId>
 )

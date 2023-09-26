@@ -10,6 +10,5 @@ data class TestFinish(
   val message: String? = null,
   val status: TestStatus,
   val location: Location? = null,
-  val dataKind: String? = null,
-  val data: JsonElement? = null
+  val data: TestFinishData? = null
 )

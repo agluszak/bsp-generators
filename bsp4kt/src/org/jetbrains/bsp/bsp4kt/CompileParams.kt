@@ -7,6 +7,6 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class CompileParams(
   val targets: List<BuildTargetIdentifier>,
-  val originId: String? = null,
+  val originId: Identifier? = null,
   val arguments: List<String>? = null
 )

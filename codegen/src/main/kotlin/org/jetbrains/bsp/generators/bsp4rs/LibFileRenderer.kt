@@ -6,7 +6,7 @@ import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.IrShape
+import org.jetbrains.bsp.generators.ir.Type
 import software.amazon.smithy.model.shapes.ShapeId
 import kotlin.io.path.Path
 
@@ -54,8 +54,8 @@ private fun RustRenderer.renderOtherDataStruct(): CodeBlock {
     val def = Def.Structure(
         ShapeId.fromParts("bsp", "OtherData"),
         listOf(
-            Field("dataKind", IrShape.String, true, listOf()),
-            Field("data", IrShape.Json, true, listOf())
+            Field("dataKind", Type.TString, true, listOf()),
+            Field("data", Type.TJson, true, listOf())
         ),
         listOf()
     )

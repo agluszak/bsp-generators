@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class MavenDependencyModuleArtifact(
-  val uri: String,
+  val uri: URI,
   val classifier: String? = null
 )

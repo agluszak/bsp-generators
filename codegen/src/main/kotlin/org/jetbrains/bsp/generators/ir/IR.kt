@@ -8,6 +8,13 @@ sealed interface Def {
     val hints: List<Hint>
 
     data class Alias(override val shapeId: ShapeId, val aliasedType: Type, override val hints: List<Hint>) : Def
+
+    data class Service(
+        override val shapeId: ShapeId,
+        val operations: List<Operation>,
+        override val hints: List<Hint>
+    ) : Def
+
     data class Structure(
         override val shapeId: ShapeId,
         val fields: List<Field>,
@@ -28,12 +35,6 @@ sealed interface Def {
         override val hints: List<Hint>
     ) : Def
 
-    data class Service(
-        override val shapeId: ShapeId,
-        val operations: List<Operation>,
-        override val hints: List<Hint>
-    ) : Def
-
     data class DataKinds(
         override val shapeId: ShapeId,
         val kindsEnumId: ShapeId,
@@ -42,6 +43,24 @@ sealed interface Def {
     ) : Def
 }
 
+ sealed interface Type {
+     // primitive types
+     object TUnit : Type
+     object TBool : Type
+     object TString : Type
+     object TInt : Type
+     object TLong : Type
+     object TJson : Type
+
+     // collections
+     data class TSet(val member: Type) : Type
+     data class TList(val member: Type) : Type
+     data class TMap(val key: Type, val value: Type) : Type
+
+     // references
+     data class TRef(val shapeId: ShapeId) : Type
+ }
+
 sealed interface JsonRpcMethodType {
     object Request : JsonRpcMethodType
     object Notification : JsonRpcMethodType
@@ -49,8 +68,8 @@ sealed interface JsonRpcMethodType {
 
 data class Operation(
     val shapeId: ShapeId,
-    val inputType: IrShape,
-    val outputType: IrShape,
+    val inputType: Type,
+    val outputType: Type,
     val jsonRpcMethodType: JsonRpcMethodType,
     val jsonRpcMethod: String,
     val hints: List<Hint>
@@ -59,6 +78,13 @@ data class Operation(
         get() = shapeId.name
 }
 
+data class Field(
+    val name: String,
+    val type: Type,
+    val required: Boolean,
+    val hints: List<Hint>
+)
+
 sealed interface EnumType<A> {
     object IntEnum : EnumType<Int>
     object StringEnum : EnumType<String>
@@ -66,42 +92,9 @@ sealed interface EnumType<A> {
 
 data class EnumValue<A>(val name: String, val value: A, val hints: List<Hint>)
 
-sealed interface Type {
-    data class Set(val member: IrShape) : Type
-    data class List(val member: IrShape) : Type
-    data class Map(val key: IrShape, val value: IrShape) : Type
-    object Ref : Type
-
-    // Should be data objects
-    object Unit : Type
-    object Bool : Type
-    object String : Type
-    object Int : Type
-    object Long : Type
-    object Json : Type
-}
-
-data class IrShape(val shapeId: ShapeId, val type: Type) {
-    companion object {
-        val Unit: IrShape = IrShape(ShapeId.from("smithy.api#Unit"), Type.Unit)
-        val Bool: IrShape = IrShape(ShapeId.from("smithy.api#Boolean"), Type.Bool)
-        val String: IrShape = IrShape(ShapeId.from("smithy.api#String"), Type.String)
-        val Int: IrShape = IrShape(ShapeId.from("smithy.api#Integer"), Type.Int)
-        val Long: IrShape = IrShape(ShapeId.from("smithy.api#Long"), Type.Long)
-        val Json: IrShape = IrShape(ShapeId.from("smithy.api#Document"), Type.Json)
-    }
-}
-
-data class Field(
-    val name: String,
-    val type: IrShape,
-    val required: Boolean,
-    val hints: List<Hint>
-)
-
 data class PolymorphicDataKind(
     val kind: String,
-    val shape: IrShape,
+    val shape: Type,
     val hints: List<Hint>
 )
 
