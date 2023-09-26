@@ -41,7 +41,6 @@ trait BuildTarget {
   object jvmRunEnvironment extends Endpoint[JvmRunEnvironmentParams, JvmRunEnvironmentResult]("buildTarget/jvmRunEnvironment")
   object pythonOptions extends Endpoint[PythonOptionsParams, PythonOptionsResult]("buildTarget/pythonOptions")
   object rustWorkspace extends Endpoint[RustWorkspaceParams, RustWorkspaceResult]("buildTarget/rustWorkspace")
-  object rustToolchain extends Endpoint[RustToolchainParams, RustToolchainResult]("buildTarget/rustToolchain")
   object scalacOptions extends Endpoint[ScalacOptionsParams, ScalacOptionsResult]("buildTarget/scalacOptions")
   @deprecated("Use buildTarget/jvmTestEnvironment instead")
   object scalaTestClasses extends Endpoint[ScalaTestClassesParams, ScalaTestClassesResult]("buildTarget/scalaTestClasses")

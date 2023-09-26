@@ -951,7 +951,7 @@ final case class RustPackage (
   cfgOptions: Option[Map[String, List[String]]],
   env: Option[Map[String, String]],
   outDirUrl: Option[Uri],
-  procMacroArtifact: Option[String],
+  procMacroArtifact: Option[Uri],
 )
 
 object RustPackage {
@@ -1006,32 +1006,6 @@ object RustTargetKind {
     }
   }
 }
-final case class RustToolchainItem (
-  rustStdLib: Option[RustcInfo],
-  cargoBinPath: Uri,
-  procMacroSrvPath: Uri,
-)
-
-object RustToolchainItem {
-  implicit val codec: JsonValueCodec[RustToolchainItem] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
-final case class RustToolchainParams (
-  targets: List[BuildTargetIdentifier],
-)
-
-object RustToolchainParams {
-  implicit val codec: JsonValueCodec[RustToolchainParams] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
-final case class RustToolchainResult (
-  toolchains: List[RustToolchainItem],
-)
-
-object RustToolchainResult {
-  implicit val codec: JsonValueCodec[RustToolchainResult] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
 final case class RustWorkspaceParams (
   targets: List[BuildTargetIdentifier],
 )
@@ -1049,17 +1023,6 @@ final case class RustWorkspaceResult (
 
 object RustWorkspaceResult {
   implicit val codec: JsonValueCodec[RustWorkspaceResult] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
-final case class RustcInfo (
-  sysrootPath: Uri,
-  srcSysrootPath: Uri,
-  version: String,
-  host: String,
-)
-
-object RustcInfo {
-  implicit val codec: JsonValueCodec[RustcInfo] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
 final case class SbtBuildTarget (

@@ -8,7 +8,4 @@ interface RustBuildServer {
   @JsonRequest("buildTarget/rustWorkspace")
   suspend fun rustWorkspace(params: RustWorkspaceParams): RustWorkspaceResult
 
-  @JsonRequest("buildTarget/rustToolchain")
-  suspend fun rustToolchain(params: RustToolchainParams): RustToolchainResult
-
 }

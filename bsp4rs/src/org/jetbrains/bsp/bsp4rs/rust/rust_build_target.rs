@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::BTreeSet;
 
-/// This structure is embedded in the `data?: BuildTargetData` field, when the
-/// `dataKind` field contains "rust".
+/// `RustBuildTarget` is a basic data structure that contains rust-specific
+/// metadata for compiling a target containing Rust sources.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RustBuildTarget {
