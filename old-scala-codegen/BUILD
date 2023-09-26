@@ -1,13 +1,13 @@
 load("@io_bazel_rules_scala//scala:scala.bzl", "scala_library")
 
 scala_library(
-    name = "old-codegen",
+    name = "old-scala-codegen",
     srcs = glob(["**/*.scala"]),
     resources = glob(["resources/**/*"]), # "@//spec" is not here because a copy is already in the new codegen
     visibility = ["//visibility:public"],
     deps = [
         "@//spec-traits",
-        "@//codegen/src/main/kotlin/org/jetbrains/bsp/generators:codegen",
+        "@//codegen",
         "@maven//:org_scala_lang_modules_scala_collection_compat_2_13",
         "@maven//:software_amazon_smithy_smithy_codegen_core",
         "@maven//:software_amazon_smithy_smithy_model",

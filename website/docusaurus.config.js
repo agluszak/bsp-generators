@@ -20,7 +20,7 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         docs: {
-          path: "docs",
+          path: "generated",
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           editUrl: ({ docPath }) =>

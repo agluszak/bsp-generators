@@ -12,4 +12,5 @@ java_library(
         "@maven//:org_eclipse_xtend_org_eclipse_xtend_lib",
         "@maven//:org_eclipse_xtext_org_eclipse_xtext_xbase_lib",
     ],
+    visibility = ["//visibility:public"],
 )

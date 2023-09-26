@@ -117,6 +117,9 @@ maven_install(
         "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1",
         "com.github.agluszak:jsonrpc4kt:f4d0c972f8",
 
+        # docs
+        "org.scalameta:mdoc_2.13:2.3.7",
+
         # scala
         "org.scala-lang.modules:scala-collection-compat_2.13:2.11.0",
         "com.lihaoyi:os-lib_2.13:0.9.1",
