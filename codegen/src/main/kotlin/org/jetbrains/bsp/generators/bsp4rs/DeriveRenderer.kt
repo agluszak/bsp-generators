@@ -50,6 +50,7 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
             is Def.Service -> emptySet()
             is Def.Alias -> emptySet()
             is Def.DataKinds -> setOf(DeriveOption.DEFAULT, DeriveOption.HASH, DeriveOption.ORD)
+            is Def.UntaggedUnion -> TODO()
         }
     }
 

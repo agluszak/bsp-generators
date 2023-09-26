@@ -17,6 +17,7 @@ import software.amazon.smithy.model.shapes.ShapeId
 import software.amazon.smithy.model.shapes.ShapeVisitor
 import software.amazon.smithy.model.shapes.StringShape
 import software.amazon.smithy.model.shapes.StructureShape
+import software.amazon.smithy.model.shapes.UnionShape
 import software.amazon.smithy.model.traits.DeprecatedTrait
 import software.amazon.smithy.model.traits.DocumentationTrait
 import software.amazon.smithy.model.traits.JsonNameTrait
@@ -29,6 +30,7 @@ import traits.EnumKindTrait
 import traits.JsonNotificationTrait
 import traits.JsonRequestTrait
 import traits.SetTrait
+import traits.UntaggedUnionTrait
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
@@ -222,6 +224,15 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
             }
         }
 
+        override fun unionShape(shape: UnionShape): List<Def> {
+            if (config.untaggedUnions == AbstractionLevel.AsType) return emptyList()
+
+            return if (shape.hasTrait(UntaggedUnionTrait::class.java)) {
+                val memberTypes = shape.members().mapNotNull { it.accept(toTypeVisitor) }
+                listOf(Def.UntaggedUnion(shape.id, memberTypes, getHints(shape)))
+            } else emptyList()
+        }
+
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
             return when (shape) {
@@ -281,13 +292,10 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
 
         fun enumUniversal(shape: Shape, openType: Type): Type {
             val enumKind = shape.expectTrait(EnumKindTrait::class.java).enumKind
-            return when (enumKind) {
-                EnumKindTrait.EnumKind.OPEN ->
-                    if (config.openEnum == DefinitionLevel.AsType) openType
-                    else Type.TRef(shape.id)
-
-                EnumKindTrait.EnumKind.CLOSED -> Type.TRef(shape.id)
-            }
+            return if (config.openEnums == AbstractionLevel.AsType && enumKind == EnumKindTrait.EnumKind.OPEN)
+                openType
+            else
+                Type.TRef(shape.id)
         }
 
         override fun enumShape(shape: EnumShape): Type {
@@ -297,6 +305,13 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
         override fun intEnumShape(shape: IntEnumShape): Type {
             return enumUniversal(shape, Type.TInt)
         }
+
+        override fun unionShape(shape: UnionShape): Type =
+            if (config.untaggedUnions == AbstractionLevel.AsType && shape.hasTrait(UntaggedUnionTrait::class.java)) {
+                val memberTypes = shape.members().mapNotNull {it.accept(this) }
+                Type.TUntaggedUnion(memberTypes)
+            }
+            else Type.TRef(shape.id)
 
         override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
 

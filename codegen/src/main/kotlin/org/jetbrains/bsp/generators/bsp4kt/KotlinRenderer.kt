@@ -44,6 +44,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             is Def.Service -> renderService(def)
             is Def.Structure -> renderStructure(def)
             is Def.DataKinds -> renderData(def)
+            is Def.UntaggedUnion -> TODO()
         }
     }
 
@@ -142,6 +143,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         is Type.TSet -> "Set<${renderType(type.member)}>"
         Type.TString -> "String"
         Type.TUnit -> "Unit"
+        is Type.TUntaggedUnion -> TODO()
     }
 
     fun renderOperation(op: Operation): CodeBlock {

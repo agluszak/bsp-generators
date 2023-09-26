@@ -22,4 +22,5 @@ fun RustRenderer.renderType(type: Type): String = when (type) {
     is Type.TString -> "String"
     is Type.TUnit -> "()"
     is Type.TRef -> makeName(type.shapeId.name)
+    is Type.TUntaggedUnion -> TODO()
 }

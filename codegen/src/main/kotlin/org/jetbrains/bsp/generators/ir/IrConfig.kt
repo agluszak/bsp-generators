@@ -1,13 +1,14 @@
 package org.jetbrains.bsp.generators.ir
 
 class IrConfig(
-    val strings: TypeAliasing = TypeAliasing.Pure,
-    val maps: TypeAliasing = TypeAliasing.Pure,
-    val dataWithKind: TypeAliasing = TypeAliasing.Pure,
-    val openEnum: DefinitionLevel = DefinitionLevel.AsDef,
+    val strings: TypeAliasing,
+    val maps: TypeAliasing,
+    val dataWithKind: TypeAliasing,
+    val openEnums: AbstractionLevel,
+    val untaggedUnions: AbstractionLevel,
 )
 
-enum class DefinitionLevel {
+enum class AbstractionLevel {
     AsDef,
     AsType,
 }

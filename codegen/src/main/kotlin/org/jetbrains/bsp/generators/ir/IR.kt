@@ -41,6 +41,12 @@ sealed interface Def {
         val kinds: List<PolymorphicDataKind>,
         override val hints: List<Hint>
     ) : Def
+
+    data class UntaggedUnion(
+        override val shapeId: ShapeId,
+        val members: List<Type>,
+        override val hints: List<Hint>
+    ) : Def
 }
 
  sealed interface Type {
@@ -59,6 +65,9 @@ sealed interface Def {
 
      // references
      data class TRef(val shapeId: ShapeId) : Type
+
+     // Def as type
+     data class TUntaggedUnion(val members: List<Type>): Type
  }
 
 sealed interface JsonRpcMethodType {

@@ -2,7 +2,7 @@ package org.jetbrains.bsp.generators.bsp4kt
 
 import org.jetbrains.bsp.generators.FilesGenerator
 import org.jetbrains.bsp.generators.Loader
-import org.jetbrains.bsp.generators.ir.DefinitionLevel
+import org.jetbrains.bsp.generators.ir.AbstractionLevel
 import org.jetbrains.bsp.generators.ir.IrConfig
 import org.jetbrains.bsp.generators.ir.SmithyToIr
 import org.jetbrains.bsp.generators.ir.TypeAliasing
@@ -26,7 +26,8 @@ object Main {
             strings = TypeAliasing.Aliased,
             maps = TypeAliasing.Aliased,
             dataWithKind = TypeAliasing.Aliased,
-            openEnum = DefinitionLevel.AsType
+            openEnums = AbstractionLevel.AsType,
+            untaggedUnions = AbstractionLevel.AsType,
         )
         val ir = SmithyToIr(model, irConfig)
         val definitions = namespaces.flatMap { ir.definitions(it) }

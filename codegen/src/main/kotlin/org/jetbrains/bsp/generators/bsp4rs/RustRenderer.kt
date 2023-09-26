@@ -44,6 +44,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Def.Service -> renderService(def)
         is Def.Alias -> renderAlias(def)
         is Def.DataKinds -> renderDataKinds(def)
+        is Def.UntaggedUnion -> TODO()
     }
 
     private fun generateModFile(modulePath: Path, filesNames: List<String>): CodegenFile {
