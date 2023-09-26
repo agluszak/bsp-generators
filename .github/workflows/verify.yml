@@ -13,7 +13,9 @@ jobs:
       - name: Mount bazel cache
         uses: actions/cache@v3
         with:
-          path: "~/.cache/bazel"
+          path: |
+            ~/.cache/bazel
+            ~/.cache/coursier
           key: bazel
 
       - name: Generate
