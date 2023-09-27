@@ -29,6 +29,9 @@ jobs:
       - name: Build
         run: bazel build //...
 
+      - name: Test
+        run: bazel test //...
+
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@v16
         id: verify-changed-files
