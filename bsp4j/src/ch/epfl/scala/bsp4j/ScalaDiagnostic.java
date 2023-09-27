@@ -8,8 +8,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 public class ScalaDiagnostic {
   private List<ScalaAction> actions;
 
-  public ScalaDiagnostic() {
-  }
+  public ScalaDiagnostic() {}
 
   @Pure
   public List<ScalaAction> getActions() {
@@ -31,24 +30,19 @@ public class ScalaDiagnostic {
   @Override
   @Pure
   public boolean equals(final Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     ScalaDiagnostic other = (ScalaDiagnostic) obj;
     if (this.actions == null) {
-      if (other.actions != null)
-        return false;
-    } else if (!this.actions.equals(other.actions))
-      return false;
+      if (other.actions != null) return false;
+    } else if (!this.actions.equals(other.actions)) return false;
     return true;
   }
 
   @Override
   @Pure
   public int hashCode() {
-    return 31 * 1 + ((this.actions== null) ? 0 : this.actions.hashCode());
+    return 31 * 1 + ((this.actions == null) ? 0 : this.actions.hashCode());
   }
 }

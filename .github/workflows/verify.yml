@@ -10,10 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: coursier/cache-action@v6
+      - uses: coursier/setup-action@v1
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
       - name: Mount bazel cache
         uses: actions/cache@v3
         with:
-          path: "~/.cache/bazel"
+          path: |
+            ~/.cache/bazel
           key: bazel
 
       - name: Generate
@@ -31,6 +38,7 @@ jobs:
             **/*.rs
             **/*.scala
             **/*.java
+            **/*.md
 
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'

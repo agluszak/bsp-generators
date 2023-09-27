@@ -8,8 +8,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @SuppressWarnings("all")
 public class RustToolchainResult {
-  @NonNull
-  private List<RustToolchainItem> toolchains;
+  @NonNull private List<RustToolchainItem> toolchains;
 
   public RustToolchainResult(@NonNull final List<RustToolchainItem> toolchains) {
     this.toolchains = toolchains;
@@ -36,24 +35,19 @@ public class RustToolchainResult {
   @Override
   @Pure
   public boolean equals(final Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RustToolchainResult other = (RustToolchainResult) obj;
     if (this.toolchains == null) {
-      if (other.toolchains != null)
-        return false;
-    } else if (!this.toolchains.equals(other.toolchains))
-      return false;
+      if (other.toolchains != null) return false;
+    } else if (!this.toolchains.equals(other.toolchains)) return false;
     return true;
   }
 
   @Override
   @Pure
   public int hashCode() {
-    return 31 * 1 + ((this.toolchains== null) ? 0 : this.toolchains.hashCode());
+    return 31 * 1 + ((this.toolchains == null) ? 0 : this.toolchains.hashCode());
   }
 }

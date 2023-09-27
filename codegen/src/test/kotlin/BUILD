@@ -5,7 +5,7 @@ kt_test(
     src = "DslTest.kt",
     classname = "DslTest",
     deps = [
-        "//:codegen",
+        "//codegen",
     ],
 )
 
@@ -14,7 +14,7 @@ kt_test(
     src = "Bsp4rsTest.kt",
     classname = "Bsp4rsTest",
     deps = [
-        "//:codegen",
+        "//codegen",
         "@maven//:software_amazon_smithy_smithy_model",
     ],
 )

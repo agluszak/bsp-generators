@@ -1,17 +1,69 @@
 load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
 load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_compiler_plugin")
 load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary")
-load("@rules_multirun//:defs.bzl", "multirun")
+load("@io_bazel_rules_scala//scala:scala_import.bzl", "scala_import")
+load("@rules_multirun//:defs.bzl", "command", "multirun")
 load("//rules/generator:generator.bzl", "library_generator")
+load("//rules/generator:website.bzl", "website")
 
+# This is a wrapper which ensures that all generators are first run in parallel and then
+#  the formatter is run sequentially, i.e. to avoid the formatter running in parallel
+#  with the generators.
 multirun(
     name = "generate",
+    commands = [
+        "//:generate_all_command",
+        "//:format_all_command",
+    ],
+)
+
+multirun(
+    name = "generate_all",
     commands = [
         "//:generate-bsp4kt_command",
         "//:generate-bsp4s_command",
         "//:generate-bsp4j_command",
         "//:generate-bsp4rs_command",
+        "//:generate-website_command",
     ],
+    jobs = 0,
+)
+
+command(
+    name = "generate_all_command",
+    command = ":generate_all",
+)
+
+command(
+    name = "format_all_command",
+    command = "@aspect_rules_format//format",
+)
+
+filegroup(
+    name = "docs",
+    srcs = glob(["docs/**/*"]),
+)
+
+website(
+    name = "generate-website",
+    data = [
+        ":docs",
+    ],
+    jars = [
+        "//bsp4j",
+        "//old-scala-codegen",
+        "//codegen:codegen.jar",
+        "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_jsonrpc",
+        "@maven//:com_google_code_gson_gson",
+        "@com_github_jetbrains_kotlin//:kotlin-stdlib",
+        "@maven//:software_amazon_smithy_smithy_model",
+        "@maven//:software_amazon_smithy_smithy_utils",
+        "//spec-traits:spec-traits.jar",
+        "@maven//:com_monovore_decline_2_13",
+        "@maven//:org_typelevel_cats_core_2_13",
+        "@maven//:org_typelevel_cats_kernel_2_13",
+    ],
+    library_version = "2.1.0",
 )
 
 kt_compiler_plugin(
@@ -34,24 +86,12 @@ kt_jvm_library(
     ],
 )
 
-alias(
-    name = "codegen",
-    actual = "//codegen/src/main/kotlin/org/jetbrains/bsp/generators:codegen",
-    visibility = ["//visibility:public"],
-)
-
-alias(
-    name = "old-codegen",
-    actual = "//old-scala-codegen:old-codegen",
-    visibility = ["//visibility:public"],
-)
-
 java_binary(
     name = "bsp4kt-generator",
     main_class = "org.jetbrains.bsp.generators.bsp4kt.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
-        ":codegen",
+        "//codegen",
     ],
 )
 
@@ -67,7 +107,7 @@ java_binary(
     main_class = "bsp.codegen.bsp4s.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
-        ":old-codegen",
+        "//old-scala-codegen",
     ],
 )
 
@@ -83,7 +123,7 @@ java_binary(
     main_class = "bsp.codegen.bsp4j.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
-        ":old-codegen",
+        "//old-scala-codegen",
     ],
 )
 
@@ -99,7 +139,7 @@ java_binary(
     main_class = "org.jetbrains.bsp.generators.bsp4rs.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
-        ":codegen",
+        "//codegen",
     ],
 )
 

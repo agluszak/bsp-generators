@@ -7,19 +7,19 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @SuppressWarnings("all")
 public class RustcInfo {
-  @NonNull
-  private String sysrootPath;
+  @NonNull private String sysrootPath;
 
-  @NonNull
-  private String srcSysrootPath;
+  @NonNull private String srcSysrootPath;
 
-  @NonNull
-  private String version;
+  @NonNull private String version;
 
-  @NonNull
-  private String host;
+  @NonNull private String host;
 
-  public RustcInfo(@NonNull final String sysrootPath, @NonNull final String srcSysrootPath, @NonNull final String version, @NonNull final String host) {
+  public RustcInfo(
+      @NonNull final String sysrootPath,
+      @NonNull final String srcSysrootPath,
+      @NonNull final String version,
+      @NonNull final String host) {
     this.sysrootPath = sysrootPath;
     this.srcSysrootPath = srcSysrootPath;
     this.version = version;
@@ -80,33 +80,22 @@ public class RustcInfo {
   @Override
   @Pure
   public boolean equals(final Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RustcInfo other = (RustcInfo) obj;
     if (this.sysrootPath == null) {
-      if (other.sysrootPath != null)
-        return false;
-    } else if (!this.sysrootPath.equals(other.sysrootPath))
-      return false;
+      if (other.sysrootPath != null) return false;
+    } else if (!this.sysrootPath.equals(other.sysrootPath)) return false;
     if (this.srcSysrootPath == null) {
-      if (other.srcSysrootPath != null)
-        return false;
-    } else if (!this.srcSysrootPath.equals(other.srcSysrootPath))
-      return false;
+      if (other.srcSysrootPath != null) return false;
+    } else if (!this.srcSysrootPath.equals(other.srcSysrootPath)) return false;
     if (this.version == null) {
-      if (other.version != null)
-        return false;
-    } else if (!this.version.equals(other.version))
-      return false;
+      if (other.version != null) return false;
+    } else if (!this.version.equals(other.version)) return false;
     if (this.host == null) {
-      if (other.host != null)
-        return false;
-    } else if (!this.host.equals(other.host))
-      return false;
+      if (other.host != null) return false;
+    } else if (!this.host.equals(other.host)) return false;
     return true;
   }
 
@@ -115,9 +104,9 @@ public class RustcInfo {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((this.sysrootPath== null) ? 0 : this.sysrootPath.hashCode());
-    result = prime * result + ((this.srcSysrootPath== null) ? 0 : this.srcSysrootPath.hashCode());
-    result = prime * result + ((this.version== null) ? 0 : this.version.hashCode());
-    return prime * result + ((this.host== null) ? 0 : this.host.hashCode());
+    result = prime * result + ((this.sysrootPath == null) ? 0 : this.sysrootPath.hashCode());
+    result = prime * result + ((this.srcSysrootPath == null) ? 0 : this.srcSysrootPath.hashCode());
+    result = prime * result + ((this.version == null) ? 0 : this.version.hashCode());
+    return prime * result + ((this.host == null) ? 0 : this.host.hashCode());
   }
 }
