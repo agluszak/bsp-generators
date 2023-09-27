@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TestResult(
-  val originId: Identifier? = null,
+  val originId: String? = null,
   val statusCode: StatusCode,
   val dataKind: String? = null,
   val data: JsonElement? = null

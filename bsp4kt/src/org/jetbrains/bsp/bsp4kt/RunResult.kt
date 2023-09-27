@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class RunResult(
-  val originId: Identifier? = null,
+  val originId: String? = null,
   val statusCode: StatusCode
 )

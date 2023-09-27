@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TextDocumentIdentifier(
-  val uri: URI
+  val uri: String
 )

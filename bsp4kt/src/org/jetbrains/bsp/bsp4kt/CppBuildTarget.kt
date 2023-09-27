@@ -8,6 +8,6 @@ import kotlinx.serialization.json.JsonElement
 data class CppBuildTarget(
   val version: String? = null,
   val compiler: String? = null,
-  val cCompiler: URI? = null,
-  val cppCompiler: URI? = null
+  val cCompiler: String? = null,
+  val cppCompiler: String? = null
 )

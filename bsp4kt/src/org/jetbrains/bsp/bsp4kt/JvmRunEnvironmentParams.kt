@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class JvmRunEnvironmentParams(
   val targets: List<BuildTargetIdentifier>,
-  val originId: Identifier? = null
+  val originId: String? = null
 )

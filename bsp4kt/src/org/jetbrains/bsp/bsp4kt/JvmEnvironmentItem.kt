@@ -10,6 +10,6 @@ data class JvmEnvironmentItem(
   val classpath: List<String>,
   val jvmOptions: List<String>,
   val workingDirectory: String,
-  val environmentVariables: EnvironmentVariables,
+  val environmentVariables: Map<String, String>,
   val mainClasses: List<JvmMainClass>? = null
 )

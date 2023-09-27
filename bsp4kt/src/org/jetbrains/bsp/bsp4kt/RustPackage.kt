@@ -7,7 +7,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class RustPackage(
   val id: String,
-  val rootUrl: URI,
+  val rootUrl: String,
   val name: String,
   val version: String,
   val origin: String,
@@ -15,10 +15,10 @@ data class RustPackage(
   val source: String? = null,
   val resolvedTargets: List<RustBuildTarget>,
   val allTargets: List<RustBuildTarget>,
-  val features: FeatureDependencyGraph,
-  val enabledFeatures: Set<Feature>,
-  val cfgOptions: RustCfgOptions? = null,
-  val env: EnvironmentVariables? = null,
-  val outDirUrl: URI? = null,
+  val features: Map<String, Set<String>>,
+  val enabledFeatures: Set<String>,
+  val cfgOptions: Map<String, List<String>>? = null,
+  val env: Map<String, String>? = null,
+  val outDirUrl: String? = null,
   val procMacroArtifact: String? = null
 )

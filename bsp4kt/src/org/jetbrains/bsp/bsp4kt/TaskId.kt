@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class TaskId(
-  val id: Identifier,
-  val parents: List<Identifier>? = null
+  val id: String,
+  val parents: List<String>? = null
 )

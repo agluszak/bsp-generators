@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class CargoBuildTarget(
   val edition: String,
-  val required_features: Set<Feature>
+  val required_features: Set<String>
 )

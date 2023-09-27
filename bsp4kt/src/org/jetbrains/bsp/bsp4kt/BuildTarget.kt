@@ -8,9 +8,9 @@ import kotlinx.serialization.json.JsonElement
 data class BuildTarget(
   val id: BuildTargetIdentifier,
   val displayName: String? = null,
-  val baseDirectory: URI? = null,
+  val baseDirectory: String? = null,
   val tags: List<String>,
-  val languageIds: List<LanguageId>,
+  val languageIds: List<String>,
   val dependencies: List<BuildTargetIdentifier>,
   val capabilities: BuildTargetCapabilities,
   val dataKind: String? = null,

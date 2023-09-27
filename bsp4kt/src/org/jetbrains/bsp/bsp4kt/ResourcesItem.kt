@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class ResourcesItem(
   val target: BuildTargetIdentifier,
-  val resources: List<URI>
+  val resources: List<String>
 )

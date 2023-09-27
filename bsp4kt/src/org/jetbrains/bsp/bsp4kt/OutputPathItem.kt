@@ -6,6 +6,6 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class OutputPathItem(
-  val uri: URI,
+  val uri: String,
   val kind: OutputPathItemKind
 )

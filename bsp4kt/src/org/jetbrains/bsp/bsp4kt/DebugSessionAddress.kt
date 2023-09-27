@@ -6,5 +6,5 @@ import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class DebugSessionAddress(
-  val uri: URI
+  val uri: String
 )

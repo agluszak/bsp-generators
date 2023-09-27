@@ -9,7 +9,7 @@ data class InitializeBuildParams(
   val displayName: String,
   val version: String,
   val bspVersion: String,
-  val rootUri: URI,
+  val rootUri: String,
   val capabilities: BuildClientCapabilities,
   val dataKind: String? = null,
   val data: JsonElement? = null

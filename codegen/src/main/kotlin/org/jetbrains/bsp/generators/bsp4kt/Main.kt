@@ -23,8 +23,8 @@ object Main {
         val model = Loader.model
         val namespaces = Loader.namespaces
         val irConfig = IrConfig(
-            strings = TypeAliasing.Aliased,
-            maps = TypeAliasing.Aliased,
+            strings = TypeAliasing.Pure,
+            maps = TypeAliasing.Pure,
             dataWithKind = AbstractionLevel.AsType,
             openEnums = AbstractionLevel.AsType,
             untaggedUnions = AbstractionLevel.AsType,

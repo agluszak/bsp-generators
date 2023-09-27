@@ -12,5 +12,5 @@ data class RustRawDependency(
   val target: String? = null,
   val optional: Boolean,
   val usesDefaultFeatures: Boolean,
-  val features: Set<Feature>
+  val features: Set<String>
 )

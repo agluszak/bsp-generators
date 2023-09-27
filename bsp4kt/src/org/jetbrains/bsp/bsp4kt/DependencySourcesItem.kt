@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class DependencySourcesItem(
   val target: BuildTargetIdentifier,
-  val sources: List<URI>
+  val sources: List<String>
 )
