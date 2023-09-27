@@ -89,15 +89,6 @@ load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
 
 kt_register_toolchains()  # to use the default toolchain, otherwise see toolchains below
 
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "new_git_repository")
-
-new_git_repository(
-    name = "bsp",
-    build_file = "@//:BUILD.bsp.bazel",
-    commit = "5af516738f17dbb03bec931a22027c99ffd225ff",
-    remote = "git@github.com:build-server-protocol/build-server-protocol.git",
-)
-
 RULES_JVM_EXTERNAL_TAG = "5.3"
 
 RULES_JVM_EXTERNAL_SHA = "d31e369b854322ca5098ea12c69d7175ded971435e55c18dd9dd5f29cc5249ac"
@@ -252,7 +243,7 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 git_repository(
     name = "aspect_rules_format",
     commit = "e7c4f86e470f7ddb4b363cf1d343bde56594277b",
-    remote = "git@github.com:agluszak/bazel-super-formatter.git",
+    remote = "https://github.com/agluszak/bazel-super-formatter.git",
 )
 
 load("@aspect_rules_format//format:repositories.bzl", "rules_format_dependencies")
