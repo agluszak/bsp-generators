@@ -16,6 +16,7 @@ multirun(
         "//:generate-bsp4rs_command",
         "//:generate-website_command"
     ],
+    jobs = 0,
 )
 
 filegroup(
