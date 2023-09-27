@@ -25,7 +25,7 @@ object Main {
         val irConfig = IrConfig(
             strings = TypeAliasing.Aliased,
             maps = TypeAliasing.Aliased,
-            dataWithKind = TypeAliasing.Aliased,
+            dataWithKind = AbstractionLevel.AsDef,
             openEnums = AbstractionLevel.AsDef,
             untaggedUnions = AbstractionLevel.AsDef,
         )

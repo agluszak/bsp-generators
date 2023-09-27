@@ -13,5 +13,6 @@ data class TaskProgressParams(
   val total: Long? = null,
   val progress: Long? = null,
   val unit: String? = null,
-  val data: TaskProgressData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

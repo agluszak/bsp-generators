@@ -1,22 +1,25 @@
 use serde::{Deserialize, Serialize};
 
-use crate::*;
-use std::collections::BTreeMap;
-
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct RustDependencies(pub BTreeMap<String, Vec<RustDependency>>);
+pub struct RustDependencies(pub String);
 
 impl std::ops::Deref for RustDependencies {
-    type Target = BTreeMap<String, Vec<RustDependency>>;
+    type Target = String;
 
     fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
 
-impl From<BTreeMap<String, Vec<RustDependency>>> for RustDependencies {
-    fn from(input: BTreeMap<String, Vec<RustDependency>>) -> Self {
+impl From<String> for RustDependencies {
+    fn from(input: String) -> Self {
         Self(input)
+    }
+}
+
+impl From<&str> for RustDependencies {
+    fn from(input: &str) -> Self {
+        Self(input.to_string())
     }
 }

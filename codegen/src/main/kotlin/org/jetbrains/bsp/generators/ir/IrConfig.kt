@@ -3,7 +3,7 @@ package org.jetbrains.bsp.generators.ir
 class IrConfig(
     val strings: TypeAliasing,
     val maps: TypeAliasing,
-    val dataWithKind: TypeAliasing,
+    val dataWithKind: AbstractionLevel,
     val openEnums: AbstractionLevel,
     val untaggedUnions: AbstractionLevel,
 )

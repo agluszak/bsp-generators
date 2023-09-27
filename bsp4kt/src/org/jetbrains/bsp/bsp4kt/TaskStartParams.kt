@@ -10,5 +10,6 @@ data class TaskStartParams(
   val originId: Identifier? = null,
   val eventTime: Long? = null,
   val message: String? = null,
-  val data: TaskStartData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

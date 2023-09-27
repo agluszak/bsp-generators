@@ -7,5 +7,6 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class DebugSessionParams(
   val targets: List<BuildTargetIdentifier>,
-  val data: DebugSessionParamsData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

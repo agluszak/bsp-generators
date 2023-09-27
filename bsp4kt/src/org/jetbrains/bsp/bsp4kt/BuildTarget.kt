@@ -13,5 +13,6 @@ data class BuildTarget(
   val languageIds: List<LanguageId>,
   val dependencies: List<BuildTargetIdentifier>,
   val capabilities: BuildTargetCapabilities,
-  val data: BuildTargetData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

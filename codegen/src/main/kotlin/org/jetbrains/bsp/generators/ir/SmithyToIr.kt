@@ -235,11 +235,13 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
 
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
-            return when (shape) {
-                is StringShape -> listOf(Def.Alias(shape.getId(), Type.TString, hints))
-                is MapShape -> listOfNotNull(pureMapType(shape)?.let { Def.Alias(shape.getId(), it, hints) })
-                else -> emptyList()
+            val type =  when (shape) {
+                is StringShape -> Type.TString
+                is MapShape -> pureMapType(shape)
+                else -> null
             }
+
+            return listOfNotNull(type?.let {Def.Alias(shape.id, Type.TString, hints) })
         }
 
         override fun stringShape(shape: StringShape): List<Def> =
@@ -272,7 +274,7 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
                 Type.TString
 
         override fun documentShape(shape: DocumentShape): Type =
-            if (shape.hasTrait(DataTrait::class.java) && config.dataWithKind == TypeAliasing.Aliased)
+            if (shape.hasTrait(DataTrait::class.java) && config.dataWithKind == AbstractionLevel.AsDef)
                 Type.TRef(shape.id)
             else
                 Type.TJson

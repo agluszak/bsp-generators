@@ -11,5 +11,6 @@ data class TaskFinishParams(
   val eventTime: Long? = null,
   val message: String? = null,
   val status: StatusCode,
-  val data: TaskFinishData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

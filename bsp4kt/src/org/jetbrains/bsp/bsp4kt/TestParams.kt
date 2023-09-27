@@ -11,5 +11,6 @@ data class TestParams(
   val arguments: List<String>? = null,
   val environmentVariables: EnvironmentVariables? = null,
   val workingDirectory: URI? = null,
-  val data: TestParamsData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

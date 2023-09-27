@@ -11,5 +11,6 @@ data class RunParams(
   val arguments: List<String>? = null,
   val environmentVariables: EnvironmentVariables? = null,
   val workingDirectory: URI? = null,
-  val data: RunParamsData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

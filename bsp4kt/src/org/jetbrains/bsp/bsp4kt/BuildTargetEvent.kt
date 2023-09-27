@@ -8,5 +8,6 @@ import kotlinx.serialization.json.JsonElement
 data class BuildTargetEvent(
   val target: BuildTargetIdentifier,
   val kind: BuildTargetEventKind? = null,
-  val data: BuildTargetEventData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

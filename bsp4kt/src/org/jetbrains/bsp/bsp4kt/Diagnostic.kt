@@ -12,5 +12,6 @@ data class Diagnostic(
   val source: String? = null,
   val message: String,
   val relatedInformation: List<DiagnosticRelatedInformation>? = null,
-  val data: DiagnosticData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )

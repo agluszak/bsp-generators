@@ -8,5 +8,6 @@ import kotlinx.serialization.json.JsonElement
 data class TestResult(
   val originId: Identifier? = null,
   val statusCode: StatusCode,
-  val data: TestResultData? = null
+  val dataKind: String? = null,
+  val data: JsonElement? = null
 )
