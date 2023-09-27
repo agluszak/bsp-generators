@@ -8,4 +8,5 @@ scala_library(
         "@maven//:com_github_plokhotnyuk_jsoniter_scala_jsoniter_scala_macros_2_13",
         "@maven//:me_vican_jorge_jsonrpc4s_2_13",
     ],
+    visibility = ["//visibility:public"],
 )

@@ -17,4 +17,5 @@ rust_library(
         "@crate_index//:serde_json",
         "@crate_index//:url",
     ],
+    visibility = ["//visibility:public"],
 )
