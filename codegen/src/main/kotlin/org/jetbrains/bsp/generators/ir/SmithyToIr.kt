@@ -241,7 +241,7 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
                 else -> null
             }
 
-            return listOfNotNull(type?.let {Def.Alias(shape.id, Type.TString, hints) })
+            return listOfNotNull(type?.let {Def.Alias(shape.id, it, hints) })
         }
 
         override fun stringShape(shape: StringShape): List<Def> =
