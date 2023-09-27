@@ -3,7 +3,7 @@ load("@io_bazel_rules_scala//scala:scala.bzl", "scala_library")
 scala_library(
     name = "old-scala-codegen",
     srcs = glob(["**/*.scala"]),
-    resources = glob(["resources/**/*"]), # "@//spec" is not here because a copy is already in the new codegen
+    resources = glob(["resources/**/*"]),  # "@//spec" is not here because a copy is already in the new codegen
     visibility = ["//visibility:public"],
     deps = [
         "@//spec-traits",

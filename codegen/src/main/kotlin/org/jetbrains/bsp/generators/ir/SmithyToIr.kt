@@ -136,7 +136,7 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
                 return emptyList()
             }
 
-            val fields = shape.members().mapNotNull { toField(it) }
+            var fields = shape.members().mapNotNull { toField(it) }
 
             fun fieldIsData(field: Field): Boolean =
                 field.name == "data" && field.type == Type.TJson
@@ -163,11 +163,11 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
                 return mutableFields
             }
 
-            // this adds a "dataKind" field to the structure, it if contains a "data" (dataWithKind) field
-            // ideally, we would like to delete this logic and take care of it in according generators
-            val updatedFields = insertDiscriminator(fields)
+            if (config.dataWithKind == AbstractionLevel.AsType) {
+                fields = insertDiscriminator(fields)
+            }
 
-            return listOf(Def.Structure(shape.id, updatedFields, getHints(shape)))
+            return listOf(Def.Structure(shape.id, fields, getHints(shape)))
         }
 
         override fun intEnumShape(shape: IntEnumShape): List<Def> {
