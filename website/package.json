@@ -1,13 +1,8 @@
 {
   "scripts": {
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "publish-gh-pages": "docusaurus deploy",
-    "version": "docusaurus-version",
-    "rename-version": "docusaurus-rename-version",
-    "swizzle": "docusaurus swizzle",
-    "docusaurus": "docusaurus",
-    "serve": "docusaurus serve",
+    "start": "bazel run //website:docusaurus-start",
+    "build": "bazel run //website:docusaurus-build",
+    "publish-gh-pages": "bazel run //website:docusaurus-deploy",
     "format": "prettier --write ../"
   },
   "dependencies": {

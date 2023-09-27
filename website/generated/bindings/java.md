@@ -37,7 +37,6 @@ libraryDependencies += "ch.epfl.scala" % "bsp4j" % "2.1.0"
 
 ## Examples
 
-
 ### Client
 
 First, begin by obtaining an input and output stream to communicate with the
@@ -139,7 +138,6 @@ server.buildShutdown().thenAccept(new java.util.function.Consumer[Object] {
 })
 
 ```
-
 
 ### Server
 

@@ -7,8 +7,7 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @SuppressWarnings("all")
 public class TestTask {
-  @NonNull
-  private BuildTargetIdentifier target;
+  @NonNull private BuildTargetIdentifier target;
 
   public TestTask(@NonNull final BuildTargetIdentifier target) {
     this.target = target;
@@ -35,24 +34,19 @@ public class TestTask {
   @Override
   @Pure
   public boolean equals(final Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     TestTask other = (TestTask) obj;
     if (this.target == null) {
-      if (other.target != null)
-        return false;
-    } else if (!this.target.equals(other.target))
-      return false;
+      if (other.target != null) return false;
+    } else if (!this.target.equals(other.target)) return false;
     return true;
   }
 
   @Override
   @Pure
   public int hashCode() {
-    return 31 * 1 + ((this.target== null) ? 0 : this.target.hashCode());
+    return 31 * 1 + ((this.target == null) ? 0 : this.target.hashCode());
   }
 }

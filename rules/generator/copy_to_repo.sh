@@ -2,8 +2,8 @@
 set -e
 
 if [ $# -ne 2 ]; then
-    echo "Usage: $0 <source_dir> <target_dir>"
-    exit 1
+  echo "Usage: $0 <source_dir> <target_dir>"
+  exit 1
 fi
 
 SOURCE_DIR=$1

@@ -10,37 +10,27 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @SuppressWarnings("all")
 public class RustPackage {
-  @NonNull
-  private String id;
+  @NonNull private String id;
 
-  @NonNull
-  private String rootUrl;
+  @NonNull private String rootUrl;
 
-  @NonNull
-  private String name;
+  @NonNull private String name;
 
-  @NonNull
-  private String version;
+  @NonNull private String version;
 
-  @NonNull
-  private String origin;
+  @NonNull private String origin;
 
-  @NonNull
-  private String edition;
+  @NonNull private String edition;
 
   private String source;
 
-  @NonNull
-  private List<RustBuildTarget> resolvedTargets;
+  @NonNull private List<RustBuildTarget> resolvedTargets;
 
-  @NonNull
-  private List<RustBuildTarget> allTargets;
+  @NonNull private List<RustBuildTarget> allTargets;
 
-  @NonNull
-  private Map<String, Set<String>> features;
+  @NonNull private Map<String, Set<String>> features;
 
-  @NonNull
-  private Set<String> enabledFeatures;
+  @NonNull private Set<String> enabledFeatures;
 
   private Map<String, List<String>> cfgOptions;
 
@@ -50,7 +40,17 @@ public class RustPackage {
 
   private String procMacroArtifact;
 
-  public RustPackage(@NonNull final String id, @NonNull final String rootUrl, @NonNull final String name, @NonNull final String version, @NonNull final String origin, @NonNull final String edition, @NonNull final List<RustBuildTarget> resolvedTargets, @NonNull final List<RustBuildTarget> allTargets, @NonNull final Map<String, Set<String>> features, @NonNull final Set<String> enabledFeatures) {
+  public RustPackage(
+      @NonNull final String id,
+      @NonNull final String rootUrl,
+      @NonNull final String name,
+      @NonNull final String version,
+      @NonNull final String origin,
+      @NonNull final String edition,
+      @NonNull final List<RustBuildTarget> resolvedTargets,
+      @NonNull final List<RustBuildTarget> allTargets,
+      @NonNull final Map<String, Set<String>> features,
+      @NonNull final Set<String> enabledFeatures) {
     this.id = id;
     this.rootUrl = rootUrl;
     this.name = name;
@@ -233,88 +233,55 @@ public class RustPackage {
   @Override
   @Pure
   public boolean equals(final Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
     RustPackage other = (RustPackage) obj;
     if (this.id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!this.id.equals(other.id))
-      return false;
+      if (other.id != null) return false;
+    } else if (!this.id.equals(other.id)) return false;
     if (this.rootUrl == null) {
-      if (other.rootUrl != null)
-        return false;
-    } else if (!this.rootUrl.equals(other.rootUrl))
-      return false;
+      if (other.rootUrl != null) return false;
+    } else if (!this.rootUrl.equals(other.rootUrl)) return false;
     if (this.name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!this.name.equals(other.name))
-      return false;
+      if (other.name != null) return false;
+    } else if (!this.name.equals(other.name)) return false;
     if (this.version == null) {
-      if (other.version != null)
-        return false;
-    } else if (!this.version.equals(other.version))
-      return false;
+      if (other.version != null) return false;
+    } else if (!this.version.equals(other.version)) return false;
     if (this.origin == null) {
-      if (other.origin != null)
-        return false;
-    } else if (!this.origin.equals(other.origin))
-      return false;
+      if (other.origin != null) return false;
+    } else if (!this.origin.equals(other.origin)) return false;
     if (this.edition == null) {
-      if (other.edition != null)
-        return false;
-    } else if (!this.edition.equals(other.edition))
-      return false;
+      if (other.edition != null) return false;
+    } else if (!this.edition.equals(other.edition)) return false;
     if (this.source == null) {
-      if (other.source != null)
-        return false;
-    } else if (!this.source.equals(other.source))
-      return false;
+      if (other.source != null) return false;
+    } else if (!this.source.equals(other.source)) return false;
     if (this.resolvedTargets == null) {
-      if (other.resolvedTargets != null)
-        return false;
-    } else if (!this.resolvedTargets.equals(other.resolvedTargets))
-      return false;
+      if (other.resolvedTargets != null) return false;
+    } else if (!this.resolvedTargets.equals(other.resolvedTargets)) return false;
     if (this.allTargets == null) {
-      if (other.allTargets != null)
-        return false;
-    } else if (!this.allTargets.equals(other.allTargets))
-      return false;
+      if (other.allTargets != null) return false;
+    } else if (!this.allTargets.equals(other.allTargets)) return false;
     if (this.features == null) {
-      if (other.features != null)
-        return false;
-    } else if (!this.features.equals(other.features))
-      return false;
+      if (other.features != null) return false;
+    } else if (!this.features.equals(other.features)) return false;
     if (this.enabledFeatures == null) {
-      if (other.enabledFeatures != null)
-        return false;
-    } else if (!this.enabledFeatures.equals(other.enabledFeatures))
-      return false;
+      if (other.enabledFeatures != null) return false;
+    } else if (!this.enabledFeatures.equals(other.enabledFeatures)) return false;
     if (this.cfgOptions == null) {
-      if (other.cfgOptions != null)
-        return false;
-    } else if (!this.cfgOptions.equals(other.cfgOptions))
-      return false;
+      if (other.cfgOptions != null) return false;
+    } else if (!this.cfgOptions.equals(other.cfgOptions)) return false;
     if (this.env == null) {
-      if (other.env != null)
-        return false;
-    } else if (!this.env.equals(other.env))
-      return false;
+      if (other.env != null) return false;
+    } else if (!this.env.equals(other.env)) return false;
     if (this.outDirUrl == null) {
-      if (other.outDirUrl != null)
-        return false;
-    } else if (!this.outDirUrl.equals(other.outDirUrl))
-      return false;
+      if (other.outDirUrl != null) return false;
+    } else if (!this.outDirUrl.equals(other.outDirUrl)) return false;
     if (this.procMacroArtifact == null) {
-      if (other.procMacroArtifact != null)
-        return false;
-    } else if (!this.procMacroArtifact.equals(other.procMacroArtifact))
-      return false;
+      if (other.procMacroArtifact != null) return false;
+    } else if (!this.procMacroArtifact.equals(other.procMacroArtifact)) return false;
     return true;
   }
 
@@ -323,20 +290,23 @@ public class RustPackage {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((this.id== null) ? 0 : this.id.hashCode());
-    result = prime * result + ((this.rootUrl== null) ? 0 : this.rootUrl.hashCode());
-    result = prime * result + ((this.name== null) ? 0 : this.name.hashCode());
-    result = prime * result + ((this.version== null) ? 0 : this.version.hashCode());
-    result = prime * result + ((this.origin== null) ? 0 : this.origin.hashCode());
-    result = prime * result + ((this.edition== null) ? 0 : this.edition.hashCode());
-    result = prime * result + ((this.source== null) ? 0 : this.source.hashCode());
-    result = prime * result + ((this.resolvedTargets== null) ? 0 : this.resolvedTargets.hashCode());
-    result = prime * result + ((this.allTargets== null) ? 0 : this.allTargets.hashCode());
-    result = prime * result + ((this.features== null) ? 0 : this.features.hashCode());
-    result = prime * result + ((this.enabledFeatures== null) ? 0 : this.enabledFeatures.hashCode());
-    result = prime * result + ((this.cfgOptions== null) ? 0 : this.cfgOptions.hashCode());
-    result = prime * result + ((this.env== null) ? 0 : this.env.hashCode());
-    result = prime * result + ((this.outDirUrl== null) ? 0 : this.outDirUrl.hashCode());
-    return prime * result + ((this.procMacroArtifact== null) ? 0 : this.procMacroArtifact.hashCode());
+    result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+    result = prime * result + ((this.rootUrl == null) ? 0 : this.rootUrl.hashCode());
+    result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+    result = prime * result + ((this.version == null) ? 0 : this.version.hashCode());
+    result = prime * result + ((this.origin == null) ? 0 : this.origin.hashCode());
+    result = prime * result + ((this.edition == null) ? 0 : this.edition.hashCode());
+    result = prime * result + ((this.source == null) ? 0 : this.source.hashCode());
+    result =
+        prime * result + ((this.resolvedTargets == null) ? 0 : this.resolvedTargets.hashCode());
+    result = prime * result + ((this.allTargets == null) ? 0 : this.allTargets.hashCode());
+    result = prime * result + ((this.features == null) ? 0 : this.features.hashCode());
+    result =
+        prime * result + ((this.enabledFeatures == null) ? 0 : this.enabledFeatures.hashCode());
+    result = prime * result + ((this.cfgOptions == null) ? 0 : this.cfgOptions.hashCode());
+    result = prime * result + ((this.env == null) ? 0 : this.env.hashCode());
+    result = prime * result + ((this.outDirUrl == null) ? 0 : this.outDirUrl.hashCode());
+    return prime * result
+        + ((this.procMacroArtifact == null) ? 0 : this.procMacroArtifact.hashCode());
   }
 }

@@ -19,10 +19,14 @@ def website(name, jars, data, library_version, **kwargs):
         outs = ["website-generated"],
         srcs = jars + data,
         args = [
-            "--classpath", classpath,
-            "--in", "docs",
-            "--out", "$(location website-generated)",
-            "--site.LIBRARY_VERSION", library_version,
+            "--classpath",
+            classpath,
+            "--in",
+            "docs",
+            "--out",
+            "$(location website-generated)",
+            "--site.LIBRARY_VERSION",
+            library_version,
         ],
         **kwargs
     )

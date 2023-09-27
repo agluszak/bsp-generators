@@ -1,4 +1,4 @@
-const {resolve} = require("path");
+const { resolve } = require("path");
 module.exports = {
   title: "Build Server Protocol",
   tagline:
@@ -36,12 +36,12 @@ module.exports = {
   ],
   plugins: [
     () => ({
-      name: 'resolve-react',
+      name: "resolve-react",
       configureWebpack() {
         return {
           resolve: {
             alias: {
-              react: resolve('node_modules/react'),
+              react: resolve("node_modules/react"),
             },
           },
         };

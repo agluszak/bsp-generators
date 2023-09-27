@@ -5,3 +5,4 @@ projectview.bazelproject
 bazel-*
 bsp4rs/target
 .aspect
+website/node_modules

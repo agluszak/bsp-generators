@@ -1,6 +1,7 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 bazel_skylib_version = "1.4.1"
+
 bazel_skylib_sha = "b8a1527901774180afc798aeb28c4634bdccf19c4d98e7bdd1ce79d1fe9aaad7"
 
 http_archive(
@@ -12,7 +13,19 @@ http_archive(
     ],
 )
 
+http_archive(
+    name = "rules_python",
+    sha256 = "5868e73107a8e85d8f323806e60cad7283f34b32163ea6ff1020cf27abef6036",
+    strip_prefix = "rules_python-0.25.0",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.25.0/rules_python-0.25.0.tar.gz",
+)
+
+load("@rules_python//python:repositories.bzl", "py_repositories")
+
+py_repositories()
+
 rules_scala_version = "6.1.0"
+
 rules_scala_sha = "cc590e644b2d5c6a87344af5e2c683017fdc85516d9d64b37f15d33badf2e84c"
 
 http_archive(
@@ -22,8 +35,8 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_scala/releases/download/v%s/rules_scala-v%s.tar.gz" % (rules_scala_version, rules_scala_version),
 )
 
-
 load("@io_bazel_rules_scala//:scala_config.bzl", "scala_config")
+
 # Stores Scala version and other configuration
 # 2.12 is a default version, other versions can be use by passing them explicitly:
 # scala_config(scala_version = "2.11.12")
@@ -43,17 +56,23 @@ rules_scala_setup()
 rules_scala_toolchain_deps_repositories(fetch_sources = True)
 
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
+
 rules_proto_dependencies()
+
 rules_proto_toolchains()
 
 load("@io_bazel_rules_scala//scala:toolchains.bzl", "scala_register_toolchains")
+
 scala_register_toolchains()
 
 load("@io_bazel_rules_scala//testing:scalatest.bzl", "scalatest_repositories", "scalatest_toolchain")
+
 scalatest_repositories()
+
 scalatest_toolchain()
 
 rules_kotlin_version = "1.8"
+
 rules_kotlin_sha = "01293740a16e474669aba5b5a1fe3d368de5832442f164e4fbfc566815a8bc3a"
 
 http_archive(
@@ -144,7 +163,6 @@ maven_install(
         "org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.28.0",
         "com.google.guava:guava:30.1.1-jre",
         "com.google.inject:guice:7.0.0",
-
     ],
     fetch_sources = True,
     repositories = [
@@ -179,10 +197,10 @@ load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
 
 npm_translate_lock(
     name = "npm",
-    pnpm_lock = "//website:pnpm-lock.yaml",
-    verify_node_modules_ignored = "//:.bazelignore",
-    update_pnpm_lock = True,
     data = ["//website:package.json"],
+    pnpm_lock = "//website:pnpm-lock.yaml",
+    update_pnpm_lock = True,
+    verify_node_modules_ignored = "//:.bazelignore",
 )
 
 load("@npm//:repositories.bzl", "npm_repositories")
@@ -228,3 +246,27 @@ http_archive(
     strip_prefix = "rules_multirun-0.6.1",
     url = "https://github.com/keith/rules_multirun/archive/refs/tags/0.6.1.tar.gz",
 )
+
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+    name = "aspect_rules_format",
+    commit = "e7c4f86e470f7ddb4b363cf1d343bde56594277b",
+    remote = "git@github.com:agluszak/bazel-super-formatter.git",
+)
+
+load("@aspect_rules_format//format:repositories.bzl", "rules_format_dependencies")
+
+rules_format_dependencies()
+
+load("@aspect_rules_format//format:dependencies.bzl", "parse_dependencies")
+
+parse_dependencies()
+
+# Installs toolchains for running programs under Node, Python, etc.
+# Be sure to register your own toolchains before this.
+# Most users should do this LAST in their WORKSPACE to avoid getting our versions of
+# things like the Go toolchain rather than the one you intended.
+load("@aspect_rules_format//format:toolchains.bzl", "format_register_toolchains")
+
+format_register_toolchains()
