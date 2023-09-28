@@ -6,6 +6,7 @@ import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.utils.camelCaseUpperCamelCase
 
 fun RustRenderer.renderUntaggedUnion(def: Def.UntaggedUnion): CodeBlock? {
     return rustCode {
@@ -17,7 +18,7 @@ fun RustRenderer.renderUntaggedUnion(def: Def.UntaggedUnion): CodeBlock? {
 private fun RustRenderer.makeUnionOptions(types: List<Type>): List<Pair<String, String>> =
     types.map { type ->
         val renderedType = renderType(type)
-        val name = renderedType.replaceFirstChar { it.uppercase() }
+        val name = renderedType.camelCaseUpperCamelCase()
 
         Pair(name, renderedType)
     }

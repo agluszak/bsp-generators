@@ -27,7 +27,7 @@ object Main {
             maps = TypeAliasing.Pure,
             dataWithKind = AbstractionLevel.AsType,
             openEnums = AbstractionLevel.AsType,
-            untaggedUnions = AbstractionLevel.AsType,
+            untaggedUnions = AbstractionLevel.AsDef,
         )
         val ir = SmithyToIr(model, irConfig)
         val definitions = namespaces.flatMap { ir.definitions(it) }
