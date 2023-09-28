@@ -202,6 +202,14 @@ object CleanCacheResult {
   implicit val codec: JsonValueCodec[CleanCacheResult] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
+final case class CodeDescription (
+  href: Uri,
+)
+
+object CodeDescription {
+  implicit val codec: JsonValueCodec[CodeDescription] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
 final case class CompileParams (
   targets: List[BuildTargetIdentifier],
   originId: Option[String],
@@ -394,8 +402,10 @@ final case class Diagnostic (
   range: Range,
   severity: Option[DiagnosticSeverity],
   code: Option[String],
+  codeDescription: Option[CodeDescription],
   source: Option[String],
   message: String,
+  tags: Option[List[Int]],
   relatedInformation: Option[List[DiagnosticRelatedInformation]],
   dataKind: Option[String],
   data: Option[RawJson],

@@ -8,10 +8,10 @@ use traits#enumKind
 use traits#jsonNotification
 use traits#jsonRPC
 use traits#jsonRequest
+use traits#untaggedUnion
 
 // TODO: add cancel notif
 // TODO: add WorkspaceLibraries endpoint
-// TODO: update structures from lsp (eg. Diagnostic)
 
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
 integer Integer
@@ -287,8 +287,6 @@ operation OnBuildLogMessage {
 }
 
 /// The Diagnostics notification are sent from the server to the client to signal results of validation runs.
-///
-/// Diagnostic is defined as it is in the LSP.
 ///
 /// When reset is true, the client must clean all previous diagnostics associated with the same textDocument and
 /// buildTarget and set instead the diagnostics in the request. This is the same behaviour as PublishDiagnosticsParams
@@ -708,6 +706,7 @@ structure PublishDiagnosticsParams {
 @data
 document DiagnosticData
 
+/// Diagnostic is defined as it is in the LSP.
 structure Diagnostic {
     /// The range at which the message applies.
     @required
@@ -716,37 +715,43 @@ structure Diagnostic {
     /// client to interpret diagnostics as error, warning, info or hint.
     severity: DiagnosticSeverity
     /// The diagnostic's code, which might appear in the user interface.
-    code: String
-    //    /// An optional property to describe the error code. // TODO: new LSP version
-    //    codeDescription: CodeDescription
+    code: DiagnosticCode
+    /// An optional property to describe the error code.
+    codeDescription: CodeDescription
     /// A human-readable string describing the source of this
     /// diagnostic, e.g. 'typescript' or 'super lint'.
     source: String
     /// The diagnostic's message.
     @required
     message: String
-    //     Additional metadata about the diagnostic. // TODO: new LSP version
-    //    tags: DiagnosticTags
+    /// Additional metadata about the diagnostic.
+    tags: DiagnosticTags
     /// An array of related diagnostic information, e.g. when symbol-names within
     /// a scope collide all definitions can be marked via this property.
-    relatedInformation: DiagnosticRelatedInformationList
-    /// A data entry field that is preserved between a `textDocument/publishDiagnostics` notification
-    /// and a `textDocument/codeAction` request.
+    relatedInformation: DiagnosticRelatedInformations
+    /// A data entry field that is preserved between a
+    /// `textDocument/publishDiagnostics` notification and
+    /// `textDocument/codeAction` request.
     data: DiagnosticData
 }
 
 structure Position {
-    /// Line position within a file. First line of a file is 0.
+    /// Line position in a document (zero-based).
     @required
     line: Integer
-    /// Character position within a line. First character of a line is 0.
+    /// Character offset on a line in a document (zero-based)
+    ///
+    /// If the character value is greater than the line length it defaults back
+    /// to the line length.
     @required
     character: Integer
 }
 
 structure Range {
+    /// The range's start position.
     @required
     start: Position
+    /// The range's end position.
     @required
     end: Position
 }
@@ -770,30 +775,35 @@ list Diagnostics {
 
 @enumKind("closed")
 intEnum DiagnosticSeverity {
+    /// Reports an error.
     ERROR = 1
+    /// Reports a warning.
     WARNING = 2
+    /// Reports an information.
     INFORMATION = 3
+    /// Reports a hint.
     HINT = 4
 }
 
-union Code {
+@untaggedUnion
+union DiagnosticCode {
     string: String
     integer: Integer
 }
 
-// TODO: this has been introduced in newer versions of the LSP spec
-// /// Structure to capture a description for an error code.
-// structure CodeDescription {
-//    @required
-//    /// An URI to open with more information about the diagnostic error.
-//    href: URI
-//}
+/// Structure to capture a description for an error code.
+structure CodeDescription {
+    /// An URI to open with more information about the diagnostic error.
+    @required
+    href: URI
+}
 
 @enumKind("open")
 intEnum DiagnosticTag {
     /// Unused or unnecessary code.
     ///
-    /// Clients are allowed to render diagnostics with this tag faded out instead of having an error squiggle.
+    /// Clients are allowed to render diagnostics with this tag faded out
+    /// instead of having an error squiggle.
     UNNECESSARY = 1
     /// Deprecated or obsolete code.
     ///
@@ -817,7 +827,7 @@ structure DiagnosticRelatedInformation {
     message: String
 }
 
-list DiagnosticRelatedInformationList {
+list DiagnosticRelatedInformations {
     member: DiagnosticRelatedInformation
 }
 
