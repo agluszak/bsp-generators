@@ -58,3 +58,7 @@ object DebugSession extends DebugSession
 trait DebugSession {
   object start extends Endpoint[DebugSessionParams, DebugSessionAddress]("debugSession/start")
 }
+object $ extends $
+trait $ {
+  object cancelRequest extends Endpoint[CancelRequestParams, Unit]("$/cancelRequest")
+}

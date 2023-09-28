@@ -168,6 +168,14 @@ object BuildTargetTag {
   val Test = "test"
 }
 
+final case class CancelRequestParams (
+  id: String,
+)
+
+object CancelRequestParams {
+  implicit val codec: JsonValueCodec[CancelRequestParams] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
 final case class CargoBuildTarget (
   edition: String,
   required_features: Set[String],

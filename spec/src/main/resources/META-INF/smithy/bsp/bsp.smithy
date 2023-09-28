@@ -10,7 +10,6 @@ use traits#jsonRPC
 use traits#jsonRequest
 use traits#untaggedUnion
 
-// TODO: add cancel notif
 // TODO: add WorkspaceLibraries endpoint
 
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
@@ -505,7 +504,7 @@ operation BuildTargetCleanCache {
 }
 
 /// Represents the identifier of a BSP request.
-string RequestId
+string OriginId
 
 list BuildTargetIdentifiers {
     member: BuildTargetIdentifier
@@ -650,7 +649,7 @@ structure MessageParams {
     /// The request id that originated this notification.
     /// The originId field helps clients know which request originated a notification in case several requests are handled by the
     /// client at the same time. It will only be populated if the client defined it in the request that triggered this notification.
-    originId: RequestId
+    originId: OriginId
     /// The actual message.
     @required
     message: String
@@ -687,7 +686,7 @@ structure PublishDiagnosticsParams {
     @required
     buildTarget: BuildTargetIdentifier
     /// The request id that originated this notification.
-    originId: RequestId
+    originId: OriginId
     /// The diagnostics to be published by the client.
     @required
     diagnostics: Diagnostics
