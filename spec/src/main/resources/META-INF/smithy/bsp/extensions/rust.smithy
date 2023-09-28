@@ -265,7 +265,6 @@ structure RustRawDependency {
     features: Features
 }
 
-
 /// The RustDependencies is a mapping between
 /// package id and the package's dependencies info.
 map RustDependencies {

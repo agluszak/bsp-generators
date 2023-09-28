@@ -7,6 +7,6 @@ use crate::*;
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTargetIdentifier {
-    /// The target’s Uri
+    /// The target's Uri
     pub uri: URI,
 }

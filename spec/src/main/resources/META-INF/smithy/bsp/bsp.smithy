@@ -70,7 +70,7 @@ service BuildServer {
 ///
 /// The general idea is that the BuildTarget data structure should contain only information that is fast or cheap to compute.
 structure BuildTarget {
-    /// The target’s unique identifier
+    /// The target's unique identifier
     @required
     id: BuildTargetIdentifier
     /// A human readable name for this target.
@@ -135,7 +135,6 @@ enum BuildTargetTag {
     /// The original motivation to add the "manual" tag comes from a similar functionality
     /// that exists in Bazel, where targets with this tag have to be specified explicitly
     /// on the command line.
-    ///
     MANUAL = "manual"
 }
 
@@ -159,7 +158,7 @@ structure BuildTargetCapabilities {
 /// A unique identifier for a target, can use any URI-compatible encoding as long as it is unique within the workspace.
 /// Clients should not infer metadata out of the URI structure such as the path or query parameters, use `BuildTarget` instead.
 structure BuildTargetIdentifier {
-    /// The target’s Uri
+    /// The target's Uri
     @required
     uri: URI
 }
@@ -268,7 +267,6 @@ operation BuildShutdown {
 @jsonNotification("build/exit")
 operation OnBuildExit {
 }
-
 
 /// The show message notification is sent from a server to a client to ask the client to display a particular message in the user interface.
 ///
@@ -461,7 +459,6 @@ operation BuildTargetTest {
     output: TestResult
 }
 
-
 /// The run request is sent from the client to the server to run a build target. The
 /// server communicates during the initialize handshake whether this method is
 /// supported or not.
@@ -481,7 +478,6 @@ operation BuildTargetRun {
     input: RunParams
     output: RunResult
 }
-
 
 /// The debug request is sent from the client to the server to debug build target(s). The
 /// server launches a [Microsoft DAP](https://microsoft.github.io/debug-adapter-protocol/) server
@@ -508,10 +504,8 @@ operation BuildTargetCleanCache {
     output: CleanCacheResult
 }
 
-
 /// Represents the identifier of a BSP request.
 string RequestId
-
 
 list BuildTargetIdentifiers {
     member: BuildTargetIdentifier
@@ -1070,7 +1064,6 @@ intEnum OutputPathItemKind {
     DIRECTORY = 2
 }
 
-
 /// Task start notifications may contain an arbitrary interface in their `data`
 /// field. The kind of interface that is contained in a notification must be
 /// specified in the `dataKind` field.
@@ -1165,7 +1158,6 @@ structure TaskFinishParams {
     data: TaskFinishData
 }
 
-
 structure CompileParams {
     /// A sequence of build targets to compile.
     @required
@@ -1204,7 +1196,6 @@ structure CompileResult {
     data: CompileResultData
 }
 
-
 /// The beginning of a compilation unit may be signalled to the client with a
 /// `build/taskStart` notification. When the compilation unit is a build target, the
 /// notification's `dataKind` field must be "compile-task" and the `data` field must
@@ -1214,7 +1205,6 @@ structure CompileTask {
     @required
     target: BuildTargetIdentifier
 }
-
 
 /// The completion of a compilation task should be signalled with a
 /// `build/taskFinish` notification. When the compilation unit is a build target,
@@ -1286,7 +1276,6 @@ structure TestResult {
     /// See ScalaTestParams as an example.
     data: TestResultData
 }
-
 
 /// The beginning of a testing unit may be signalled to the client with a
 /// `build/taskStart` notification. When the testing unit is a build target, the

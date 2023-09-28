@@ -27,7 +27,6 @@ impl BuildTargetTag {
     /// The original motivation to add the "manual" tag comes from a similar functionality
     /// that exists in Bazel, where targets with this tag have to be specified explicitly
     /// on the command line.
-    ///
     pub const MANUAL: BuildTargetTag = BuildTargetTag::new("manual");
     /// Target should be ignored by IDEs.
     pub const NO_IDE: BuildTargetTag = BuildTargetTag::new("no-ide");
