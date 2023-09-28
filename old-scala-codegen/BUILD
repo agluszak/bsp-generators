@@ -26,5 +26,7 @@ scala_library(
         "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j",
         "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_jsonrpc",
         "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_generator",
+        # scala utils
+        "@maven//:com_github_plokhotnyuk_jsoniter_scala_jsoniter_scala_core_2_13",
     ],
 )

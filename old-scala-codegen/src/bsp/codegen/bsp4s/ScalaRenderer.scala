@@ -9,7 +9,7 @@ import bsp.codegen.ir.Type._
 import bsp.codegen.ir._
 import bsp.codegen.ir.Hint.{Deprecated, Documentation}
 import cats.implicits.toFoldableOps
-import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.{CodegenFile, Loader}
 import os.RelPath
 import software.amazon.smithy.model.shapes.ShapeId
 
@@ -21,7 +21,13 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
   val baseRelPath: Path = Path.of(basepkg.replace(".", "/"))
 
   def render(): List[CodegenFile] = {
-    List(renderEndpoints(), renderDefinitions())
+    List(renderEndpoints(), renderDefinitions(), copyUtils())
+  }
+
+  def copyUtils(): CodegenFile = {
+    val customCodecContents = Loader.INSTANCE.readResource("CustomCodec.scala")
+    val customCodecPath = Path.of("bsp4s", "util", "CustomCodec.scala")
+    new CodegenFile(customCodecPath, customCodecContents )
   }
 
   def renderDefinitions(): CodegenFile = {
@@ -38,6 +44,8 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
 
     val contents = lines(
       s"package $basepkg",
+      newline,
+      "import bsp4s.util.CustomCodec",
       newline,
       "import java.net.{URI, URISyntaxException}",
       newline,
@@ -117,7 +125,10 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
       newline,
       block(s"object ${shapeId.getName()}")(
         lines(
-          s"implicit val codec: JsonValueCodec[${shapeId.getName()}] = JsonCodecMaker.makeWithRequiredCollectionFields"
+          s"implicit val codec: JsonValueCodec[${shapeId.getName()}] = JsonCodecMaker.makeWithRequiredCollectionFields",
+           if (fields.exists(_.tpe.isInstanceOf[TUntaggedUnion]))
+             s"implicit val codecForEither: JsonValueCodec[Either[String, Int]] = CustomCodec.forEitherStringInt"
+           else Lines.empty
         )
       ),
       newline
@@ -260,8 +271,15 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
     case TMap(key, value)          => s"Map[${renderType(key)}, ${renderType(value)}]"
     case TCollection(member)       => s"List[${renderType(member)}]"
     case TSet(member)              => s"Set[${renderType(member)}]"
-    case TUntaggedUnion(tpes)      => renderType(tpes.head) // Todo what does bsp4j do ?
-  }
+    case TUntaggedUnion(tpes)      => renderUntaggedUnion(tpes)
+   }
+
+   private def renderUntaggedUnion(types: List[Type]): String = {
+     if (types.size != 2)
+       throw new Exception("Only unions of two types are supported")
+
+     s"Either[${types.map(renderType).mkString(", ")}]"
+   }
 
   def renderPrimitive(prim: Primitive, shapeId: ShapeId): String = {
     // Special handling for URI
