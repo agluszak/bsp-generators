@@ -102,8 +102,8 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
             }
 
             return maybeMethod?.let { (methodName, methodType) ->
-                val inputType = getType(op.input.getOrNull()) ?: Type.TUnit
-                val outputType = getType(op.output.getOrNull()) ?: Type.TUnit
+                val inputType = getType(op.input.getOrNull()) ?: Type.Unit
+                val outputType = getType(op.output.getOrNull()) ?: Type.Unit
                 val hints = getHints(op)
                 Operation(op.id, inputType, outputType, methodType, methodName, hints)
             }
@@ -139,16 +139,16 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
             var fields = shape.members().mapNotNull { toField(it) }
 
             fun fieldIsData(field: Field): Boolean =
-                field.name == "data" && field.type == Type.TJson
+                field.name == "data" && field.type == Type.Json
 
             fun makeDiscriminatorField(dataField: Field): Field {
                 val doc =
                     "Kind of data to expect in the `data` field. If this field is not set, the kind of data is not specified."
                 val hints = listOf(Hint.Documentation(doc))
-                if (dataField.type != Type.TJson) {
+                if (dataField.type != Type.Json) {
                     throw RuntimeException("Expected document type")
                 }
-                return Field("dataKind", Type.TString, false, hints)
+                return Field("dataKind", Type.String, false, hints)
             }
 
             fun insertDiscriminator(fields: List<Field>): List<Field> {
@@ -236,7 +236,7 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
             val type =  when (shape) {
-                is StringShape -> Type.TString
+                is StringShape -> Type.String
                 is MapShape -> pureMapType(shape)
                 else -> null
             }
@@ -254,66 +254,66 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
 
     fun pureMapType(shape: MapShape): Type? = shape.key.accept(toTypeVisitor)?.let { key ->
         shape.value.accept(toTypeVisitor)?.let { value ->
-            Type.TMap(key, value)
+            Type.Map(key, value)
         }
     }
 
     val toTypeVisitor = object : ShapeVisitor.Default<Type?>() {
         override fun getDefault(shape: Shape): Type? = null
 
-        override fun booleanShape(shape: BooleanShape): Type = Type.TBool
+        override fun booleanShape(shape: BooleanShape): Type = Type.Bool
 
-        override fun integerShape(shape: IntegerShape): Type = Type.TInt
+        override fun integerShape(shape: IntegerShape): Type = Type.Int
 
-        override fun longShape(shape: LongShape): Type = Type.TLong
+        override fun longShape(shape: LongShape): Type = Type.Long
 
         override fun stringShape(shape: StringShape): Type =
             if (config.strings == TypeAliasing.Aliased && aliased(shape.id))
-                Type.TRef(shape.id)
+                Type.Ref(shape.id)
             else
-                Type.TString
+                Type.String
 
         override fun documentShape(shape: DocumentShape): Type =
             if (shape.hasTrait(DataTrait::class.java) && config.dataWithKind == AbstractionLevel.AsDef)
-                Type.TRef(shape.id)
+                Type.Ref(shape.id)
             else
-                Type.TJson
+                Type.Json
 
         override fun listShape(shape: ListShape): Type? {
             return shape.member.accept(this)?.let { memberType ->
-                if (shape.hasTrait(SetTrait::class.java)) Type.TSet(memberType)
-                else Type.TList(memberType)
+                if (shape.hasTrait(SetTrait::class.java)) Type.Set(memberType)
+                else Type.List(memberType)
             }
         }
 
         override fun mapShape(shape: MapShape): Type? {
-            return if (config.maps == TypeAliasing.Aliased) Type.TRef(shape.id) else pureMapType(shape)
+            return if (config.maps == TypeAliasing.Aliased) Type.Ref(shape.id) else pureMapType(shape)
         }
 
-        override fun structureShape(shape: StructureShape): Type = Type.TRef(shape.id)
+        override fun structureShape(shape: StructureShape): Type = Type.Ref(shape.id)
 
         fun enumUniversal(shape: Shape, openType: Type): Type {
             val enumKind = shape.expectTrait(EnumKindTrait::class.java).enumKind
             return if (config.openEnums == AbstractionLevel.AsType && enumKind == EnumKindTrait.EnumKind.OPEN)
                 openType
             else
-                Type.TRef(shape.id)
+                Type.Ref(shape.id)
         }
 
         override fun enumShape(shape: EnumShape): Type {
-            return enumUniversal(shape, Type.TString)
+            return enumUniversal(shape, Type.String)
         }
 
         override fun intEnumShape(shape: IntEnumShape): Type {
-            return enumUniversal(shape, Type.TInt)
+            return enumUniversal(shape, Type.Int)
         }
 
         override fun unionShape(shape: UnionShape): Type =
             if (config.untaggedUnions == AbstractionLevel.AsType && shape.hasTrait(UntaggedUnionTrait::class.java)) {
                 val memberTypes = shape.members().mapNotNull {it.accept(this) }
-                Type.TUntaggedUnion(memberTypes)
+                Type.UntaggedUnion(memberTypes)
             }
-            else Type.TRef(shape.id)
+            else Type.Ref(shape.id)
 
         override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
 

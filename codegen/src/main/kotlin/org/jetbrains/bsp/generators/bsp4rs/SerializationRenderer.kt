@@ -72,15 +72,15 @@ class SerializationRenderer {
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
         fun optionalToSerdeList(type: Type): SerdeOption = when (type) {
-            is Type.TList -> SerdeOption.SkipVector
-            is Type.TMap -> SerdeOption.SkipMap
-            is Type.TSet -> SerdeOption.SkipSet
+            is Type.List -> SerdeOption.SkipVector
+            is Type.Map -> SerdeOption.SkipMap
+            is Type.Set -> SerdeOption.SkipSet
             else -> SerdeOption.SkipOption
         }
 
         var serdeOpt = emptySet<SerdeOption>()
 
-        if (field.type is Type.TRef && field.name == "data") {
+        if (field.type is Type.Ref && field.name == "data") {
             serdeOpt = serdeOpt.plus(SerdeOption.Flatten)
         }
 

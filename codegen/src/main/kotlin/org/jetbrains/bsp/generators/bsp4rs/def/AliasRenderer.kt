@@ -18,7 +18,7 @@ fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
         include(renderDerefForAlias(name, type))
         newline()
         include(renderFromForAlias(type, name, ""))
-        if (def.aliasedType is Type.TString) {
+        if (def.aliasedType is Type.String) {
             newline()
             include(renderFromForAlias("&str", name, ".to_string()"))
         }

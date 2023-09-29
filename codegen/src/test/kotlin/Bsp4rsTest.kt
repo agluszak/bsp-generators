@@ -19,16 +19,16 @@ class Bsp4rsTest {
         data class TestCase(val input: Type, val expected: String)
 
         val cases = listOf(
-            TestCase(Type.TUnit, "()"),
-            TestCase(Type.TBool, "bool"),
-            TestCase(Type.TString, "String"),
-            TestCase(Type.TInt, "i32"),
-            TestCase(Type.TLong, "i64"),
-            TestCase(Type.TJson, "serde_json::Value"),
-            TestCase(Type.TSet(Type.TString), "BTreeSet<String>"),
-            TestCase(Type.TList(Type.TLong), "Vec<i64>"),
-            TestCase(Type.TMap(Type.TInt, Type.TBool), "BTreeMap<i32, bool>"),
-            TestCase(Type.TRef(ShapeId.fromParts("bsp", "SomeType")), "SomeType"),
+            TestCase(Type.Unit, "()"),
+            TestCase(Type.Bool, "bool"),
+            TestCase(Type.String, "String"),
+            TestCase(Type.Int, "i32"),
+            TestCase(Type.Long, "i64"),
+            TestCase(Type.Json, "serde_json::Value"),
+            TestCase(Type.Set(Type.String), "BTreeSet<String>"),
+            TestCase(Type.List(Type.Long), "Vec<i64>"),
+            TestCase(Type.Map(Type.Int, Type.Bool), "BTreeMap<i32, bool>"),
+            TestCase(Type.Ref(ShapeId.fromParts("bsp", "SomeType")), "SomeType"),
         )
 
         for (case in cases) {
@@ -42,17 +42,17 @@ class Bsp4rsTest {
 
         val cases = listOf(
             TestCase(
-                Field("test", Type.TBool, true, emptyList()),
+                Field("test", Type.Bool, true, emptyList()),
                 rustCode { },
             ),
             TestCase(
-                Field("test", Type.TBool, false, emptyList()),
+                Field("test", Type.Bool, false, emptyList()),
                 rustCode {
                     -"""#[serde(default, skip_serializing_if = "Option::is_none")]"""
                 },
             ),
             TestCase(
-                Field("test", Type.TList(Type.TInt), false, emptyList()),
+                Field("test", Type.List(Type.Int), false, emptyList()),
                 rustCode {
                     -"""#[serde(default, skip_serializing_if = "Vec::is_empty")]"""
                 }
@@ -60,7 +60,7 @@ class Bsp4rsTest {
             TestCase(
                 Field(
                     "test",
-                    Type.TMap(Type.TString, Type.TUnit),
+                    Type.Map(Type.String, Type.Unit),
                     false,
                     emptyList()
                 ),
@@ -69,7 +69,7 @@ class Bsp4rsTest {
                 }
             ),
             TestCase(
-                Field("test", Type.TSet(Type.TJson), false, emptyList()),
+                Field("test", Type.Set(Type.Json), false, emptyList()),
                 rustCode {
                     -"""#[serde(default, skip_serializing_if = "BTreeSet::is_empty")]"""
                 }

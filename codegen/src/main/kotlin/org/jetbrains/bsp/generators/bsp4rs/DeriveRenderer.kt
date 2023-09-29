@@ -63,11 +63,11 @@ class DeriveRenderer(private val defs: Map<ShapeId, Def>) {
 
     private fun typeToDenyList(type: Type): Set<DeriveOption> {
         return when (type) {
-            is Type.TJson -> setOf(DeriveOption.HASH, DeriveOption.ORD)
-            is Type.TRef -> defToDenyList(defs[type.shapeId]!!)
-            is Type.TList -> typeToDenyList(type.member)
-            is Type.TSet -> typeToDenyList(type.member)
-            is Type.TMap -> typeToDenyList(type.key).plus(typeToDenyList(type.value))
+            is Type.Json -> setOf(DeriveOption.HASH, DeriveOption.ORD)
+            is Type.Ref -> defToDenyList(defs[type.shapeId]!!)
+            is Type.List -> typeToDenyList(type.member)
+            is Type.Set -> typeToDenyList(type.member)
+            is Type.Map -> typeToDenyList(type.key).plus(typeToDenyList(type.value))
             else -> emptySet()
         }
     }

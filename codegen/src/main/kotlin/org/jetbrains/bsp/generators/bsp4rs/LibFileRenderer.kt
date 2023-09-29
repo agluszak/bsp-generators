@@ -54,8 +54,8 @@ private fun RustRenderer.renderOtherDataStruct(): CodeBlock {
     val def = Def.Structure(
         ShapeId.fromParts("bsp", "OtherData"),
         listOf(
-            Field("dataKind", Type.TString, true, listOf()),
-            Field("data", Type.TJson, true, listOf())
+            Field("dataKind", Type.String, true, listOf()),
+            Field("data", Type.Json, true, listOf())
         ),
         listOf()
     )

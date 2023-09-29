@@ -132,8 +132,8 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             val typeName = makeTypeName(renderType(member))
 
             when (member) {
-                Type.TInt -> "intSerializer = $typeName.serializer()"
-                Type.TString -> "stringSerializer = $typeName.serializer()"
+                Type.Int -> "intSerializer = $typeName.serializer()"
+                Type.String -> "stringSerializer = $typeName.serializer()"
                 else -> null
             }
         }.toList()
@@ -179,17 +179,17 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     }
 
     fun renderType(type: Type): String = when (type) {
-        Type.TBool -> "Boolean"
-        Type.TInt -> "Int"
-        Type.TJson -> "JsonElement"
-        is Type.TList -> "List<${renderType(type.member)}>"
-        Type.TLong -> "Long"
-        is Type.TMap -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
-        is Type.TRef -> type.shapeId.name
-        is Type.TSet -> "Set<${renderType(type.member)}>"
-        Type.TString -> "String"
-        Type.TUnit -> "Unit"
-        is Type.TUntaggedUnion -> ""
+        Type.Bool -> "Boolean"
+        Type.Int -> "Int"
+        Type.Json -> "JsonElement"
+        is Type.List -> "List<${renderType(type.member)}>"
+        Type.Long -> "Long"
+        is Type.Map -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
+        is Type.Ref -> type.shapeId.name
+        is Type.Set -> "Set<${renderType(type.member)}>"
+        Type.String -> "String"
+        Type.Unit -> "Unit"
+        is Type.UntaggedUnion -> ""
     }
 
     fun renderOperation(op: Operation): CodeBlock {
@@ -202,7 +202,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             JsonRpcMethodType.Request -> "suspend "
         }
         val input = when (op.inputType) {
-            Type.TUnit -> ""
+            Type.Unit -> ""
             else -> "params: ${renderType(op.inputType)}"
         }
         val rpcMethod = op.jsonRpcMethod
