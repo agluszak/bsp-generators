@@ -6,7 +6,7 @@ use crate::*;
 #[serde(rename_all = "camelCase")]
 pub struct TestReport {
     #[deprecated(note = "Use the field in TaskFinishParams instead")]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<Identifier>,
     /// The build target that was compiled.
     pub target: BuildTargetIdentifier,
@@ -21,6 +21,6 @@ pub struct TestReport {
     /// The total number of skipped tests.
     pub skipped: i32,
     /// The total number of milliseconds tests take to run (e.g. doesn't include compile times).
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub time: Option<i64>,
 }

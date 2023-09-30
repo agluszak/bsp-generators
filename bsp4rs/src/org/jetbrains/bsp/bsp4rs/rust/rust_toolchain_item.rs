@@ -7,7 +7,7 @@ use crate::*;
 pub struct RustToolchainItem {
     /// Additional information about Rust toolchain.
     /// Obtained from `rustc`.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rust_std_lib: Option<RustcInfo>,
     /// Path to Cargo executable.
     pub cargo_bin_path: URI,

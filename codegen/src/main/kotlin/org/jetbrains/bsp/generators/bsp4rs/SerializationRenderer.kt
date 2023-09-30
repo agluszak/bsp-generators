@@ -75,8 +75,6 @@ class SerializationRenderer {
         }
 
         if (!field.required) {
-            // TODO: remove default once every not required is Option
-            serdeOpt = serdeOpt.plus(SerdeOption.Default)
             serdeOpt = serdeOpt.plus(SerdeOption.SkipOption)
         }
 
@@ -96,7 +94,6 @@ class SerializationRenderer {
     }
 
     sealed class SerdeOption(val key: String, val value: String) {
-        object Default : SerdeOption("default", "")
         object Transparent : SerdeOption("transparent", "")
         object Untagged : SerdeOption("untagged", "")
         object Flatten : SerdeOption("flatten", "")

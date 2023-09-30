@@ -9,6 +9,6 @@ use crate::*;
 pub struct ScalaDiagnostic {
     /// Actions (also known as quick fixes) that are able to either fix or address
     /// the issue that is causing this diagnostic.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<ScalaAction>>,
 }

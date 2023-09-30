@@ -22,7 +22,7 @@ pub struct SbtBuildTarget {
     pub sbt_version: String,
     pub auto_imports: Vec<String>,
     pub scala_build_target: ScalaBuildTarget,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent: Option<BuildTargetIdentifier>,
     pub children: Vec<BuildTargetIdentifier>,
 }

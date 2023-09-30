@@ -8,6 +8,6 @@ pub struct RustDepKindInfo {
     /// The dependency kind.
     pub kind: RustDepKind,
     /// The target platform for the dependency.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
 }

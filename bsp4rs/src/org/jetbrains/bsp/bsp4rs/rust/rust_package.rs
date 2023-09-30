@@ -31,7 +31,7 @@ pub struct RustPackage {
     /// Code edition of the package.
     pub edition: RustEdition,
     /// The source ID of the dependency, `null` for the root package and path dependencies.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
     /// Corresponds to source files which can be compiled into a crate from this package.
     /// Contains only resolved targets without conflicts.
@@ -51,18 +51,18 @@ pub struct RustPackage {
     /// The `cfg` is split by '=' delimiter and the first half becomes key and
     /// the second is aggregated to the value in `RustCfgOptions`.
     /// For "cfg1" the value is empty.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cfg_options: Option<RustCfgOptions>,
     /// Environment variables for the package.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub env: Option<EnvironmentVariables>,
     /// An absolute path which is used as a value of `OUT_DIR` environmental
     /// variable when compiling current package.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub out_dir_url: Option<URI>,
     /// File path to compiled output of a procedural macro crate.
     /// Procedural macros are macros that generate code at compile time.
     /// Contains files with file extensions: `.dll`, `.so` or `.dylib`.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub proc_macro_artifact: Option<String>,
 }

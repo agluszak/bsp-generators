@@ -20,6 +20,6 @@ pub struct CppOptionsItem {
     pub linkopts: Vec<String>,
     /// Create a shared library.
     /// The presence of this flag means that linking occurs with the -shared flag
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub linkshared: Option<bool>,
 }

@@ -13,9 +13,9 @@ pub struct ScalaAction {
     /// A short, human-readable, title for this code action.
     pub title: String,
     /// A description that may be shown to the user client side to explain the action.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// The workspace edit this code action performs.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub edit: Option<ScalaWorkspaceEdit>,
 }

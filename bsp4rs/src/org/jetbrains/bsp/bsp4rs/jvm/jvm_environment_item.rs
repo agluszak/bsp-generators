@@ -10,6 +10,6 @@ pub struct JvmEnvironmentItem {
     pub jvm_options: Vec<String>,
     pub working_directory: String,
     pub environment_variables: EnvironmentVariables,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub main_classes: Option<Vec<JvmMainClass>>,
 }

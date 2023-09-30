@@ -14,6 +14,6 @@ pub struct InitializeBuildResult {
     /// The capabilities of the build server
     pub capabilities: BuildServerCapabilities,
     /// Additional metadata about the server
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
+    #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<InitializeBuildResultData>,
 }

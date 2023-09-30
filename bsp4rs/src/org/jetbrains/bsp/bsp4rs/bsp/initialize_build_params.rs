@@ -16,6 +16,6 @@ pub struct InitializeBuildParams {
     /// The capabilities of the client
     pub capabilities: BuildClientCapabilities,
     /// Additional metadata about the client
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
+    #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<InitializeBuildParamsData>,
 }

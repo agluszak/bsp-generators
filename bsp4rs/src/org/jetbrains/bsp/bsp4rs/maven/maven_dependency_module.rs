@@ -16,6 +16,6 @@ pub struct MavenDependencyModule {
     ///   {uri = "../scala-library-2.13.5-sources.jar", classifier = "sources"}
     /// ]
     pub artifacts: Vec<MavenDependencyModuleArtifact>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
 }
