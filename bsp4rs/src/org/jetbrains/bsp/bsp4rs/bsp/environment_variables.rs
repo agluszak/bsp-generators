@@ -2,8 +2,6 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::BTreeMap;
 
-/// Map representing the environment variables used in BSP extensions.
-/// Each key represents an environment variable name and each value represents the corresponding value to be set.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct EnvironmentVariables(pub BTreeMap<String, String>);

@@ -15,21 +15,15 @@
           "Library": {
             "crate_name": "bitflags",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "bitflags",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default"
-          ],
+          "common": ["default"],
           "selects": {}
         },
         "edition": "2018",
@@ -46,17 +40,13 @@
           "Library": {
             "crate_name": "bsp4rs",
             "crate_root": "src/org/jetbrains/bsp/bsp4rs/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "bsp4rs",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -106,17 +96,13 @@
           "Library": {
             "crate_name": "darling",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "darling",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -154,17 +140,13 @@
           "Library": {
             "crate_name": "darling_core",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "darling_core",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -209,17 +191,13 @@
           "ProcMacro": {
             "crate_name": "darling_macro",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "darling_macro",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -256,22 +234,15 @@
           "Library": {
             "crate_name": "fnv",
             "crate_root": "lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "fnv",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "edition": "2015",
@@ -293,23 +264,15 @@
           "Library": {
             "crate_name": "form_urlencoded",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "form_urlencoded",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "std"
-          ],
+          "common": ["alloc", "default", "std"],
           "selects": {}
         },
         "deps": {
@@ -340,17 +303,13 @@
           "Library": {
             "crate_name": "ident_case",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "ident_case",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2015",
         "version": "1.0.1"
       },
@@ -370,23 +329,15 @@
           "Library": {
             "crate_name": "idna",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "idna",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "std"
-          ],
+          "common": ["alloc", "default", "std"],
           "selects": {}
         },
         "deps": {
@@ -421,17 +372,13 @@
           "Library": {
             "crate_name": "itoa",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "itoa",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "1.0.9"
       },
@@ -451,21 +398,15 @@
           "Library": {
             "crate_name": "lsp_types",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "lsp_types",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default"
-          ],
+          "common": ["default"],
           "selects": {}
         },
         "deps": {
@@ -517,23 +458,15 @@
           "Library": {
             "crate_name": "percent_encoding",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "percent_encoding",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "std"
-          ],
+          "common": ["alloc", "default", "std"],
           "selects": {}
         },
         "edition": "2018",
@@ -555,31 +488,22 @@
           "Library": {
             "crate_name": "proc_macro2",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "proc_macro2",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "proc-macro"
-          ],
+          "common": ["default", "proc-macro"],
           "selects": {}
         },
         "deps": {
@@ -599,9 +523,7 @@
         "version": "1.0.66"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -619,22 +541,15 @@
           "Library": {
             "crate_name": "quote",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "quote",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "proc-macro"
-          ],
+          "common": ["default", "proc-macro"],
           "selects": {}
         },
         "deps": {
@@ -665,17 +580,13 @@
           "Library": {
             "crate_name": "ryu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "ryu",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "1.0.15"
       },
@@ -695,33 +606,22 @@
           "Library": {
             "crate_name": "serde",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "derive",
-            "serde_derive",
-            "std"
-          ],
+          "common": ["default", "derive", "serde_derive", "std"],
           "selects": {}
         },
         "deps": {
@@ -746,9 +646,7 @@
         "version": "1.0.188"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -766,17 +664,13 @@
           "Library": {
             "crate_name": "serde_attributes",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_attributes",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "attr-alias",
@@ -827,22 +721,15 @@
           "ProcMacro": {
             "crate_name": "serde_enum_str",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_enum_str",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "deps": {
@@ -889,21 +776,15 @@
           "Library": {
             "crate_name": "serde_rename_rule",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_rename_rule",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "std"
-          ],
+          "common": ["std"],
           "selects": {}
         },
         "edition": "2021",
@@ -925,21 +806,15 @@
           "ProcMacro": {
             "crate_name": "serde_derive",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_derive",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default"
-          ],
+          "common": ["default"],
           "selects": {}
         },
         "deps": {
@@ -978,31 +853,22 @@
           "Library": {
             "crate_name": "serde_json",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_json",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "deps": {
@@ -1030,9 +896,7 @@
         "version": "1.0.107"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1050,17 +914,13 @@
           "ProcMacro": {
             "crate_name": "serde_repr",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_repr",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -1097,26 +957,20 @@
           "Library": {
             "crate_name": "syn",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "syn",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "clone-impls",
@@ -1156,9 +1010,7 @@
         "version": "1.0.109"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1176,17 +1028,13 @@
           "Library": {
             "crate_name": "syn",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "syn",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "clone-impls",
@@ -1235,23 +1083,15 @@
           "Library": {
             "crate_name": "tinyvec",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "tinyvec",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "tinyvec_macros"
-          ],
+          "common": ["alloc", "default", "tinyvec_macros"],
           "selects": {}
         },
         "deps": {
@@ -1282,17 +1122,13 @@
           "Library": {
             "crate_name": "tinyvec_macros",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "tinyvec_macros",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "0.1.1"
       },
@@ -1312,22 +1148,15 @@
           "Library": {
             "crate_name": "unicode_bidi",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "unicode_bidi",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "hardcoded-data",
-            "std"
-          ],
+          "common": ["hardcoded-data", "std"],
           "selects": {}
         },
         "edition": "2018",
@@ -1349,17 +1178,13 @@
           "Library": {
             "crate_name": "unicode_ident",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "unicode_ident",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "1.0.11"
       },
@@ -1379,21 +1204,15 @@
           "Library": {
             "crate_name": "unicode_normalization",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "unicode_normalization",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "std"
-          ],
+          "common": ["std"],
           "selects": {}
         },
         "deps": {
@@ -1424,22 +1243,15 @@
           "Library": {
             "crate_name": "url",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "url",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "serde"
-          ],
+          "common": ["default", "serde"],
           "selects": {}
         },
         "deps": {

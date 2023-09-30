@@ -14,6 +14,12 @@ pub struct RunParams {
     /// Optional arguments to the executed application.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<String>>,
+    /// Optional environment variables to set before running the application.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<EnvironmentVariables>,
+    /// Optional working directory
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<URI>,
     /// Language-specific metadata for this execution.
     /// See ScalaMainClass as an example.
     #[serde(flatten, skip_serializing_if = "Option::is_none")]

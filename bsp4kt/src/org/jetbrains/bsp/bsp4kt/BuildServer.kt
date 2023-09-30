@@ -56,4 +56,7 @@ interface BuildServer {
   @JsonRequest("buildTarget/cleanCache")
   suspend fun buildTargetCleanCache(params: CleanCacheParams): CleanCacheResult
 
+  @JsonNotification("run/readStdin")
+  fun onRunReadStdin(params: ReadParams): Unit
+
 }

@@ -248,3 +248,13 @@ impl Request for BuildTargetCleanCache {
     type Result = CleanCacheResult;
     const METHOD: &'static str = "buildTarget/cleanCache";
 }
+
+/// Notification sent from the client to the server when the user wants to send
+/// input to the stdin of the running target.
+#[derive(Debug)]
+pub enum OnRunReadStdin {}
+
+impl Notification for OnRunReadStdin {
+    type Params = ReadParams;
+    const METHOD: &'static str = "run/readStdin";
+}

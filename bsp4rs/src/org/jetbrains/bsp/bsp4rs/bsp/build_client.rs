@@ -104,3 +104,23 @@ impl Notification for OnBuildTaskFinish {
     type Params = TaskFinishParams;
     const METHOD: &'static str = "build/taskFinish";
 }
+
+/// Notification sent from the server to the client when the target being run or tested
+/// prints something to stdout.
+#[derive(Debug)]
+pub enum OnRunPrintStdout {}
+
+impl Notification for OnRunPrintStdout {
+    type Params = PrintParams;
+    const METHOD: &'static str = "run/printStdout";
+}
+
+/// Notification sent from the server to the client when the target being run or tested
+/// prints something to stderr.
+#[derive(Debug)]
+pub enum OnRunPrintStderr {}
+
+impl Notification for OnRunPrintStderr {
+    type Params = PrintParams;
+    const METHOD: &'static str = "run/printStderr";
+}

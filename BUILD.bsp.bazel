@@ -1,5 +1,0 @@
-filegroup(
-    name = "definition",
-    srcs = glob(["spec/src/main/resources/META-INF/**"]),
-    # visibility = ["//visibility:public"],
-)

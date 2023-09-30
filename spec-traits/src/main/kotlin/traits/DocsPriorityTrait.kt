@@ -10,7 +10,7 @@ import software.amazon.smithy.utils.ToSmithyBuilder
 
 class DocsPriorityTrait private constructor(builder: Builder) : AbstractTrait(ID, builder.sourceLocation),
     ToSmithyBuilder<DocsPriorityTrait> {
-    private val priority: Int
+    val priority: Int
 
     init {
         priority = builder.priority

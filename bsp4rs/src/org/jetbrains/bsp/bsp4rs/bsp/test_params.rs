@@ -14,6 +14,12 @@ pub struct TestParams {
     /// Optional arguments to the test execution engine.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<String>>,
+    /// Optional environment variables to set before running the tests.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<EnvironmentVariables>,
+    /// Optional working directory
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub working_directory: Option<URI>,
     /// Language-specific metadata about for this test execution.
     /// See ScalaTestParams as an example.
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
