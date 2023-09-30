@@ -16,14 +16,14 @@ pub struct RustBuildTarget {
     pub kind: RustTargetKind,
     /// Type of output that is produced by a crate during the build process.
     /// The crate type determines how the source code is compiled.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub crate_types: Vec<RustCrateType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub crate_types: Option<Vec<RustCrateType>>,
     /// The Rust edition of the target.
     pub edition: RustEdition,
     /// Whether or not this target has doc tests enabled, and
     /// the target is compatible with doc testing.
     pub doctest: bool,
     /// A sequence of required features.
-    #[serde(default, skip_serializing_if = "BTreeSet::is_empty")]
-    pub required_features: BTreeSet<Feature>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub required_features: Option<BTreeSet<Feature>>,
 }

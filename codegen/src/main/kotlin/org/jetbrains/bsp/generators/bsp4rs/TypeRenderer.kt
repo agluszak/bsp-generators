@@ -3,14 +3,9 @@ package org.jetbrains.bsp.generators.bsp4rs
 import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.Type
 
-fun RustRenderer.renderIrShape(shape: IrShape, isRequired: Boolean): String {
-    if (isRequired) return renderIrShapeType(shape)
-
-    return when (shape.type) {
-        is Type.List, is Type.Map, is Type.Set -> renderIrShapeType(shape)
-        else -> "Option<${renderIrShapeType(shape)}>"
-    }
-}
+fun RustRenderer.renderIrShape(shape: IrShape, isRequired: Boolean): String =
+    if (isRequired) renderIrShapeType(shape)
+    else "Option<${renderIrShapeType(shape)}>"
 
 fun RustRenderer.renderIrShapeType(irShape: IrShape): String {
     if (irShape.type is Type.Ref)

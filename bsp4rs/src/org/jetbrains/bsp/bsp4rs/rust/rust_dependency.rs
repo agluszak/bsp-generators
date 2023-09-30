@@ -12,6 +12,6 @@ pub struct RustDependency {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// Array of dependency kinds.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub dep_kinds: Vec<RustDepKindInfo>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dep_kinds: Option<Vec<RustDepKindInfo>>,
 }

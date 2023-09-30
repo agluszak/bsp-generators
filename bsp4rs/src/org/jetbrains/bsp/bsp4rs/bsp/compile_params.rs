@@ -12,6 +12,6 @@ pub struct CompileParams {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<Identifier>,
     /// Optional arguments to the compilation process.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub arguments: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<Vec<String>>,
 }

@@ -11,6 +11,6 @@ pub struct ScalaMainClass {
     /// The jvm options for the application.
     pub jvm_options: Vec<String>,
     /// The environment variables for the application.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub environment_variables: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<Vec<String>>,
 }

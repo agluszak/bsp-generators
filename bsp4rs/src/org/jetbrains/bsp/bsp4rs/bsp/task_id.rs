@@ -15,6 +15,6 @@ pub struct TaskId {
     /// execution.
     /// OriginId should not be included in the parents field, there is a separate
     /// field for that.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub parents: Vec<Identifier>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parents: Option<Vec<Identifier>>,
 }
