@@ -9,16 +9,16 @@ use std::collections::{BTreeMap, BTreeSet};
 #[serde(transparent)]
 pub struct FeatureDependencyGraph(pub BTreeMap<Feature, BTreeSet<Feature>>);
 
+impl FeatureDependencyGraph {
+    pub fn new(input: BTreeMap<Feature, BTreeSet<Feature>>) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for FeatureDependencyGraph {
     type Target = BTreeMap<Feature, BTreeSet<Feature>>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<BTreeMap<Feature, BTreeSet<Feature>>> for FeatureDependencyGraph {
-    fn from(input: BTreeMap<Feature, BTreeSet<Feature>>) -> Self {
-        Self(input)
     }
 }

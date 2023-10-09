@@ -6,16 +6,16 @@ use std::collections::BTreeMap;
 #[serde(transparent)]
 pub struct EnvironmentVariables(pub BTreeMap<String, String>);
 
+impl EnvironmentVariables {
+    pub fn new(input: BTreeMap<String, String>) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for EnvironmentVariables {
     type Target = BTreeMap<String, String>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<BTreeMap<String, String>> for EnvironmentVariables {
-    fn from(input: BTreeMap<String, String>) -> Self {
-        Self(input)
     }
 }

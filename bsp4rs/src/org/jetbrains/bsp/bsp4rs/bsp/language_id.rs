@@ -6,17 +6,17 @@ use serde::{Deserialize, Serialize};
 #[serde(transparent)]
 pub struct LanguageId(pub String);
 
+impl LanguageId {
+    pub fn new(input: String) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for LanguageId {
     type Target = String;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<String> for LanguageId {
-    fn from(input: String) -> Self {
-        Self(input)
     }
 }
 

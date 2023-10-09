@@ -17,17 +17,26 @@ fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
         include(renderPreDef(def))
         -"""pub struct $name(pub $type);"""
         newline()
-        include(renderDerefForAlias(name, type))
+        include(renderConstructor(name, type))
         newline()
-        include(renderFromForAlias(type, name, ""))
+        include(renderDeref(name, type))
         if (def.aliasedType is Type.String) {
             newline()
-            include(renderFromForAlias("&str", name, ".to_string()"))
+            include(renderFrom("&str", name, ".to_string()"))
         }
     }
 }
 
-private fun renderDerefForAlias(name: String, type: String): CodeBlock =
+private fun renderConstructor(name: String, from: String): CodeBlock =
+    rustCode {
+        block("""impl $name""") {
+            block("pub fn new(input: $from) -> Self") {
+                -"Self(input)"
+            }
+        }
+    }
+
+private fun renderDeref(name: String, type: String): CodeBlock =
     rustCode {
         block("""impl std::ops::Deref for $name""") {
             -"""type Target = $type;"""
@@ -38,7 +47,7 @@ private fun renderDerefForAlias(name: String, type: String): CodeBlock =
         }
     }
 
-private fun renderFromForAlias(from: String, name: String, fn: String): CodeBlock =
+private fun renderFrom(from: String, name: String, fn: String): CodeBlock =
     rustCode {
         block("""impl From<$from> for $name""") {
             block("fn from(input: $from) -> Self") {

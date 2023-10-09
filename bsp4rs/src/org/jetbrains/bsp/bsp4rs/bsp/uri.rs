@@ -6,17 +6,17 @@ use serde::{Deserialize, Serialize};
 #[serde(transparent)]
 pub struct URI(pub String);
 
+impl URI {
+    pub fn new(input: String) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for URI {
     type Target = String;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<String> for URI {
-    fn from(input: String) -> Self {
-        Self(input)
     }
 }
 

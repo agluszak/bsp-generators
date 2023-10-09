@@ -7,16 +7,16 @@ use std::collections::BTreeMap;
 #[serde(transparent)]
 pub struct RustDependencies(pub BTreeMap<String, Vec<RustDependency>>);
 
+impl RustDependencies {
+    pub fn new(input: BTreeMap<String, Vec<RustDependency>>) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for RustDependencies {
     type Target = BTreeMap<String, Vec<RustDependency>>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<BTreeMap<String, Vec<RustDependency>>> for RustDependencies {
-    fn from(input: BTreeMap<String, Vec<RustDependency>>) -> Self {
-        Self(input)
     }
 }

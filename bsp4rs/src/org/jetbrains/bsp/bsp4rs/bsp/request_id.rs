@@ -5,17 +5,17 @@ use serde::{Deserialize, Serialize};
 #[serde(transparent)]
 pub struct RequestId(pub String);
 
+impl RequestId {
+    pub fn new(input: String) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for RequestId {
     type Target = String;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<String> for RequestId {
-    fn from(input: String) -> Self {
-        Self(input)
     }
 }
 

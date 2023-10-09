@@ -4,17 +4,17 @@ use serde::{Deserialize, Serialize};
 #[serde(transparent)]
 pub struct Identifier(pub String);
 
+impl Identifier {
+    pub fn new(input: String) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for Identifier {
     type Target = String;
 
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl From<String> for Identifier {
-    fn from(input: String) -> Self {
-        Self(input)
     }
 }
 
