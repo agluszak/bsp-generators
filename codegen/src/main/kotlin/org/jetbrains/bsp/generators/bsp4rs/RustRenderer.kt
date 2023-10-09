@@ -1,7 +1,13 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.CodegenFile
-import org.jetbrains.bsp.generators.bsp4rs.def.*
+import org.jetbrains.bsp.generators.bsp4rs.def.renderAlias
+import org.jetbrains.bsp.generators.bsp4rs.def.renderClosedEnum
+import org.jetbrains.bsp.generators.bsp4rs.def.renderDataKinds
+import org.jetbrains.bsp.generators.bsp4rs.def.renderOpenEnum
+import org.jetbrains.bsp.generators.bsp4rs.def.renderService
+import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
+import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnion
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
