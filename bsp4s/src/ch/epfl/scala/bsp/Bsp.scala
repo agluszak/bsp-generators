@@ -112,7 +112,6 @@ object BuildTargetDataKind {
   val Cpp = "cpp"
   val Jvm = "jvm"
   val Python = "python"
-  val Rust = "rust"
   val Sbt = "sbt"
   val Scala = "scala"
 }
@@ -879,20 +878,6 @@ object RunResult {
   implicit val codec: JsonValueCodec[RunResult] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
-final case class RustBuildTarget (
-  name: String,
-  crateRootUrl: Uri,
-  kind: RustTargetKind,
-  crateTypes: Option[List[RustCrateType]],
-  edition: String,
-  doctest: Boolean,
-  requiredFeatures: Option[Set[String]],
-)
-
-object RustBuildTarget {
-  implicit val codec: JsonValueCodec[RustBuildTarget] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
 sealed abstract class RustCrateType(val value: Int)
 object RustCrateType {
   case object Bin extends RustCrateType(1)
@@ -962,8 +947,8 @@ final case class RustPackage (
   origin: String,
   edition: String,
   source: Option[String],
-  resolvedTargets: List[RustBuildTarget],
-  allTargets: List[RustBuildTarget],
+  resolvedTargets: List[RustTarget],
+  allTargets: List[RustTarget],
   features: Map[String, Set[String]],
   enabledFeatures: Set[String],
   cfgOptions: Option[Map[String, List[String]]],
@@ -995,6 +980,20 @@ final case class RustRawDependency (
 
 object RustRawDependency {
   implicit val codec: JsonValueCodec[RustRawDependency] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
+final case class RustTarget (
+  name: String,
+  crateRootUrl: Uri,
+  kind: RustTargetKind,
+  crateTypes: Option[List[RustCrateType]],
+  edition: String,
+  doctest: Boolean,
+  requiredFeatures: Option[Set[String]],
+)
+
+object RustTarget {
+  implicit val codec: JsonValueCodec[RustTarget] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
 sealed abstract class RustTargetKind(val value: Int)

@@ -3,11 +3,10 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::BTreeSet;
 
-/// `RustBuildTarget` is a basic data structure that contains rust-specific
-/// metadata for compiling a target containing Rust sources.
+/// `RustTarget` contains data of the target as defined in Cargo metadata.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RustBuildTarget {
+pub struct RustTarget {
     /// The name of the target.
     pub name: String,
     /// Path to the root module of the crate.
