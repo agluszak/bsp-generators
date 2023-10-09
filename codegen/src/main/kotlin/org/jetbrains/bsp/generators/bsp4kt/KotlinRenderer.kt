@@ -3,7 +3,14 @@ package org.jetbrains.bsp.generators.bsp4kt
 import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.code
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumType
+import org.jetbrains.bsp.generators.ir.EnumValue
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
+import org.jetbrains.bsp.generators.ir.Operation
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelCaseUpperCamelCase
 import org.jetbrains.bsp.generators.utils.kebabToScreamingSnakeCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
@@ -112,10 +119,16 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return renderOpenEnum(dataKindDef)
     }
 
-    private fun renderUntaggedUnion(def: Def.UntaggedUnion): CodegenFile {
-        val name = def.name
+    private fun renderUntaggedUnion(def: Def.UntaggedUnion): CodegenFile? {
+        if (def.members.size == 2 && def.members.containsAll(listOf(String, Int))) {
+            return null
+        }
 
         fun makeTypeName(renderedType: String): String = "${renderedType.camelCaseUpperCamelCase()}Value"
+
+        val name = def.name
+        val stringTypeName = def.members.find { it == Type.String }?.let { makeTypeName(renderType(it)) }
+        val intTypeName = def.members.find { it == Type.Int }?.let { makeTypeName(renderType(it)) }
 
         fun renderConstructor(type: Type): CodeBlock {
             val renderedType = renderType(type)
@@ -128,24 +141,11 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             }
         }
 
-        val serializers = def.members.toSet().mapNotNull { member ->
-            val typeName = makeTypeName(renderType(member))
-
-            when (member) {
-                Type.Int -> "intSerializer = $typeName.serializer()"
-                Type.String -> "stringSerializer = $typeName.serializer()"
-                else -> null
-            }
-        }.toList()
-
         val code = code {
             -"package $basepkg"
             newline()
-            -"import bsp4kt.util.stringIntUnionSerializer"
-            -"import kotlinx.serialization.DeserializationStrategy"
+            -"import bsp4kt.util.StringIntUnionSerializer"
             -"import kotlinx.serialization.Serializable"
-            -"import kotlinx.serialization.json.JsonContentPolymorphicSerializer"
-            -"import kotlinx.serialization.json.JsonElement"
             newline()
             -"""@Serializable(with = $name.Companion::class)"""
             block("sealed interface $name") {
@@ -153,10 +153,10 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
                     include(renderConstructor(member))
                     newline()
                 }
-                block("companion object : JsonContentPolymorphicSerializer<$name>($name::class)") {
-                    block("override fun selectDeserializer(element: JsonElement): DeserializationStrategy<$name>") {
-                        -"return stringIntUnionSerializer<$name>(${serializers.joinToString(",")})(element)"
-                    }
+                paren("companion object : StringIntUnionSerializer<$name>") {
+                    -"clazz = $name::class,"
+                    -"stringSerializer = $stringTypeName.serializer(),"
+                    -"intSerializer = $intTypeName.serializer(),"
                 }
             }
         }

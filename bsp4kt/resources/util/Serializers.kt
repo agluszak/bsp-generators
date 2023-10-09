@@ -2,31 +2,22 @@ package bsp4kt.util
 
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.*
+import kotlin.reflect.KClass
 
-fun <T> stringIntUnionSerializer(
-    stringSerializer: DeserializationStrategy<T>? = null,
-    intSerializer: DeserializationStrategy<T>? = null
-): (JsonElement) -> DeserializationStrategy<T> {
-    fun selectDeserializer(element: JsonElement): DeserializationStrategy<T> {
-        val error = SerializationException("Unsupported type")
+open class StringIntUnionSerializer<T : Any>(
+    clazz: KClass<T>,
+    private val stringSerializer: DeserializationStrategy<T>,
+    private val intSerializer: DeserializationStrategy<T>
+) : JsonContentPolymorphicSerializer<T>(clazz) {
 
-        return when (element) {
-            is JsonPrimitive -> {
-                if (element.isString) {
-                    stringSerializer ?: throw error
-                } else if (element.intOrNull != null) {
-                    intSerializer ?: throw error
-                } else {
-                    throw error
-                }
-            }
+    private val unsupportedTypeException =
+        SerializationException("Unsupported type, value must be either a string or an integer")
 
-            else -> throw error
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<T> =
+        when {
+            element is JsonPrimitive && element.jsonPrimitive.isString -> stringSerializer
+            element is JsonPrimitive && element.intOrNull != null -> intSerializer
+            else -> throw unsupportedTypeException
         }
-    }
-
-    return ::selectDeserializer
 }
