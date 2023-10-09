@@ -1,36 +1,9 @@
 package org.jetbrains.bsp.generators.ir
 
 import software.amazon.smithy.model.Model
-import software.amazon.smithy.model.shapes.BooleanShape
-import software.amazon.smithy.model.shapes.DocumentShape
-import software.amazon.smithy.model.shapes.EnumShape
-import software.amazon.smithy.model.shapes.IntEnumShape
-import software.amazon.smithy.model.shapes.IntegerShape
-import software.amazon.smithy.model.shapes.ListShape
-import software.amazon.smithy.model.shapes.LongShape
-import software.amazon.smithy.model.shapes.MapShape
-import software.amazon.smithy.model.shapes.MemberShape
-import software.amazon.smithy.model.shapes.OperationShape
-import software.amazon.smithy.model.shapes.ServiceShape
-import software.amazon.smithy.model.shapes.Shape
-import software.amazon.smithy.model.shapes.ShapeId
-import software.amazon.smithy.model.shapes.ShapeVisitor
-import software.amazon.smithy.model.shapes.StringShape
-import software.amazon.smithy.model.shapes.StructureShape
-import software.amazon.smithy.model.shapes.UnionShape
-import software.amazon.smithy.model.traits.DeprecatedTrait
-import software.amazon.smithy.model.traits.DocumentationTrait
-import software.amazon.smithy.model.traits.JsonNameTrait
-import software.amazon.smithy.model.traits.MixinTrait
-import software.amazon.smithy.model.traits.RequiredTrait
-import software.amazon.smithy.model.traits.UnstableTrait
-import traits.DataKindTrait
-import traits.DataTrait
-import traits.EnumKindTrait
-import traits.JsonNotificationTrait
-import traits.JsonRequestTrait
-import traits.SetTrait
-import traits.UntaggedUnionTrait
+import software.amazon.smithy.model.shapes.*
+import software.amazon.smithy.model.traits.*
+import traits.*
 import java.util.stream.Collectors
 import kotlin.jvm.optionals.getOrNull
 
@@ -235,13 +208,13 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
 
         fun typeShape(shape: Shape): List<Def> {
             val hints = getHints(shape)
-            val type =  when (shape) {
+            val type = when (shape) {
                 is StringShape -> Type.String
                 is MapShape -> pureMapType(shape)
                 else -> null
             }
 
-            return listOfNotNull(type?.let {Def.Alias(shape.id, it, hints) })
+            return listOfNotNull(type?.let { Def.Alias(shape.id, it, hints) })
         }
 
         override fun stringShape(shape: StringShape): List<Def> =
@@ -310,10 +283,9 @@ class SmithyToIr(val model: Model, val config: IrConfig) {
 
         override fun unionShape(shape: UnionShape): Type =
             if (config.untaggedUnions == AbstractionLevel.AsType && shape.hasTrait(UntaggedUnionTrait::class.java)) {
-                val memberTypes = shape.members().mapNotNull {it.accept(this) }
+                val memberTypes = shape.members().mapNotNull { it.accept(this) }
                 Type.UntaggedUnion(memberTypes)
-            }
-            else Type.Ref(shape.id)
+            } else Type.Ref(shape.id)
 
         override fun memberShape(shape: MemberShape): Type? = model.expectShape(shape.target).accept(this)
 

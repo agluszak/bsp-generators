@@ -7,7 +7,7 @@ import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Type
 
-fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock? {
+fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock {
     val name = def.name
     val type = this.renderType(def.aliasedType)
 

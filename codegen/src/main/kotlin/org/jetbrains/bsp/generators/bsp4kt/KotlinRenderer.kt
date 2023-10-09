@@ -141,7 +141,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         val code = code {
             -"package $basepkg"
             newline()
-            -"import bsp4kt.util.untaggedUnionSerializer"
+            -"import bsp4kt.util.stringIntUnionSerializer"
             -"import kotlinx.serialization.DeserializationStrategy"
             -"import kotlinx.serialization.Serializable"
             -"import kotlinx.serialization.json.JsonContentPolymorphicSerializer"
@@ -154,8 +154,8 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
                     newline()
                 }
                 block("companion object : JsonContentPolymorphicSerializer<$name>($name::class)") {
-                    block("override fun selectDeserializer(element: JsonElement): DeserializationStrategy<$name>"){
-                        -"return untaggedUnionSerializer<$name>(${serializers.joinToString(",")})(element)"
+                    block("override fun selectDeserializer(element: JsonElement): DeserializationStrategy<$name>") {
+                        -"return stringIntUnionSerializer<$name>(${serializers.joinToString(",")})(element)"
                     }
                 }
             }

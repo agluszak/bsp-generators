@@ -49,26 +49,26 @@ sealed interface Def {
     ) : Def
 }
 
- sealed interface Type {
-     // primitive types
-     object Unit : Type
-     object Bool : Type
-     object String : Type
-     object Int : Type
-     object Long : Type
-     object Json : Type
+sealed interface Type {
+    // primitive types
+    object Unit : Type
+    object Bool : Type
+    object String : Type
+    object Int : Type
+    object Long : Type
+    object Json : Type
 
-     // collections
-     data class Set(val member: Type) : Type
-     data class List(val member: Type) : Type
-     data class Map(val key: Type, val value: Type) : Type
+    // collections
+    data class Set(val member: Type) : Type
+    data class List(val member: Type) : Type
+    data class Map(val key: Type, val value: Type) : Type
 
-     // references
-     data class Ref(val shapeId: ShapeId) : Type
+    // references
+    data class Ref(val shapeId: ShapeId) : Type
 
-     // Def as type
-     data class UntaggedUnion(val members: kotlin.collections.List<Type>): Type
- }
+    // Def as type
+    data class UntaggedUnion(val members: kotlin.collections.List<Type>) : Type
+}
 
 sealed interface JsonRpcMethodType {
     object Request : JsonRpcMethodType
@@ -112,6 +112,6 @@ sealed interface Hint {
     data class Deprecated(val message: String) : Hint
 
     data class JsonRename(val name: String) : Hint
-    object Unstable: Hint
+    object Unstable : Hint
 }
 

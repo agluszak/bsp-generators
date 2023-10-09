@@ -25,7 +25,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderModule(module: Module): List<CodegenFile> {
         val filesWithNames = module.definitions.mapNotNull {
-            renderDef(it)?.run {
+            renderDef(it).run {
                 val name = makeName(it.name).camelToSnakeCase()
                 Pair(generateFile(this, module.path, "$name.rs"), name)
             }
@@ -37,7 +37,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return files + modFile
     }
 
-    private fun renderDef(def: Def): CodeBlock? = when (def) {
+    private fun renderDef(def: Def): CodeBlock = when (def) {
         is Def.Structure -> renderStructure(def)
         is Def.OpenEnum<*> -> renderOpenEnum(def)
         is Def.ClosedEnum<*> -> renderClosedEnum(def)

@@ -8,7 +8,7 @@ import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelCaseUpperCamelCase
 
-fun RustRenderer.renderUntaggedUnion(def: Def.UntaggedUnion): CodeBlock? {
+fun RustRenderer.renderUntaggedUnion(def: Def.UntaggedUnion): CodeBlock {
     return rustCode {
         include(renderPreDef(def, untagged = true))
         include(renderVariantsEnum(def.name, makeUnionOptions(def.members)))

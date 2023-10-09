@@ -6,7 +6,10 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.intOrNull
 
-fun <T>untaggedUnionSerializer(stringSerializer: DeserializationStrategy<T>? = null, intSerializer: DeserializationStrategy<T>? = null): (JsonElement) -> DeserializationStrategy<T> {
+fun <T> stringIntUnionSerializer(
+    stringSerializer: DeserializationStrategy<T>? = null,
+    intSerializer: DeserializationStrategy<T>? = null
+): (JsonElement) -> DeserializationStrategy<T> {
     fun selectDeserializer(element: JsonElement): DeserializationStrategy<T> {
         val error = SerializationException("Unsupported type")
 
@@ -20,6 +23,7 @@ fun <T>untaggedUnionSerializer(stringSerializer: DeserializationStrategy<T>? = n
                     throw error
                 }
             }
+
             else -> throw error
         }
     }

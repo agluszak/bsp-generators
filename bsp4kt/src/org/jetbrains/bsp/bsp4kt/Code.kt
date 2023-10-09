@@ -1,6 +1,6 @@
 package org.jetbrains.bsp.bsp4kt
 
-import bsp4kt.util.untaggedUnionSerializer
+import bsp4kt.util.stringIntUnionSerializer
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
@@ -18,7 +18,7 @@ sealed interface Code {
 
   companion object : JsonContentPolymorphicSerializer<Code>(Code::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Code> {
-      return untaggedUnionSerializer<Code>(stringSerializer = StringValue.serializer(),intSerializer = IntValue.serializer())(element)
+      return stringIntUnionSerializer<Code>(stringSerializer = StringValue.serializer(),intSerializer = IntValue.serializer())(element)
     }
   }
 }
