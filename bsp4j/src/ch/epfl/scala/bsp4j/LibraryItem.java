@@ -17,10 +17,14 @@ public class LibraryItem {
   @NonNull
   private List<String> jars;
 
-  public LibraryItem(@NonNull final BuildTargetIdentifier id, @NonNull final List<BuildTargetIdentifier> dependencies, @NonNull final List<String> jars) {
+  @NonNull
+  private List<String> sourceJars;
+
+  public LibraryItem(@NonNull final BuildTargetIdentifier id, @NonNull final List<BuildTargetIdentifier> dependencies, @NonNull final List<String> jars, @NonNull final List<String> sourceJars) {
     this.id = id;
     this.dependencies = dependencies;
     this.jars = jars;
+    this.sourceJars = sourceJars;
   }
 
   @Pure
@@ -53,6 +57,16 @@ public class LibraryItem {
     this.jars = Preconditions.checkNotNull(jars, "jars");
   }
 
+  @Pure
+  @NonNull
+  public List<String> getSourceJars() {
+    return this.sourceJars;
+  }
+
+  public void setSourceJars(@NonNull final List<String> sourceJars) {
+    this.sourceJars = Preconditions.checkNotNull(sourceJars, "sourceJars");
+  }
+
   @Override
   @Pure
   public String toString() {
@@ -60,6 +74,7 @@ public class LibraryItem {
     b.add("id", this.id);
     b.add("dependencies", this.dependencies);
     b.add("jars", this.jars);
+    b.add("sourceJars", this.sourceJars);
     return b.toString();
   }
 
@@ -88,6 +103,11 @@ public class LibraryItem {
         return false;
     } else if (!this.jars.equals(other.jars))
       return false;
+    if (this.sourceJars == null) {
+      if (other.sourceJars != null)
+        return false;
+    } else if (!this.sourceJars.equals(other.sourceJars))
+      return false;
     return true;
   }
 
@@ -98,6 +118,7 @@ public class LibraryItem {
     int result = 1;
     result = prime * result + ((this.id== null) ? 0 : this.id.hashCode());
     result = prime * result + ((this.dependencies== null) ? 0 : this.dependencies.hashCode());
-    return prime * result + ((this.jars== null) ? 0 : this.jars.hashCode());
+    result = prime * result + ((this.jars== null) ? 0 : this.jars.hashCode());
+    return prime * result + ((this.sourceJars== null) ? 0 : this.sourceJars.hashCode());
   }
 }

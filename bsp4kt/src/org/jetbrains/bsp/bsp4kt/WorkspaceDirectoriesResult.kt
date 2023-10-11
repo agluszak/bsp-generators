@@ -5,9 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class LibraryItem(
-  val id: BuildTargetIdentifier,
-  val dependencies: List<BuildTargetIdentifier>,
-  val jars: List<String>,
-  val sourceJars: List<String>
+data class WorkspaceDirectoriesResult(
+  val includedDirectories: List<DirectoryItem>,
+  val excludedDirectories: List<DirectoryItem>
 )

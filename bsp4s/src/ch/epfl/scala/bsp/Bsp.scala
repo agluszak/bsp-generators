@@ -452,6 +452,14 @@ object DidChangeBuildTarget {
   implicit val codec: JsonValueCodec[DidChangeBuildTarget] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
+final case class DirectoryItem (
+  uri: Uri,
+)
+
+object DirectoryItem {
+  implicit val codec: JsonValueCodec[DirectoryItem] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
 final case class InitializeBuildParams (
   displayName: String,
   version: String,
@@ -597,6 +605,7 @@ final case class LibraryItem (
   id: BuildTargetIdentifier,
   dependencies: List[BuildTargetIdentifier],
   jars: List[String],
+  sourceJars: List[String],
 )
 
 object LibraryItem {
@@ -1573,6 +1582,15 @@ final case class WorkspaceBuildTargetsResult (
 
 object WorkspaceBuildTargetsResult {
   implicit val codec: JsonValueCodec[WorkspaceBuildTargetsResult] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
+final case class WorkspaceDirectoriesResult (
+  includedDirectories: List[DirectoryItem],
+  excludedDirectories: List[DirectoryItem],
+)
+
+object WorkspaceDirectoriesResult {
+  implicit val codec: JsonValueCodec[WorkspaceDirectoriesResult] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
 final case class WorkspaceLibrariesResult (

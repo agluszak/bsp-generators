@@ -9,5 +9,8 @@ public interface BazelBuildServer {
     @JsonRequest("workspace/libraries")
     CompletableFuture<WorkspaceLibrariesResult> workspaceLibraries();
 
+    @JsonRequest("workspace/directories")
+    CompletableFuture<WorkspaceDirectoriesResult> workspaceDirectories();
+
 
 }

@@ -8,4 +8,7 @@ interface BazelBuildServer {
   @JsonRequest("workspace/libraries")
   suspend fun workspaceLibraries(): WorkspaceLibrariesResult
 
+  @JsonRequest("workspace/directories")
+  suspend fun workspaceDirectories(): WorkspaceDirectoriesResult
+
 }
