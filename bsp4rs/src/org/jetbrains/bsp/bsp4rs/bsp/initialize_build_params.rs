@@ -19,3 +19,6 @@ pub struct InitializeBuildParams {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<InitializeBuildParamsData>,
 }
+
+#[cfg(test)]
+mod tests {}

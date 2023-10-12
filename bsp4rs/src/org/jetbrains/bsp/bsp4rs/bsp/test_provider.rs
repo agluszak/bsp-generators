@@ -7,3 +7,6 @@ use crate::*;
 pub struct TestProvider {
     pub language_ids: Vec<LanguageId>,
 }
+
+#[cfg(test)]
+mod tests {}

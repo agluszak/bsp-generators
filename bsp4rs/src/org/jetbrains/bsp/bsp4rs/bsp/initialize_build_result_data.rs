@@ -15,3 +15,6 @@ pub enum InitializeBuildResultData {
 }
 
 impl InitializeBuildResultData {}
+
+#[cfg(test)]
+mod tests {}

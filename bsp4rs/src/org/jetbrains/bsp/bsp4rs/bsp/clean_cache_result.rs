@@ -9,3 +9,6 @@ pub struct CleanCacheResult {
     /// Indicates whether the clean cache request was performed or not.
     pub cleaned: bool,
 }
+
+#[cfg(test)]
+mod tests {}

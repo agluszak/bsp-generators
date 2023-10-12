@@ -25,3 +25,6 @@ impl DebugSessionParamsData {
         Self::Named(NamedDebugSessionParamsData::ScalaMainClass(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

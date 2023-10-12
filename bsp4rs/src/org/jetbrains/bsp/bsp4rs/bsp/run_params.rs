@@ -25,3 +25,6 @@ pub struct RunParams {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<RunParamsData>,
 }
+
+#[cfg(test)]
+mod tests {}

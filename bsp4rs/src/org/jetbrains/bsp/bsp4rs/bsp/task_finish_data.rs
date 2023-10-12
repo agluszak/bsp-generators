@@ -35,3 +35,6 @@ impl TaskFinishData {
         Self::Named(NamedTaskFinishData::TestReport(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

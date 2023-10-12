@@ -15,3 +15,6 @@ pub struct SourceItem {
     /// intended to be manually edited by the user.
     pub generated: bool,
 }
+
+#[cfg(test)]
+mod tests {}

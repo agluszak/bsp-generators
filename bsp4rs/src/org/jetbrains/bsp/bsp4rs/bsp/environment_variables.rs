@@ -19,3 +19,6 @@ impl std::ops::Deref for EnvironmentVariables {
         &self.0
     }
 }
+
+#[cfg(test)]
+mod tests {}

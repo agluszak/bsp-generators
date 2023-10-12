@@ -19,3 +19,6 @@ impl std::ops::Deref for RustCfgOptions {
         &self.0
     }
 }
+
+#[cfg(test)]
+mod tests {}

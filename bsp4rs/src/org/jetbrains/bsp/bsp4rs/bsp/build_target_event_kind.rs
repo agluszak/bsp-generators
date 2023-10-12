@@ -15,3 +15,6 @@ pub enum BuildTargetEventKind {
     /// The build target has been deleted.
     Deleted = 3,
 }
+
+#[cfg(test)]
+mod tests {}

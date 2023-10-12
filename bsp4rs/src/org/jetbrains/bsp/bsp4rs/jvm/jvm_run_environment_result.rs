@@ -7,3 +7,6 @@ use crate::*;
 pub struct JvmRunEnvironmentResult {
     pub items: Vec<JvmEnvironmentItem>,
 }
+
+#[cfg(test)]
+mod tests {}

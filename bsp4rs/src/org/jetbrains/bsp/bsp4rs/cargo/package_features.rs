@@ -15,3 +15,6 @@ pub struct PackageFeatures {
     /// The list of enabled features for the Cargo package.
     pub enabled_features: BTreeSet<Feature>,
 }
+
+#[cfg(test)]
+mod tests {}

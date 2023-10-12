@@ -9,3 +9,6 @@ pub struct ScalaTestSuiteSelection {
     /// Empty collection means that all of them are supposed to be executed.
     pub tests: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {}

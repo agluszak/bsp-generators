@@ -14,3 +14,6 @@ pub struct RustToolchainItem {
     /// Location of the source code of procedural macros in the Rust toolchain.
     pub proc_macro_srv_path: URI,
 }
+
+#[cfg(test)]
+mod tests {}

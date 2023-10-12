@@ -24,3 +24,6 @@ impl From<&str> for RequestId {
         Self(input.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {}

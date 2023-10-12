@@ -14,3 +14,6 @@ pub struct DependencyModule {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<DependencyModuleData>,
 }
+
+#[cfg(test)]
+mod tests {}

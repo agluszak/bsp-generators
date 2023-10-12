@@ -15,3 +15,6 @@ pub struct RustWorkspaceResult {
     /// A sequence of build targets taken into consideration during build process.
     pub resolved_targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

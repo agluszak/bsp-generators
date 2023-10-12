@@ -29,3 +29,6 @@ impl TestParamsData {
         Self::Named(NamedTestParamsData::ScalaTestSuitesSelection(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

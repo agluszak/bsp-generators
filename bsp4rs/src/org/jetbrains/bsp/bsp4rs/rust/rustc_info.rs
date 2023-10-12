@@ -16,3 +16,6 @@ pub struct RustcInfo {
     /// Used by [`intellij-rust`] for checking if given toolchain is supported.
     pub host: String,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -9,3 +9,6 @@ pub struct WorkspaceBuildTargetsResult {
     /// contain sources with the given language ids.
     pub targets: Vec<BuildTarget>,
 }
+
+#[cfg(test)]
+mod tests {}

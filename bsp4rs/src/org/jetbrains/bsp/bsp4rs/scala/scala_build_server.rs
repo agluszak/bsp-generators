@@ -66,3 +66,6 @@ impl Request for BuildTargetScalaMainClasses {
     type Result = ScalaMainClassesResult;
     const METHOD: &'static str = "buildTarget/scalaMainClasses";
 }
+
+#[cfg(test)]
+mod tests {}

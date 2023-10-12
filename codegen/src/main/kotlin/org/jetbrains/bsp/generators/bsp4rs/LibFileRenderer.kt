@@ -12,6 +12,8 @@ import kotlin.io.path.Path
 
 fun RustRenderer.generateLibFile(modulesNames: List<String>): CodegenFile {
     val code = rustCode {
+        include(renderImports(false))
+        newline()
         lines(modulesNames.map { "pub mod $it" }, ";", ";")
         newline()
         lines(modulesNames.map { "use $it::*" }, ";", ";")
@@ -21,6 +23,8 @@ fun RustRenderer.generateLibFile(modulesNames: List<String>): CodegenFile {
         include(renderRpcTraits())
         newline()
         include(renderOtherDataStruct())
+        newline()
+        include(renderTestsBlock())
     }
 
     return generateFile(code, Path(""), "lib.rs")
@@ -61,4 +65,18 @@ private fun RustRenderer.renderOtherDataStruct(): CodeBlock {
     )
 
     return renderStructure(def)
+}
+
+private fun renderTestsBlock(): CodeBlock {
+    return rustCode {
+        -"#[cfg(test)]"
+        block("pub mod tests") {
+            -"use serde::Deserialize;"
+            newline()
+            block("pub fn test_deserialization<T>(json: &str, expected: &T) where T: for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug") {
+                -"let value = serde_json::from_str::<T>(json).unwrap();"
+                -"assert_eq!(&value, expected);"
+            }
+        }
+    }
 }

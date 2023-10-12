@@ -18,3 +18,6 @@ pub struct LogMessageParams {
     /// The actual message.
     pub message: String,
 }
+
+#[cfg(test)]
+mod tests {}

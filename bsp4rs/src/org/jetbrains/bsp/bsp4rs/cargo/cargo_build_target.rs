@@ -11,3 +11,6 @@ pub struct CargoBuildTarget {
     pub edition: RustEdition,
     pub required_features: BTreeSet<Feature>,
 }
+
+#[cfg(test)]
+mod tests {}

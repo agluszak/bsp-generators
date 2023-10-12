@@ -11,3 +11,6 @@ pub struct BuildClientCapabilities {
     /// languages than those that appear in this list.
     pub language_ids: Vec<LanguageId>,
 }
+
+#[cfg(test)]
+mod tests {}

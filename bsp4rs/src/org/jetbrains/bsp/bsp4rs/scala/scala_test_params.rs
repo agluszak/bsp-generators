@@ -15,3 +15,6 @@ pub struct ScalaTestParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jvm_options: Option<Vec<String>>,
 }
+
+#[cfg(test)]
+mod tests {}

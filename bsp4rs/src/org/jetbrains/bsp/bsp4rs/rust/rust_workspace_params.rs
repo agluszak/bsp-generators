@@ -8,3 +8,6 @@ pub struct RustWorkspaceParams {
     /// A sequence of build targets for workspace resolution.
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

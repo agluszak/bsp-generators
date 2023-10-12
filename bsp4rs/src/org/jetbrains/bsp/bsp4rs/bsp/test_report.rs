@@ -24,3 +24,6 @@ pub struct TestReport {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time: Option<i64>,
 }
+
+#[cfg(test)]
+mod tests {}

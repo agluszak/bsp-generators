@@ -15,3 +15,6 @@ pub enum BuildTargetEventData {
 }
 
 impl BuildTargetEventData {}
+
+#[cfg(test)]
+mod tests {}

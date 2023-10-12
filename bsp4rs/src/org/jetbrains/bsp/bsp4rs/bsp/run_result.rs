@@ -11,3 +11,6 @@ pub struct RunResult {
     /// A status code for the execution.
     pub status_code: StatusCode,
 }
+
+#[cfg(test)]
+mod tests {}

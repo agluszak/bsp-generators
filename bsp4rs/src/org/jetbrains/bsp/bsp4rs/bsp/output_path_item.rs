@@ -12,3 +12,6 @@ pub struct OutputPathItem {
     /// Type of file of the output item, such as whether it is file or directory.
     pub kind: OutputPathItemKind,
 }
+
+#[cfg(test)]
+mod tests {}

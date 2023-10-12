@@ -15,3 +15,6 @@ pub struct ReadParams {
     /// They should be escaped as per [javascript encoding](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#using_special_characters_in_strings)
     pub message: String,
 }
+
+#[cfg(test)]
+mod tests {}

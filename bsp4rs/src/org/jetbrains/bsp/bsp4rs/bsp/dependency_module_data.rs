@@ -21,3 +21,6 @@ impl DependencyModuleData {
         Self::Named(NamedDependencyModuleData::Maven(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

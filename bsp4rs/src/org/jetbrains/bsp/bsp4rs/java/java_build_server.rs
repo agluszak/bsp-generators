@@ -11,3 +11,6 @@ impl Request for BuildTargetJavacOptions {
     type Result = JavacOptionsResult;
     const METHOD: &'static str = "buildTarget/javacOptions";
 }
+
+#[cfg(test)]
+mod tests {}

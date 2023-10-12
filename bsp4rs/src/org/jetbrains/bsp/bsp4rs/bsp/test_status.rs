@@ -17,3 +17,6 @@ pub enum TestStatus {
     /// The was not included in execution.
     Skipped = 5,
 }
+
+#[cfg(test)]
+mod tests {}

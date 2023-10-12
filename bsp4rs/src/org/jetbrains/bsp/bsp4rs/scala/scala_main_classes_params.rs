@@ -10,3 +10,6 @@ pub struct ScalaMainClassesParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origin_id: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {}

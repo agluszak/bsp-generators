@@ -7,3 +7,6 @@ use crate::*;
 pub struct DependencySourcesParams {
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

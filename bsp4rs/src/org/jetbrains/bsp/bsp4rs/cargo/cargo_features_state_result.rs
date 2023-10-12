@@ -9,3 +9,6 @@ pub struct CargoFeaturesStateResult {
     /// identifiers and available features.
     pub packages_features: Vec<PackageFeatures>,
 }
+
+#[cfg(test)]
+mod tests {}

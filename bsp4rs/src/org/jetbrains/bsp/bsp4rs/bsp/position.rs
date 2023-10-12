@@ -8,3 +8,6 @@ pub struct Position {
     /// Character position within a line. First character of a line is 0.
     pub character: i32,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -6,3 +6,6 @@ pub struct JvmMainClass {
     pub class_name: String,
     pub arguments: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -23,3 +23,6 @@ impl From<&str> for Identifier {
         Self(input.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {}

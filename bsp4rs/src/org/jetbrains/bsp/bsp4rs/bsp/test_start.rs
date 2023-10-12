@@ -11,3 +11,6 @@ pub struct TestStart {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
 }
+
+#[cfg(test)]
+mod tests {}

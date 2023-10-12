@@ -19,3 +19,6 @@ pub struct MavenDependencyModule {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -61,3 +61,6 @@ pub struct BuildServerCapabilities {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub can_reload: Option<bool>,
 }
+
+#[cfg(test)]
+mod tests {}

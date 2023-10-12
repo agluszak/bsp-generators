@@ -49,3 +49,6 @@ pub struct BuildTarget {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<BuildTargetData>,
 }
+
+#[cfg(test)]
+mod tests {}

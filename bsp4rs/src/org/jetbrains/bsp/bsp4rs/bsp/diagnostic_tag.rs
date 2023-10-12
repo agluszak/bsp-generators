@@ -18,3 +18,6 @@ impl DiagnosticTag {
         Self(tag)
     }
 }
+
+#[cfg(test)]
+mod tests {}

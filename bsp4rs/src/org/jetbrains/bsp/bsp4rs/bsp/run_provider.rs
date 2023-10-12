@@ -7,3 +7,6 @@ use crate::*;
 pub struct RunProvider {
     pub language_ids: Vec<LanguageId>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -15,3 +15,6 @@ pub enum TestResultData {
 }
 
 impl TestResultData {}
+
+#[cfg(test)]
+mod tests {}

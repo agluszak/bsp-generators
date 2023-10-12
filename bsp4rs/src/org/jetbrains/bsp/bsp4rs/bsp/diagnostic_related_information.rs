@@ -13,3 +13,6 @@ pub struct DiagnosticRelatedInformation {
     /// The message of this related diagnostic information.
     pub message: String,
 }
+
+#[cfg(test)]
+mod tests {}

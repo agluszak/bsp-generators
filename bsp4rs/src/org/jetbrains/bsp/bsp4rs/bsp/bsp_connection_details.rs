@@ -15,3 +15,6 @@ pub struct BspConnectionDetails {
     /// The languages supported by the BSP server.
     pub languages: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {}

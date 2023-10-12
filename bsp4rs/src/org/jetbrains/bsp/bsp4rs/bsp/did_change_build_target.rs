@@ -7,3 +7,6 @@ use crate::*;
 pub struct DidChangeBuildTarget {
     pub changes: Vec<BuildTargetEvent>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -11,3 +11,6 @@ pub struct SetCargoFeaturesParams {
     /// The list of features to be set as a new state.
     pub features: BTreeSet<Feature>,
 }
+
+#[cfg(test)]
+mod tests {}

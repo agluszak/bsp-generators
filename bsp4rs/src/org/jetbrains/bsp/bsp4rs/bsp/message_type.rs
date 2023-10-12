@@ -15,3 +15,6 @@ pub enum MessageType {
     /// A log message.
     Log = 4,
 }
+
+#[cfg(test)]
+mod tests {}

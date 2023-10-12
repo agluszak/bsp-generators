@@ -8,3 +8,6 @@ pub struct DebugSessionAddress {
     /// The Debug Adapter Protocol server's connection uri
     pub uri: URI,
 }
+
+#[cfg(test)]
+mod tests {}

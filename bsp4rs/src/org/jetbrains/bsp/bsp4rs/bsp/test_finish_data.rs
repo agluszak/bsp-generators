@@ -15,3 +15,6 @@ pub enum TestFinishData {
 }
 
 impl TestFinishData {}
+
+#[cfg(test)]
+mod tests {}

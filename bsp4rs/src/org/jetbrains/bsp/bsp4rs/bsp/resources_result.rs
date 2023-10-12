@@ -7,3 +7,6 @@ use crate::*;
 pub struct ResourcesResult {
     pub items: Vec<ResourcesItem>,
 }
+
+#[cfg(test)]
+mod tests {}

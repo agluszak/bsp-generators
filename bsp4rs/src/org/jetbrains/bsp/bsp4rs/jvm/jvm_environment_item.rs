@@ -13,3 +13,6 @@ pub struct JvmEnvironmentItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub main_classes: Option<Vec<JvmMainClass>>,
 }
+
+#[cfg(test)]
+mod tests {}

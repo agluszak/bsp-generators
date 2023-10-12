@@ -8,3 +8,6 @@ pub struct SetCargoFeaturesResult {
     /// The status code of the operation.
     pub status_code: StatusCode,
 }
+
+#[cfg(test)]
+mod tests {}

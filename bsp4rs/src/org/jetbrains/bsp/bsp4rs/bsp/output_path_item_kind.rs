@@ -11,3 +11,6 @@ pub enum OutputPathItemKind {
     /// The output path item references a directory.
     Directory = 2,
 }
+
+#[cfg(test)]
+mod tests {}

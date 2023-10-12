@@ -23,3 +23,6 @@ impl Request for SetCargoFeatures {
     type Result = SetCargoFeaturesResult;
     const METHOD: &'static str = "workspace/setCargoFeatures";
 }
+
+#[cfg(test)]
+mod tests {}

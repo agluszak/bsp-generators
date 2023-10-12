@@ -14,3 +14,6 @@ pub enum StatusCode {
     /// Execution was cancelled.
     Cancelled = 3,
 }
+
+#[cfg(test)]
+mod tests {}

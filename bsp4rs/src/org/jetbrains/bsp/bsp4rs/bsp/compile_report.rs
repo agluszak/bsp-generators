@@ -26,3 +26,6 @@ pub struct CompileReport {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub no_op: Option<bool>,
 }
+
+#[cfg(test)]
+mod tests {}

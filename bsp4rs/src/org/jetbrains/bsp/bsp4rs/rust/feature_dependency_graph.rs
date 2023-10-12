@@ -22,3 +22,6 @@ impl std::ops::Deref for FeatureDependencyGraph {
         &self.0
     }
 }
+
+#[cfg(test)]
+mod tests {}

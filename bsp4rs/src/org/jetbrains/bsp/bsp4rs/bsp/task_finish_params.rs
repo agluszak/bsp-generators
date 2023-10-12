@@ -23,3 +23,6 @@ pub struct TaskFinishParams {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<TaskFinishData>,
 }
+
+#[cfg(test)]
+mod tests {}

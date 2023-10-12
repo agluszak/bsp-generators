@@ -7,3 +7,6 @@ use crate::*;
 pub struct InverseSourcesParams {
     pub text_document: TextDocumentIdentifier,
 }
+
+#[cfg(test)]
+mod tests {}

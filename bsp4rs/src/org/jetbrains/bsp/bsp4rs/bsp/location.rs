@@ -8,3 +8,6 @@ pub struct Location {
     pub uri: URI,
     pub range: Range,
 }
+
+#[cfg(test)]
+mod tests {}

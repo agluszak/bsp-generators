@@ -124,3 +124,6 @@ impl Notification for OnRunPrintStderr {
     type Params = PrintParams;
     const METHOD: &'static str = "run/printStderr";
 }
+
+#[cfg(test)]
+mod tests {}

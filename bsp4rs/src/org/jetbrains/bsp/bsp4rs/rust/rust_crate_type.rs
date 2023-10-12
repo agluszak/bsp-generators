@@ -17,3 +17,6 @@ pub enum RustCrateType {
     ProcMacro = 7,
     Unknown = 8,
 }
+
+#[cfg(test)]
+mod tests {}

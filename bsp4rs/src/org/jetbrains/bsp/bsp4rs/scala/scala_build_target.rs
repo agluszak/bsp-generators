@@ -22,3 +22,6 @@ pub struct ScalaBuildTarget {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jvm_build_target: Option<JvmBuildTarget>,
 }
+
+#[cfg(test)]
+mod tests {}

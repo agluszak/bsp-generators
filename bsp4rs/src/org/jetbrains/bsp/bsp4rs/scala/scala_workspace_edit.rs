@@ -8,3 +8,6 @@ use crate::*;
 pub struct ScalaWorkspaceEdit {
     pub changes: Vec<ScalaTextEdit>,
 }
+
+#[cfg(test)]
+mod tests {}

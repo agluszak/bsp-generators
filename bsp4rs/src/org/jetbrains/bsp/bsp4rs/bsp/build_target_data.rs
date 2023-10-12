@@ -45,3 +45,6 @@ impl BuildTargetData {
         Self::Named(NamedBuildTargetData::Scala(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

@@ -16,3 +16,6 @@ pub struct ScalaMainClass {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_variables: Option<Vec<String>>,
 }
+
+#[cfg(test)]
+mod tests {}

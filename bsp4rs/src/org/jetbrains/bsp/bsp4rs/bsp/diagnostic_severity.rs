@@ -11,3 +11,6 @@ pub enum DiagnosticSeverity {
     Information = 3,
     Hint = 4,
 }
+
+#[cfg(test)]
+mod tests {}

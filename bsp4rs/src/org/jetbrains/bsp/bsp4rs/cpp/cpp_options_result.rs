@@ -8,3 +8,6 @@ pub struct CppOptionsResult {
     /// The list of options for each target.
     pub items: Vec<CppOptionsItem>,
 }
+
+#[cfg(test)]
+mod tests {}

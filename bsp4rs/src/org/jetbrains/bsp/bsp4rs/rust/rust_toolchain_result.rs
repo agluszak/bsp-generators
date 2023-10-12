@@ -8,3 +8,6 @@ pub struct RustToolchainResult {
     /// A sequence of Rust toolchains.
     pub toolchains: Vec<RustToolchainItem>,
 }
+
+#[cfg(test)]
+mod tests {}

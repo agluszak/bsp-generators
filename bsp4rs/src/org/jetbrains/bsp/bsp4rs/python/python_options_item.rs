@@ -10,3 +10,6 @@ pub struct PythonOptionsItem {
     /// For example: -E
     pub interpreter_options: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {}

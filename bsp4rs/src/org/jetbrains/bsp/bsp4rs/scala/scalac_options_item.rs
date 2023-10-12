@@ -17,3 +17,6 @@ pub struct ScalacOptionsItem {
     /// The output directory for classfiles produced by this target
     pub class_directory: String,
 }
+
+#[cfg(test)]
+mod tests {}

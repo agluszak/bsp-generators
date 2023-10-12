@@ -26,3 +26,6 @@ pub struct SbtBuildTarget {
     pub parent: Option<BuildTargetIdentifier>,
     pub children: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

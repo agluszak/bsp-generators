@@ -12,3 +12,6 @@ pub struct ScalaDiagnostic {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<ScalaAction>>,
 }
+
+#[cfg(test)]
+mod tests {}

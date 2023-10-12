@@ -8,3 +8,6 @@ pub struct CleanCacheParams {
     /// The build targets to clean.
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

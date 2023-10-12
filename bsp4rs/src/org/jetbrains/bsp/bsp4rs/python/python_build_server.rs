@@ -11,3 +11,6 @@ impl Request for BuildTargetPythonOptions {
     type Result = PythonOptionsResult;
     const METHOD: &'static str = "buildTarget/pythonOptions";
 }
+
+#[cfg(test)]
+mod tests {}

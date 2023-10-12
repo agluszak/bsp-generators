@@ -7,3 +7,6 @@ use crate::*;
 pub struct PythonOptionsResult {
     pub items: Vec<PythonOptionsItem>,
 }
+
+#[cfg(test)]
+mod tests {}

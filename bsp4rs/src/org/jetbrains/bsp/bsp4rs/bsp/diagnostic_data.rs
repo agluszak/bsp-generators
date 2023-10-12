@@ -21,3 +21,6 @@ impl DiagnosticData {
         Self::Named(NamedDiagnosticData::Scala(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

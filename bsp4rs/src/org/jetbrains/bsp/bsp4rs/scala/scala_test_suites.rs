@@ -13,3 +13,6 @@ pub struct ScalaTestSuites {
     #[deprecated(note = "Use `buildTarget/test` params instead")]
     pub environment_variables: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {}

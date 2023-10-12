@@ -23,3 +23,6 @@ pub struct CppOptionsItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub linkshared: Option<bool>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -15,3 +15,6 @@ pub struct CompileParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<String>>,
 }
+
+#[cfg(test)]
+mod tests {}

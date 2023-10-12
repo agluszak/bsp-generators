@@ -16,3 +16,6 @@ pub struct JvmBuildTarget {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub java_version: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -258,3 +258,6 @@ impl Notification for OnRunReadStdin {
     type Params = ReadParams;
     const METHOD: &'static str = "run/readStdin";
 }
+
+#[cfg(test)]
+mod tests {}

@@ -18,3 +18,6 @@ pub enum TaskProgressData {
 }
 
 impl TaskProgressData {}
+
+#[cfg(test)]
+mod tests {}

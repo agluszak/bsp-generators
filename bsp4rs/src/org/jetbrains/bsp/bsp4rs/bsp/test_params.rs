@@ -25,3 +25,6 @@ pub struct TestParams {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<TestParamsData>,
 }
+
+#[cfg(test)]
+mod tests {}

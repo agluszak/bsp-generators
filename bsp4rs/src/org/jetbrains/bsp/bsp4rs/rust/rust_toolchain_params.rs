@@ -8,3 +8,6 @@ pub struct RustToolchainParams {
     /// A sequence of build targets for toolchain resolution.
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

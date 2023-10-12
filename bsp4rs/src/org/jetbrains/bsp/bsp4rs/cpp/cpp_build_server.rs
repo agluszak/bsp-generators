@@ -11,3 +11,6 @@ impl Request for BuildTargetCppOptions {
     type Result = CppOptionsResult;
     const METHOD: &'static str = "buildTarget/cppOptions";
 }
+
+#[cfg(test)]
+mod tests {}

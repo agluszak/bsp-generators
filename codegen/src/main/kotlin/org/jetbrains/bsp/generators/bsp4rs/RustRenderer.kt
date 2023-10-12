@@ -28,7 +28,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderModule(module: Module): List<CodegenFile> {
         val filesWithNames = module.definitions.mapNotNull {
-            renderDef(it)?.run {
+            renderDefCodeBlock(it)?.run {
                 val name = makeName(it.name).camelToSnakeCase()
                 Pair(generateFile(this, module.path, "$name.rs"), name)
             }
@@ -40,6 +40,27 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return files + modFile
     }
 
+    private fun renderDefCodeBlock(def: Def): CodeBlock? {
+        val renderedDef = renderDef(def) ?: return null
+
+        return rustCode {
+            include(renderImports(true))
+            newline()
+            include(renderedDef)
+            newline()
+            -"#[cfg(test)]"
+            block("mod tests") {
+                include(renderTestsImports())
+                newline()
+                renderDefTest(def)?.let {
+                    -"#[test]"
+                    include(it)
+                }
+            }
+            newline()
+        }
+    }
+
     private fun renderDef(def: Def): CodeBlock? = when (def) {
         is Def.Structure -> renderStructure(def)
         is Def.OpenEnum<*> -> renderOpenEnum(def)
@@ -48,6 +69,8 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Def.Alias -> renderAlias(def)
         is Def.DataKinds -> renderDataKinds(def)
     }
+
+    private fun renderDefTest(def: Def): CodeBlock? = null
 
     private fun generateModFile(modulePath: Path, filesNames: List<String>): CodegenFile {
         val code = rustCode {
@@ -60,17 +83,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     fun generateFile(content: CodeBlock, namespacePath: Path, fileName: String): CodegenFile {
-        val code = rustCode {
-            include(renderImports(fileName != "lib.rs"))
-            newline()
-            include(content)
-            newline()
-        }
-
-        return CodegenFile(createPath(namespacePath, fileName), code.toString())
+        return CodegenFile(createPath(namespacePath, fileName), content.toString())
     }
 
-    private fun renderImports(canImportCrate: Boolean): CodeBlock {
+    fun renderImports(canImportCrate: Boolean): CodeBlock {
         return rustCode {
             -"use serde::{Deserialize, Serialize};"
             -"use serde::de::DeserializeOwned;"
@@ -79,6 +95,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -"use std::collections::{BTreeSet, BTreeMap};"
             if (canImportCrate)
                 -"use crate::*;"
+        }
+    }
+
+    private fun renderTestsImports(): CodeBlock {
+        return rustCode {
+            -"use insta::assert_json_snapshot;"
+            -"use crate::tests::test_deserialization;"
+            -"use super::*;"
         }
     }
 

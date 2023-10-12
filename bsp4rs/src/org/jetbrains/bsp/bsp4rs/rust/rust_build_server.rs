@@ -28,3 +28,6 @@ impl Request for RustToolchain {
     type Result = RustToolchainResult;
     const METHOD: &'static str = "buildTarget/rustToolchain";
 }
+
+#[cfg(test)]
+mod tests {}

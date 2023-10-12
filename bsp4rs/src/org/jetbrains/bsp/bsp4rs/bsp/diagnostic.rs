@@ -29,3 +29,6 @@ pub struct Diagnostic {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<DiagnosticData>,
 }
+
+#[cfg(test)]
+mod tests {}

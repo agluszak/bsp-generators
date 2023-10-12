@@ -7,3 +7,6 @@ use crate::*;
 pub struct PythonOptionsParams {
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -10,3 +10,6 @@ pub struct ScalaMainClassesItem {
     /// The main class item.
     pub classes: Vec<ScalaMainClass>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -23,3 +23,6 @@ impl From<&str> for Feature {
         Self(input.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {}

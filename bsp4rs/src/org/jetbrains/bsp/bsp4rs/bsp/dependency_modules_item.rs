@@ -8,3 +8,6 @@ pub struct DependencyModulesItem {
     pub target: BuildTargetIdentifier,
     pub modules: Vec<DependencyModule>,
 }
+
+#[cfg(test)]
+mod tests {}

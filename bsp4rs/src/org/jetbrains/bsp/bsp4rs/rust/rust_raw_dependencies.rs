@@ -20,3 +20,6 @@ impl std::ops::Deref for RustRawDependencies {
         &self.0
     }
 }
+
+#[cfg(test)]
+mod tests {}

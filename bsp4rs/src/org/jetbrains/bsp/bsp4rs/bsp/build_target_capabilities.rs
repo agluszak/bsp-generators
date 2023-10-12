@@ -18,3 +18,6 @@ pub struct BuildTargetCapabilities {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub can_debug: Option<bool>,
 }
+
+#[cfg(test)]
+mod tests {}

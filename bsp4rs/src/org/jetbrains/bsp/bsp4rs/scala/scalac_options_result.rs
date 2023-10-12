@@ -7,3 +7,6 @@ use crate::*;
 pub struct ScalacOptionsResult {
     pub items: Vec<ScalacOptionsItem>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -24,3 +24,6 @@ pub struct CppBuildTarget {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpp_compiler: Option<URI>,
 }
+
+#[cfg(test)]
+mod tests {}

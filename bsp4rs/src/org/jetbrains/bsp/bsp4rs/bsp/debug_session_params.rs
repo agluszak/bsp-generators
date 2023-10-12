@@ -12,3 +12,6 @@ pub struct DebugSessionParams {
     #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<DebugSessionParamsData>,
 }
+
+#[cfg(test)]
+mod tests {}

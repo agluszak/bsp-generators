@@ -8,3 +8,6 @@ pub struct TextDocumentIdentifier {
     /// The text document's URI.
     pub uri: URI,
 }
+
+#[cfg(test)]
+mod tests {}

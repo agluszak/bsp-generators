@@ -24,3 +24,6 @@ pub struct RustRawDependency {
     /// A sequence of enabled features.
     pub features: BTreeSet<Feature>,
 }
+
+#[cfg(test)]
+mod tests {}

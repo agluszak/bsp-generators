@@ -27,3 +27,6 @@ pub struct RustBuildTarget {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required_features: Option<BTreeSet<Feature>>,
 }
+
+#[cfg(test)]
+mod tests {}

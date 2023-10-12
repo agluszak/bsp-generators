@@ -21,3 +21,6 @@ pub struct PublishDiagnosticsParams {
     /// mapped to the same `textDocument` and `buildTarget`.
     pub reset: bool,
 }
+
+#[cfg(test)]
+mod tests {}

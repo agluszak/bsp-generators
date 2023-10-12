@@ -9,3 +9,6 @@ pub struct ResourcesItem {
     /// List of resource files.
     pub resources: Vec<URI>,
 }
+
+#[cfg(test)]
+mod tests {}

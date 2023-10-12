@@ -27,3 +27,6 @@ impl Request for BuildTargetJvmRunEnvironment {
     type Result = JvmRunEnvironmentResult;
     const METHOD: &'static str = "buildTarget/jvmRunEnvironment";
 }
+
+#[cfg(test)]
+mod tests {}

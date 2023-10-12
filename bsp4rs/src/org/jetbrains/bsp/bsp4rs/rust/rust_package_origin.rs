@@ -18,3 +18,6 @@ impl RustPackageOrigin {
         Self(std::borrow::Cow::Borrowed(tag))
     }
 }
+
+#[cfg(test)]
+mod tests {}

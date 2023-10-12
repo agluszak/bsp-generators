@@ -13,3 +13,6 @@ pub struct ScalaTextEdit {
     /// empty string.
     pub new_text: String,
 }
+
+#[cfg(test)]
+mod tests {}

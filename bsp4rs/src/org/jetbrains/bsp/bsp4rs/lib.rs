@@ -42,3 +42,16 @@ pub struct OtherData {
     pub data_kind: String,
     pub data: serde_json::Value,
 }
+
+#[cfg(test)]
+pub mod tests {
+    use serde::Deserialize;
+
+    pub fn test_deserialization<T>(json: &str, expected: &T)
+    where
+        T: for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug,
+    {
+        let value = serde_json::from_str::<T>(json).unwrap();
+        assert_eq!(&value, expected);
+    }
+}

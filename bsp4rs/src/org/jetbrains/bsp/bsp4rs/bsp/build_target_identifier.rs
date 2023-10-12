@@ -10,3 +10,6 @@ pub struct BuildTargetIdentifier {
     /// The target’s Uri
     pub uri: URI,
 }
+
+#[cfg(test)]
+mod tests {}

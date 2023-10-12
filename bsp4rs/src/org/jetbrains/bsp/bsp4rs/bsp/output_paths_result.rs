@@ -7,3 +7,6 @@ use crate::*;
 pub struct OutputPathsResult {
     pub items: Vec<OutputPathsItem>,
 }
+
+#[cfg(test)]
+mod tests {}

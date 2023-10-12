@@ -18,3 +18,6 @@ pub struct TaskId {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parents: Option<Vec<Identifier>>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -19,3 +19,6 @@ pub struct ScalaAction {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edit: Option<ScalaWorkspaceEdit>,
 }
+
+#[cfg(test)]
+mod tests {}

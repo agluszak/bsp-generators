@@ -35,3 +35,6 @@ impl TaskStartData {
         Self::Named(NamedTaskStartData::TestTask(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

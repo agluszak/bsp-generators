@@ -7,3 +7,6 @@ use crate::*;
 pub struct JavacOptionsResult {
     pub items: Vec<JavacOptionsItem>,
 }
+
+#[cfg(test)]
+mod tests {}

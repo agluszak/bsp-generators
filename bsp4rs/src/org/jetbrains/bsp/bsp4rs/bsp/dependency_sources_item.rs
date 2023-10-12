@@ -11,3 +11,6 @@ pub struct DependencySourcesItem {
     /// Can be source files, jar files, zip files, or directories.
     pub sources: Vec<URI>,
 }
+
+#[cfg(test)]
+mod tests {}

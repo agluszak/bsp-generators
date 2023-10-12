@@ -15,3 +15,6 @@ pub struct ScalaTestClassesItem {
     /// The fully qualified names of the test classes in this target
     pub classes: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {}

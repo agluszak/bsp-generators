@@ -11,3 +11,6 @@ pub struct MavenDependencyModuleArtifact {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifier: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -21,3 +21,6 @@ pub enum RustTargetKind {
     /// For unknown targets.
     Unknown = 7,
 }
+
+#[cfg(test)]
+mod tests {}

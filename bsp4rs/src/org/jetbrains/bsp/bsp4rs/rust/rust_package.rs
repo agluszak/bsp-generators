@@ -66,3 +66,6 @@ pub struct RustPackage {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proc_macro_artifact: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {}

@@ -21,3 +21,6 @@ impl RunParamsData {
         Self::Named(NamedRunParamsData::ScalaMainClass(data))
     }
 }
+
+#[cfg(test)]
+mod tests {}

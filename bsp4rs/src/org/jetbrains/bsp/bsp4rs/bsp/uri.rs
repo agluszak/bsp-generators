@@ -25,3 +25,6 @@ impl From<&str> for URI {
         Self(input.to_string())
     }
 }
+
+#[cfg(test)]
+mod tests {}

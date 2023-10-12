@@ -10,3 +10,6 @@ pub struct OutputPathsItem {
     /// Output paths.
     pub output_paths: Vec<OutputPathItem>,
 }
+
+#[cfg(test)]
+mod tests {}

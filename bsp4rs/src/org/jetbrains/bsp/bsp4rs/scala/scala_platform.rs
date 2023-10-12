@@ -10,3 +10,6 @@ pub enum ScalaPlatform {
     Js = 2,
     Native = 3,
 }
+
+#[cfg(test)]
+mod tests {}

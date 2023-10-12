@@ -8,3 +8,6 @@ pub struct CppOptionsParams {
     /// The targets for which the options are requested.
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {}

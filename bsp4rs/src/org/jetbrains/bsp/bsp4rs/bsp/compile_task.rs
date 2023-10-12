@@ -11,3 +11,6 @@ use crate::*;
 pub struct CompileTask {
     pub target: BuildTargetIdentifier,
 }
+
+#[cfg(test)]
+mod tests {}

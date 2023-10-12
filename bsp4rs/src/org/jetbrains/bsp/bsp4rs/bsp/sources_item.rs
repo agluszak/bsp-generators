@@ -13,3 +13,6 @@ pub struct SourcesItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub roots: Option<Vec<URI>>,
 }
+
+#[cfg(test)]
+mod tests {}

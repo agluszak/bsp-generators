@@ -15,3 +15,6 @@ pub struct RustDependency {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dep_kinds: Option<Vec<RustDepKindInfo>>,
 }
+
+#[cfg(test)]
+mod tests {}
