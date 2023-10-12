@@ -1,6 +1,6 @@
 package org.jetbrains.bsp.bsp4kt
 
-import bsp4kt.util.StringIntUnionSerializer
+import org.jetbrains.bsp.util.StringIntUnionSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable(with = Code.Companion::class)

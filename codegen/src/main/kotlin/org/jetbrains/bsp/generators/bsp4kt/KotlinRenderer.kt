@@ -1,6 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4kt
 
 import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.Loader
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.code
 import org.jetbrains.bsp.generators.ir.Def
@@ -22,7 +23,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     fun render(): List<CodegenFile> {
         val files = definitions.mapNotNull { renderDef(it) }
         val versionFile = renderVersion()
-        return listOf(versionFile) + files
+        return listOf(versionFile, copySerializers()) + files
     }
 
     fun renderVersion(): CodegenFile {
@@ -35,6 +36,12 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
 
         return CodegenFile(baseRelPath.resolve("Bsp4Kt.kt"), code.toString())
+    }
+
+    private fun copySerializers(): CodegenFile {
+        val contents = Loader.readResource("Serializers.kt")
+        val path = baseRelPath.parent.resolve("util").resolve("Serializers.kt")
+        return CodegenFile(path, contents)
     }
 
     fun renderDef(def: Def): CodegenFile? {
@@ -144,7 +151,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         val code = code {
             -"package $basepkg"
             newline()
-            -"import bsp4kt.util.StringIntUnionSerializer"
+            -"import org.jetbrains.bsp.util.StringIntUnionSerializer"
             -"import kotlinx.serialization.Serializable"
             newline()
             -"""@Serializable(with = $name.Companion::class)"""

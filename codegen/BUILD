@@ -3,7 +3,7 @@ load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 kt_jvm_library(
     name = "codegen",
     srcs = glob(["src/main/kotlin/**/*.kt"]),
-    resources = ["@//spec"],
+    resources = ["@//spec"] + glob(["src/main/resources/**/*"]),
     visibility = ["//visibility:public"],
     deps = [
         "@//spec-traits",

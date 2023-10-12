@@ -1,4 +1,4 @@
-package bsp4kt.util
+package org.jetbrains.bsp.util
 
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationException
