@@ -25,7 +25,7 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
 
   private def copyCustomCodec(): CodegenFile = {
     val contents = Loader.INSTANCE.readResource("CustomCodec.scala")
-    val path = Path.of("org", "jetbrains","bsp","util", "CustomCodec.scala")
+    val path = Path.of("org", "jetbrains", "bsp", "util", "CustomCodec.scala")
     new CodegenFile(path, contents)
   }
 
