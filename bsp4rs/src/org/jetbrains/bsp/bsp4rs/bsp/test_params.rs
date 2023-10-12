@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
-use std::collections::BTreeMap;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -16,8 +15,8 @@ pub struct TestParams {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub arguments: Vec<String>,
     /// Optional environment variables to set before running the tests.
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub environment_variables: EnvironmentVariables,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<EnvironmentVariables>,
     /// Optional working directory
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub working_directory: Option<URI>,

@@ -5,7 +5,6 @@ import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.Type
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -26,10 +25,10 @@ class Bsp4rsTest {
             TestCase(Type.Int, "i32"),
             TestCase(Type.Long, "i64"),
             TestCase(Type.Json, "serde_json::Value"),
-            TestCase(Type.Set(IrShape.String), "BTreeSet<String>"),
-            TestCase(Type.List(IrShape.Long), "Vec<i64>"),
-            TestCase(Type.Map(IrShape.Int, IrShape.Bool), "BTreeMap<i32, bool>"),
-            TestCase(Type.Ref, ""),
+            TestCase(Type.Set(Type.String), "BTreeSet<String>"),
+            TestCase(Type.List(Type.Long), "Vec<i64>"),
+            TestCase(Type.Map(Type.Int, Type.Bool), "BTreeMap<i32, bool>"),
+            TestCase(Type.Ref(ShapeId.fromParts("bsp", "SomeType")), "SomeType"),
         )
 
         for (case in cases) {
@@ -43,17 +42,17 @@ class Bsp4rsTest {
 
         val cases = listOf(
             TestCase(
-                Field("test", IrShape.Bool, true, emptyList()),
+                Field("test", Type.Bool, true, emptyList()),
                 rustCode { },
             ),
             TestCase(
-                Field("test", IrShape.Bool, false, emptyList()),
+                Field("test", Type.Bool, false, emptyList()),
                 rustCode {
                     -"""#[serde(default, skip_serializing_if = "Option::is_none")]"""
                 },
             ),
             TestCase(
-                Field("test", IrShape(ShapeId.fromParts("bsp", "ints"), Type.List(IrShape.Int)), false, emptyList()),
+                Field("test", Type.List(Type.Int), false, emptyList()),
                 rustCode {
                     -"""#[serde(default, skip_serializing_if = "Vec::is_empty")]"""
                 }
@@ -61,7 +60,7 @@ class Bsp4rsTest {
             TestCase(
                 Field(
                     "test",
-                    IrShape(ShapeId.fromParts("bsp", "units"), Type.Map(IrShape.String, IrShape.Unit)),
+                    Type.Map(Type.String, Type.Unit),
                     false,
                     emptyList()
                 ),
@@ -70,7 +69,7 @@ class Bsp4rsTest {
                 }
             ),
             TestCase(
-                Field("test", IrShape(ShapeId.fromParts("bsp", "jsons"), Type.Set(IrShape.Json)), false, emptyList()),
+                Field("test", Type.Set(Type.Json), false, emptyList()),
                 rustCode {
                     -"""#[serde(default, skip_serializing_if = "BTreeSet::is_empty")]"""
                 }

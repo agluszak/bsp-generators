@@ -9,6 +9,10 @@ fun String.kebabToScreamingSnakeCase(): String {
     return this.replace('-', '_').uppercase()
 }
 
+fun String.camelCaseUpperCamelCase(): String {
+    return this.replaceFirstChar { it.uppercase() }
+}
+
 fun String.snakeToUpperCamelCase(): String {
     return this.toUpperCamelCase("_")
 }

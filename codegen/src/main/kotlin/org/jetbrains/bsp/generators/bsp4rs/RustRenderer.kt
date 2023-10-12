@@ -1,14 +1,18 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.CodegenFile
-import org.jetbrains.bsp.generators.bsp4rs.def.*
+import org.jetbrains.bsp.generators.bsp4rs.def.renderAlias
+import org.jetbrains.bsp.generators.bsp4rs.def.renderClosedEnum
+import org.jetbrains.bsp.generators.bsp4rs.def.renderDataKinds
+import org.jetbrains.bsp.generators.bsp4rs.def.renderOpenEnum
+import org.jetbrains.bsp.generators.bsp4rs.def.renderService
+import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
+import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnion
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
-import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -18,7 +22,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     val serializationRenderer = SerializationRenderer()
 
     private val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
-    private val bannedAliases: List<String> = listOf("Integer", "Long")
 
     fun render(): List<CodegenFile> {
         val defFiles = modules.flatMap { renderModule(it) }
@@ -28,7 +31,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderModule(module: Module): List<CodegenFile> {
         val filesWithNames = module.definitions.mapNotNull {
-            renderDef(it)?.run {
+            renderDef(it).run {
                 val name = makeName(it.name).camelToSnakeCase()
                 Pair(generateFile(this, module.path, "$name.rs"), name)
             }
@@ -40,13 +43,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         return files + modFile
     }
 
-    private fun renderDef(def: Def): CodeBlock? = when (def) {
+    private fun renderDef(def: Def): CodeBlock = when (def) {
         is Def.Structure -> renderStructure(def)
         is Def.OpenEnum<*> -> renderOpenEnum(def)
         is Def.ClosedEnum<*> -> renderClosedEnum(def)
         is Def.Service -> renderService(def)
         is Def.Alias -> renderAlias(def)
         is Def.DataKinds -> renderDataKinds(def)
+        is Def.UntaggedUnion -> renderUntaggedUnion(def)
     }
 
     private fun generateModFile(modulePath: Path, filesNames: List<String>): CodegenFile {
@@ -89,14 +93,12 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     fun makeName(name: String): String =
         renames[name] ?: name
 
-    fun isAliasRenderable(shapeId: ShapeId, type: Type): Boolean {
-        if (!shapeId.namespace.startsWith("bsp")) return false
-        if (shapeId.name in bannedAliases) return false
-        if (type is Type.List) return false
-        if (type is Type.Set) return false
-
-        return true
-    }
+    fun renderVariantsEnum(name: String, values: List<Pair<String, String>>): CodeBlock =
+        rustCode {
+            block("pub enum $name") {
+                lines(values.map { "${it.first}(${it.second})" }, ",", ",")
+            }
+        }
 
     fun renderPreDef(def: Def, hints: Boolean = true, untagged: Boolean = false): CodeBlock =
         rustCode {

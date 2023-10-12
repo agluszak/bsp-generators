@@ -6,7 +6,6 @@ import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.Type
 
 class SerializationRenderer {
@@ -14,7 +13,7 @@ class SerializationRenderer {
     private var reprSet: Set<ReprOption> = emptySet()
 
     fun renderForDef(def: Def, untagged: Boolean = false): CodeBlock {
-        prepareSerdeSet(def.hints)
+        prepareSerdeSet(def.hints, untagged)
         serdeSet = serdeSet.plus(defToSerdeList(def, untagged))
 
         reprSet = setOf()
@@ -35,10 +34,15 @@ class SerializationRenderer {
         }
     }
 
-    private fun prepareSerdeSet(hints: List<Hint>) {
-        val rename = hints.find { it is Hint.JsonRename }
+    private fun prepareSerdeSet(hints: List<Hint>, untagged: Boolean = false) {
+        serdeSet = emptySet()
 
-        serdeSet = if (rename is Hint.JsonRename) setOf(SerdeOption.Rename(""""${rename.name}"""")) else emptySet()
+        val rename = hints.find { it is Hint.JsonRename }
+        if (rename is Hint.JsonRename)
+            serdeSet = serdeSet.plus(SerdeOption.Rename(""""${rename.name}""""))
+
+        if (untagged)
+            serdeSet = serdeSet.plus(SerdeOption.Untagged)
     }
 
     private fun defToSerdeList(def: Def, untagged: Boolean): Set<SerdeOption> = when (def) {
@@ -67,7 +71,7 @@ class SerializationRenderer {
     }
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
-        fun optionalToSerdeList(irShape: IrShape): SerdeOption = when (irShape.type) {
+        fun optionalToSerdeList(type: Type): SerdeOption = when (type) {
             is Type.List -> SerdeOption.SkipVector
             is Type.Map -> SerdeOption.SkipMap
             is Type.Set -> SerdeOption.SkipSet
@@ -76,9 +80,7 @@ class SerializationRenderer {
 
         var serdeOpt = emptySet<SerdeOption>()
 
-        if (field.type.type is Type.Json && field.name == "data"
-            && field.type.shapeId.namespace.startsWith("bsp")
-        ) {
+        if (field.type is Type.Ref && field.name == "data") {
             serdeOpt = serdeOpt.plus(SerdeOption.Flatten)
         }
 

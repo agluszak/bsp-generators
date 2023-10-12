@@ -8,6 +8,7 @@ use traits#enumKind
 use traits#jsonNotification
 use traits#jsonRPC
 use traits#jsonRequest
+use traits#untaggedUnion
 
 // TODO: add cancel notif
 // TODO: add WorkspaceLibraries endpoint
@@ -70,7 +71,7 @@ service BuildServer {
 ///
 /// The general idea is that the BuildTarget data structure should contain only information that is fast or cheap to compute.
 structure BuildTarget {
-    /// The target’s unique identifier
+    /// The target's unique identifier
     @required
     id: BuildTargetIdentifier
     /// A human readable name for this target.
@@ -159,7 +160,7 @@ structure BuildTargetCapabilities {
 /// A unique identifier for a target, can use any URI-compatible encoding as long as it is unique within the workspace.
 /// Clients should not infer metadata out of the URI structure such as the path or query parameters, use `BuildTarget` instead.
 structure BuildTargetIdentifier {
-    /// The target’s Uri
+    /// The target's Uri
     @required
     uri: URI
 }
@@ -776,6 +777,7 @@ intEnum DiagnosticSeverity {
     HINT = 4
 }
 
+@untaggedUnion
 union Code {
     string: String
     integer: Integer
