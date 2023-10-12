@@ -19,4 +19,20 @@ pub enum RustCrateType {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn rust_crate_type() {
+        assert_json_snapshot!(RustCrateType::Bin, @r#"1"#);
+        assert_json_snapshot!(RustCrateType::Lib, @r#"2"#);
+        assert_json_snapshot!(RustCrateType::Rlib, @r#"3"#);
+        assert_json_snapshot!(RustCrateType::Dylib, @r#"4"#);
+        assert_json_snapshot!(RustCrateType::Cdylib, @r#"5"#);
+        assert_json_snapshot!(RustCrateType::Staticlib, @r#"6"#);
+        assert_json_snapshot!(RustCrateType::ProcMacro, @r#"7"#);
+        assert_json_snapshot!(RustCrateType::Unknown, @r#"8"#);
+    }
+}

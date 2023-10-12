@@ -5,9 +5,11 @@ import org.jetbrains.bsp.generators.bsp4rs.def.*
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Hint
 import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
+import org.jetbrains.bsp.generators.utils.printEnumValue
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -70,7 +72,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Def.DataKinds -> renderDataKinds(def)
     }
 
-    private fun renderDefTest(def: Def): CodeBlock? = null
+    private fun renderDefTest(def: Def): CodeBlock? = when (def) {
+        is Def.ClosedEnum<*> -> renderClosedEnumTest(def)
+        else -> null
+    }
 
     private fun generateModFile(modulePath: Path, filesNames: List<String>): CodegenFile {
         val code = rustCode {
@@ -144,6 +149,17 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
         return hints.map { """#[deprecated(note = "${it.message}")]""" }
+    }
+
+    fun renderEnumTest(name: String, values: List<EnumValue<*>>, fn: (String) -> String): CodeBlock {
+        return rustCode {
+            block("fn ${name.camelToSnakeCase()}()") {
+                values.forEach { value ->
+                    val enumValueName = fn(makeName(value.name))
+                    -"""assert_json_snapshot!($name::$enumValueName, @r#"${printEnumValue(value.value)}"#);"""
+                }
+            }
+        }
     }
 }
 

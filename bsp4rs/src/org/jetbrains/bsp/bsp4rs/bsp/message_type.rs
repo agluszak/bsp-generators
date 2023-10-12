@@ -17,4 +17,16 @@ pub enum MessageType {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn message_type() {
+        assert_json_snapshot!(MessageType::Error, @r#"1"#);
+        assert_json_snapshot!(MessageType::Warning, @r#"2"#);
+        assert_json_snapshot!(MessageType::Info, @r#"3"#);
+        assert_json_snapshot!(MessageType::Log, @r#"4"#);
+    }
+}

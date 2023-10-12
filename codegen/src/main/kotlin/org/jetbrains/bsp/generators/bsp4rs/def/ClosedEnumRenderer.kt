@@ -34,3 +34,6 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>): CodeBlock {
         -"$enumVal,"
     }
 }
+
+fun RustRenderer.renderClosedEnumTest(def: Def.ClosedEnum<*>): CodeBlock =
+    renderEnumTest(def.name, def.values) { it.snakeToUpperCamelCase() }

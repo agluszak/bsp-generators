@@ -13,4 +13,14 @@ pub enum SourceItemKind {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn source_item_kind() {
+        assert_json_snapshot!(SourceItemKind::File, @r#"1"#);
+        assert_json_snapshot!(SourceItemKind::Directory, @r#"2"#);
+    }
+}
