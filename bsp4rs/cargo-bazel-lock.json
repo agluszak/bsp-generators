@@ -1,42 +1,6 @@
 {
-  "checksum": "f553cd88ee42ddd82bd638c0a22013014599aaae17dcda111f08064b8463f999",
+  "checksum": "82d8e97fb071ce03cb8f63df62faad8d5c4b8aa564318126e2a7a2c2237631fd",
   "crates": {
-    "bitflags 1.3.2": {
-      "name": "bitflags",
-      "version": "1.3.2",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/bitflags/1.3.2/download",
-          "sha256": "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "bitflags",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "bitflags",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default"
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "1.3.2"
-      },
-      "license": "MIT/Apache-2.0"
-    },
     "bsp4rs 0.1.0": {
       "name": "bsp4rs",
       "version": "0.1.0",
@@ -46,23 +10,15 @@
           "Library": {
             "crate_name": "bsp4rs",
             "crate_root": "src/org/jetbrains/bsp/bsp4rs/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "bsp4rs",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
-            {
-              "id": "lsp-types 0.94.1",
-              "target": "lsp_types"
-            },
             {
               "id": "serde 1.0.188",
               "target": "serde"
@@ -115,17 +71,13 @@
           "Library": {
             "crate_name": "console",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "console",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -169,17 +121,13 @@
           "Library": {
             "crate_name": "darling",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "darling",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -217,17 +165,13 @@
           "Library": {
             "crate_name": "darling_core",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "darling_core",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -272,17 +216,13 @@
           "ProcMacro": {
             "crate_name": "darling_macro",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "darling_macro",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -319,22 +259,15 @@
           "Library": {
             "crate_name": "encode_unicode",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "encode_unicode",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "edition": "2015",
@@ -356,75 +289,21 @@
           "Library": {
             "crate_name": "fnv",
             "crate_root": "lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "fnv",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "edition": "2015",
         "version": "1.0.7"
       },
       "license": "Apache-2.0 / MIT"
-    },
-    "form_urlencoded 1.2.0": {
-      "name": "form_urlencoded",
-      "version": "1.2.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/form_urlencoded/1.2.0/download",
-          "sha256": "a62bc1cf6f830c2ec14a513a9fb124d0a213a629668a4186f329db21fe045652"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "form_urlencoded",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "form_urlencoded",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "percent-encoding 2.3.0",
-              "target": "percent_encoding"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "1.2.0"
-      },
-      "license": "MIT OR Apache-2.0"
     },
     "ident_case 1.0.1": {
       "name": "ident_case",
@@ -440,72 +319,17 @@
           "Library": {
             "crate_name": "ident_case",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "ident_case",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2015",
         "version": "1.0.1"
       },
       "license": "MIT/Apache-2.0"
-    },
-    "idna 0.4.0": {
-      "name": "idna",
-      "version": "0.4.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/idna/0.4.0/download",
-          "sha256": "7d20d6b07bfbc108882d88ed8e37d39636dcc260e15e30c45e6ba089610b917c"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "idna",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "idna",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "unicode-bidi 0.3.13",
-              "target": "unicode_bidi"
-            },
-            {
-              "id": "unicode-normalization 0.1.22",
-              "target": "unicode_normalization"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.4.0"
-      },
-      "license": "MIT OR Apache-2.0"
     },
     "insta 1.34.0": {
       "name": "insta",
@@ -521,26 +345,15 @@
           "Library": {
             "crate_name": "insta",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "insta",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "colors",
-            "console",
-            "default",
-            "json",
-            "serde",
-            "yaml"
-          ],
+          "common": ["colors", "console", "default", "json", "serde", "yaml"],
           "selects": {}
         },
         "deps": {
@@ -591,17 +404,13 @@
           "Library": {
             "crate_name": "itoa",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "itoa",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "1.0.9"
       },
@@ -621,17 +430,13 @@
           "Library": {
             "crate_name": "lazy_static",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "lazy_static",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2015",
         "version": "1.4.0"
       },
@@ -651,31 +456,22 @@
           "Library": {
             "crate_name": "libc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "libc",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "deps": {
@@ -691,9 +487,7 @@
         "version": "0.2.149"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -711,125 +505,17 @@
           "Library": {
             "crate_name": "linked_hash_map",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "linked_hash_map",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2015",
         "version": "0.5.6"
       },
       "license": "MIT/Apache-2.0"
-    },
-    "lsp-types 0.94.1": {
-      "name": "lsp-types",
-      "version": "0.94.1",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/lsp-types/0.94.1/download",
-          "sha256": "c66bfd44a06ae10647fe3f8214762e9369fd4248df1350924b4ef9e770a85ea1"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "lsp_types",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "lsp_types",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "bitflags 1.3.2",
-              "target": "bitflags"
-            },
-            {
-              "id": "serde 1.0.188",
-              "target": "serde"
-            },
-            {
-              "id": "serde_json 1.0.107",
-              "target": "serde_json"
-            },
-            {
-              "id": "url 2.4.1",
-              "target": "url"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "proc_macro_deps": {
-          "common": [
-            {
-              "id": "serde_repr 0.1.16",
-              "target": "serde_repr"
-            }
-          ],
-          "selects": {}
-        },
-        "version": "0.94.1"
-      },
-      "license": "MIT"
-    },
-    "percent-encoding 2.3.0": {
-      "name": "percent-encoding",
-      "version": "2.3.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/percent-encoding/2.3.0/download",
-          "sha256": "9b2a4787296e9989611394c33f193f676704af1686e70b8f8033ab5ba9a35a94"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "percent_encoding",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "percent_encoding",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "std"
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "2.3.0"
-      },
-      "license": "MIT OR Apache-2.0"
     },
     "proc-macro2 1.0.66": {
       "name": "proc-macro2",
@@ -845,31 +531,22 @@
           "Library": {
             "crate_name": "proc_macro2",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "proc_macro2",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "proc-macro"
-          ],
+          "common": ["default", "proc-macro"],
           "selects": {}
         },
         "deps": {
@@ -889,9 +566,7 @@
         "version": "1.0.66"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -909,22 +584,15 @@
           "Library": {
             "crate_name": "quote",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "quote",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "proc-macro"
-          ],
+          "common": ["default", "proc-macro"],
           "selects": {}
         },
         "deps": {
@@ -955,17 +623,13 @@
           "Library": {
             "crate_name": "ryu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "ryu",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "1.0.15"
       },
@@ -985,33 +649,22 @@
           "Library": {
             "crate_name": "serde",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "derive",
-            "serde_derive",
-            "std"
-          ],
+          "common": ["default", "derive", "serde_derive", "std"],
           "selects": {}
         },
         "deps": {
@@ -1036,9 +689,7 @@
         "version": "1.0.188"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1056,17 +707,13 @@
           "Library": {
             "crate_name": "serde_attributes",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_attributes",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "attr-alias",
@@ -1117,22 +764,15 @@
           "ProcMacro": {
             "crate_name": "serde_enum_str",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_enum_str",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "deps": {
@@ -1179,21 +819,15 @@
           "Library": {
             "crate_name": "serde_rename_rule",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_rename_rule",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "std"
-          ],
+          "common": ["std"],
           "selects": {}
         },
         "edition": "2021",
@@ -1215,21 +849,15 @@
           "ProcMacro": {
             "crate_name": "serde_derive",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_derive",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default"
-          ],
+          "common": ["default"],
           "selects": {}
         },
         "deps": {
@@ -1268,31 +896,22 @@
           "Library": {
             "crate_name": "serde_json",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_json",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "std"
-          ],
+          "common": ["default", "std"],
           "selects": {}
         },
         "deps": {
@@ -1320,9 +939,7 @@
         "version": "1.0.107"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1340,17 +957,13 @@
           "ProcMacro": {
             "crate_name": "serde_repr",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "serde_repr",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -1387,23 +1000,15 @@
           "Library": {
             "crate_name": "similar",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "similar",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
-          "common": [
-            "default",
-            "inline",
-            "text"
-          ],
+          "common": ["default", "inline", "text"],
           "selects": {}
         },
         "edition": "2018",
@@ -1425,26 +1030,20 @@
           "Library": {
             "crate_name": "syn",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "syn",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "clone-impls",
@@ -1484,9 +1083,7 @@
         "version": "1.0.109"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -1504,17 +1101,13 @@
           "Library": {
             "crate_name": "syn",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "syn",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "clone-impls",
@@ -1549,120 +1142,6 @@
       },
       "license": "MIT OR Apache-2.0"
     },
-    "tinyvec 1.6.0": {
-      "name": "tinyvec",
-      "version": "1.6.0",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/tinyvec/1.6.0/download",
-          "sha256": "87cc5ceb3875bb20c2890005a4e226a4651264a5c75edb2421b52861a0a0cb50"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "tinyvec",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "tinyvec",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "alloc",
-            "default",
-            "tinyvec_macros"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "tinyvec_macros 0.1.1",
-              "target": "tinyvec_macros"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "1.6.0"
-      },
-      "license": "Zlib OR Apache-2.0 OR MIT"
-    },
-    "tinyvec_macros 0.1.1": {
-      "name": "tinyvec_macros",
-      "version": "0.1.1",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/tinyvec_macros/0.1.1/download",
-          "sha256": "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "tinyvec_macros",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "tinyvec_macros",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "edition": "2018",
-        "version": "0.1.1"
-      },
-      "license": "MIT OR Apache-2.0 OR Zlib"
-    },
-    "unicode-bidi 0.3.13": {
-      "name": "unicode-bidi",
-      "version": "0.3.13",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/unicode-bidi/0.3.13/download",
-          "sha256": "92888ba5573ff080736b3648696b70cafad7d250551175acbaa4e0385b3e1460"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "unicode_bidi",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "unicode_bidi",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "hardcoded-data",
-            "std"
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.3.13"
-      },
-      "license": "MIT OR Apache-2.0"
-    },
     "unicode-ident 1.0.11": {
       "name": "unicode-ident",
       "version": "1.0.11",
@@ -1677,124 +1156,17 @@
           "Library": {
             "crate_name": "unicode_ident",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "unicode_ident",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "edition": "2018",
         "version": "1.0.11"
       },
       "license": "(MIT OR Apache-2.0) AND Unicode-DFS-2016"
-    },
-    "unicode-normalization 0.1.22": {
-      "name": "unicode-normalization",
-      "version": "0.1.22",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/unicode-normalization/0.1.22/download",
-          "sha256": "5c5713f0fc4b5db668a2ac63cdb7bb4469d8c9fed047b1d0292cc7b0ce2ba921"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "unicode_normalization",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "unicode_normalization",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "std"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "tinyvec 1.6.0",
-              "target": "tinyvec"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "0.1.22"
-      },
-      "license": "MIT/Apache-2.0"
-    },
-    "url 2.4.1": {
-      "name": "url",
-      "version": "2.4.1",
-      "repository": {
-        "Http": {
-          "url": "https://crates.io/api/v1/crates/url/2.4.1/download",
-          "sha256": "143b538f18257fac9cad154828a57c6bf5157e1aa604d4816b5995bf6de87ae5"
-        }
-      },
-      "targets": [
-        {
-          "Library": {
-            "crate_name": "url",
-            "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
-          }
-        }
-      ],
-      "library_target_name": "url",
-      "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
-        "crate_features": {
-          "common": [
-            "default",
-            "serde"
-          ],
-          "selects": {}
-        },
-        "deps": {
-          "common": [
-            {
-              "id": "form_urlencoded 1.2.0",
-              "target": "form_urlencoded"
-            },
-            {
-              "id": "idna 0.4.0",
-              "target": "idna"
-            },
-            {
-              "id": "percent-encoding 2.3.0",
-              "target": "percent_encoding"
-            },
-            {
-              "id": "serde 1.0.188",
-              "target": "serde"
-            }
-          ],
-          "selects": {}
-        },
-        "edition": "2018",
-        "version": "2.4.1"
-      },
-      "license": "MIT OR Apache-2.0"
     },
     "windows-sys 0.45.0": {
       "name": "windows-sys",
@@ -1810,17 +1182,13 @@
           "Library": {
             "crate_name": "windows_sys",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_sys",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "crate_features": {
           "common": [
             "Win32",
@@ -1866,17 +1234,13 @@
           "Library": {
             "crate_name": "windows_targets",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_targets",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [],
           "selects": {
@@ -1973,26 +1337,20 @@
           "Library": {
             "crate_name": "windows_aarch64_gnullvm",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_aarch64_gnullvm",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2006,9 +1364,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2026,26 +1382,20 @@
           "Library": {
             "crate_name": "windows_aarch64_msvc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_aarch64_msvc",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2059,9 +1409,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2079,26 +1427,20 @@
           "Library": {
             "crate_name": "windows_i686_gnu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_i686_gnu",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2112,9 +1454,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2132,26 +1472,20 @@
           "Library": {
             "crate_name": "windows_i686_msvc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_i686_msvc",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2165,9 +1499,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2185,26 +1517,20 @@
           "Library": {
             "crate_name": "windows_x86_64_gnu",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_x86_64_gnu",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2218,9 +1544,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2238,26 +1562,20 @@
           "Library": {
             "crate_name": "windows_x86_64_gnullvm",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_x86_64_gnullvm",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2271,9 +1589,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2291,26 +1607,20 @@
           "Library": {
             "crate_name": "windows_x86_64_msvc",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         },
         {
           "BuildScript": {
             "crate_name": "build_script_build",
             "crate_root": "build.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "windows_x86_64_msvc",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2324,9 +1634,7 @@
         "version": "0.42.2"
       },
       "build_script_attrs": {
-        "data_glob": [
-          "**"
-        ]
+        "data_glob": ["**"]
       },
       "license": "MIT OR Apache-2.0"
     },
@@ -2344,17 +1652,13 @@
           "Library": {
             "crate_name": "yaml_rust",
             "crate_root": "src/lib.rs",
-            "srcs": [
-              "**/*.rs"
-            ]
+            "srcs": ["**/*.rs"]
           }
         }
       ],
       "library_target_name": "yaml_rust",
       "common_attrs": {
-        "compile_data_glob": [
-          "**"
-        ],
+        "compile_data_glob": ["**"],
         "deps": {
           "common": [
             {
@@ -2376,9 +1680,7 @@
   },
   "conditions": {
     "aarch64-pc-windows-gnullvm": [],
-    "aarch64-pc-windows-msvc": [
-      "aarch64-pc-windows-msvc"
-    ],
+    "aarch64-pc-windows-msvc": ["aarch64-pc-windows-msvc"],
     "aarch64-uwp-windows-msvc": [],
     "cfg(not(windows_raw_dylib))": [
       "aarch64-apple-darwin",
@@ -2419,16 +1721,12 @@
       "x86_64-pc-windows-msvc"
     ],
     "i686-pc-windows-gnu": [],
-    "i686-pc-windows-msvc": [
-      "i686-pc-windows-msvc"
-    ],
+    "i686-pc-windows-msvc": ["i686-pc-windows-msvc"],
     "i686-uwp-windows-gnu": [],
     "i686-uwp-windows-msvc": [],
     "x86_64-pc-windows-gnu": [],
     "x86_64-pc-windows-gnullvm": [],
-    "x86_64-pc-windows-msvc": [
-      "x86_64-pc-windows-msvc"
-    ],
+    "x86_64-pc-windows-msvc": ["x86_64-pc-windows-msvc"],
     "x86_64-uwp-windows-gnu": [],
     "x86_64-uwp-windows-msvc": []
   }

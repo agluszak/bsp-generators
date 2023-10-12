@@ -9,7 +9,6 @@ rust_library(
         "@crate_index//:serde_repr",
     ],
     deps = [
-        "@crate_index//:lsp-types",
         "@crate_index//:serde",
         "@crate_index//:serde_json",
     ],
