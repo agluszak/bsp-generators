@@ -1,4 +1,4 @@
-package bsp4s.util
+package org.jetbrains.bsp.util
 
 import com.github.plokhotnyuk.jsoniter_scala.core.{JsonReader, JsonValueCodec, JsonWriter}
 

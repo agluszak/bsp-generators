@@ -9,8 +9,7 @@ import bsp.codegen.ir.Type._
 import bsp.codegen.ir._
 import bsp.codegen.ir.Hint.{Deprecated, Documentation}
 import cats.implicits.toFoldableOps
-import org.jetbrains.bsp.generators.CodegenFile
-import os.RelPath
+import org.jetbrains.bsp.generators.{CodegenFile, Loader}
 import software.amazon.smithy.model.shapes.ShapeId
 
 import java.nio.file.Path
@@ -21,7 +20,13 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
   val baseRelPath: Path = Path.of(basepkg.replace(".", "/"))
 
   def render(): List[CodegenFile] = {
-    List(renderEndpoints(), renderDefinitions())
+    List(renderEndpoints(), renderDefinitions(), copyCustomCodec())
+  }
+
+  private def copyCustomCodec(): CodegenFile = {
+    val contents = Loader.INSTANCE.readResource("CustomCodec.scala")
+    val path = Path.of("org", "jetbrains","bsp","util", "CustomCodec.scala")
+    new CodegenFile(path, contents)
   }
 
   def renderDefinitions(): CodegenFile = {
@@ -39,7 +44,7 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
     val contents = lines(
       s"package $basepkg",
       newline,
-      "import bsp4s.util.CustomCodec",
+      "import org.jetbrains.bsp.util.CustomCodec",
       newline,
       "import java.net.{URI, URISyntaxException}",
       newline,

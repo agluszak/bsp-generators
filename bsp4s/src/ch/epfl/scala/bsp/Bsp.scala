@@ -1,6 +1,6 @@
 package ch.epfl.scala.bsp
 
-import bsp4s.util.CustomCodec
+import org.jetbrains.bsp.util.CustomCodec
 
 import java.net.{URI, URISyntaxException}
 
