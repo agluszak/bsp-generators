@@ -41,4 +41,19 @@ impl BuildTargetTag {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn build_target_tag() {
+        assert_json_snapshot!(BuildTargetTag::APPLICATION, @r#""application""#);
+        assert_json_snapshot!(BuildTargetTag::BENCHMARK, @r#""benchmark""#);
+        assert_json_snapshot!(BuildTargetTag::INTEGRATION_TEST, @r#""integration-test""#);
+        assert_json_snapshot!(BuildTargetTag::LIBRARY, @r#""library""#);
+        assert_json_snapshot!(BuildTargetTag::MANUAL, @r#""manual""#);
+        assert_json_snapshot!(BuildTargetTag::NO_IDE, @r#""no-ide""#);
+        assert_json_snapshot!(BuildTargetTag::TEST, @r#""test""#);
+    }
+}

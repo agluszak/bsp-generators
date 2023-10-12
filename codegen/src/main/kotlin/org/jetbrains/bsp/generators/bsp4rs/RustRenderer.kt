@@ -74,6 +74,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderDefTest(def: Def): CodeBlock? = when (def) {
         is Def.ClosedEnum<*> -> renderClosedEnumTest(def)
+        is Def.OpenEnum<*> -> renderOpenEnumTest(def)
         else -> null
     }
 

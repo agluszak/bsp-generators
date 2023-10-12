@@ -20,4 +20,16 @@ impl RustPackageOrigin {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn rust_package_origin() {
+        assert_json_snapshot!(RustPackageOrigin::DEPENDENCY, @r#""dependency""#);
+        assert_json_snapshot!(RustPackageOrigin::STDLIB, @r#""stdlib""#);
+        assert_json_snapshot!(RustPackageOrigin::STDLIB_DEPENDENCY, @r#""stdlib-dependency""#);
+        assert_json_snapshot!(RustPackageOrigin::WORKSPACE, @r#""workspace""#);
+    }
+}

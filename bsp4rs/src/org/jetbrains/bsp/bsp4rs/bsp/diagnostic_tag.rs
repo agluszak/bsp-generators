@@ -20,4 +20,14 @@ impl DiagnosticTag {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn diagnostic_tag() {
+        assert_json_snapshot!(DiagnosticTag::UNNECESSARY, @r#"1"#);
+        assert_json_snapshot!(DiagnosticTag::DEPRECATED, @r#"2"#);
+    }
+}
