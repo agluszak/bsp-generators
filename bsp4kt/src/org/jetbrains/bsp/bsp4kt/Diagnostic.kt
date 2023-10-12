@@ -8,6 +8,7 @@ import kotlinx.serialization.json.JsonElement
 data class Diagnostic(
   val range: Range,
   val severity: DiagnosticSeverity? = null,
+  val code: DiagnosticCode? = null,
   val codeDescription: CodeDescription? = null,
   val source: String? = null,
   val message: String,

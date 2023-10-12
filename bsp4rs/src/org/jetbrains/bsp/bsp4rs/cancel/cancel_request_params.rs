@@ -1,5 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
+use crate::*;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CancelRequestParams {}
+pub struct CancelRequestParams {
+    /// The request id to cancel.
+    pub id: RequestId,
+}

@@ -1,5 +1,6 @@
 package ch.epfl.scala.bsp4j;
 
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.jsonrpc.validation.NonNull;
 import org.eclipse.lsp4j.util.Preconditions;
 import org.eclipse.xtext.xbase.lib.Pure;
@@ -7,20 +8,38 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @SuppressWarnings("all")
 public class CancelRequestParams {
-  @NonNull private String id;
+  @NonNull private Either<String, Integer> id;
 
-  public CancelRequestParams(@NonNull final String id) {
+  public CancelRequestParams(@NonNull final Either<String, Integer> id) {
     this.id = id;
   }
 
   @Pure
   @NonNull
-  public String getId() {
+  public Either<String, Integer> getId() {
     return this.id;
   }
 
-  public void setId(@NonNull final String id) {
+  public void setId(@NonNull final Either<String, Integer> id) {
     this.id = Preconditions.checkNotNull(id, "id");
+  }
+
+  public void setId(final String id) {
+    if (id == null) {
+      Preconditions.checkNotNull(id, "id");
+      this.id = null;
+      return;
+    }
+    this.id = Either.forLeft(id);
+  }
+
+  public void setId(final Integer id) {
+    if (id == null) {
+      Preconditions.checkNotNull(id, "id");
+      this.id = null;
+      return;
+    }
+    this.id = Either.forRight(id);
   }
 
   @Override

@@ -2,12 +2,10 @@ $version: "2"
 
 namespace bsp.rust
 
-use bsp#BuildTargetData
 use bsp#BuildTargetIdentifiers
 use bsp#EnvironmentVariables
 use bsp#URI
 use traits#enumKind
-use traits#dataKind
 use traits#jsonRPC
 use traits#jsonRequest
 use traits#set

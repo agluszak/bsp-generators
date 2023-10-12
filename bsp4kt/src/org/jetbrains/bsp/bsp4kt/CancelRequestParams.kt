@@ -5,4 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-object CancelRequestParams
+data class CancelRequestParams(
+  val id: RequestId
+)

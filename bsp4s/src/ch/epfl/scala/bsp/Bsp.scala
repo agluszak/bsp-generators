@@ -1,5 +1,7 @@
 package ch.epfl.scala.bsp
 
+import org.jetbrains.bsp.util.CustomCodec
+
 import java.net.{URI, URISyntaxException}
 
 import com.github.plokhotnyuk.jsoniter_scala.core.JsonValueCodec
@@ -168,11 +170,12 @@ object BuildTargetTag {
 }
 
 final case class CancelRequestParams (
-  id: String,
+  id: Either[String, Int],
 )
 
 object CancelRequestParams {
   implicit val codec: JsonValueCodec[CancelRequestParams] = JsonCodecMaker.makeWithRequiredCollectionFields
+  implicit val codecForEither: JsonValueCodec[Either[String, Int]] = CustomCodec.forEitherStringInt
 }
 
 final case class CargoBuildTarget (
@@ -408,7 +411,7 @@ object DependencySourcesResult {
 final case class Diagnostic (
   range: Range,
   severity: Option[DiagnosticSeverity],
-  code: Option[String],
+  code: Option[Either[String, Int]],
   codeDescription: Option[CodeDescription],
   source: Option[String],
   message: String,
@@ -420,6 +423,7 @@ final case class Diagnostic (
 
 object Diagnostic {
   implicit val codec: JsonValueCodec[Diagnostic] = JsonCodecMaker.makeWithRequiredCollectionFields
+  implicit val codecForEither: JsonValueCodec[Either[String, Int]] = CustomCodec.forEitherStringInt
 }
 
 object DiagnosticDataKind {

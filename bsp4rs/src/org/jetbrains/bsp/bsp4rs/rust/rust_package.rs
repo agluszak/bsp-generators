@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::*;
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 
 /// A `crate` is the smallest amount of code that the Rust compiler considers at a time.
 /// It can come in one of two forms: a binary crate or a library crate.
@@ -53,11 +53,11 @@ pub struct RustPackage {
     /// The `cfg` is split by '=' delimiter and the first half becomes key and
     /// the second is aggregated to the value in `RustCfgOptions`.
     /// For "cfg1" the value is empty.
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub cfg_options: RustCfgOptions,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cfg_options: Option<RustCfgOptions>,
     /// Environment variables for the package.
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub env: EnvironmentVariables,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub env: Option<EnvironmentVariables>,
     /// An absolute path which is used as a value of `OUT_DIR` environmental
     /// variable when compiling current package.
     #[serde(default, skip_serializing_if = "Option::is_none")]

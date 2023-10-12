@@ -12,6 +12,9 @@ pub struct Diagnostic {
     /// client to interpret diagnostics as error, warning, info or hint.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub severity: Option<DiagnosticSeverity>,
+    /// The diagnostic's code, which might appear in the user interface.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub code: Option<DiagnosticCode>,
     /// An optional property to describe the error code.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub code_description: Option<CodeDescription>,

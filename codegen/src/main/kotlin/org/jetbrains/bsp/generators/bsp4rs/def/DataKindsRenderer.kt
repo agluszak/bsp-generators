@@ -1,7 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import org.jetbrains.bsp.generators.bsp4rs.renderIrShapeType
+import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -18,10 +18,10 @@ fun RustRenderer.renderDataKinds(def: Def.DataKinds): CodeBlock {
         -"#[allow(clippy::large_enum_variant)]"
         newline()
         include(renderPreDef(def, hints = false))
-        include(renderDataKindsEnum(namedName, dataKinds))
+        include(renderVariantsEnum(namedName, dataKinds))
         newline()
         include(renderPreDef(def, untagged = true))
-        include(renderDataKindsEnum(def.name, wrapperEnum))
+        include(renderVariantsEnum(def.name, wrapperEnum))
         newline()
         include(renderDataKindsImpl(def.name, namedName, dataKinds))
     }
@@ -30,16 +30,9 @@ fun RustRenderer.renderDataKinds(def: Def.DataKinds): CodeBlock {
 private fun RustRenderer.makeDataKindsList(irKinds: List<PolymorphicDataKind>): List<Pair<String, String>> =
     irKinds.map { kind ->
         val name = makeName(kind.kind).kebabToUpperCamelCase()
-        val dataType = renderIrShapeType(kind.shape)
+        val dataType = renderType(kind.shape)
 
         Pair(name, dataType)
-    }
-
-private fun renderDataKindsEnum(name: String, values: List<Pair<String, String>>): CodeBlock =
-    rustCode {
-        block("pub enum $name") {
-            lines(values.map { "${it.first}(${it.second})" }, ",", ",")
-        }
     }
 
 private fun renderDataKindsImpl(
