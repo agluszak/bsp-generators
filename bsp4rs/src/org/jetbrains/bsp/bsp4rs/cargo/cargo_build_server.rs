@@ -25,4 +25,17 @@ impl Request for SetCargoFeatures {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn cargo_features_state_method() {
+        assert_eq!(CargoFeaturesState::METHOD, "workspace/cargoFeaturesState");
+    }
+
+    #[test]
+    fn set_cargo_features_method() {
+        assert_eq!(SetCargoFeatures::METHOD, "workspace/setCargoFeatures");
+    }
+}

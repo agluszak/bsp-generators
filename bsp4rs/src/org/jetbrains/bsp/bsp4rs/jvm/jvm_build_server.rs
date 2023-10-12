@@ -29,4 +29,23 @@ impl Request for BuildTargetJvmRunEnvironment {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn build_target_jvm_test_environment_method() {
+        assert_eq!(
+            BuildTargetJvmTestEnvironment::METHOD,
+            "buildTarget/jvmTestEnvironment"
+        );
+    }
+
+    #[test]
+    fn build_target_jvm_run_environment_method() {
+        assert_eq!(
+            BuildTargetJvmRunEnvironment::METHOD,
+            "buildTarget/jvmRunEnvironment"
+        );
+    }
+}

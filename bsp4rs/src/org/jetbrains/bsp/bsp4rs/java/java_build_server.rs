@@ -13,4 +13,12 @@ impl Request for BuildTargetJavacOptions {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn build_target_javac_options_method() {
+        assert_eq!(BuildTargetJavacOptions::METHOD, "buildTarget/javacOptions");
+    }
+}

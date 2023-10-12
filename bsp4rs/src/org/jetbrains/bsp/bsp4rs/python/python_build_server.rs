@@ -13,4 +13,15 @@ impl Request for BuildTargetPythonOptions {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn build_target_python_options_method() {
+        assert_eq!(
+            BuildTargetPythonOptions::METHOD,
+            "buildTarget/pythonOptions"
+        );
+    }
+}

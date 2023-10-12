@@ -8,6 +8,7 @@ import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Hint
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
+import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 
 fun RustRenderer.renderService(def: Def.Service): CodeBlock =
     rustCode {
@@ -49,5 +50,25 @@ private fun RustRenderer.renderOperationTraitProperties(op: Operation): CodeBloc
 
     return rustCode {
         lines(listOfNotNull(input, output, method), join = ";", end = ";")
+    }
+}
+
+fun RustRenderer.renderServiceTest(def: Def.Service): CodeBlock =
+    rustCode {
+        def.operations.forEach { operation ->
+            include(renderOperationTest(operation))
+            newline()
+        }
+    }
+
+private fun RustRenderer.renderOperationTest(op: Operation): CodeBlock {
+    val name = makeName(op.name)
+
+    return rustCode {
+        if (op.hints.count { it is Hint.Deprecated } > 0) -"#[allow(deprecated)]"
+        -"#[test]"
+        block("fn ${name.camelToSnakeCase()}_method()") {
+            -"""assert_eq!($name::METHOD, "${op.jsonRpcMethod}");"""
+        }
     }
 }

@@ -126,4 +126,55 @@ impl Notification for OnRunPrintStderr {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn on_build_show_message_method() {
+        assert_eq!(OnBuildShowMessage::METHOD, "build/showMessage");
+    }
+
+    #[test]
+    fn on_build_log_message_method() {
+        assert_eq!(OnBuildLogMessage::METHOD, "build/logMessage");
+    }
+
+    #[test]
+    fn on_build_publish_diagnostics_method() {
+        assert_eq!(
+            OnBuildPublishDiagnostics::METHOD,
+            "build/publishDiagnostics"
+        );
+    }
+
+    #[test]
+    fn on_build_target_did_change_method() {
+        assert_eq!(OnBuildTargetDidChange::METHOD, "buildTarget/didChange");
+    }
+
+    #[test]
+    fn on_build_task_start_method() {
+        assert_eq!(OnBuildTaskStart::METHOD, "build/taskStart");
+    }
+
+    #[test]
+    fn on_build_task_progress_method() {
+        assert_eq!(OnBuildTaskProgress::METHOD, "build/taskProgress");
+    }
+
+    #[test]
+    fn on_build_task_finish_method() {
+        assert_eq!(OnBuildTaskFinish::METHOD, "build/taskFinish");
+    }
+
+    #[test]
+    fn on_run_print_stdout_method() {
+        assert_eq!(OnRunPrintStdout::METHOD, "run/printStdout");
+    }
+
+    #[test]
+    fn on_run_print_stderr_method() {
+        assert_eq!(OnRunPrintStderr::METHOD, "run/printStderr");
+    }
+}

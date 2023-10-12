@@ -260,4 +260,106 @@ impl Notification for OnRunReadStdin {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn build_initialize_method() {
+        assert_eq!(BuildInitialize::METHOD, "build/initialize");
+    }
+
+    #[test]
+    fn on_build_initialized_method() {
+        assert_eq!(OnBuildInitialized::METHOD, "build/initialized");
+    }
+
+    #[test]
+    fn build_shutdown_method() {
+        assert_eq!(BuildShutdown::METHOD, "build/shutdown");
+    }
+
+    #[test]
+    fn on_build_exit_method() {
+        assert_eq!(OnBuildExit::METHOD, "build/exit");
+    }
+
+    #[test]
+    fn workspace_build_targets_method() {
+        assert_eq!(WorkspaceBuildTargets::METHOD, "workspace/buildTargets");
+    }
+
+    #[test]
+    fn workspace_reload_method() {
+        assert_eq!(WorkspaceReload::METHOD, "workspace/reload");
+    }
+
+    #[test]
+    fn build_target_sources_method() {
+        assert_eq!(BuildTargetSources::METHOD, "buildTarget/sources");
+    }
+
+    #[test]
+    fn build_target_inverse_sources_method() {
+        assert_eq!(
+            BuildTargetInverseSources::METHOD,
+            "buildTarget/inverseSources"
+        );
+    }
+
+    #[test]
+    fn build_target_dependency_sources_method() {
+        assert_eq!(
+            BuildTargetDependencySources::METHOD,
+            "buildTarget/dependencySources"
+        );
+    }
+
+    #[test]
+    fn build_target_dependency_modules_method() {
+        assert_eq!(
+            BuildTargetDependencyModules::METHOD,
+            "buildTarget/dependencyModules"
+        );
+    }
+
+    #[test]
+    fn build_target_resources_method() {
+        assert_eq!(BuildTargetResources::METHOD, "buildTarget/resources");
+    }
+
+    #[test]
+    fn build_target_output_paths_method() {
+        assert_eq!(BuildTargetOutputPaths::METHOD, "buildTarget/outputPaths");
+    }
+
+    #[test]
+    fn build_target_compile_method() {
+        assert_eq!(BuildTargetCompile::METHOD, "buildTarget/compile");
+    }
+
+    #[test]
+    fn build_target_run_method() {
+        assert_eq!(BuildTargetRun::METHOD, "buildTarget/run");
+    }
+
+    #[test]
+    fn build_target_test_method() {
+        assert_eq!(BuildTargetTest::METHOD, "buildTarget/test");
+    }
+
+    #[test]
+    fn debug_session_start_method() {
+        assert_eq!(DebugSessionStart::METHOD, "debugSession/start");
+    }
+
+    #[test]
+    fn build_target_clean_cache_method() {
+        assert_eq!(BuildTargetCleanCache::METHOD, "buildTarget/cleanCache");
+    }
+
+    #[test]
+    fn on_run_read_stdin_method() {
+        assert_eq!(OnRunReadStdin::METHOD, "run/readStdin");
+    }
+}

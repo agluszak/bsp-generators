@@ -30,4 +30,17 @@ impl Request for RustToolchain {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn rust_workspace_method() {
+        assert_eq!(RustWorkspace::METHOD, "buildTarget/rustWorkspace");
+    }
+
+    #[test]
+    fn rust_toolchain_method() {
+        assert_eq!(RustToolchain::METHOD, "buildTarget/rustToolchain");
+    }
+}

@@ -8,6 +8,7 @@ import org.jetbrains.bsp.generators.bsp4rs.def.renderDataKinds
 import org.jetbrains.bsp.generators.bsp4rs.def.renderOpenEnum
 import org.jetbrains.bsp.generators.bsp4rs.def.renderOpenEnumTest
 import org.jetbrains.bsp.generators.bsp4rs.def.renderService
+import org.jetbrains.bsp.generators.bsp4rs.def.renderServiceTest
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
 import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnion
 import org.jetbrains.bsp.generators.dsl.CodeBlock
@@ -56,10 +57,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             block("mod tests") {
                 include(renderTestsImports())
                 newline()
-                renderDefTest(def)?.let {
-                    -"#[test]"
-                    include(it)
-                }
+                renderDefTest(def)?.let { include(it) }
             }
             newline()
         }
@@ -77,6 +75,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     private fun renderDefTest(def: Def): CodeBlock? = when (def) {
         is Def.ClosedEnum<*> -> renderClosedEnumTest(def)
         is Def.OpenEnum<*> -> renderOpenEnumTest(def)
+        is Def.Service -> renderServiceTest(def)
         else -> null
     }
 
@@ -154,6 +153,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     fun renderEnumTest(name: String, values: List<EnumValue<*>>, fn: (String) -> String): CodeBlock {
         return rustCode {
+            -"#[test]"
             block("fn ${name.camelToSnakeCase()}()") {
                 values.forEach { value ->
                     val enumValueName = fn(makeName(value.name))

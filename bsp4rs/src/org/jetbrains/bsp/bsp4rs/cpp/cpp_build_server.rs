@@ -13,4 +13,12 @@ impl Request for BuildTargetCppOptions {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn build_target_cpp_options_method() {
+        assert_eq!(BuildTargetCppOptions::METHOD, "buildTarget/cppOptions");
+    }
+}

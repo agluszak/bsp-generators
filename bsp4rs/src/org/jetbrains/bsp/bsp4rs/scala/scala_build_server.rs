@@ -68,4 +68,33 @@ impl Request for BuildTargetScalaMainClasses {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn build_target_scalac_options_method() {
+        assert_eq!(
+            BuildTargetScalacOptions::METHOD,
+            "buildTarget/scalacOptions"
+        );
+    }
+
+    #[allow(deprecated)]
+    #[test]
+    fn build_target_scala_test_classes_method() {
+        assert_eq!(
+            BuildTargetScalaTestClasses::METHOD,
+            "buildTarget/scalaTestClasses"
+        );
+    }
+
+    #[allow(deprecated)]
+    #[test]
+    fn build_target_scala_main_classes_method() {
+        assert_eq!(
+            BuildTargetScalaMainClasses::METHOD,
+            "buildTarget/scalaMainClasses"
+        );
+    }
+}
