@@ -274,8 +274,9 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
    }
 
    private def renderUntaggedUnion(types: List[Type]): String = {
-     if (types.size != 2)
-       throw new Exception("Only unions of two types are supported")
+     val supported = List(Type.TString, Type.TPrimitive(Primitive.PInt,ShapeId.fromParts("bsp","Integer")))
+     if (types.size != 2 || !(types == supported))
+       throw new Exception("Only unions with String and Int are supported (order matters)")
 
      s"Either[${types.map(renderType).mkString(", ")}]"
    }

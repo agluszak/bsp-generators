@@ -4,14 +4,7 @@ import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.Loader
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.code
-import org.jetbrains.bsp.generators.ir.Def
-import org.jetbrains.bsp.generators.ir.EnumType
-import org.jetbrains.bsp.generators.ir.EnumValue
-import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
-import org.jetbrains.bsp.generators.ir.Operation
-import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.ir.*
 import org.jetbrains.bsp.generators.utils.camelCaseUpperCamelCase
 import org.jetbrains.bsp.generators.utils.kebabToScreamingSnakeCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
@@ -126,9 +119,9 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return renderOpenEnum(dataKindDef)
     }
 
-    private fun renderUntaggedUnion(def: Def.UntaggedUnion): CodegenFile? {
-        if (def.members.size == 2 && def.members.containsAll(listOf(String, Int))) {
-            return null
+    private fun renderUntaggedUnion(def: Def.UntaggedUnion): CodegenFile {
+        require(def.members.size == 2 && def.members.containsAll(listOf(Type.String, Type.Int))) {
+            "Only unions with String and Int are supported"
         }
 
         fun makeTypeName(renderedType: String): String = "${renderedType.camelCaseUpperCamelCase()}Value"
