@@ -19,3 +19,9 @@ fun RustRenderer.renderType(type: Type): String = when (type) {
     is Type.Ref -> makeName(type.shapeId.name)
     is Type.UntaggedUnion -> ""
 }
+
+fun RustRenderer.printEnumValue(value: Any?): String = when (value) {
+    is Int -> "$value"
+    is String -> """"$value""""
+    else -> ""
+}

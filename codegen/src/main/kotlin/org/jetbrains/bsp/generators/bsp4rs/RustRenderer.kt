@@ -16,7 +16,6 @@ import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Hint
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
-import org.jetbrains.bsp.generators.utils.printEnumValue
 import java.nio.file.Path
 import kotlin.io.path.Path
 

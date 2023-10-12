@@ -1,12 +1,12 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
+import org.jetbrains.bsp.generators.bsp4rs.printEnumValue
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.EnumValue
-import org.jetbrains.bsp.generators.utils.printEnumValue
 
 fun RustRenderer.renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
     val name = def.name
