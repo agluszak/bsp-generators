@@ -1,5 +1,7 @@
 package ch.epfl.scala.bsp
 
+import org.jetbrains.bsp.util.CustomCodec
+
 import java.net.{URI, URISyntaxException}
 
 import com.github.plokhotnyuk.jsoniter_scala.core.JsonValueCodec

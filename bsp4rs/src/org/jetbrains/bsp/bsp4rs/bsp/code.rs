@@ -1,0 +1,11 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Code {
+    String(String),
+    I32(i32),
+}
+
+#[cfg(test)]
+mod tests {}

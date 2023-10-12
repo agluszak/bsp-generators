@@ -16,7 +16,7 @@ use crate::*;
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTarget {
-    /// The target’s unique identifier
+    /// The target's unique identifier
     pub id: BuildTargetIdentifier,
     /// A human readable name for this target.
     /// May be presented in the user interface.
