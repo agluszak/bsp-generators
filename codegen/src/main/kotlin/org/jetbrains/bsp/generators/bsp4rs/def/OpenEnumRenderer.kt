@@ -1,7 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import org.jetbrains.bsp.generators.bsp4rs.printEnumValue
+import org.jetbrains.bsp.generators.bsp4rs.renderEnumValueJson
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -35,7 +35,7 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, enumName: String): Co
 
     return rustCode {
         include(renderHints(ev.hints))
-        -"pub const $enumValueName: $enumName = $enumName::new(${printEnumValue(ev.value)});"
+        -"pub const $enumValueName: $enumName = $enumName::new(${renderEnumValueJson(ev.value)});"
     }
 }
 

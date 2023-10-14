@@ -20,16 +20,16 @@ pub enum TestStatus {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     use super::*;
 
     #[test]
     fn test_status() {
-        assert_json_snapshot!(TestStatus::Passed, @r#"1"#);
-        assert_json_snapshot!(TestStatus::Failed, @r#"2"#);
-        assert_json_snapshot!(TestStatus::Ignored, @r#"3"#);
-        assert_json_snapshot!(TestStatus::Cancelled, @r#"4"#);
-        assert_json_snapshot!(TestStatus::Skipped, @r#"5"#);
+        assert_compact_json_snapshot!(TestStatus::Passed, @r#"1"#);
+        assert_compact_json_snapshot!(TestStatus::Failed, @r#"2"#);
+        assert_compact_json_snapshot!(TestStatus::Ignored, @r#"3"#);
+        assert_compact_json_snapshot!(TestStatus::Cancelled, @r#"4"#);
+        assert_compact_json_snapshot!(TestStatus::Skipped, @r#"5"#);
     }
 }

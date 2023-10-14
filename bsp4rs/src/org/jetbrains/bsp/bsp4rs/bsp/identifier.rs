@@ -25,4 +25,13 @@ impl From<&str> for Identifier {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn identifier() {
+        assert_compact_json_snapshot!(Identifier(TEST_STRING.to_string()), @r#""test_string""#);
+    }
+}

@@ -24,18 +24,18 @@ pub enum RustTargetKind {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     use super::*;
 
     #[test]
     fn rust_target_kind() {
-        assert_json_snapshot!(RustTargetKind::Lib, @r#"1"#);
-        assert_json_snapshot!(RustTargetKind::Bin, @r#"2"#);
-        assert_json_snapshot!(RustTargetKind::Test, @r#"3"#);
-        assert_json_snapshot!(RustTargetKind::Example, @r#"4"#);
-        assert_json_snapshot!(RustTargetKind::Bench, @r#"5"#);
-        assert_json_snapshot!(RustTargetKind::CustomBuild, @r#"6"#);
-        assert_json_snapshot!(RustTargetKind::Unknown, @r#"7"#);
+        assert_compact_json_snapshot!(RustTargetKind::Lib, @r#"1"#);
+        assert_compact_json_snapshot!(RustTargetKind::Bin, @r#"2"#);
+        assert_compact_json_snapshot!(RustTargetKind::Test, @r#"3"#);
+        assert_compact_json_snapshot!(RustTargetKind::Example, @r#"4"#);
+        assert_compact_json_snapshot!(RustTargetKind::Bench, @r#"5"#);
+        assert_compact_json_snapshot!(RustTargetKind::CustomBuild, @r#"6"#);
+        assert_compact_json_snapshot!(RustTargetKind::Unknown, @r#"7"#);
     }
 }

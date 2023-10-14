@@ -18,14 +18,14 @@ pub enum BuildTargetEventKind {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     use super::*;
 
     #[test]
     fn build_target_event_kind() {
-        assert_json_snapshot!(BuildTargetEventKind::Created, @r#"1"#);
-        assert_json_snapshot!(BuildTargetEventKind::Changed, @r#"2"#);
-        assert_json_snapshot!(BuildTargetEventKind::Deleted, @r#"3"#);
+        assert_compact_json_snapshot!(BuildTargetEventKind::Created, @r#"1"#);
+        assert_compact_json_snapshot!(BuildTargetEventKind::Changed, @r#"2"#);
+        assert_compact_json_snapshot!(BuildTargetEventKind::Deleted, @r#"3"#);
     }
 }

@@ -27,4 +27,13 @@ impl From<&str> for LanguageId {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn language_id() {
+        assert_compact_json_snapshot!(LanguageId(TEST_STRING.to_string()), @r#""test_string""#);
+    }
+}

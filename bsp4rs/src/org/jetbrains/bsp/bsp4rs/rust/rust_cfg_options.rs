@@ -21,4 +21,13 @@ impl std::ops::Deref for RustCfgOptions {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn rust_cfg_options() {
+        assert_compact_json_snapshot!(RustCfgOptions(BTreeMap::from([(TEST_STRING.to_string(), vec![TEST_STRING.to_string()])])), @r#"{"test_string": ["test_string"]}"#);
+    }
+}

@@ -1,11 +1,11 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
-import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import org.jetbrains.bsp.generators.bsp4rs.renderType
+import org.jetbrains.bsp.generators.bsp4rs.*
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 
 fun RustRenderer.renderAlias(def: Def.Alias): CodeBlock {
     val name = def.name
@@ -53,3 +53,24 @@ private fun renderFrom(from: String, name: String, fn: String): CodeBlock =
             }
         }
     }
+
+fun RustRenderer.renderAliasTest(def: Def.Alias): CodeBlock {
+    val name = def.name
+    val renderedTestValue = "$name(${renderTypeTest(def.aliasedType)})"
+    val renderedJson = renderAliasJson(def)
+
+    return rustCode {
+        -"#[test]"
+        block("fn ${name.camelToSnakeCase()}()") {
+            -"""assert_compact_json_snapshot!($renderedTestValue, @r#"$renderedJson"#);"""
+        }
+    }
+}
+
+fun RustRenderer.renderAliasJson(def: Def.Alias): String {
+    return renderTypeJson(def.aliasedType)
+}
+
+fun RustRenderer.renderAliasDefaultJson(def: Def.Alias): String {
+    return renderTypeDefaultJson(def.aliasedType)
+}

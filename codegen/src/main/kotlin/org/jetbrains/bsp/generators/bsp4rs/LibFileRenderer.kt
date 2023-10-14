@@ -68,10 +68,24 @@ private fun RustRenderer.renderOtherDataStruct(): CodeBlock {
 }
 
 private fun renderTestsBlock(): CodeBlock {
+    val consts = listOf(Type.Bool, Type.Int, Type.Long, Type.String).map {
+        Pair(
+            Pair(
+                renderTypeTestConstName(it),
+                renderTypeTestConstType(it)
+            ),
+            renderTypeTestConstValue(it)
+        )
+    }
+
     return rustCode {
         -"#[cfg(test)]"
         block("pub mod tests") {
             -"use serde::Deserialize;"
+            newline()
+            consts.forEach { (nameTypePair, value) ->
+                -"""pub const ${nameTypePair.first}: ${nameTypePair.second} = $value;"""
+            }
             newline()
             block("pub fn test_deserialization<T>(json: &str, expected: &T) where T: for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug") {
                 -"let value = serde_json::from_str::<T>(json).unwrap();"
@@ -79,4 +93,20 @@ private fun renderTestsBlock(): CodeBlock {
             }
         }
     }
+}
+
+fun renderTypeTestConstType(type: Type): String = when (type) {
+    is Type.Bool -> "bool"
+    is Type.Int -> "i32"
+    is Type.Long -> "i64"
+    is Type.String -> "&str"
+    else -> ""
+}
+
+fun renderTypeTestConstValue(type: Type): String = when (type) {
+    is Type.Bool -> "true"
+    is Type.Int -> "1"
+    is Type.Long -> "2"
+    is Type.String -> """"test_string""""
+    else -> ""
 }

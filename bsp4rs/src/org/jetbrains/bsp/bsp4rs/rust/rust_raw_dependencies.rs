@@ -22,4 +22,13 @@ impl std::ops::Deref for RustRawDependencies {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn rust_raw_dependencies() {
+        assert_compact_json_snapshot!(RustRawDependencies(BTreeMap::from([(TEST_STRING.to_string(), vec![RustRawDependency::default()])])), @r#"{"test_string": [{"name": "", "optional": false, "usesDefaultFeatures": false, "features": []}]}"#);
+    }
+}

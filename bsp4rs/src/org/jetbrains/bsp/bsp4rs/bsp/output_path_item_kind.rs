@@ -14,13 +14,13 @@ pub enum OutputPathItemKind {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     use super::*;
 
     #[test]
     fn output_path_item_kind() {
-        assert_json_snapshot!(OutputPathItemKind::File, @r#"1"#);
-        assert_json_snapshot!(OutputPathItemKind::Directory, @r#"2"#);
+        assert_compact_json_snapshot!(OutputPathItemKind::File, @r#"1"#);
+        assert_compact_json_snapshot!(OutputPathItemKind::Directory, @r#"2"#);
     }
 }
