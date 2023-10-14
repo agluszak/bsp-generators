@@ -14,6 +14,7 @@ import org.jetbrains.bsp.generators.bsp4rs.def.renderServiceTest
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructureDefaultJson
 import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnion
+import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnionTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -82,6 +83,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         is Def.OpenEnum<*> -> renderOpenEnumTest(def)
         is Def.Service -> renderServiceTest(def)
         is Def.Alias -> renderAliasTest(def)
+        is Def.UntaggedUnion -> renderUntaggedUnionTest(def)
         else -> null
     }
 
