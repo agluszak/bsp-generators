@@ -17,4 +17,40 @@ pub struct RustWorkspaceResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn rust_workspace_result() {
+        assert_json_snapshot!(
+           RustWorkspaceResult {packages: vec![RustPackage::default()], raw_dependencies: RustRawDependencies::default(), dependencies: RustDependencies::default(), resolved_targets: vec![BuildTargetIdentifier::default()]},
+           @r#"
+{
+  "packages": [
+    {
+      "id": "",
+      "rootUrl": "",
+      "name": "",
+      "version": "",
+      "origin": "",
+      "edition": "",
+      "resolvedTargets": [],
+      "allTargets": [],
+      "features": {},
+      "enabledFeatures": []
+    }
+  ],
+  "rawDependencies": {},
+  "dependencies": {},
+  "resolvedTargets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

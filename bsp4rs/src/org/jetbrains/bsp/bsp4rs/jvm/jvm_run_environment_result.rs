@@ -9,4 +9,30 @@ pub struct JvmRunEnvironmentResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn jvm_run_environment_result() {
+        assert_json_snapshot!(
+           JvmRunEnvironmentResult {items: vec![JvmEnvironmentItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "classpath": [],
+      "jvmOptions": [],
+      "workingDirectory": "",
+      "environmentVariables": {}
+    }
+  ]
+}
+   "#
+        );
+    }
+}

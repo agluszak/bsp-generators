@@ -10,4 +10,24 @@ pub struct CleanCacheParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn clean_cache_params() {
+        assert_json_snapshot!(
+           CleanCacheParams {targets: vec![BuildTargetIdentifier::default()]},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

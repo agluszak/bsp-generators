@@ -1,32 +1,33 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import org.jetbrains.bsp.generators.CodegenFile
-import org.jetbrains.bsp.generators.bsp4rs.def.renderAlias
-import org.jetbrains.bsp.generators.bsp4rs.def.renderAliasDefaultJson
-import org.jetbrains.bsp.generators.bsp4rs.def.renderAliasTest
-import org.jetbrains.bsp.generators.bsp4rs.def.renderClosedEnum
-import org.jetbrains.bsp.generators.bsp4rs.def.renderClosedEnumTest
-import org.jetbrains.bsp.generators.bsp4rs.def.renderDataKinds
-import org.jetbrains.bsp.generators.bsp4rs.def.renderOpenEnum
-import org.jetbrains.bsp.generators.bsp4rs.def.renderOpenEnumTest
-import org.jetbrains.bsp.generators.bsp4rs.def.renderService
-import org.jetbrains.bsp.generators.bsp4rs.def.renderServiceTest
-import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
-import org.jetbrains.bsp.generators.bsp4rs.def.renderStructureDefaultJson
-import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnion
-import org.jetbrains.bsp.generators.bsp4rs.def.renderUntaggedUnionTest
+import org.jetbrains.bsp.generators.bsp4rs.def.renderDef
+import org.jetbrains.bsp.generators.bsp4rs.def.renderDefTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumValue
+import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
+import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
 import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
     val shapes = modules.flatMap { it.definitions }.associateBy { it.shapeId }
+    val otherDataDef = Def.Structure(
+        ShapeId.fromParts("bsp", "OtherData"),
+        listOf(
+            Field("dataKind", Type.String, true, listOf()),
+            Field("data", Type.Json, true, listOf())
+        ),
+        listOf()
+    )
 
     val deriveRenderer = DeriveRenderer(shapes)
     val serializationRenderer = SerializationRenderer()
@@ -40,7 +41,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     private fun renderModule(module: Module): List<CodegenFile> {
-        val filesWithNames = module.definitions.mapNotNull {
+        val filesWithNames = module.definitions.map {
             renderDefCodeBlock(it).run {
                 val name = makeName(it.name).camelToSnakeCase()
                 Pair(generateFile(this, module.path, "$name.rs"), name)
@@ -67,31 +68,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             }
             newline()
         }
-
-    private fun renderDef(def: Def): CodeBlock = when (def) {
-        is Def.Structure -> renderStructure(def)
-        is Def.OpenEnum<*> -> renderOpenEnum(def)
-        is Def.ClosedEnum<*> -> renderClosedEnum(def)
-        is Def.Service -> renderService(def)
-        is Def.Alias -> renderAlias(def)
-        is Def.DataKinds -> renderDataKinds(def)
-        is Def.UntaggedUnion -> renderUntaggedUnion(def)
-    }
-
-    private fun renderDefTest(def: Def): CodeBlock? = when (def) {
-        is Def.ClosedEnum<*> -> renderClosedEnumTest(def)
-        is Def.OpenEnum<*> -> renderOpenEnumTest(def)
-        is Def.Service -> renderServiceTest(def)
-        is Def.Alias -> renderAliasTest(def)
-        is Def.UntaggedUnion -> renderUntaggedUnionTest(def)
-        else -> null
-    }
-
-    fun renderDefDefaultJson(def: Def): String = when (def) {
-        is Def.Alias -> renderAliasDefaultJson(def)
-        is Def.Structure -> renderStructureDefaultJson(def)
-        else -> ""
-    }
 
     private fun generateModFile(modulePath: Path, filesNames: List<String>): CodegenFile {
         val code = rustCode {
@@ -121,7 +97,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderTestsImports(): CodeBlock {
         return rustCode {
-            -"use insta::assert_compact_json_snapshot;"
+            -"use insta::assert_json_snapshot;"
             -"use crate::tests::*;"
             -"use super::*;"
         }
@@ -169,9 +145,9 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         fun renderEnumValueTest(value: EnumValue<*>): String {
             val enumValueName = fn(makeName(value.name))
             val renderedTestValue = "$name::$enumValueName"
-            val renderedJson = renderEnumValueJson(value.value)
+            val renderedJson = renderEnumValueJson(value)
 
-            return """assert_compact_json_snapshot!($renderedTestValue, @r#"$renderedJson"#);"""
+            return renderSerializationTest(renderedTestValue, renderedJson)
         }
 
         return rustCode {
@@ -182,6 +158,19 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
                 }
             }
         }
+    }
+
+    fun renderSerializationTest(testedValue: String, expectedJson: String): String {
+        val jsonElement = JsonParser.parseString(expectedJson)
+        val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
+        val prettyJson = gson.toJson(jsonElement)
+
+        return """assert_json_snapshot!(
+            |   $testedValue, 
+            |   @r#"
+            |$prettyJson
+            |   "#
+            |);""".trimMargin()
     }
 }
 

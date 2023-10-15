@@ -18,4 +18,29 @@ pub struct ScalaMainClass {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_main_class() {
+        assert_json_snapshot!(
+           ScalaMainClass {class_name: TEST_STRING.to_string(), arguments: vec![TEST_STRING.to_string()], jvm_options: vec![TEST_STRING.to_string()], environment_variables: Some(vec![TEST_STRING.to_string()])},
+           @r#"
+{
+  "class": "test_string",
+  "arguments": [
+    "test_string"
+  ],
+  "jvmOptions": [
+    "test_string"
+  ],
+  "environmentVariables": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

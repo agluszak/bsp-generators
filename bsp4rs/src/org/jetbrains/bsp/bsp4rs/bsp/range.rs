@@ -10,4 +10,27 @@ pub struct Range {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn range() {
+        assert_json_snapshot!(
+           Range {start: Position::default(), end: Position::default()},
+           @r#"
+{
+  "start": {
+    "line": 0,
+    "character": 0
+  },
+  "end": {
+    "line": 0,
+    "character": 0
+  }
+}
+   "#
+        );
+    }
+}

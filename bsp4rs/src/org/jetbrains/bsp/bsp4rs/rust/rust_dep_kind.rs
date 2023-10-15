@@ -21,15 +21,35 @@ impl RustDepKind {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     use super::*;
 
     #[test]
     fn rust_dep_kind() {
-        assert_compact_json_snapshot!(RustDepKind::BUILD, @r#""build""#);
-        assert_compact_json_snapshot!(RustDepKind::DEV, @r#""dev""#);
-        assert_compact_json_snapshot!(RustDepKind::NORMAL, @r#""normal""#);
-        assert_compact_json_snapshot!(RustDepKind::UNCLASSIFIED, @r#""unclassified""#);
+        assert_json_snapshot!(
+           RustDepKind::BUILD,
+           @r#"
+"build"
+   "#
+        );
+        assert_json_snapshot!(
+           RustDepKind::DEV,
+           @r#"
+"dev"
+   "#
+        );
+        assert_json_snapshot!(
+           RustDepKind::NORMAL,
+           @r#"
+"normal"
+   "#
+        );
+        assert_json_snapshot!(
+           RustDepKind::UNCLASSIFIED,
+           @r#"
+"unclassified"
+   "#
+        );
     }
 }

@@ -14,4 +14,21 @@ pub struct PythonBuildTarget {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn python_build_target() {
+        assert_json_snapshot!(
+           PythonBuildTarget {version: Some(TEST_STRING.to_string()), interpreter: Some(URI::default())},
+           @r#"
+{
+  "version": "test_string",
+  "interpreter": ""
+}
+   "#
+        );
+    }
+}

@@ -13,14 +13,29 @@ pub enum ScalaPlatform {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     use super::*;
 
     #[test]
     fn scala_platform() {
-        assert_compact_json_snapshot!(ScalaPlatform::Jvm, @r#"1"#);
-        assert_compact_json_snapshot!(ScalaPlatform::Js, @r#"2"#);
-        assert_compact_json_snapshot!(ScalaPlatform::Native, @r#"3"#);
+        assert_json_snapshot!(
+           ScalaPlatform::Jvm,
+           @r#"
+1
+   "#
+        );
+        assert_json_snapshot!(
+           ScalaPlatform::Js,
+           @r#"
+2
+   "#
+        );
+        assert_json_snapshot!(
+           ScalaPlatform::Native,
+           @r#"
+3
+   "#
+        );
     }
 }

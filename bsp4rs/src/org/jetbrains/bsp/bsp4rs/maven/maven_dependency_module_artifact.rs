@@ -13,4 +13,21 @@ pub struct MavenDependencyModuleArtifact {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn maven_dependency_module_artifact() {
+        assert_json_snapshot!(
+           MavenDependencyModuleArtifact {uri: URI::default(), classifier: Some(TEST_STRING.to_string())},
+           @r#"
+{
+  "uri": "",
+  "classifier": "test_string"
+}
+   "#
+        );
+    }
+}

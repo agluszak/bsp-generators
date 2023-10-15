@@ -10,4 +10,20 @@ pub struct DebugSessionAddress {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn debug_session_address() {
+        assert_json_snapshot!(
+           DebugSessionAddress {uri: URI::default()},
+           @r#"
+{
+  "uri": ""
+}
+   "#
+        );
+    }
+}

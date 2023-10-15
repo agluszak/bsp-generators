@@ -10,4 +10,20 @@ pub struct SetCargoFeaturesResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn set_cargo_features_result() {
+        assert_json_snapshot!(
+           SetCargoFeaturesResult {status_code: StatusCode::default()},
+           @r#"
+{
+  "statusCode": 1
+}
+   "#
+        );
+    }
+}

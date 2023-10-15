@@ -14,4 +14,21 @@ pub struct OutputPathItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn output_path_item() {
+        assert_json_snapshot!(
+           OutputPathItem {uri: URI::default(), kind: OutputPathItemKind::default()},
+           @r#"
+{
+  "uri": "",
+  "kind": 1
+}
+   "#
+        );
+    }
+}

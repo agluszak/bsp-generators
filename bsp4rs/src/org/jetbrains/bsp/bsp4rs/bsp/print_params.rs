@@ -17,4 +17,24 @@ pub struct PrintParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn print_params() {
+        assert_json_snapshot!(
+           PrintParams {origin_id: Identifier::default(), task: Some(TaskId::default()), message: TEST_STRING.to_string()},
+           @r#"
+{
+  "originId": "",
+  "task": {
+    "id": ""
+  },
+  "message": "test_string"
+}
+   "#
+        );
+    }
+}

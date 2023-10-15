@@ -14,4 +14,26 @@ pub struct DebugSessionParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn debug_session_params() {
+        assert_json_snapshot!(
+           DebugSessionParams {targets: vec![BuildTargetIdentifier::default()], data: Some(DebugSessionParamsData::Other(OtherData::default()))},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ],
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

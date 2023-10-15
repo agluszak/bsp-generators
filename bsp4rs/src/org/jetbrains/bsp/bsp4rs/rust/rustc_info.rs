@@ -18,4 +18,23 @@ pub struct RustcInfo {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn rustc_info() {
+        assert_json_snapshot!(
+           RustcInfo {sysroot_path: URI::default(), src_sysroot_path: URI::default(), version: TEST_STRING.to_string(), host: TEST_STRING.to_string()},
+           @r#"
+{
+  "sysrootPath": "",
+  "srcSysrootPath": "",
+  "version": "test_string",
+  "host": "test_string"
+}
+   "#
+        );
+    }
+}

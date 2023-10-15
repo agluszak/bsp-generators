@@ -33,7 +33,7 @@ fun RustRenderer.renderUntaggedUnionTest(def: Def.UntaggedUnion): CodeBlock {
         val renderedTestValue = "$name::$enumValueName(${renderTypeTest(type)})"
         val renderedJson = renderTypeJson(type)
 
-        return """assert_compact_json_snapshot!($renderedTestValue, @r#"$renderedJson"#);"""
+        return renderSerializationTest(renderedTestValue, renderedJson)
     }
 
     return rustCode {
@@ -45,3 +45,5 @@ fun RustRenderer.renderUntaggedUnionTest(def: Def.UntaggedUnion): CodeBlock {
         }
     }
 }
+
+fun RustRenderer.renderUntaggedUnionDefault(def: Def.UntaggedUnion): String = TODO()

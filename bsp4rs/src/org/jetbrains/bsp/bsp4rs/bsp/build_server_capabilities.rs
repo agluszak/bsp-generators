@@ -63,4 +63,41 @@ pub struct BuildServerCapabilities {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn build_server_capabilities() {
+        assert_json_snapshot!(
+           BuildServerCapabilities {compile_provider: Some(CompileProvider::default()), test_provider: Some(TestProvider::default()), run_provider: Some(RunProvider::default()), debug_provider: Some(DebugProvider::default()), inverse_sources_provider: Some(TEST_BOOL), dependency_sources_provider: Some(TEST_BOOL), dependency_modules_provider: Some(TEST_BOOL), resources_provider: Some(TEST_BOOL), output_paths_provider: Some(TEST_BOOL), build_target_changed_provider: Some(TEST_BOOL), jvm_run_environment_provider: Some(TEST_BOOL), jvm_test_environment_provider: Some(TEST_BOOL), cargo_features_provider: Some(TEST_BOOL), can_reload: Some(TEST_BOOL)},
+           @r#"
+{
+  "compileProvider": {
+    "languageIds": []
+  },
+  "testProvider": {
+    "languageIds": []
+  },
+  "runProvider": {
+    "languageIds": []
+  },
+  "debugProvider": {
+    "languageIds": []
+  },
+  "inverseSourcesProvider": true,
+  "dependencySourcesProvider": true,
+  "dependencyModulesProvider": true,
+  "resourcesProvider": true,
+  "outputPathsProvider": true,
+  "buildTargetChangedProvider": true,
+  "jvmRunEnvironmentProvider": true,
+  "jvmTestEnvironmentProvider": true,
+  "cargoFeaturesProvider": true,
+  "canReload": true
+}
+   "#
+        );
+    }
+}

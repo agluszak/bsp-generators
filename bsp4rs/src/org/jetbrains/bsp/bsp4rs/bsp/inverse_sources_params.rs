@@ -9,4 +9,22 @@ pub struct InverseSourcesParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn inverse_sources_params() {
+        assert_json_snapshot!(
+           InverseSourcesParams {text_document: TextDocumentIdentifier::default()},
+           @r#"
+{
+  "textDocument": {
+    "uri": ""
+  }
+}
+   "#
+        );
+    }
+}

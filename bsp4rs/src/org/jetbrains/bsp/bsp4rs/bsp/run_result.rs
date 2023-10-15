@@ -13,4 +13,21 @@ pub struct RunResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn run_result() {
+        assert_json_snapshot!(
+           RunResult {origin_id: Some(Identifier::default()), status_code: StatusCode::default()},
+           @r#"
+{
+  "originId": "",
+  "statusCode": 1
+}
+   "#
+        );
+    }
+}

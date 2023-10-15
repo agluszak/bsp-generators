@@ -15,4 +15,31 @@ pub struct ScalaTestSuites {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_test_suites() {
+        assert_json_snapshot!(
+           ScalaTestSuites {suites: vec![ScalaTestSuiteSelection::default()], jvm_options: vec![TEST_STRING.to_string()], environment_variables: vec![TEST_STRING.to_string()]},
+           @r#"
+{
+  "suites": [
+    {
+      "className": "",
+      "tests": []
+    }
+  ],
+  "jvmOptions": [
+    "test_string"
+  ],
+  "environmentVariables": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

@@ -9,4 +9,22 @@ pub struct CompileProvider {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn compile_provider() {
+        assert_json_snapshot!(
+           CompileProvider {language_ids: vec![LanguageId::default()]},
+           @r#"
+{
+  "languageIds": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

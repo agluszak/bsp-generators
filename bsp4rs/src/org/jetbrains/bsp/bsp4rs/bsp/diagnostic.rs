@@ -31,4 +31,53 @@ pub struct Diagnostic {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn diagnostic() {
+        assert_json_snapshot!(
+           Diagnostic {range: Range::default(), severity: Some(DiagnosticSeverity::default()), code: Some(TEST_STRING.to_string()), source: Some(TEST_STRING.to_string()), message: TEST_STRING.to_string(), related_information: Some(vec![DiagnosticRelatedInformation::default()]), data: Some(DiagnosticData::Other(OtherData::default()))},
+           @r#"
+{
+  "range": {
+    "start": {
+      "line": 0,
+      "character": 0
+    },
+    "end": {
+      "line": 0,
+      "character": 0
+    }
+  },
+  "severity": 1,
+  "code": "test_string",
+  "source": "test_string",
+  "message": "test_string",
+  "relatedInformation": [
+    {
+      "location": {
+        "uri": "",
+        "range": {
+          "start": {
+            "line": 0,
+            "character": 0
+          },
+          "end": {
+            "line": 0,
+            "character": 0
+          }
+        }
+      },
+      "message": ""
+    }
+  ],
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

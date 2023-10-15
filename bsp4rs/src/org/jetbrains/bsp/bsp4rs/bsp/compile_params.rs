@@ -17,4 +17,28 @@ pub struct CompileParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn compile_params() {
+        assert_json_snapshot!(
+           CompileParams {targets: vec![BuildTargetIdentifier::default()], origin_id: Some(Identifier::default()), arguments: Some(vec![TEST_STRING.to_string()])},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ],
+  "originId": "",
+  "arguments": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

@@ -9,4 +9,24 @@ pub struct DependencySourcesParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn dependency_sources_params() {
+        assert_json_snapshot!(
+           DependencySourcesParams {targets: vec![BuildTargetIdentifier::default()]},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

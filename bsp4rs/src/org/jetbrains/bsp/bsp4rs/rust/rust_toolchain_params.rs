@@ -10,4 +10,24 @@ pub struct RustToolchainParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn rust_toolchain_params() {
+        assert_json_snapshot!(
+           RustToolchainParams {targets: vec![BuildTargetIdentifier::default()]},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

@@ -9,4 +9,22 @@ pub struct DebugProvider {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn debug_provider() {
+        assert_json_snapshot!(
+           DebugProvider {language_ids: vec![LanguageId::default()]},
+           @r#"
+{
+  "languageIds": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

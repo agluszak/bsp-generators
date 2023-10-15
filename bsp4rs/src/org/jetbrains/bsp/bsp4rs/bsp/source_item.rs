@@ -17,4 +17,22 @@ pub struct SourceItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn source_item() {
+        assert_json_snapshot!(
+           SourceItem {uri: URI::default(), kind: SourceItemKind::default(), generated: TEST_BOOL},
+           @r#"
+{
+  "uri": "",
+  "kind": 1,
+  "generated": true
+}
+   "#
+        );
+    }
+}

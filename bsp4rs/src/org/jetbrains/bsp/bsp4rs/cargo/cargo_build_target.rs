@@ -13,4 +13,23 @@ pub struct CargoBuildTarget {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn cargo_build_target() {
+        assert_json_snapshot!(
+           CargoBuildTarget {edition: RustEdition::default(), required_features: BTreeSet::from([Feature::default()])},
+           @r#"
+{
+  "edition": "",
+  "requiredFeatures": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

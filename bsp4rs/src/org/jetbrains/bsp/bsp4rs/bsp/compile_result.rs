@@ -17,4 +17,23 @@ pub struct CompileResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn compile_result() {
+        assert_json_snapshot!(
+           CompileResult {origin_id: Some(Identifier::default()), status_code: StatusCode::default(), data: Some(CompileResultData::Other(OtherData::default()))},
+           @r#"
+{
+  "originId": "",
+  "statusCode": 1,
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

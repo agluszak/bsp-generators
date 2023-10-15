@@ -27,7 +27,7 @@ structure CargoBuildTarget {
     @required
     edition: RustEdition
     @required
-    required_features: Features
+    requiredFeatures: Features
 }
 
 /// The cargo features state request is sent from the client to the server to

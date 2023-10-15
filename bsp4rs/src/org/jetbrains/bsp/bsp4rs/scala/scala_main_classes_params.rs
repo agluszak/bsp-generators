@@ -12,4 +12,25 @@ pub struct ScalaMainClassesParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_main_classes_params() {
+        assert_json_snapshot!(
+           ScalaMainClassesParams {targets: vec![BuildTargetIdentifier::default()], origin_id: Some(TEST_STRING.to_string())},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ],
+  "originId": "test_string"
+}
+   "#
+        );
+    }
+}

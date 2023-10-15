@@ -1,8 +1,11 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
+import org.jetbrains.bsp.generators.bsp4rs.def.renderDefDefault
+import org.jetbrains.bsp.generators.bsp4rs.def.renderDefDefaultJson
+import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Type
 
-fun renderEnumValueJson(value: Any?): String = when (value) {
+fun renderEnumValueJson(ev: EnumValue<*>): String = when (val value = ev.value) {
     is Int -> "$value"
     is String -> """"$value""""
     else -> ""
@@ -40,6 +43,10 @@ fun renderTypeTestConstName(type: Type): String = when (type) {
 
 // value in test
 
+fun RustRenderer.renderIrShapeTest(type: Type, isRequired: Boolean): String =
+    if (isRequired) renderTypeTest(type)
+    else "Some(${renderTypeTest(type)})"
+
 fun RustRenderer.renderTypeTest(type: Type): String = when (type) {
     is Type.Unit -> "()"
     is Type.Bool -> renderTypeTestConstName(Type.Bool)
@@ -50,7 +57,7 @@ fun RustRenderer.renderTypeTest(type: Type): String = when (type) {
     is Type.List -> "vec![${renderTypeTest(type.member)}]"
     is Type.Map -> "BTreeMap::from([(${renderTypeTest(type.key)}, ${renderTypeTest(type.value)})])"
     is Type.Set -> "BTreeSet::from([${renderTypeTest(type.member)}])"
-    is Type.Ref -> makeName(type.shapeId.name) + "::default()"
+    is Type.Ref -> renderDefDefault(shapes[type.shapeId]!!)
     else -> ""
 }
 
@@ -78,7 +85,7 @@ fun RustRenderer.renderTypeDefaultJson(type: Type): String = when (type) {
     is Type.Int -> "0"
     is Type.Long -> "0"
     is Type.String -> """"""""
-    is Type.Json -> "{}"
+    is Type.Json -> "null"
     is Type.List -> "[]"
     is Type.Map -> "{}"
     is Type.Set -> "[]"

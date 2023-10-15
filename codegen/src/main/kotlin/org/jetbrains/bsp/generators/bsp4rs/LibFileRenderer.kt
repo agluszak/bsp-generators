@@ -4,10 +4,7 @@ import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
-import org.jetbrains.bsp.generators.ir.Def
-import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Type
-import software.amazon.smithy.model.shapes.ShapeId
 import kotlin.io.path.Path
 
 fun RustRenderer.generateLibFile(modulesNames: List<String>): CodegenFile {
@@ -22,7 +19,7 @@ fun RustRenderer.generateLibFile(modulesNames: List<String>): CodegenFile {
         newline()
         include(renderRpcTraits())
         newline()
-        include(renderOtherDataStruct())
+        include(renderStructure(otherDataDef))
         newline()
         include(renderTestsBlock())
     }
@@ -52,19 +49,6 @@ private fun renderRpcTraits(): CodeBlock {
             lines(listOf(paramsStr, methodStr), ";", ";")
         }
     }
-}
-
-private fun RustRenderer.renderOtherDataStruct(): CodeBlock {
-    val def = Def.Structure(
-        ShapeId.fromParts("bsp", "OtherData"),
-        listOf(
-            Field("dataKind", Type.String, true, listOf()),
-            Field("data", Type.Json, true, listOf())
-        ),
-        listOf()
-    )
-
-    return renderStructure(def)
 }
 
 private fun renderTestsBlock(): CodeBlock {

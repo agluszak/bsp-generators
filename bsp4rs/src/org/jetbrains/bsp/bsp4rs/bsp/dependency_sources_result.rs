@@ -9,4 +9,27 @@ pub struct DependencySourcesResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn dependency_sources_result() {
+        assert_json_snapshot!(
+           DependencySourcesResult {items: vec![DependencySourcesItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "sources": []
+    }
+  ]
+}
+   "#
+        );
+    }
+}

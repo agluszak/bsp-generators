@@ -13,4 +13,21 @@ pub struct RustDepKindInfo {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn rust_dep_kind_info() {
+        assert_json_snapshot!(
+           RustDepKindInfo {kind: RustDepKind::default(), target: Some(TEST_STRING.to_string())},
+           @r#"
+{
+  "kind": "",
+  "target": "test_string"
+}
+   "#
+        );
+    }
+}

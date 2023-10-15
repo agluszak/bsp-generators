@@ -10,4 +10,24 @@ pub struct CppOptionsParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn cpp_options_params() {
+        assert_json_snapshot!(
+           CppOptionsParams {targets: vec![BuildTargetIdentifier::default()]},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

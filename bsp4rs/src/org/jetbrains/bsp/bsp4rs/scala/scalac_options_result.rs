@@ -9,4 +9,29 @@ pub struct ScalacOptionsResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn scalac_options_result() {
+        assert_json_snapshot!(
+           ScalacOptionsResult {items: vec![ScalacOptionsItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "options": [],
+      "classpath": [],
+      "classDirectory": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

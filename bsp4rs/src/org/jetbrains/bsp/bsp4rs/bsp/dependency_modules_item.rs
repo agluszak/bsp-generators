@@ -10,4 +10,28 @@ pub struct DependencyModulesItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn dependency_modules_item() {
+        assert_json_snapshot!(
+           DependencyModulesItem {target: BuildTargetIdentifier::default(), modules: vec![DependencyModule::default()]},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "modules": [
+    {
+      "name": "",
+      "version": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

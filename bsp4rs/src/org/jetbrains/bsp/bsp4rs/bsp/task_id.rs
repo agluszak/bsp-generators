@@ -20,4 +20,23 @@ pub struct TaskId {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn task_id() {
+        assert_json_snapshot!(
+           TaskId {id: Identifier::default(), parents: Some(vec![Identifier::default()])},
+           @r#"
+{
+  "id": "",
+  "parents": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

@@ -10,4 +10,21 @@ pub struct Position {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn position() {
+        assert_json_snapshot!(
+           Position {line: TEST_INT, character: TEST_INT},
+           @r#"
+{
+  "line": 1,
+  "character": 1
+}
+   "#
+        );
+    }
+}

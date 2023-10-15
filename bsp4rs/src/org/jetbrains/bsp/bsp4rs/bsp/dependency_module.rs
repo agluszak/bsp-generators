@@ -16,4 +16,23 @@ pub struct DependencyModule {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn dependency_module() {
+        assert_json_snapshot!(
+           DependencyModule {name: TEST_STRING.to_string(), version: TEST_STRING.to_string(), data: Some(DependencyModuleData::Other(OtherData::default()))},
+           @r#"
+{
+  "name": "test_string",
+  "version": "test_string",
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

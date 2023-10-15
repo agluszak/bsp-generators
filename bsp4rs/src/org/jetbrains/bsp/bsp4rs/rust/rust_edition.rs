@@ -16,14 +16,29 @@ impl RustEdition {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     use super::*;
 
     #[test]
     fn rust_edition() {
-        assert_compact_json_snapshot!(RustEdition::E2015, @r#""2015""#);
-        assert_compact_json_snapshot!(RustEdition::E2018, @r#""2018""#);
-        assert_compact_json_snapshot!(RustEdition::E2021, @r#""2021""#);
+        assert_json_snapshot!(
+           RustEdition::E2015,
+           @r#"
+"2015"
+   "#
+        );
+        assert_json_snapshot!(
+           RustEdition::E2018,
+           @r#"
+"2018"
+   "#
+        );
+        assert_json_snapshot!(
+           RustEdition::E2021,
+           @r#"
+"2021"
+   "#
+        );
     }
 }

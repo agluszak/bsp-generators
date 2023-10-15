@@ -15,4 +15,32 @@ pub struct SourcesItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn sources_item() {
+        assert_json_snapshot!(
+           SourcesItem {target: BuildTargetIdentifier::default(), sources: vec![SourceItem::default()], roots: Some(vec![URI::default()])},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "sources": [
+    {
+      "uri": "",
+      "kind": 1,
+      "generated": false
+    }
+  ],
+  "roots": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

@@ -1,6 +1,10 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
-import org.jetbrains.bsp.generators.bsp4rs.*
+import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
+import org.jetbrains.bsp.generators.bsp4rs.renderType
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefaultJson
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeJson
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -62,7 +66,7 @@ fun RustRenderer.renderAliasTest(def: Def.Alias): CodeBlock {
     return rustCode {
         -"#[test]"
         block("fn ${name.camelToSnakeCase()}()") {
-            -"""assert_compact_json_snapshot!($renderedTestValue, @r#"$renderedJson"#);"""
+            -renderSerializationTest(renderedTestValue, renderedJson)
         }
     }
 }

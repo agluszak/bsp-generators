@@ -21,4 +21,28 @@ pub struct MavenDependencyModule {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn maven_dependency_module() {
+        assert_json_snapshot!(
+           MavenDependencyModule {organization: TEST_STRING.to_string(), name: TEST_STRING.to_string(), version: TEST_STRING.to_string(), artifacts: vec![MavenDependencyModuleArtifact::default()], scope: Some(TEST_STRING.to_string())},
+           @r#"
+{
+  "organization": "test_string",
+  "name": "test_string",
+  "version": "test_string",
+  "artifacts": [
+    {
+      "uri": ""
+    }
+  ],
+  "scope": "test_string"
+}
+   "#
+        );
+    }
+}

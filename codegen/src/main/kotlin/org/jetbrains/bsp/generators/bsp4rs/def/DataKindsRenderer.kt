@@ -49,3 +49,9 @@ private fun renderDataKindsImpl(
             }
         }
     }
+
+fun RustRenderer.renderDataKindsDefault(def: Def.DataKinds): String =
+    "${def.name}::Other(${renderDefDefault(otherDataDef)})"
+
+fun RustRenderer.renderDataKindsDefaultJson(): String =
+    renderDefDefaultJson(otherDataDef).drop(1).dropLast(1)

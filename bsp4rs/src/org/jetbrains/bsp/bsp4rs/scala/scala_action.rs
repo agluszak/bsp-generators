@@ -21,4 +21,24 @@ pub struct ScalaAction {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_action() {
+        assert_json_snapshot!(
+           ScalaAction {title: TEST_STRING.to_string(), description: Some(TEST_STRING.to_string()), edit: Some(ScalaWorkspaceEdit::default())},
+           @r#"
+{
+  "title": "test_string",
+  "description": "test_string",
+  "edit": {
+    "changes": []
+  }
+}
+   "#
+        );
+    }
+}

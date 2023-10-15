@@ -14,4 +14,24 @@ pub struct ScalaDiagnostic {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn scala_diagnostic() {
+        assert_json_snapshot!(
+           ScalaDiagnostic {actions: Some(vec![ScalaAction::default()])},
+           @r#"
+{
+  "actions": [
+    {
+      "title": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

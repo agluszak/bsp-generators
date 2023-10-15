@@ -12,4 +12,28 @@ pub struct OutputPathsItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn output_paths_item() {
+        assert_json_snapshot!(
+           OutputPathsItem {target: BuildTargetIdentifier::default(), output_paths: vec![OutputPathItem::default()]},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "outputPaths": [
+    {
+      "uri": "",
+      "kind": 1
+    }
+  ]
+}
+   "#
+        );
+    }
+}

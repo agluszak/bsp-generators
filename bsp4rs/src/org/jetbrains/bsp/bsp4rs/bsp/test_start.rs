@@ -13,4 +13,33 @@ pub struct TestStart {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn test_start() {
+        assert_json_snapshot!(
+           TestStart {display_name: TEST_STRING.to_string(), location: Some(Location::default())},
+           @r#"
+{
+  "displayName": "test_string",
+  "location": {
+    "uri": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "character": 0
+      },
+      "end": {
+        "line": 0,
+        "character": 0
+      }
+    }
+  }
+}
+   "#
+        );
+    }
+}

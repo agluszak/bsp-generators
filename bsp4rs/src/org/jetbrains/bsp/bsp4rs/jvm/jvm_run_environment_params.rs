@@ -11,4 +11,25 @@ pub struct JvmRunEnvironmentParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn jvm_run_environment_params() {
+        assert_json_snapshot!(
+           JvmRunEnvironmentParams {targets: vec![BuildTargetIdentifier::default()], origin_id: Some(Identifier::default())},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ],
+  "originId": ""
+}
+   "#
+        );
+    }
+}

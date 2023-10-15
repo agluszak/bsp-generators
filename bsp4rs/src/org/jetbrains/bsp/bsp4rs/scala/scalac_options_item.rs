@@ -19,4 +19,29 @@ pub struct ScalacOptionsItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scalac_options_item() {
+        assert_json_snapshot!(
+           ScalacOptionsItem {target: BuildTargetIdentifier::default(), options: vec![TEST_STRING.to_string()], classpath: vec![TEST_STRING.to_string()], class_directory: TEST_STRING.to_string()},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "options": [
+    "test_string"
+  ],
+  "classpath": [
+    "test_string"
+  ],
+  "classDirectory": "test_string"
+}
+   "#
+        );
+    }
+}

@@ -10,4 +10,20 @@ pub struct TextDocumentIdentifier {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn text_document_identifier() {
+        assert_json_snapshot!(
+           TextDocumentIdentifier {uri: URI::default()},
+           @r#"
+{
+  "uri": ""
+}
+   "#
+        );
+    }
+}

@@ -11,4 +11,25 @@ pub struct ResourcesItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn resources_item() {
+        assert_json_snapshot!(
+           ResourcesItem {target: BuildTargetIdentifier::default(), resources: vec![URI::default()]},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "resources": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

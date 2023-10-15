@@ -17,14 +17,29 @@ pub enum StatusCode {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     use super::*;
 
     #[test]
     fn status_code() {
-        assert_compact_json_snapshot!(StatusCode::Ok, @r#"1"#);
-        assert_compact_json_snapshot!(StatusCode::Error, @r#"2"#);
-        assert_compact_json_snapshot!(StatusCode::Cancelled, @r#"3"#);
+        assert_json_snapshot!(
+           StatusCode::Ok,
+           @r#"
+1
+   "#
+        );
+        assert_json_snapshot!(
+           StatusCode::Error,
+           @r#"
+2
+   "#
+        );
+        assert_json_snapshot!(
+           StatusCode::Cancelled,
+           @r#"
+3
+   "#
+        );
     }
 }

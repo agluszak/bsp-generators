@@ -15,4 +15,33 @@ pub struct DiagnosticRelatedInformation {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn diagnostic_related_information() {
+        assert_json_snapshot!(
+           DiagnosticRelatedInformation {location: Location::default(), message: TEST_STRING.to_string()},
+           @r#"
+{
+  "location": {
+    "uri": "",
+    "range": {
+      "start": {
+        "line": 0,
+        "character": 0
+      },
+      "end": {
+        "line": 0,
+        "character": 0
+      }
+    }
+  },
+  "message": "test_string"
+}
+   "#
+        );
+    }
+}

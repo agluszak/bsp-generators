@@ -11,4 +11,23 @@ pub struct ScalaTestSuiteSelection {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_test_suite_selection() {
+        assert_json_snapshot!(
+           ScalaTestSuiteSelection {class_name: TEST_STRING.to_string(), tests: vec![TEST_STRING.to_string()]},
+           @r#"
+{
+  "className": "test_string",
+  "tests": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

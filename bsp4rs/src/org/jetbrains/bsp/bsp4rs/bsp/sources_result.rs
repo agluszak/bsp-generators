@@ -9,4 +9,27 @@ pub struct SourcesResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn sources_result() {
+        assert_json_snapshot!(
+           SourcesResult {items: vec![SourcesItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "sources": []
+    }
+  ]
+}
+   "#
+        );
+    }
+}

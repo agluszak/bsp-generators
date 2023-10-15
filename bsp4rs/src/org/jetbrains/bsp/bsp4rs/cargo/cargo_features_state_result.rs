@@ -11,4 +11,27 @@ pub struct CargoFeaturesStateResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn cargo_features_state_result() {
+        assert_json_snapshot!(
+           CargoFeaturesStateResult {packages_features: vec![PackageFeatures::default()]},
+           @r#"
+{
+  "packagesFeatures": [
+    {
+      "packageId": "",
+      "targets": [],
+      "availableFeatures": {},
+      "enabledFeatures": []
+    }
+  ]
+}
+   "#
+        );
+    }
+}

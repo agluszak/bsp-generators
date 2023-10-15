@@ -8,4 +8,23 @@ pub struct JvmMainClass {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn jvm_main_class() {
+        assert_json_snapshot!(
+           JvmMainClass {class_name: TEST_STRING.to_string(), arguments: vec![TEST_STRING.to_string()]},
+           @r#"
+{
+  "className": "test_string",
+  "arguments": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

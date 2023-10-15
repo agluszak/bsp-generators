@@ -27,4 +27,32 @@ pub struct TestParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn test_params() {
+        assert_json_snapshot!(
+           TestParams {targets: vec![BuildTargetIdentifier::default()], origin_id: Some(Identifier::default()), arguments: Some(vec![TEST_STRING.to_string()]), environment_variables: Some(EnvironmentVariables::default()), working_directory: Some(URI::default()), data: Some(TestParamsData::Other(OtherData::default()))},
+           @r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ],
+  "originId": "",
+  "arguments": [
+    "test_string"
+  ],
+  "environmentVariables": {},
+  "workingDirectory": "",
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

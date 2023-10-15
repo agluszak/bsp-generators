@@ -23,4 +23,27 @@ pub struct TaskStartParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn task_start_params() {
+        assert_json_snapshot!(
+           TaskStartParams {task_id: TaskId::default(), origin_id: Some(Identifier::default()), event_time: Some(TEST_LONG), message: Some(TEST_STRING.to_string()), data: Some(TaskStartData::Other(OtherData::default()))},
+           @r#"
+{
+  "taskId": {
+    "id": ""
+  },
+  "originId": "",
+  "eventTime": 2,
+  "message": "test_string",
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

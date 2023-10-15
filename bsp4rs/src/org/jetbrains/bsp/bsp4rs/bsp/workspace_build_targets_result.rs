@@ -11,4 +11,30 @@ pub struct WorkspaceBuildTargetsResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn workspace_build_targets_result() {
+        assert_json_snapshot!(
+           WorkspaceBuildTargetsResult {targets: vec![BuildTarget::default()]},
+           @r#"
+{
+  "targets": [
+    {
+      "id": {
+        "uri": ""
+      },
+      "tags": [],
+      "languageIds": [],
+      "dependencies": [],
+      "capabilities": {}
+    }
+  ]
+}
+   "#
+        );
+    }
+}

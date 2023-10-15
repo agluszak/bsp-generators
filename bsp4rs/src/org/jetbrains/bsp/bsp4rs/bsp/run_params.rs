@@ -27,4 +27,30 @@ pub struct RunParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn run_params() {
+        assert_json_snapshot!(
+           RunParams {target: BuildTargetIdentifier::default(), origin_id: Some(Identifier::default()), arguments: Some(vec![TEST_STRING.to_string()]), environment_variables: Some(EnvironmentVariables::default()), working_directory: Some(URI::default()), data: Some(RunParamsData::Other(OtherData::default()))},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "originId": "",
+  "arguments": [
+    "test_string"
+  ],
+  "environmentVariables": {},
+  "workingDirectory": "",
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

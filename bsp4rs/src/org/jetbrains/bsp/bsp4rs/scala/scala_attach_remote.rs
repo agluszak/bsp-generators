@@ -6,4 +6,18 @@ use serde::{Deserialize, Serialize};
 pub struct ScalaAttachRemote {}
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn scala_attach_remote() {
+        assert_json_snapshot!(
+           ScalaAttachRemote {},
+           @r#"
+{}
+   "#
+        );
+    }
+}

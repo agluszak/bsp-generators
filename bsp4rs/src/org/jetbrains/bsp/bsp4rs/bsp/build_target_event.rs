@@ -16,4 +16,25 @@ pub struct BuildTargetEvent {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn build_target_event() {
+        assert_json_snapshot!(
+           BuildTargetEvent {target: BuildTargetIdentifier::default(), kind: Some(BuildTargetEventKind::default()), data: Some(BuildTargetEventData::Other(OtherData::default()))},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "kind": 1,
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

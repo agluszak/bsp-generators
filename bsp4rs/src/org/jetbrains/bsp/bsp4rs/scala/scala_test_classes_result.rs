@@ -10,4 +10,27 @@ pub struct ScalaTestClassesResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn scala_test_classes_result() {
+        assert_json_snapshot!(
+           ScalaTestClassesResult {items: vec![ScalaTestClassesItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "classes": []
+    }
+  ]
+}
+   "#
+        );
+    }
+}

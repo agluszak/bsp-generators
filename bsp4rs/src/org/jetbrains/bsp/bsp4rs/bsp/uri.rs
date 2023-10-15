@@ -30,10 +30,15 @@ impl From<&str> for URI {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     #[test]
     fn uri() {
-        assert_compact_json_snapshot!(URI(TEST_STRING.to_string()), @r#""test_string""#);
+        assert_json_snapshot!(
+           URI(TEST_STRING.to_string()),
+           @r#"
+"test_string"
+   "#
+        );
     }
 }

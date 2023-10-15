@@ -25,4 +25,32 @@ pub struct CppOptionsItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn cpp_options_item() {
+        assert_json_snapshot!(
+           CppOptionsItem {target: BuildTargetIdentifier::default(), copts: vec![TEST_STRING.to_string()], defines: vec![TEST_STRING.to_string()], linkopts: vec![TEST_STRING.to_string()], linkshared: Some(TEST_BOOL)},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "copts": [
+    "test_string"
+  ],
+  "defines": [
+    "test_string"
+  ],
+  "linkopts": [
+    "test_string"
+  ],
+  "linkshared": true
+}
+   "#
+        );
+    }
+}

@@ -26,4 +26,28 @@ pub struct RustRawDependency {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn rust_raw_dependency() {
+        assert_json_snapshot!(
+           RustRawDependency {name: TEST_STRING.to_string(), rename: Some(TEST_STRING.to_string()), kind: Some(RustDepKind::default()), target: Some(TEST_STRING.to_string()), optional: TEST_BOOL, uses_default_features: TEST_BOOL, features: BTreeSet::from([Feature::default()])},
+           @r#"
+{
+  "name": "test_string",
+  "rename": "test_string",
+  "kind": "",
+  "target": "test_string",
+  "optional": true,
+  "usesDefaultFeatures": true,
+  "features": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

@@ -26,4 +26,23 @@ pub struct CppBuildTarget {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn cpp_build_target() {
+        assert_json_snapshot!(
+           CppBuildTarget {version: Some(TEST_STRING.to_string()), compiler: Some(TEST_STRING.to_string()), c_compiler: Some(URI::default()), cpp_compiler: Some(URI::default())},
+           @r#"
+{
+  "version": "test_string",
+  "compiler": "test_string",
+  "cCompiler": "",
+  "cppCompiler": ""
+}
+   "#
+        );
+    }
+}

@@ -11,11 +11,21 @@ pub enum Code {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     #[test]
     fn code() {
-        assert_compact_json_snapshot!(Code::String(TEST_STRING.to_string()), @r#""test_string""#);
-        assert_compact_json_snapshot!(Code::I32(TEST_INT), @r#"1"#);
+        assert_json_snapshot!(
+           Code::String(TEST_STRING.to_string()),
+           @r#"
+"test_string"
+   "#
+        );
+        assert_json_snapshot!(
+           Code::I32(TEST_INT),
+           @r#"
+1
+   "#
+        );
     }
 }

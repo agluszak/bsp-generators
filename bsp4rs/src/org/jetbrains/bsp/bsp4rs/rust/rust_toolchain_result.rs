@@ -10,4 +10,25 @@ pub struct RustToolchainResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn rust_toolchain_result() {
+        assert_json_snapshot!(
+           RustToolchainResult {toolchains: vec![RustToolchainItem::default()]},
+           @r#"
+{
+  "toolchains": [
+    {
+      "cargoBinPath": "",
+      "procMacroSrvPath": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

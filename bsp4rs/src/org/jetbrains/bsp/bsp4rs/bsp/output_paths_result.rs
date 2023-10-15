@@ -9,4 +9,27 @@ pub struct OutputPathsResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn output_paths_result() {
+        assert_json_snapshot!(
+           OutputPathsResult {items: vec![OutputPathsItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "outputPaths": []
+    }
+  ]
+}
+   "#
+        );
+    }
+}

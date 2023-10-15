@@ -13,4 +13,23 @@ pub struct SetCargoFeaturesParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn set_cargo_features_params() {
+        assert_json_snapshot!(
+           SetCargoFeaturesParams {package_id: TEST_STRING.to_string(), features: BTreeSet::from([Feature::default()])},
+           @r#"
+{
+  "packageId": "test_string",
+  "features": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

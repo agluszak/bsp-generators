@@ -29,10 +29,15 @@ impl From<&str> for RequestId {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     #[test]
     fn request_id() {
-        assert_compact_json_snapshot!(RequestId(TEST_STRING.to_string()), @r#""test_string""#);
+        assert_json_snapshot!(
+           RequestId(TEST_STRING.to_string()),
+           @r#"
+"test_string"
+   "#
+        );
     }
 }

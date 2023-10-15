@@ -20,4 +20,25 @@ pub struct ShowMessageParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn show_message_params() {
+        assert_json_snapshot!(
+           ShowMessageParams {r#type: MessageType::default(), task: Some(TaskId::default()), origin_id: Some(RequestId::default()), message: TEST_STRING.to_string()},
+           @r#"
+{
+  "type": 1,
+  "task": {
+    "id": ""
+  },
+  "originId": "",
+  "message": "test_string"
+}
+   "#
+        );
+    }
+}

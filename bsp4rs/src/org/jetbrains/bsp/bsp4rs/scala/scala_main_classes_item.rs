@@ -12,4 +12,29 @@ pub struct ScalaMainClassesItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn scala_main_classes_item() {
+        assert_json_snapshot!(
+           ScalaMainClassesItem {target: BuildTargetIdentifier::default(), classes: vec![ScalaMainClass::default()]},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "classes": [
+    {
+      "class": "",
+      "arguments": [],
+      "jvmOptions": []
+    }
+  ]
+}
+   "#
+        );
+    }
+}

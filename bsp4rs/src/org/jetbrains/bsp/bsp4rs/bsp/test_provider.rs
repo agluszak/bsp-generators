@@ -9,4 +9,22 @@ pub struct TestProvider {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn test_provider() {
+        assert_json_snapshot!(
+           TestProvider {language_ids: vec![LanguageId::default()]},
+           @r#"
+{
+  "languageIds": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

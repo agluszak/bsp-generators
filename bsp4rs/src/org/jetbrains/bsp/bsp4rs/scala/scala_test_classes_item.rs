@@ -17,4 +17,26 @@ pub struct ScalaTestClassesItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_test_classes_item() {
+        assert_json_snapshot!(
+           ScalaTestClassesItem {target: BuildTargetIdentifier::default(), framework: Some(TEST_STRING.to_string()), classes: vec![TEST_STRING.to_string()]},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "framework": "test_string",
+  "classes": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

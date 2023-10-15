@@ -9,4 +9,29 @@ pub struct JavacOptionsResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn javac_options_result() {
+        assert_json_snapshot!(
+           JavacOptionsResult {items: vec![JavacOptionsItem::default()]},
+           @r#"
+{
+  "items": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "options": [],
+      "classpath": [],
+      "classDirectory": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

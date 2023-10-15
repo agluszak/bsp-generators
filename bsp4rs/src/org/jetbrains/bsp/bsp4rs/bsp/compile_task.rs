@@ -13,4 +13,22 @@ pub struct CompileTask {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn compile_task() {
+        assert_json_snapshot!(
+           CompileTask {target: BuildTargetIdentifier::default()},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  }
+}
+   "#
+        );
+    }
+}

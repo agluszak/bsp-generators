@@ -13,4 +13,25 @@ pub struct DependencySourcesItem {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn dependency_sources_item() {
+        assert_json_snapshot!(
+           DependencySourcesItem {target: BuildTargetIdentifier::default(), sources: vec![URI::default()]},
+           @r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "sources": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

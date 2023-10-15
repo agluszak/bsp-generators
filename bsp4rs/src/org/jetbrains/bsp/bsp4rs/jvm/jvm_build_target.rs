@@ -18,4 +18,21 @@ pub struct JvmBuildTarget {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn jvm_build_target() {
+        assert_json_snapshot!(
+           JvmBuildTarget {java_home: Some(URI::default()), java_version: Some(TEST_STRING.to_string())},
+           @r#"
+{
+  "javaHome": "",
+  "javaVersion": "test_string"
+}
+   "#
+        );
+    }
+}

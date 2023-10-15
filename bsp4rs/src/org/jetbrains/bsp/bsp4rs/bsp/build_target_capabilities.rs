@@ -20,4 +20,23 @@ pub struct BuildTargetCapabilities {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn build_target_capabilities() {
+        assert_json_snapshot!(
+           BuildTargetCapabilities {can_compile: Some(TEST_BOOL), can_test: Some(TEST_BOOL), can_run: Some(TEST_BOOL), can_debug: Some(TEST_BOOL)},
+           @r#"
+{
+  "canCompile": true,
+  "canTest": true,
+  "canRun": true,
+  "canDebug": true
+}
+   "#
+        );
+    }
+}

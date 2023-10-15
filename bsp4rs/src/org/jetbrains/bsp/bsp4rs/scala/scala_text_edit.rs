@@ -15,4 +15,30 @@ pub struct ScalaTextEdit {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_text_edit() {
+        assert_json_snapshot!(
+           ScalaTextEdit {range: Range::default(), new_text: TEST_STRING.to_string()},
+           @r#"
+{
+  "range": {
+    "start": {
+      "line": 0,
+      "character": 0
+    },
+    "end": {
+      "line": 0,
+      "character": 0
+    }
+  },
+  "newText": "test_string"
+}
+   "#
+        );
+    }
+}

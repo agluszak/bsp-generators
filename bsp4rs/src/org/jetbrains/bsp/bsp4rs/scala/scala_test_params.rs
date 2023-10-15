@@ -17,4 +17,30 @@ pub struct ScalaTestParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_test_params() {
+        assert_json_snapshot!(
+           ScalaTestParams {test_classes: Some(vec![ScalaTestClassesItem::default()]), jvm_options: Some(vec![TEST_STRING.to_string()])},
+           @r#"
+{
+  "testClasses": [
+    {
+      "target": {
+        "uri": ""
+      },
+      "classes": []
+    }
+  ],
+  "jvmOptions": [
+    "test_string"
+  ]
+}
+   "#
+        );
+    }
+}

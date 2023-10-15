@@ -21,4 +21,28 @@ pub struct InitializeBuildParams {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn initialize_build_params() {
+        assert_json_snapshot!(
+           InitializeBuildParams {display_name: TEST_STRING.to_string(), version: TEST_STRING.to_string(), bsp_version: TEST_STRING.to_string(), root_uri: URI::default(), capabilities: BuildClientCapabilities::default(), data: Some(InitializeBuildParamsData::Other(OtherData::default()))},
+           @r#"
+{
+  "displayName": "test_string",
+  "version": "test_string",
+  "bspVersion": "test_string",
+  "rootUri": "",
+  "capabilities": {
+    "languageIds": []
+  },
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

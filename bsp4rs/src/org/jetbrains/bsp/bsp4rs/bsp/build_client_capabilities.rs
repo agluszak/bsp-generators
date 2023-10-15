@@ -13,4 +13,22 @@ pub struct BuildClientCapabilities {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn build_client_capabilities() {
+        assert_json_snapshot!(
+           BuildClientCapabilities {language_ids: vec![LanguageId::default()]},
+           @r#"
+{
+  "languageIds": [
+    ""
+  ]
+}
+   "#
+        );
+    }
+}

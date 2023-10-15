@@ -26,4 +26,29 @@ pub struct TestReport {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn test_report() {
+        assert_json_snapshot!(
+           TestReport {origin_id: Some(Identifier::default()), target: BuildTargetIdentifier::default(), passed: TEST_INT, failed: TEST_INT, ignored: TEST_INT, cancelled: TEST_INT, skipped: TEST_INT, time: Some(TEST_LONG)},
+           @r#"
+{
+  "originId": "",
+  "target": {
+    "uri": ""
+  },
+  "passed": 1,
+  "failed": 1,
+  "ignored": 1,
+  "cancelled": 1,
+  "skipped": 1,
+  "time": 2
+}
+   "#
+        );
+    }
+}

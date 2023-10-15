@@ -28,4 +28,38 @@ pub struct SbtBuildTarget {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn sbt_build_target() {
+        assert_json_snapshot!(
+           SbtBuildTarget {sbt_version: TEST_STRING.to_string(), auto_imports: vec![TEST_STRING.to_string()], scala_build_target: ScalaBuildTarget::default(), parent: Some(BuildTargetIdentifier::default()), children: vec![BuildTargetIdentifier::default()]},
+           @r#"
+{
+  "sbtVersion": "test_string",
+  "autoImports": [
+    "test_string"
+  ],
+  "scalaBuildTarget": {
+    "scalaOrganization": "",
+    "scalaVersion": "",
+    "scalaBinaryVersion": "",
+    "platform": 1,
+    "jars": []
+  },
+  "parent": {
+    "uri": ""
+  },
+  "children": [
+    {
+      "uri": ""
+    }
+  ]
+}
+   "#
+        );
+    }
+}

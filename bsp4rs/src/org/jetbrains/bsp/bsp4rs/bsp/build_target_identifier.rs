@@ -12,4 +12,20 @@ pub struct BuildTargetIdentifier {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn build_target_identifier() {
+        assert_json_snapshot!(
+           BuildTargetIdentifier {uri: URI::default()},
+           @r#"
+{
+  "uri": ""
+}
+   "#
+        );
+    }
+}

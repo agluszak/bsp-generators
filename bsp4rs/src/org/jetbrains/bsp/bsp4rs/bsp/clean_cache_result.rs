@@ -11,4 +11,21 @@ pub struct CleanCacheResult {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn clean_cache_result() {
+        assert_json_snapshot!(
+           CleanCacheResult {message: Some(TEST_STRING.to_string()), cleaned: TEST_BOOL},
+           @r#"
+{
+  "message": "test_string",
+  "cleaned": true
+}
+   "#
+        );
+    }
+}
