@@ -2,11 +2,15 @@ package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderType
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefault
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefaultJson
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.PolymorphicDataKind
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
+import org.jetbrains.bsp.generators.utils.kebabToSnakeCase
 import org.jetbrains.bsp.generators.utils.kebabToUpperCamelCase
 
 fun RustRenderer.renderDataKinds(def: Def.DataKinds): CodeBlock {
@@ -49,6 +53,36 @@ private fun renderDataKindsImpl(
             }
         }
     }
+
+fun RustRenderer.renderDataKindsTest(def: Def.DataKinds): CodeBlock {
+    val enumName = def.name
+    return rustCode {
+        -"#[test]"
+        block("fn ${enumName.camelToSnakeCase()}()") {
+            def.kinds.forEach { data ->
+                -renderDataKindTest(enumName, data)
+                newline()
+            }
+            -renderOtherDataKindTest(enumName)
+        }
+    }
+}
+
+private fun RustRenderer.renderDataKindTest(enumName: String, data: PolymorphicDataKind): String {
+    val dataName = makeName(data.kind).kebabToSnakeCase()
+    val renderedTestValue = "$enumName::$dataName(${renderTypeDefault(data.shape)})"
+    val renderedJson = """{"dataKind": "${data.kind}", "data": ${renderTypeDefaultJson(data.shape)}}"""
+
+    return renderSerializationTest(renderedTestValue, renderedJson)
+}
+
+private fun RustRenderer.renderOtherDataKindTest(enumName: String): String {
+    val otherType = Type.Ref(otherDataDef.shapeId)
+    val renderedTestValue = "$enumName::Other(${renderTypeDefault(otherType)})"
+    val renderedJson = renderTypeDefaultJson(otherType)
+
+    return renderSerializationTest(renderedTestValue, renderedJson)
+}
 
 fun RustRenderer.renderDataKindsDefault(def: Def.DataKinds): String =
     "${def.name}::Other(${renderDefDefault(otherDataDef)})"

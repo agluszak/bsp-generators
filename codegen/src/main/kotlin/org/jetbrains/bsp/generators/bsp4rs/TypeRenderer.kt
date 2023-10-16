@@ -61,6 +61,18 @@ fun RustRenderer.renderTypeTest(type: Type): String = when (type) {
     else -> ""
 }
 
+fun RustRenderer.renderTypeDefault(type: Type): String {
+    val typeName = when (type) {
+        is Type.List -> "Vec::<${renderType(type.member)}>"
+        is Type.Map -> "BTreeMap::<${renderType(type.key)}, ${renderType(type.value)}>"
+        is Type.Set -> "BTreeSet::<${renderType(type.member)}>"
+        else -> renderType(type)
+    }
+
+    return "$typeName::default()"
+}
+
+
 // value in json of minimal not default type
 
 fun RustRenderer.renderTypeJson(type: Type): String = when (type) {

@@ -23,4 +23,35 @@ impl RunParamsData {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn run_params_data() {
+        assert_json_snapshot!(
+           RunParamsData::scala_main_class(ScalaMainClass::default()),
+           @r#"
+{
+  "dataKind": "scala-main-class",
+  "data": {
+    "class": "",
+    "arguments": [],
+    "jvmOptions": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           RunParamsData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

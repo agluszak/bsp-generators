@@ -23,4 +23,36 @@ impl DependencyModuleData {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn dependency_module_data() {
+        assert_json_snapshot!(
+           DependencyModuleData::maven(MavenDependencyModule::default()),
+           @r#"
+{
+  "dataKind": "maven",
+  "data": {
+    "organization": "",
+    "name": "",
+    "version": "",
+    "artifacts": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           DependencyModuleData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

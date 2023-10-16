@@ -17,4 +17,21 @@ pub enum InitializeBuildResultData {
 impl InitializeBuildResultData {}
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn initialize_build_result_data() {
+        assert_json_snapshot!(
+           InitializeBuildResultData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

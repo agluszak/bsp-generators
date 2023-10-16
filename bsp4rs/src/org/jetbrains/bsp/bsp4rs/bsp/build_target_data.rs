@@ -47,4 +47,117 @@ impl BuildTargetData {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn build_target_data() {
+        assert_json_snapshot!(
+           BuildTargetData::cargo(CargoBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "cargo",
+  "data": {
+    "edition": "",
+    "requiredFeatures": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::cpp(CppBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "cpp",
+  "data": {}
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::jvm(JvmBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "jvm",
+  "data": {}
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::python(PythonBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "python",
+  "data": {}
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::rust(RustBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "rust",
+  "data": {
+    "name": "",
+    "crateRootUrl": "",
+    "kind": 1,
+    "edition": "",
+    "doctest": false
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::sbt(SbtBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "sbt",
+  "data": {
+    "sbtVersion": "",
+    "autoImports": [],
+    "scalaBuildTarget": {
+      "scalaOrganization": "",
+      "scalaVersion": "",
+      "scalaBinaryVersion": "",
+      "platform": 1,
+      "jars": []
+    },
+    "children": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::scala(ScalaBuildTarget::default()),
+           @r#"
+{
+  "dataKind": "scala",
+  "data": {
+    "scalaOrganization": "",
+    "scalaVersion": "",
+    "scalaBinaryVersion": "",
+    "platform": 1,
+    "jars": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           BuildTargetData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

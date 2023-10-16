@@ -19,7 +19,6 @@ import kotlin.io.path.Path
 
 class RustRenderer(basepkg: String, private val modules: List<Module>, val version: String) {
     private val baseRelPath = Path(basepkg.replace(".", "/"))
-    val shapes = modules.flatMap { it.definitions }.associateBy { it.shapeId }
     val otherDataDef = Def.Structure(
         ShapeId.fromParts("bsp", "OtherData"),
         listOf(
@@ -28,6 +27,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         ),
         listOf()
     )
+    val shapes = modules.flatMap { it.definitions }.plus(otherDataDef).associateBy { it.shapeId }
 
     val deriveRenderer = DeriveRenderer(shapes)
     val serializationRenderer = SerializationRenderer()
@@ -64,7 +64,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             block("mod tests") {
                 include(renderTestsImports())
                 newline()
-                renderDefTest(def)?.let { include(it) }
+                include(renderDefTest(def))
             }
             newline()
         }

@@ -23,4 +23,31 @@ impl DiagnosticData {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn diagnostic_data() {
+        assert_json_snapshot!(
+           DiagnosticData::scala(ScalaDiagnostic::default()),
+           @r#"
+{
+  "dataKind": "scala",
+  "data": {}
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           DiagnosticData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

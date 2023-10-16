@@ -17,4 +17,21 @@ pub enum BuildTargetEventData {
 impl BuildTargetEventData {}
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn build_target_event_data() {
+        assert_json_snapshot!(
+           BuildTargetEventData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

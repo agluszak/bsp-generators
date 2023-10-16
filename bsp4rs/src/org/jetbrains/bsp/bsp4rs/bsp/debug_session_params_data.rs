@@ -27,4 +27,45 @@ impl DebugSessionParamsData {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn debug_session_params_data() {
+        assert_json_snapshot!(
+           DebugSessionParamsData::scala_attach_remote(ScalaAttachRemote::default()),
+           @r#"
+{
+  "dataKind": "scala-attach-remote",
+  "data": {}
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           DebugSessionParamsData::scala_main_class(ScalaMainClass::default()),
+           @r#"
+{
+  "dataKind": "scala-main-class",
+  "data": {
+    "class": "",
+    "arguments": [],
+    "jvmOptions": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           DebugSessionParamsData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

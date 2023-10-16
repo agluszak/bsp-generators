@@ -31,4 +31,55 @@ impl TestParamsData {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn test_params_data() {
+        assert_json_snapshot!(
+           TestParamsData::scala_test(ScalaTestParams::default()),
+           @r#"
+{
+  "dataKind": "scala-test",
+  "data": {}
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           TestParamsData::scala_test_suites(Vec::<String>::default()),
+           @r#"
+{
+  "dataKind": "scala-test-suites",
+  "data": []
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           TestParamsData::scala_test_suites_selection(ScalaTestSuites::default()),
+           @r#"
+{
+  "dataKind": "scala-test-suites-selection",
+  "data": {
+    "suites": [],
+    "jvmOptions": [],
+    "environmentVariables": []
+  }
+}
+   "#
+        );
+
+        assert_json_snapshot!(
+           TestParamsData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

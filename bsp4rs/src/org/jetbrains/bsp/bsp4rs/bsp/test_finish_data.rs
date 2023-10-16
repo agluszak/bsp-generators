@@ -17,4 +17,21 @@ pub enum TestFinishData {
 impl TestFinishData {}
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use insta::assert_json_snapshot;
+
+    use super::*;
+
+    #[test]
+    fn test_finish_data() {
+        assert_json_snapshot!(
+           TestFinishData::Other(OtherData::default()),
+           @r#"
+{
+  "dataKind": "",
+  "data": null
+}
+   "#
+        );
+    }
+}

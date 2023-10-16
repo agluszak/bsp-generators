@@ -14,14 +14,14 @@ fun RustRenderer.renderDef(def: Def): CodeBlock = when (def) {
     is Def.UntaggedUnion -> renderUntaggedUnion(def)
 }
 
-fun RustRenderer.renderDefTest(def: Def): CodeBlock? = when (def) {
+fun RustRenderer.renderDefTest(def: Def): CodeBlock = when (def) {
     is Def.ClosedEnum<*> -> renderClosedEnumTest(def)
     is Def.OpenEnum<*> -> renderOpenEnumTest(def)
     is Def.Service -> renderServiceTest(def)
     is Def.Alias -> renderAliasTest(def)
     is Def.UntaggedUnion -> renderUntaggedUnionTest(def)
     is Def.Structure -> renderStructureTest(def)
-    else -> null
+    is Def.DataKinds -> renderDataKindsTest(def)
 }
 
 fun RustRenderer.renderDefDefault(def: Def): String = when (def) {
