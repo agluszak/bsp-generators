@@ -1,5 +1,5 @@
 {
-  "checksum": "82d8e97fb071ce03cb8f63df62faad8d5c4b8aa564318126e2a7a2c2237631fd",
+  "checksum": "f35c5a172434416fc5a4cebed1650e1aceafdff1314ac00e99cff8c870f925ef",
   "crates": {
     "bsp4rs 0.1.0": {
       "name": "bsp4rs",
@@ -55,7 +55,7 @@
         },
         "version": "0.1.0"
       },
-      "license": null
+      "license": "MIT OR Apache-2.0"
     },
     "console 0.15.7": {
       "name": "console",
