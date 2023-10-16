@@ -44,7 +44,7 @@ pub struct RustPackage {
     /// Set of features defined for the package (including optional dependencies).
     /// Each feature maps to an array of features or dependencies it enables.
     /// The entry named "default" defines which features are enabled by default.
-    pub features: FeatureDependencyGraph,
+    pub features: FeaturesDependencyGraph,
     /// Array of features enabled on this package.
     pub enabled_features: BTreeSet<Feature>,
     /// Conditional compilation flags that can be set based on certain conditions.

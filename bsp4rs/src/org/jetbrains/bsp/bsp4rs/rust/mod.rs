@@ -1,5 +1,5 @@
 mod feature;
-mod feature_dependency_graph;
+mod features_dependency_graph;
 mod rust_build_server;
 mod rust_cfg_options;
 mod rust_crate_type;
@@ -18,7 +18,7 @@ mod rust_workspace_params;
 mod rust_workspace_result;
 
 pub use feature::*;
-pub use feature_dependency_graph::*;
+pub use features_dependency_graph::*;
 pub use rust_build_server::*;
 pub use rust_cfg_options::*;
 pub use rust_crate_type::*;

@@ -180,7 +180,7 @@ object CancelRequestParams {
 
 final case class CargoBuildTarget (
   edition: String,
-  required_features: Set[String],
+  requiredFeatures: Set[String],
 )
 
 object CargoBuildTarget {
