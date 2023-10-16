@@ -10,14 +10,19 @@ pub struct JavacOptionsResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn javac_options_result() {
+        let test_data = JavacOptionsResult {
+            items: vec![JavacOptionsItem::default()],
+        };
+
         assert_json_snapshot!(
-           JavacOptionsResult {items: vec![JavacOptionsItem::default()]},
+           test_data,
            @r#"
 {
   "items": [
@@ -32,6 +37,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "options": [], "classpath": [], "classDirectory": ""}]}"#,
+            &test_data,
         );
     }
 }

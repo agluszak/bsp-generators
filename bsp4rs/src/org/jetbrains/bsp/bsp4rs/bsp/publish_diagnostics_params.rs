@@ -26,12 +26,21 @@ pub struct PublishDiagnosticsParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn publish_diagnostics_params() {
+        let test_data = PublishDiagnosticsParams {
+            text_document: TextDocumentIdentifier::default(),
+            build_target: BuildTargetIdentifier::default(),
+            origin_id: Some(RequestId::default()),
+            diagnostics: vec![Diagnostic::default()],
+            reset: TEST_BOOL,
+        };
+
         assert_json_snapshot!(
-           PublishDiagnosticsParams {text_document: TextDocumentIdentifier::default(), build_target: BuildTargetIdentifier::default(), origin_id: Some(RequestId::default()), diagnostics: vec![Diagnostic::default()], reset: TEST_BOOL},
+           test_data,
            @r#"
 {
   "textDocument": {
@@ -59,6 +68,11 @@ mod tests {
   "reset": true
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"textDocument": {"uri": ""}, "buildTarget": {"uri": ""}, "originId": "", "diagnostics": [{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "message": ""}], "reset": true}"#,
+            &test_data,
         );
     }
 }

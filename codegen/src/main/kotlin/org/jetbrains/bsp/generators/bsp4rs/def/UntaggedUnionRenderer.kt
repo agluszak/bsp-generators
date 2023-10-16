@@ -30,19 +30,23 @@ private fun RustRenderer.makeUnionOptions(types: List<Type>): List<Pair<String, 
 
 fun RustRenderer.renderUntaggedUnionTest(def: Def.UntaggedUnion): CodeBlock {
     val name = def.name
-    fun renderMemberTest(type: Type): String {
+    fun renderMemberTest(type: Type): CodeBlock {
         val enumValueName = renderType(type).camelCaseUpperCamelCase()
         val renderedTestValue = "$name::$enumValueName(${renderTypeTest(type)})"
         val renderedJson = renderTypeJson(type)
 
-        return renderSerializationTest(renderedTestValue, renderedJson)
+        return rustCode {
+            -renderSerializationTest(renderedTestValue, renderedJson, true)
+            -renderDeserializationTest(renderedTestValue, renderedJson)
+        }
     }
 
     return rustCode {
         -"#[test]"
         block("fn ${name.camelToSnakeCase()}()") {
             def.members.forEach { type ->
-                -renderMemberTest(type)
+                include(renderMemberTest(type))
+                newline()
             }
         }
     }

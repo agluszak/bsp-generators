@@ -7,17 +7,22 @@ pub struct ScalaAttachRemote {}
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn scala_attach_remote() {
+        let test_data = ScalaAttachRemote {};
+
         assert_json_snapshot!(
-           ScalaAttachRemote {},
+           test_data,
            @r#"
 {}
    "#
         );
+
+        test_deserialization(r#"{}"#, &test_data);
     }
 }

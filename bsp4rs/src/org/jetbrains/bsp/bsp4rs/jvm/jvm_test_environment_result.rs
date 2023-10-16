@@ -10,14 +10,19 @@ pub struct JvmTestEnvironmentResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn jvm_test_environment_result() {
+        let test_data = JvmTestEnvironmentResult {
+            items: vec![JvmEnvironmentItem::default()],
+        };
+
         assert_json_snapshot!(
-           JvmTestEnvironmentResult {items: vec![JvmEnvironmentItem::default()]},
+           test_data,
            @r#"
 {
   "items": [
@@ -33,6 +38,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "classpath": [], "jvmOptions": [], "workingDirectory": "", "environmentVariables": {}}]}"#,
+            &test_data,
         );
     }
 }

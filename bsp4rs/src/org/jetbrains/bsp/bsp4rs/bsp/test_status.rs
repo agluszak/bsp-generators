@@ -20,41 +20,40 @@ pub enum TestStatus {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn test_status() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            TestStatus::Passed,
-           @r#"
-1
-   "#
+           @r#"1"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"1"#, &TestStatus::Passed);
+
+        assert_compact_json_snapshot!(
            TestStatus::Failed,
-           @r#"
-2
-   "#
+           @r#"2"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"2"#, &TestStatus::Failed);
+
+        assert_compact_json_snapshot!(
            TestStatus::Ignored,
-           @r#"
-3
-   "#
+           @r#"3"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"3"#, &TestStatus::Ignored);
+
+        assert_compact_json_snapshot!(
            TestStatus::Cancelled,
-           @r#"
-4
-   "#
+           @r#"4"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"4"#, &TestStatus::Cancelled);
+
+        assert_compact_json_snapshot!(
            TestStatus::Skipped,
-           @r#"
-5
-   "#
+           @r#"5"#
         );
+        test_deserialization(r#"5"#, &TestStatus::Skipped);
     }
 }

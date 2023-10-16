@@ -15,12 +15,18 @@ pub struct PythonOptionsItem {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn python_options_item() {
+        let test_data = PythonOptionsItem {
+            target: BuildTargetIdentifier::default(),
+            interpreter_options: vec![TEST_STRING.to_string()],
+        };
+
         assert_json_snapshot!(
-           PythonOptionsItem {target: BuildTargetIdentifier::default(), interpreter_options: vec![TEST_STRING.to_string()]},
+           test_data,
            @r#"
 {
   "target": {
@@ -31,6 +37,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "interpreterOptions": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

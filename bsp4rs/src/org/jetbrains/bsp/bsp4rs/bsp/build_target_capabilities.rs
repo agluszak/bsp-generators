@@ -23,12 +23,20 @@ pub struct BuildTargetCapabilities {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn build_target_capabilities() {
+        let test_data = BuildTargetCapabilities {
+            can_compile: Some(TEST_BOOL),
+            can_test: Some(TEST_BOOL),
+            can_run: Some(TEST_BOOL),
+            can_debug: Some(TEST_BOOL),
+        };
+
         assert_json_snapshot!(
-           BuildTargetCapabilities {can_compile: Some(TEST_BOOL), can_test: Some(TEST_BOOL), can_run: Some(TEST_BOOL), can_debug: Some(TEST_BOOL)},
+           test_data,
            @r#"
 {
   "canCompile": true,
@@ -37,6 +45,11 @@ mod tests {
   "canDebug": true
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"canCompile": true, "canTest": true, "canRun": true, "canDebug": true}"#,
+            &test_data,
         );
     }
 }

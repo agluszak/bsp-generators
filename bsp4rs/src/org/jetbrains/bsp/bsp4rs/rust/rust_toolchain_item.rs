@@ -17,14 +17,21 @@ pub struct RustToolchainItem {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn rust_toolchain_item() {
+        let test_data = RustToolchainItem {
+            rust_std_lib: Some(RustcInfo::default()),
+            cargo_bin_path: URI::default(),
+            proc_macro_srv_path: URI::default(),
+        };
+
         assert_json_snapshot!(
-           RustToolchainItem {rust_std_lib: Some(RustcInfo::default()), cargo_bin_path: URI::default(), proc_macro_srv_path: URI::default()},
+           test_data,
            @r#"
 {
   "rustStdLib": {
@@ -37,6 +44,11 @@ mod tests {
   "procMacroSrvPath": ""
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"rustStdLib": {"sysrootPath": "", "srcSysrootPath": "", "version": "", "host": ""}, "cargoBinPath": "", "procMacroSrvPath": ""}"#,
+            &test_data,
         );
     }
 }

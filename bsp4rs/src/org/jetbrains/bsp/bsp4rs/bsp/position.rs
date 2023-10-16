@@ -13,12 +13,18 @@ pub struct Position {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn position() {
+        let test_data = Position {
+            line: TEST_INT,
+            character: TEST_INT,
+        };
+
         assert_json_snapshot!(
-           Position {line: TEST_INT, character: TEST_INT},
+           test_data,
            @r#"
 {
   "line": 1,
@@ -26,5 +32,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"line": 1, "character": 1}"#, &test_data);
     }
 }

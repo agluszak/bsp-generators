@@ -29,12 +29,20 @@ pub struct CppBuildTarget {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn cpp_build_target() {
+        let test_data = CppBuildTarget {
+            version: Some(TEST_STRING.to_string()),
+            compiler: Some(TEST_STRING.to_string()),
+            c_compiler: Some(URI::default()),
+            cpp_compiler: Some(URI::default()),
+        };
+
         assert_json_snapshot!(
-           CppBuildTarget {version: Some(TEST_STRING.to_string()), compiler: Some(TEST_STRING.to_string()), c_compiler: Some(URI::default()), cpp_compiler: Some(URI::default())},
+           test_data,
            @r#"
 {
   "version": "test_string",
@@ -43,6 +51,11 @@ mod tests {
   "cppCompiler": ""
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"version": "test_string", "compiler": "test_string", "cCompiler": "", "cppCompiler": ""}"#,
+            &test_data,
         );
     }
 }

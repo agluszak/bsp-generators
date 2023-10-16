@@ -29,12 +29,24 @@ pub struct TestReport {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn test_report() {
+        let test_data = TestReport {
+            origin_id: Some(Identifier::default()),
+            target: BuildTargetIdentifier::default(),
+            passed: TEST_INT,
+            failed: TEST_INT,
+            ignored: TEST_INT,
+            cancelled: TEST_INT,
+            skipped: TEST_INT,
+            time: Some(TEST_LONG),
+        };
+
         assert_json_snapshot!(
-           TestReport {origin_id: Some(Identifier::default()), target: BuildTargetIdentifier::default(), passed: TEST_INT, failed: TEST_INT, ignored: TEST_INT, cancelled: TEST_INT, skipped: TEST_INT, time: Some(TEST_LONG)},
+           test_data,
            @r#"
 {
   "originId": "",
@@ -49,6 +61,11 @@ mod tests {
   "time": 2
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"originId": "", "target": {"uri": ""}, "passed": 1, "failed": 1, "ignored": 1, "cancelled": 1, "skipped": 1, "time": 2}"#,
+            &test_data,
         );
     }
 }

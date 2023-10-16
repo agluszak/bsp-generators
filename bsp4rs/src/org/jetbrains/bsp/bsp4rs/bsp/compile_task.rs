@@ -14,14 +14,19 @@ pub struct CompileTask {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn compile_task() {
+        let test_data = CompileTask {
+            target: BuildTargetIdentifier::default(),
+        };
+
         assert_json_snapshot!(
-           CompileTask {target: BuildTargetIdentifier::default()},
+           test_data,
            @r#"
 {
   "target": {
@@ -30,5 +35,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"target": {"uri": ""}}"#, &test_data);
     }
 }

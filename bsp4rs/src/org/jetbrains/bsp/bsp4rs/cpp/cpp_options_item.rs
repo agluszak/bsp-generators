@@ -28,12 +28,21 @@ pub struct CppOptionsItem {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn cpp_options_item() {
+        let test_data = CppOptionsItem {
+            target: BuildTargetIdentifier::default(),
+            copts: vec![TEST_STRING.to_string()],
+            defines: vec![TEST_STRING.to_string()],
+            linkopts: vec![TEST_STRING.to_string()],
+            linkshared: Some(TEST_BOOL),
+        };
+
         assert_json_snapshot!(
-           CppOptionsItem {target: BuildTargetIdentifier::default(), copts: vec![TEST_STRING.to_string()], defines: vec![TEST_STRING.to_string()], linkopts: vec![TEST_STRING.to_string()], linkshared: Some(TEST_BOOL)},
+           test_data,
            @r#"
 {
   "target": {
@@ -51,6 +60,11 @@ mod tests {
   "linkshared": true
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "copts": ["test_string"], "defines": ["test_string"], "linkopts": ["test_string"], "linkshared": true}"#,
+            &test_data,
         );
     }
 }

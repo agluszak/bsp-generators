@@ -11,14 +11,20 @@ pub struct Range {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn range() {
+        let test_data = Range {
+            start: Position::default(),
+            end: Position::default(),
+        };
+
         assert_json_snapshot!(
-           Range {start: Position::default(), end: Position::default()},
+           test_data,
            @r#"
 {
   "start": {
@@ -31,6 +37,11 @@ mod tests {
   }
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}"#,
+            &test_data,
         );
     }
 }

@@ -127,7 +127,6 @@ impl Notification for OnRunPrintStderr {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

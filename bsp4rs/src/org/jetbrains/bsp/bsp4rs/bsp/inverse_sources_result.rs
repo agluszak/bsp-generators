@@ -10,14 +10,19 @@ pub struct InverseSourcesResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn inverse_sources_result() {
+        let test_data = InverseSourcesResult {
+            targets: vec![BuildTargetIdentifier::default()],
+        };
+
         assert_json_snapshot!(
-           InverseSourcesResult {targets: vec![BuildTargetIdentifier::default()]},
+           test_data,
            @r#"
 {
   "targets": [
@@ -28,5 +33,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"targets": [{"uri": ""}]}"#, &test_data);
     }
 }

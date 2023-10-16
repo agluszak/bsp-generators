@@ -17,18 +17,29 @@ pub struct PythonBuildTarget {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn python_build_target() {
+        let test_data = PythonBuildTarget {
+            version: Some(TEST_STRING.to_string()),
+            interpreter: Some(URI::default()),
+        };
+
         assert_json_snapshot!(
-           PythonBuildTarget {version: Some(TEST_STRING.to_string()), interpreter: Some(URI::default())},
+           test_data,
            @r#"
 {
   "version": "test_string",
   "interpreter": ""
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"version": "test_string", "interpreter": ""}"#,
+            &test_data,
         );
     }
 }

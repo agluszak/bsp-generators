@@ -21,12 +21,20 @@ pub struct RustcInfo {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn rustc_info() {
+        let test_data = RustcInfo {
+            sysroot_path: URI::default(),
+            src_sysroot_path: URI::default(),
+            version: TEST_STRING.to_string(),
+            host: TEST_STRING.to_string(),
+        };
+
         assert_json_snapshot!(
-           RustcInfo {sysroot_path: URI::default(), src_sysroot_path: URI::default(), version: TEST_STRING.to_string(), host: TEST_STRING.to_string()},
+           test_data,
            @r#"
 {
   "sysrootPath": "",
@@ -35,6 +43,11 @@ mod tests {
   "host": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"sysrootPath": "", "srcSysrootPath": "", "version": "test_string", "host": "test_string"}"#,
+            &test_data,
         );
     }
 }

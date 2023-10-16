@@ -18,12 +18,22 @@ pub struct JvmEnvironmentItem {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn jvm_environment_item() {
+        let test_data = JvmEnvironmentItem {
+            target: BuildTargetIdentifier::default(),
+            classpath: vec![TEST_STRING.to_string()],
+            jvm_options: vec![TEST_STRING.to_string()],
+            working_directory: TEST_STRING.to_string(),
+            environment_variables: EnvironmentVariables::default(),
+            main_classes: Some(vec![JvmMainClass::default()]),
+        };
+
         assert_json_snapshot!(
-           JvmEnvironmentItem {target: BuildTargetIdentifier::default(), classpath: vec![TEST_STRING.to_string()], jvm_options: vec![TEST_STRING.to_string()], working_directory: TEST_STRING.to_string(), environment_variables: EnvironmentVariables::default(), main_classes: Some(vec![JvmMainClass::default()])},
+           test_data,
            @r#"
 {
   "target": {
@@ -45,6 +55,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "classpath": ["test_string"], "jvmOptions": ["test_string"], "workingDirectory": "test_string", "environmentVariables": {}, "mainClasses": [{"className": "", "arguments": []}]}"#,
+            &test_data,
         );
     }
 }

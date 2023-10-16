@@ -14,7 +14,6 @@ impl Request for BuildTargetJavacOptions {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

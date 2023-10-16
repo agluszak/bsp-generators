@@ -13,14 +13,20 @@ pub struct ScalaMainClassesItem {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn scala_main_classes_item() {
+        let test_data = ScalaMainClassesItem {
+            target: BuildTargetIdentifier::default(),
+            classes: vec![ScalaMainClass::default()],
+        };
+
         assert_json_snapshot!(
-           ScalaMainClassesItem {target: BuildTargetIdentifier::default(), classes: vec![ScalaMainClass::default()]},
+           test_data,
            @r#"
 {
   "target": {
@@ -35,6 +41,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "classes": [{"class": "", "arguments": [], "jvmOptions": []}]}"#,
+            &test_data,
         );
     }
 }

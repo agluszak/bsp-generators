@@ -25,21 +25,20 @@ impl std::ops::Deref for RustDependencies {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn rust_dependencies() {
-        assert_json_snapshot!(
-           RustDependencies(BTreeMap::from([(TEST_STRING.to_string(), vec![RustDependency::default()])])),
-           @r#"
-{
-  "test_string": [
-    {
-      "pkg": ""
-    }
-  ]
-}
-   "#
+        let test_data = RustDependencies(BTreeMap::from([(
+            TEST_STRING.to_string(),
+            vec![RustDependency::default()],
+        )]));
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#"{"test_string": [{"pkg": ""}]}"#
         );
+
+        test_deserialization(r#"{"test_string": [{"pkg": ""}]}"#, &test_data);
     }
 }

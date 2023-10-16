@@ -11,14 +11,19 @@ pub struct ScalaTestClassesResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn scala_test_classes_result() {
+        let test_data = ScalaTestClassesResult {
+            items: vec![ScalaTestClassesItem::default()],
+        };
+
         assert_json_snapshot!(
-           ScalaTestClassesResult {items: vec![ScalaTestClassesItem::default()]},
+           test_data,
            @r#"
 {
   "items": [
@@ -31,6 +36,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "classes": []}]}"#,
+            &test_data,
         );
     }
 }

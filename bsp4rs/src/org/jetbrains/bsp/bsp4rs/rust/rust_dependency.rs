@@ -20,12 +20,19 @@ pub struct RustDependency {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn rust_dependency() {
+        let test_data = RustDependency {
+            pkg: TEST_STRING.to_string(),
+            name: Some(TEST_STRING.to_string()),
+            dep_kinds: Some(vec![RustDepKindInfo::default()]),
+        };
+
         assert_json_snapshot!(
-           RustDependency {pkg: TEST_STRING.to_string(), name: Some(TEST_STRING.to_string()), dep_kinds: Some(vec![RustDepKindInfo::default()])},
+           test_data,
            @r#"
 {
   "pkg": "test_string",
@@ -37,6 +44,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"pkg": "test_string", "name": "test_string", "depKinds": [{"kind": ""}]}"#,
+            &test_data,
         );
     }
 }

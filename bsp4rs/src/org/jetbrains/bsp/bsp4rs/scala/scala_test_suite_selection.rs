@@ -14,12 +14,18 @@ pub struct ScalaTestSuiteSelection {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_test_suite_selection() {
+        let test_data = ScalaTestSuiteSelection {
+            class_name: TEST_STRING.to_string(),
+            tests: vec![TEST_STRING.to_string()],
+        };
+
         assert_json_snapshot!(
-           ScalaTestSuiteSelection {class_name: TEST_STRING.to_string(), tests: vec![TEST_STRING.to_string()]},
+           test_data,
            @r#"
 {
   "className": "test_string",
@@ -28,6 +34,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"className": "test_string", "tests": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

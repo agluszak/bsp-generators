@@ -15,14 +15,20 @@ pub struct DebugSessionParams {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn debug_session_params() {
+        let test_data = DebugSessionParams {
+            targets: vec![BuildTargetIdentifier::default()],
+            data: Some(DebugSessionParamsData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           DebugSessionParams {targets: vec![BuildTargetIdentifier::default()], data: Some(DebugSessionParamsData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "targets": [
@@ -34,6 +40,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"targets": [{"uri": ""}], "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

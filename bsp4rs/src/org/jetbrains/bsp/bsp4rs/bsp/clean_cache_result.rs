@@ -14,12 +14,18 @@ pub struct CleanCacheResult {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn clean_cache_result() {
+        let test_data = CleanCacheResult {
+            message: Some(TEST_STRING.to_string()),
+            cleaned: TEST_BOOL,
+        };
+
         assert_json_snapshot!(
-           CleanCacheResult {message: Some(TEST_STRING.to_string()), cleaned: TEST_BOOL},
+           test_data,
            @r#"
 {
   "message": "test_string",
@@ -27,5 +33,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"message": "test_string", "cleaned": true}"#, &test_data);
     }
 }

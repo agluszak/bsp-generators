@@ -12,14 +12,19 @@ pub struct CargoFeaturesStateResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn cargo_features_state_result() {
+        let test_data = CargoFeaturesStateResult {
+            packages_features: vec![PackageFeatures::default()],
+        };
+
         assert_json_snapshot!(
-           CargoFeaturesStateResult {packages_features: vec![PackageFeatures::default()]},
+           test_data,
            @r#"
 {
   "packagesFeatures": [
@@ -32,6 +37,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"packagesFeatures": [{"packageId": "", "targets": [], "availableFeatures": {}, "enabledFeatures": []}]}"#,
+            &test_data,
         );
     }
 }

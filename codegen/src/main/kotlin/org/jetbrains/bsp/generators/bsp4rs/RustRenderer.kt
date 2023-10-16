@@ -97,9 +97,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     private fun renderTestsImports(): CodeBlock {
         return rustCode {
-            -"use insta::assert_json_snapshot;"
-            -"use crate::tests::*;"
             -"use super::*;"
+            -"use crate::tests::*;"
+            -"use insta::assert_compact_json_snapshot;"
+            -"use insta::assert_json_snapshot;"
         }
     }
 
@@ -142,25 +143,36 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     }
 
     fun renderEnumTest(name: String, values: List<EnumValue<*>>, fn: (String) -> String): CodeBlock {
-        fun renderEnumValueTest(value: EnumValue<*>): String {
+        fun renderEnumValueTest(value: EnumValue<*>): CodeBlock {
             val enumValueName = fn(makeName(value.name))
             val renderedTestValue = "$name::$enumValueName"
             val renderedJson = renderEnumValueJson(value)
 
-            return renderSerializationTest(renderedTestValue, renderedJson)
+            return rustCode {
+                -renderSerializationTest(renderedTestValue, renderedJson, true)
+                -renderDeserializationTest(renderedTestValue, renderedJson)
+            }
         }
 
         return rustCode {
             -"#[test]"
             block("fn ${name.camelToSnakeCase()}()") {
                 values.forEach { value ->
-                    -renderEnumValueTest(value)
+                    include(renderEnumValueTest(value))
+                    newline()
                 }
             }
         }
     }
 
-    fun renderSerializationTest(testedValue: String, expectedJson: String): String {
+    fun renderSerializationTest(testedValue: String, expectedJson: String, isCompact: Boolean): String {
+        if (isCompact) {
+            return """assert_compact_json_snapshot!(
+            |   $testedValue, 
+            |   @r#"$expectedJson"#
+            |);""".trimMargin()
+        }
+
         val jsonElement = JsonParser.parseString(expectedJson)
         val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
         val prettyJson = gson.toJson(jsonElement)
@@ -170,6 +182,13 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             |   @r#"
             |$prettyJson
             |   "#
+            |);""".trimMargin()
+    }
+
+    fun renderDeserializationTest(testedValue: String, expectedJson: String): String {
+        return """test_deserialization(
+            |   r#"$expectedJson"#,
+            |   &$testedValue
             |);""".trimMargin()
     }
 }

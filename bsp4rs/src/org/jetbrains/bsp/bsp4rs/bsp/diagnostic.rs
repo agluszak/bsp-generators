@@ -34,12 +34,23 @@ pub struct Diagnostic {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn diagnostic() {
+        let test_data = Diagnostic {
+            range: Range::default(),
+            severity: Some(DiagnosticSeverity::default()),
+            code: Some(TEST_STRING.to_string()),
+            source: Some(TEST_STRING.to_string()),
+            message: TEST_STRING.to_string(),
+            related_information: Some(vec![DiagnosticRelatedInformation::default()]),
+            data: Some(DiagnosticData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           Diagnostic {range: Range::default(), severity: Some(DiagnosticSeverity::default()), code: Some(TEST_STRING.to_string()), source: Some(TEST_STRING.to_string()), message: TEST_STRING.to_string(), related_information: Some(vec![DiagnosticRelatedInformation::default()]), data: Some(DiagnosticData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "range": {
@@ -78,6 +89,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "severity": 1, "code": "test_string", "source": "test_string", "message": "test_string", "relatedInformation": [{"location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "message": ""}], "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

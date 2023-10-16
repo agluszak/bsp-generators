@@ -42,53 +42,52 @@ impl BuildTargetTag {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn build_target_tag() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            BuildTargetTag::APPLICATION,
-           @r#"
-"application"
-   "#
+           @r#""application""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""application""#, &BuildTargetTag::APPLICATION);
+
+        assert_compact_json_snapshot!(
            BuildTargetTag::BENCHMARK,
-           @r#"
-"benchmark"
-   "#
+           @r#""benchmark""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""benchmark""#, &BuildTargetTag::BENCHMARK);
+
+        assert_compact_json_snapshot!(
            BuildTargetTag::INTEGRATION_TEST,
-           @r#"
-"integration-test"
-   "#
+           @r#""integration-test""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""integration-test""#, &BuildTargetTag::INTEGRATION_TEST);
+
+        assert_compact_json_snapshot!(
            BuildTargetTag::LIBRARY,
-           @r#"
-"library"
-   "#
+           @r#""library""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""library""#, &BuildTargetTag::LIBRARY);
+
+        assert_compact_json_snapshot!(
            BuildTargetTag::MANUAL,
-           @r#"
-"manual"
-   "#
+           @r#""manual""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""manual""#, &BuildTargetTag::MANUAL);
+
+        assert_compact_json_snapshot!(
            BuildTargetTag::NO_IDE,
-           @r#"
-"no-ide"
-   "#
+           @r#""no-ide""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""no-ide""#, &BuildTargetTag::NO_IDE);
+
+        assert_compact_json_snapshot!(
            BuildTargetTag::TEST,
-           @r#"
-"test"
-   "#
+           @r#""test""#
         );
+        test_deserialization(r#""test""#, &BuildTargetTag::TEST);
     }
 }

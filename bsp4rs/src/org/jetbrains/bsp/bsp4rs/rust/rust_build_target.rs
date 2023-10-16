@@ -32,12 +32,23 @@ pub struct RustBuildTarget {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn rust_build_target() {
+        let test_data = RustBuildTarget {
+            name: TEST_STRING.to_string(),
+            crate_root_url: URI::default(),
+            kind: RustTargetKind::default(),
+            crate_types: Some(vec![RustCrateType::default()]),
+            edition: RustEdition::default(),
+            doctest: TEST_BOOL,
+            required_features: Some(BTreeSet::from([Feature::default()])),
+        };
+
         assert_json_snapshot!(
-           RustBuildTarget {name: TEST_STRING.to_string(), crate_root_url: URI::default(), kind: RustTargetKind::default(), crate_types: Some(vec![RustCrateType::default()]), edition: RustEdition::default(), doctest: TEST_BOOL, required_features: Some(BTreeSet::from([Feature::default()]))},
+           test_data,
            @r#"
 {
   "name": "test_string",
@@ -53,6 +64,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"name": "test_string", "crateRootUrl": "", "kind": 1, "crateTypes": [1], "edition": "", "doctest": true, "requiredFeatures": [""]}"#,
+            &test_data,
         );
     }
 }

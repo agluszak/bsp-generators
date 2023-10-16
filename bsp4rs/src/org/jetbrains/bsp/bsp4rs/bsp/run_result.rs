@@ -14,14 +14,20 @@ pub struct RunResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn run_result() {
+        let test_data = RunResult {
+            origin_id: Some(Identifier::default()),
+            status_code: StatusCode::default(),
+        };
+
         assert_json_snapshot!(
-           RunResult {origin_id: Some(Identifier::default()), status_code: StatusCode::default()},
+           test_data,
            @r#"
 {
   "originId": "",
@@ -29,5 +35,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"originId": "", "statusCode": 1}"#, &test_data);
     }
 }

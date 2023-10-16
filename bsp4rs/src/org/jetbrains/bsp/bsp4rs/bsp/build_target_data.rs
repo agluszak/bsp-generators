@@ -48,9 +48,10 @@ impl BuildTargetData {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
 
     #[test]
     fn build_target_data() {
@@ -150,14 +151,9 @@ mod tests {
    "#
         );
 
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            BuildTargetData::Other(OtherData::default()),
-           @r#"
-{
-  "dataKind": "",
-  "data": null
-}
-   "#
+           @r#"{"dataKind": "", "data": null}"#
         );
     }
 }

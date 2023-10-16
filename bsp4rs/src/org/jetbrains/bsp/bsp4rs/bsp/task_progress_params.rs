@@ -35,12 +35,24 @@ pub struct TaskProgressParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn task_progress_params() {
+        let test_data = TaskProgressParams {
+            task_id: TaskId::default(),
+            origin_id: Some(Identifier::default()),
+            event_time: Some(TEST_LONG),
+            message: Some(TEST_STRING.to_string()),
+            total: Some(TEST_LONG),
+            progress: Some(TEST_LONG),
+            unit: Some(TEST_STRING.to_string()),
+            data: Some(TaskProgressData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           TaskProgressParams {task_id: TaskId::default(), origin_id: Some(Identifier::default()), event_time: Some(TEST_LONG), message: Some(TEST_STRING.to_string()), total: Some(TEST_LONG), progress: Some(TEST_LONG), unit: Some(TEST_STRING.to_string()), data: Some(TaskProgressData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "taskId": {
@@ -56,6 +68,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "total": 2, "progress": 2, "unit": "test_string", "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

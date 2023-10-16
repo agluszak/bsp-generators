@@ -21,18 +21,29 @@ pub struct JvmBuildTarget {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn jvm_build_target() {
+        let test_data = JvmBuildTarget {
+            java_home: Some(URI::default()),
+            java_version: Some(TEST_STRING.to_string()),
+        };
+
         assert_json_snapshot!(
-           JvmBuildTarget {java_home: Some(URI::default()), java_version: Some(TEST_STRING.to_string())},
+           test_data,
            @r#"
 {
   "javaHome": "",
   "javaVersion": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"javaHome": "", "javaVersion": "test_string"}"#,
+            &test_data,
         );
     }
 }

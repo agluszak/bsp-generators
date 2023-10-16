@@ -11,14 +11,19 @@ pub struct RustToolchainResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn rust_toolchain_result() {
+        let test_data = RustToolchainResult {
+            toolchains: vec![RustToolchainItem::default()],
+        };
+
         assert_json_snapshot!(
-           RustToolchainResult {toolchains: vec![RustToolchainItem::default()]},
+           test_data,
            @r#"
 {
   "toolchains": [
@@ -29,6 +34,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"toolchains": [{"cargoBinPath": "", "procMacroSrvPath": ""}]}"#,
+            &test_data,
         );
     }
 }

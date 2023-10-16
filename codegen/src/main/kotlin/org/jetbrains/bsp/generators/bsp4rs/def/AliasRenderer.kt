@@ -66,7 +66,11 @@ fun RustRenderer.renderAliasTest(def: Def.Alias): CodeBlock {
     return rustCode {
         -"#[test]"
         block("fn ${name.camelToSnakeCase()}()") {
-            -renderSerializationTest(renderedTestValue, renderedJson)
+            -"let test_data = $renderedTestValue;"
+            newline()
+            -renderSerializationTest("test_data", renderedJson, true)
+            newline()
+            -renderDeserializationTest("test_data", renderedJson)
         }
     }
 }

@@ -11,14 +11,19 @@ pub struct ScalaWorkspaceEdit {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn scala_workspace_edit() {
+        let test_data = ScalaWorkspaceEdit {
+            changes: vec![ScalaTextEdit::default()],
+        };
+
         assert_json_snapshot!(
-           ScalaWorkspaceEdit {changes: vec![ScalaTextEdit::default()]},
+           test_data,
            @r#"
 {
   "changes": [
@@ -38,6 +43,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"changes": [{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "newText": ""}]}"#,
+            &test_data,
         );
     }
 }

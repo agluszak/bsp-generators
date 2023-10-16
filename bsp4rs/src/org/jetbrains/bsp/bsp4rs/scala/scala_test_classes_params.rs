@@ -15,12 +15,18 @@ pub struct ScalaTestClassesParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_test_classes_params() {
+        let test_data = ScalaTestClassesParams {
+            targets: vec![BuildTargetIdentifier::default()],
+            origin_id: Some(TEST_STRING.to_string()),
+        };
+
         assert_json_snapshot!(
-           ScalaTestClassesParams {targets: vec![BuildTargetIdentifier::default()], origin_id: Some(TEST_STRING.to_string())},
+           test_data,
            @r#"
 {
   "targets": [
@@ -31,6 +37,11 @@ mod tests {
   "originId": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"targets": [{"uri": ""}], "originId": "test_string"}"#,
+            &test_data,
         );
     }
 }

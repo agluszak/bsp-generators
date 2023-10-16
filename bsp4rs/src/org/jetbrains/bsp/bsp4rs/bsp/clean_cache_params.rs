@@ -11,14 +11,19 @@ pub struct CleanCacheParams {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn clean_cache_params() {
+        let test_data = CleanCacheParams {
+            targets: vec![BuildTargetIdentifier::default()],
+        };
+
         assert_json_snapshot!(
-           CleanCacheParams {targets: vec![BuildTargetIdentifier::default()]},
+           test_data,
            @r#"
 {
   "targets": [
@@ -29,5 +34,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"targets": [{"uri": ""}]}"#, &test_data);
     }
 }

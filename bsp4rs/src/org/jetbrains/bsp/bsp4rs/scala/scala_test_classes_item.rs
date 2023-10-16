@@ -20,12 +20,19 @@ pub struct ScalaTestClassesItem {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_test_classes_item() {
+        let test_data = ScalaTestClassesItem {
+            target: BuildTargetIdentifier::default(),
+            framework: Some(TEST_STRING.to_string()),
+            classes: vec![TEST_STRING.to_string()],
+        };
+
         assert_json_snapshot!(
-           ScalaTestClassesItem {target: BuildTargetIdentifier::default(), framework: Some(TEST_STRING.to_string()), classes: vec![TEST_STRING.to_string()]},
+           test_data,
            @r#"
 {
   "target": {
@@ -37,6 +44,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "framework": "test_string", "classes": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

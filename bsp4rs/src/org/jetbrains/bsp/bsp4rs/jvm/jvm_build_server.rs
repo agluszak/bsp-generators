@@ -30,7 +30,6 @@ impl Request for BuildTargetJvmRunEnvironment {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

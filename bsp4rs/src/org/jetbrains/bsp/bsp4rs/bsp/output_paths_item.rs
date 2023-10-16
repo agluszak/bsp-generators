@@ -13,14 +13,20 @@ pub struct OutputPathsItem {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn output_paths_item() {
+        let test_data = OutputPathsItem {
+            target: BuildTargetIdentifier::default(),
+            output_paths: vec![OutputPathItem::default()],
+        };
+
         assert_json_snapshot!(
-           OutputPathsItem {target: BuildTargetIdentifier::default(), output_paths: vec![OutputPathItem::default()]},
+           test_data,
            @r#"
 {
   "target": {
@@ -34,6 +40,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "outputPaths": [{"uri": "", "kind": 1}]}"#,
+            &test_data,
         );
     }
 }

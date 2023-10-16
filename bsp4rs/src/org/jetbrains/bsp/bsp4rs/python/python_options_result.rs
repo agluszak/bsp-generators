@@ -10,14 +10,19 @@ pub struct PythonOptionsResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn python_options_result() {
+        let test_data = PythonOptionsResult {
+            items: vec![PythonOptionsItem::default()],
+        };
+
         assert_json_snapshot!(
-           PythonOptionsResult {items: vec![PythonOptionsItem::default()]},
+           test_data,
            @r#"
 {
   "items": [
@@ -30,6 +35,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "interpreterOptions": []}]}"#,
+            &test_data,
         );
     }
 }

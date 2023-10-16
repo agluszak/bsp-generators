@@ -15,12 +15,18 @@ pub struct ScalaMainClassesResult {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_main_classes_result() {
+        let test_data = ScalaMainClassesResult {
+            items: vec![ScalaMainClassesItem::default()],
+            origin_id: Some(TEST_STRING.to_string()),
+        };
+
         assert_json_snapshot!(
-           ScalaMainClassesResult {items: vec![ScalaMainClassesItem::default()], origin_id: Some(TEST_STRING.to_string())},
+           test_data,
            @r#"
 {
   "items": [
@@ -34,6 +40,11 @@ mod tests {
   "originId": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "classes": []}], "originId": "test_string"}"#,
+            &test_data,
         );
     }
 }

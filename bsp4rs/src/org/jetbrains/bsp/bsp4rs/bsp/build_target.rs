@@ -54,12 +54,24 @@ pub struct BuildTarget {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn build_target() {
+        let test_data = BuildTarget {
+            id: BuildTargetIdentifier::default(),
+            display_name: Some(TEST_STRING.to_string()),
+            base_directory: Some(URI::default()),
+            tags: vec![BuildTargetTag::default()],
+            language_ids: vec![LanguageId::default()],
+            dependencies: vec![BuildTargetIdentifier::default()],
+            capabilities: BuildTargetCapabilities::default(),
+            data: Some(BuildTargetData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           BuildTarget {id: BuildTargetIdentifier::default(), display_name: Some(TEST_STRING.to_string()), base_directory: Some(URI::default()), tags: vec![BuildTargetTag::default()], language_ids: vec![LanguageId::default()], dependencies: vec![BuildTargetIdentifier::default()], capabilities: BuildTargetCapabilities::default(), data: Some(BuildTargetData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "id": {
@@ -83,6 +95,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"id": {"uri": ""}, "displayName": "test_string", "baseDirectory": "", "tags": [""], "languageIds": [""], "dependencies": [{"uri": ""}], "capabilities": {}, "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

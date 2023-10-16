@@ -47,7 +47,11 @@ fun RustRenderer.renderStructureTest(def: Def.Structure): CodeBlock {
     return rustCode {
         -"#[test]"
         block("fn ${def.name.camelToSnakeCase()}()") {
-            -renderSerializationTest(renderedTestValue, renderedJson)
+            -"let test_data = $renderedTestValue;"
+            newline()
+            -renderSerializationTest("test_data", renderedJson, false)
+            newline()
+            -renderDeserializationTest("test_data", renderedJson)
         }
     }
 }

@@ -19,12 +19,19 @@ pub struct DependencyModule {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn dependency_module() {
+        let test_data = DependencyModule {
+            name: TEST_STRING.to_string(),
+            version: TEST_STRING.to_string(),
+            data: Some(DependencyModuleData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           DependencyModule {name: TEST_STRING.to_string(), version: TEST_STRING.to_string(), data: Some(DependencyModuleData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "name": "test_string",
@@ -33,6 +40,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"name": "test_string", "version": "test_string", "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

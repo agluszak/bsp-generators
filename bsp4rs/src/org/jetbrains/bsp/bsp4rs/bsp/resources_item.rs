@@ -12,14 +12,20 @@ pub struct ResourcesItem {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn resources_item() {
+        let test_data = ResourcesItem {
+            target: BuildTargetIdentifier::default(),
+            resources: vec![URI::default()],
+        };
+
         assert_json_snapshot!(
-           ResourcesItem {target: BuildTargetIdentifier::default(), resources: vec![URI::default()]},
+           test_data,
            @r#"
 {
   "target": {
@@ -31,5 +37,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"target": {"uri": ""}, "resources": [""]}"#, &test_data);
     }
 }

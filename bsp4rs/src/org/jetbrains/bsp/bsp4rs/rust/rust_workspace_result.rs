@@ -18,14 +18,22 @@ pub struct RustWorkspaceResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn rust_workspace_result() {
+        let test_data = RustWorkspaceResult {
+            packages: vec![RustPackage::default()],
+            raw_dependencies: RustRawDependencies::default(),
+            dependencies: RustDependencies::default(),
+            resolved_targets: vec![BuildTargetIdentifier::default()],
+        };
+
         assert_json_snapshot!(
-           RustWorkspaceResult {packages: vec![RustPackage::default()], raw_dependencies: RustRawDependencies::default(), dependencies: RustDependencies::default(), resolved_targets: vec![BuildTargetIdentifier::default()]},
+           test_data,
            @r#"
 {
   "packages": [
@@ -51,6 +59,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"packages": [{"id": "", "rootUrl": "", "name": "", "version": "", "origin": "", "edition": "", "resolvedTargets": [], "allTargets": [], "features": {}, "enabledFeatures": []}], "rawDependencies": {}, "dependencies": {}, "resolvedTargets": [{"uri": ""}]}"#,
+            &test_data,
         );
     }
 }

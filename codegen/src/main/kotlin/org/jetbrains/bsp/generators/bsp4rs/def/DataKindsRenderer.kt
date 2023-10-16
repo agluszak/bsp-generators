@@ -73,7 +73,7 @@ private fun RustRenderer.renderDataKindTest(enumName: String, data: PolymorphicD
     val renderedTestValue = "$enumName::$dataName(${renderTypeDefault(data.shape)})"
     val renderedJson = """{"dataKind": "${data.kind}", "data": ${renderTypeDefaultJson(data.shape)}}"""
 
-    return renderSerializationTest(renderedTestValue, renderedJson)
+    return renderSerializationTest(renderedTestValue, renderedJson, false)
 }
 
 private fun RustRenderer.renderOtherDataKindTest(enumName: String): String {
@@ -81,7 +81,7 @@ private fun RustRenderer.renderOtherDataKindTest(enumName: String): String {
     val renderedTestValue = "$enumName::Other(${renderTypeDefault(otherType)})"
     val renderedJson = renderTypeDefaultJson(otherType)
 
-    return renderSerializationTest(renderedTestValue, renderedJson)
+    return renderSerializationTest(renderedTestValue, renderedJson, true)
 }
 
 fun RustRenderer.renderDataKindsDefault(def: Def.DataKinds): String =

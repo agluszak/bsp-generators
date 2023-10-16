@@ -26,12 +26,21 @@ pub struct TaskStartParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn task_start_params() {
+        let test_data = TaskStartParams {
+            task_id: TaskId::default(),
+            origin_id: Some(Identifier::default()),
+            event_time: Some(TEST_LONG),
+            message: Some(TEST_STRING.to_string()),
+            data: Some(TaskStartData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           TaskStartParams {task_id: TaskId::default(), origin_id: Some(Identifier::default()), event_time: Some(TEST_LONG), message: Some(TEST_STRING.to_string()), data: Some(TaskStartData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "taskId": {
@@ -44,6 +53,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

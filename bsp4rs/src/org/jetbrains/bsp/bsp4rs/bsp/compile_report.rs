@@ -31,12 +31,22 @@ pub struct CompileReport {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn compile_report() {
+        let test_data = CompileReport {
+            target: BuildTargetIdentifier::default(),
+            origin_id: Some(Identifier::default()),
+            errors: TEST_INT,
+            warnings: TEST_INT,
+            time: Some(TEST_LONG),
+            no_op: Some(TEST_BOOL),
+        };
+
         assert_json_snapshot!(
-           CompileReport {target: BuildTargetIdentifier::default(), origin_id: Some(Identifier::default()), errors: TEST_INT, warnings: TEST_INT, time: Some(TEST_LONG), no_op: Some(TEST_BOOL)},
+           test_data,
            @r#"
 {
   "target": {
@@ -49,6 +59,11 @@ mod tests {
   "noOp": true
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "originId": "", "errors": 1, "warnings": 1, "time": 2, "noOp": true}"#,
+            &test_data,
         );
     }
 }

@@ -21,23 +21,22 @@ impl DiagnosticTag {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn diagnostic_tag() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            DiagnosticTag::UNNECESSARY,
-           @r#"
-1
-   "#
+           @r#"1"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"1"#, &DiagnosticTag::UNNECESSARY);
+
+        assert_compact_json_snapshot!(
            DiagnosticTag::DEPRECATED,
-           @r#"
-2
-   "#
+           @r#"2"#
         );
+        test_deserialization(r#"2"#, &DiagnosticTag::DEPRECATED);
     }
 }

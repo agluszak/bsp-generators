@@ -20,12 +20,20 @@ pub struct PackageFeatures {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn package_features() {
+        let test_data = PackageFeatures {
+            package_id: TEST_STRING.to_string(),
+            targets: vec![BuildTargetIdentifier::default()],
+            available_features: FeatureDependencyGraph::default(),
+            enabled_features: BTreeSet::from([Feature::default()]),
+        };
+
         assert_json_snapshot!(
-           PackageFeatures {package_id: TEST_STRING.to_string(), targets: vec![BuildTargetIdentifier::default()], available_features: FeatureDependencyGraph::default(), enabled_features: BTreeSet::from([Feature::default()])},
+           test_data,
            @r#"
 {
   "packageId": "test_string",
@@ -40,6 +48,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"packageId": "test_string", "targets": [{"uri": ""}], "availableFeatures": {}, "enabledFeatures": [""]}"#,
+            &test_data,
         );
     }
 }

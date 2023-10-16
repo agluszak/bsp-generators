@@ -15,14 +15,19 @@ pub struct ScalaDiagnostic {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn scala_diagnostic() {
+        let test_data = ScalaDiagnostic {
+            actions: Some(vec![ScalaAction::default()]),
+        };
+
         assert_json_snapshot!(
-           ScalaDiagnostic {actions: Some(vec![ScalaAction::default()])},
+           test_data,
            @r#"
 {
   "actions": [
@@ -33,5 +38,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"actions": [{"title": ""}]}"#, &test_data);
     }
 }

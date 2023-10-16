@@ -69,7 +69,6 @@ impl Request for BuildTargetScalaMainClasses {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

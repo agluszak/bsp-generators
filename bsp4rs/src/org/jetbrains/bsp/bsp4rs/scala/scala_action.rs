@@ -24,12 +24,19 @@ pub struct ScalaAction {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_action() {
+        let test_data = ScalaAction {
+            title: TEST_STRING.to_string(),
+            description: Some(TEST_STRING.to_string()),
+            edit: Some(ScalaWorkspaceEdit::default()),
+        };
+
         assert_json_snapshot!(
-           ScalaAction {title: TEST_STRING.to_string(), description: Some(TEST_STRING.to_string()), edit: Some(ScalaWorkspaceEdit::default())},
+           test_data,
            @r#"
 {
   "title": "test_string",
@@ -39,6 +46,11 @@ mod tests {
   }
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"title": "test_string", "description": "test_string", "edit": {"changes": []}}"#,
+            &test_data,
         );
     }
 }

@@ -21,35 +21,37 @@ impl RustPackageOrigin {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn rust_package_origin() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            RustPackageOrigin::DEPENDENCY,
-           @r#"
-"dependency"
-   "#
+           @r#""dependency""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""dependency""#, &RustPackageOrigin::DEPENDENCY);
+
+        assert_compact_json_snapshot!(
            RustPackageOrigin::STDLIB,
-           @r#"
-"stdlib"
-   "#
+           @r#""stdlib""#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#""stdlib""#, &RustPackageOrigin::STDLIB);
+
+        assert_compact_json_snapshot!(
            RustPackageOrigin::STDLIB_DEPENDENCY,
-           @r#"
-"stdlib-dependency"
-   "#
+           @r#""stdlib-dependency""#
         );
-        assert_json_snapshot!(
+        test_deserialization(
+            r#""stdlib-dependency""#,
+            &RustPackageOrigin::STDLIB_DEPENDENCY,
+        );
+
+        assert_compact_json_snapshot!(
            RustPackageOrigin::WORKSPACE,
-           @r#"
-"workspace"
-   "#
+           @r#""workspace""#
         );
+        test_deserialization(r#""workspace""#, &RustPackageOrigin::WORKSPACE);
     }
 }

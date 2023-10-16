@@ -10,14 +10,19 @@ pub struct InverseSourcesParams {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn inverse_sources_params() {
+        let test_data = InverseSourcesParams {
+            text_document: TextDocumentIdentifier::default(),
+        };
+
         assert_json_snapshot!(
-           InverseSourcesParams {text_document: TextDocumentIdentifier::default()},
+           test_data,
            @r#"
 {
   "textDocument": {
@@ -26,5 +31,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"textDocument": {"uri": ""}}"#, &test_data);
     }
 }

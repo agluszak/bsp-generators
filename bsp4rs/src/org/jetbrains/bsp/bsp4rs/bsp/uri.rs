@@ -30,15 +30,17 @@ impl From<&str> for URI {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn uri() {
-        assert_json_snapshot!(
-           URI(TEST_STRING.to_string()),
-           @r#"
-"test_string"
-   "#
+        let test_data = URI(TEST_STRING.to_string());
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#""test_string""#
         );
+
+        test_deserialization(r#""test_string""#, &test_data);
     }
 }

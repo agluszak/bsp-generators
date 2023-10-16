@@ -28,12 +28,22 @@ pub struct TaskFinishParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn task_finish_params() {
+        let test_data = TaskFinishParams {
+            task_id: TaskId::default(),
+            origin_id: Some(Identifier::default()),
+            event_time: Some(TEST_LONG),
+            message: Some(TEST_STRING.to_string()),
+            status: StatusCode::default(),
+            data: Some(TaskFinishData::Other(OtherData::default())),
+        };
+
         assert_json_snapshot!(
-           TaskFinishParams {task_id: TaskId::default(), origin_id: Some(Identifier::default()), event_time: Some(TEST_LONG), message: Some(TEST_STRING.to_string()), status: StatusCode::default(), data: Some(TaskFinishData::Other(OtherData::default()))},
+           test_data,
            @r#"
 {
   "taskId": {
@@ -47,6 +57,11 @@ mod tests {
   "data": null
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "status": 1, "dataKind": "", "data": null}"#,
+            &test_data,
         );
     }
 }

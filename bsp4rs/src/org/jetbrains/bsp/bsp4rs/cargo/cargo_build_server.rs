@@ -26,7 +26,6 @@ impl Request for SetCargoFeatures {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

@@ -261,7 +261,6 @@ impl Notification for OnRunReadStdin {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

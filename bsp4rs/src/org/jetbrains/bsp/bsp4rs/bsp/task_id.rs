@@ -21,14 +21,20 @@ pub struct TaskId {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn task_id() {
+        let test_data = TaskId {
+            id: Identifier::default(),
+            parents: Some(vec![Identifier::default()]),
+        };
+
         assert_json_snapshot!(
-           TaskId {id: Identifier::default(), parents: Some(vec![Identifier::default()])},
+           test_data,
            @r#"
 {
   "id": "",
@@ -38,5 +44,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"id": "", "parents": [""]}"#, &test_data);
     }
 }

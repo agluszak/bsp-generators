@@ -20,12 +20,19 @@ pub struct PrintParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn print_params() {
+        let test_data = PrintParams {
+            origin_id: Identifier::default(),
+            task: Some(TaskId::default()),
+            message: TEST_STRING.to_string(),
+        };
+
         assert_json_snapshot!(
-           PrintParams {origin_id: Identifier::default(), task: Some(TaskId::default()), message: TEST_STRING.to_string()},
+           test_data,
            @r#"
 {
   "originId": "",
@@ -35,6 +42,11 @@ mod tests {
   "message": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"originId": "", "task": {"id": ""}, "message": "test_string"}"#,
+            &test_data,
         );
     }
 }

@@ -25,21 +25,22 @@ impl std::ops::Deref for FeatureDependencyGraph {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn feature_dependency_graph() {
-        assert_json_snapshot!(
-           FeatureDependencyGraph(BTreeMap::from([(Feature::default(), BTreeSet::from([Feature::default()]))])),
-           @r#"
-{
-  "": [
-    ""
-  ]
-}
-   "#
+        let test_data = FeatureDependencyGraph(BTreeMap::from([(
+            Feature::default(),
+            BTreeSet::from([Feature::default()]),
+        )]));
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#"{"": [""]}"#
         );
+
+        test_deserialization(r#"{"": [""]}"#, &test_data);
     }
 }

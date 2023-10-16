@@ -23,12 +23,20 @@ pub struct ShowMessageParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn show_message_params() {
+        let test_data = ShowMessageParams {
+            r#type: MessageType::default(),
+            task: Some(TaskId::default()),
+            origin_id: Some(RequestId::default()),
+            message: TEST_STRING.to_string(),
+        };
+
         assert_json_snapshot!(
-           ShowMessageParams {r#type: MessageType::default(), task: Some(TaskId::default()), origin_id: Some(RequestId::default()), message: TEST_STRING.to_string()},
+           test_data,
            @r#"
 {
   "type": 1,
@@ -39,6 +47,11 @@ mod tests {
   "message": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"type": 1, "task": {"id": ""}, "originId": "", "message": "test_string"}"#,
+            &test_data,
         );
     }
 }

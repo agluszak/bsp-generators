@@ -10,14 +10,19 @@ pub struct RunProvider {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn run_provider() {
+        let test_data = RunProvider {
+            language_ids: vec![LanguageId::default()],
+        };
+
         assert_json_snapshot!(
-           RunProvider {language_ids: vec![LanguageId::default()]},
+           test_data,
            @r#"
 {
   "languageIds": [
@@ -26,5 +31,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"languageIds": [""]}"#, &test_data);
     }
 }

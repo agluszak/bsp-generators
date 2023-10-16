@@ -21,12 +21,20 @@ pub struct ScalaMainClass {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_main_class() {
+        let test_data = ScalaMainClass {
+            class_name: TEST_STRING.to_string(),
+            arguments: vec![TEST_STRING.to_string()],
+            jvm_options: vec![TEST_STRING.to_string()],
+            environment_variables: Some(vec![TEST_STRING.to_string()]),
+        };
+
         assert_json_snapshot!(
-           ScalaMainClass {class_name: TEST_STRING.to_string(), arguments: vec![TEST_STRING.to_string()], jvm_options: vec![TEST_STRING.to_string()], environment_variables: Some(vec![TEST_STRING.to_string()])},
+           test_data,
            @r#"
 {
   "class": "test_string",
@@ -41,6 +49,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"class": "test_string", "arguments": ["test_string"], "jvmOptions": ["test_string"], "environmentVariables": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

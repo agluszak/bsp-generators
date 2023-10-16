@@ -12,14 +12,19 @@ pub struct WorkspaceBuildTargetsResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn workspace_build_targets_result() {
+        let test_data = WorkspaceBuildTargetsResult {
+            targets: vec![BuildTarget::default()],
+        };
+
         assert_json_snapshot!(
-           WorkspaceBuildTargetsResult {targets: vec![BuildTarget::default()]},
+           test_data,
            @r#"
 {
   "targets": [
@@ -35,6 +40,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"targets": [{"id": {"uri": ""}, "tags": [], "languageIds": [], "dependencies": [], "capabilities": {}}]}"#,
+            &test_data,
         );
     }
 }

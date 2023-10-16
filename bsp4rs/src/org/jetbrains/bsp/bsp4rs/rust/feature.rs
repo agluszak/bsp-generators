@@ -28,15 +28,17 @@ impl From<&str> for Feature {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn feature() {
-        assert_json_snapshot!(
-           Feature(TEST_STRING.to_string()),
-           @r#"
-"test_string"
-   "#
+        let test_data = Feature(TEST_STRING.to_string());
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#""test_string""#
         );
+
+        test_deserialization(r#""test_string""#, &test_data);
     }
 }

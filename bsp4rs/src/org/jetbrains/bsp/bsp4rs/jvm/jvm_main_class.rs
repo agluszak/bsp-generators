@@ -11,12 +11,18 @@ pub struct JvmMainClass {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn jvm_main_class() {
+        let test_data = JvmMainClass {
+            class_name: TEST_STRING.to_string(),
+            arguments: vec![TEST_STRING.to_string()],
+        };
+
         assert_json_snapshot!(
-           JvmMainClass {class_name: TEST_STRING.to_string(), arguments: vec![TEST_STRING.to_string()]},
+           test_data,
            @r#"
 {
   "className": "test_string",
@@ -25,6 +31,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"className": "test_string", "arguments": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

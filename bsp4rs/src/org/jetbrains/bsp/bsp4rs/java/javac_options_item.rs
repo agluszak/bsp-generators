@@ -22,12 +22,20 @@ pub struct JavacOptionsItem {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn javac_options_item() {
+        let test_data = JavacOptionsItem {
+            target: BuildTargetIdentifier::default(),
+            options: vec![TEST_STRING.to_string()],
+            classpath: vec![TEST_STRING.to_string()],
+            class_directory: TEST_STRING.to_string(),
+        };
+
         assert_json_snapshot!(
-           JavacOptionsItem {target: BuildTargetIdentifier::default(), options: vec![TEST_STRING.to_string()], classpath: vec![TEST_STRING.to_string()], class_directory: TEST_STRING.to_string()},
+           test_data,
            @r#"
 {
   "target": {
@@ -42,6 +50,11 @@ mod tests {
   "classDirectory": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "options": ["test_string"], "classpath": ["test_string"], "classDirectory": "test_string"}"#,
+            &test_data,
         );
     }
 }

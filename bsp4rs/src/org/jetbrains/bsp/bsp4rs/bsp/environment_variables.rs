@@ -24,17 +24,20 @@ impl std::ops::Deref for EnvironmentVariables {
 mod tests {
     use super::*;
     use crate::tests::*;
-    use insta::assert_json_snapshot;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn environment_variables() {
-        assert_json_snapshot!(
-           EnvironmentVariables(BTreeMap::from([(TEST_STRING.to_string(), TEST_STRING.to_string())])),
-           @r#"
-{
-  "test_string": "test_string"
-}
-   "#
+        let test_data = EnvironmentVariables(BTreeMap::from([(
+            TEST_STRING.to_string(),
+            TEST_STRING.to_string(),
+        )]));
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#"{"test_string": "test_string"}"#
         );
+
+        test_deserialization(r#"{"test_string": "test_string"}"#, &test_data);
     }
 }

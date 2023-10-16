@@ -10,14 +10,19 @@ pub struct DependencySourcesResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn dependency_sources_result() {
+        let test_data = DependencySourcesResult {
+            items: vec![DependencySourcesItem::default()],
+        };
+
         assert_json_snapshot!(
-           DependencySourcesResult {items: vec![DependencySourcesItem::default()]},
+           test_data,
            @r#"
 {
   "items": [
@@ -30,6 +35,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "sources": []}]}"#,
+            &test_data,
         );
     }
 }

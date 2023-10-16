@@ -31,7 +31,6 @@ impl Request for RustToolchain {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

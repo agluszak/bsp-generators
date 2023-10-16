@@ -10,14 +10,19 @@ pub struct SourcesResult {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn sources_result() {
+        let test_data = SourcesResult {
+            items: vec![SourcesItem::default()],
+        };
+
         assert_json_snapshot!(
-           SourcesResult {items: vec![SourcesItem::default()]},
+           test_data,
            @r#"
 {
   "items": [
@@ -30,6 +35,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"items": [{"target": {"uri": ""}, "sources": []}]}"#,
+            &test_data,
         );
     }
 }

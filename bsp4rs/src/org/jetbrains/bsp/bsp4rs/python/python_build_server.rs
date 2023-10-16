@@ -14,7 +14,6 @@ impl Request for BuildTargetPythonOptions {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

@@ -10,14 +10,19 @@ pub struct CompileProvider {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
 
     #[test]
     fn compile_provider() {
+        let test_data = CompileProvider {
+            language_ids: vec![LanguageId::default()],
+        };
+
         assert_json_snapshot!(
-           CompileProvider {language_ids: vec![LanguageId::default()]},
+           test_data,
            @r#"
 {
   "languageIds": [
@@ -26,5 +31,7 @@ mod tests {
 }
    "#
         );
+
+        test_deserialization(r#"{"languageIds": [""]}"#, &test_data);
     }
 }

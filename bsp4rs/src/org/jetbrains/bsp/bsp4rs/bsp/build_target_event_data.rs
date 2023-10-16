@@ -18,20 +18,15 @@ impl BuildTargetEventData {}
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn build_target_event_data() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            BuildTargetEventData::Other(OtherData::default()),
-           @r#"
-{
-  "dataKind": "",
-  "data": null
-}
-   "#
+           @r#"{"dataKind": "", "data": null}"#
         );
     }
 }

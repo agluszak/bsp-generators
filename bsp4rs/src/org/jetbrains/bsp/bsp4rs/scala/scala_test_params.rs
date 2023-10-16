@@ -20,12 +20,18 @@ pub struct ScalaTestParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn scala_test_params() {
+        let test_data = ScalaTestParams {
+            test_classes: Some(vec![ScalaTestClassesItem::default()]),
+            jvm_options: Some(vec![TEST_STRING.to_string()]),
+        };
+
         assert_json_snapshot!(
-           ScalaTestParams {test_classes: Some(vec![ScalaTestClassesItem::default()]), jvm_options: Some(vec![TEST_STRING.to_string()])},
+           test_data,
            @r#"
 {
   "testClasses": [
@@ -41,6 +47,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"testClasses": [{"target": {"uri": ""}, "classes": []}], "jvmOptions": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

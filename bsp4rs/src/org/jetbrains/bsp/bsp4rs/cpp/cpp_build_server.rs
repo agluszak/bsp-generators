@@ -14,7 +14,6 @@ impl Request for BuildTargetCppOptions {
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]

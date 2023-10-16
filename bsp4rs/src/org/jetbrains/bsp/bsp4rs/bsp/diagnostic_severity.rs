@@ -14,35 +14,34 @@ pub enum DiagnosticSeverity {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn diagnostic_severity() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            DiagnosticSeverity::Error,
-           @r#"
-1
-   "#
+           @r#"1"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"1"#, &DiagnosticSeverity::Error);
+
+        assert_compact_json_snapshot!(
            DiagnosticSeverity::Warning,
-           @r#"
-2
-   "#
+           @r#"2"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"2"#, &DiagnosticSeverity::Warning);
+
+        assert_compact_json_snapshot!(
            DiagnosticSeverity::Information,
-           @r#"
-3
-   "#
+           @r#"3"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"3"#, &DiagnosticSeverity::Information);
+
+        assert_compact_json_snapshot!(
            DiagnosticSeverity::Hint,
-           @r#"
-4
-   "#
+           @r#"4"#
         );
+        test_deserialization(r#"4"#, &DiagnosticSeverity::Hint);
     }
 }

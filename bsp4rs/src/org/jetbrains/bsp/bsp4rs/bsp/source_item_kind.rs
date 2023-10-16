@@ -14,23 +14,22 @@ pub enum SourceItemKind {
 
 #[cfg(test)]
 mod tests {
-    use insta::assert_json_snapshot;
-
     use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
 
     #[test]
     fn source_item_kind() {
-        assert_json_snapshot!(
+        assert_compact_json_snapshot!(
            SourceItemKind::File,
-           @r#"
-1
-   "#
+           @r#"1"#
         );
-        assert_json_snapshot!(
+        test_deserialization(r#"1"#, &SourceItemKind::File);
+
+        assert_compact_json_snapshot!(
            SourceItemKind::Directory,
-           @r#"
-2
-   "#
+           @r#"2"#
         );
+        test_deserialization(r#"2"#, &SourceItemKind::Directory);
     }
 }

@@ -20,12 +20,19 @@ pub struct CompileParams {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn compile_params() {
+        let test_data = CompileParams {
+            targets: vec![BuildTargetIdentifier::default()],
+            origin_id: Some(Identifier::default()),
+            arguments: Some(vec![TEST_STRING.to_string()]),
+        };
+
         assert_json_snapshot!(
-           CompileParams {targets: vec![BuildTargetIdentifier::default()], origin_id: Some(Identifier::default()), arguments: Some(vec![TEST_STRING.to_string()])},
+           test_data,
            @r#"
 {
   "targets": [
@@ -39,6 +46,11 @@ mod tests {
   ]
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"targets": [{"uri": ""}], "originId": "", "arguments": ["test_string"]}"#,
+            &test_data,
         );
     }
 }

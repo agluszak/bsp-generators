@@ -71,12 +71,31 @@ pub struct RustPackage {
 mod tests {
     use super::*;
     use crate::tests::*;
+
     use insta::assert_json_snapshot;
 
     #[test]
     fn rust_package() {
+        let test_data = RustPackage {
+            id: TEST_STRING.to_string(),
+            root_url: URI::default(),
+            name: TEST_STRING.to_string(),
+            version: TEST_STRING.to_string(),
+            origin: RustPackageOrigin::default(),
+            edition: RustEdition::default(),
+            source: Some(TEST_STRING.to_string()),
+            resolved_targets: vec![RustBuildTarget::default()],
+            all_targets: vec![RustBuildTarget::default()],
+            features: FeatureDependencyGraph::default(),
+            enabled_features: BTreeSet::from([Feature::default()]),
+            cfg_options: Some(RustCfgOptions::default()),
+            env: Some(EnvironmentVariables::default()),
+            out_dir_url: Some(URI::default()),
+            proc_macro_artifact: Some(TEST_STRING.to_string()),
+        };
+
         assert_json_snapshot!(
-           RustPackage {id: TEST_STRING.to_string(), root_url: URI::default(), name: TEST_STRING.to_string(), version: TEST_STRING.to_string(), origin: RustPackageOrigin::default(), edition: RustEdition::default(), source: Some(TEST_STRING.to_string()), resolved_targets: vec![RustBuildTarget::default()], all_targets: vec![RustBuildTarget::default()], features: FeatureDependencyGraph::default(), enabled_features: BTreeSet::from([Feature::default()]), cfg_options: Some(RustCfgOptions::default()), env: Some(EnvironmentVariables::default()), out_dir_url: Some(URI::default()), proc_macro_artifact: Some(TEST_STRING.to_string())},
+           test_data,
            @r#"
 {
   "id": "test_string",
@@ -114,6 +133,11 @@ mod tests {
   "procMacroArtifact": "test_string"
 }
    "#
+        );
+
+        test_deserialization(
+            r#"{"id": "test_string", "rootUrl": "", "name": "test_string", "version": "test_string", "origin": "", "edition": "", "source": "test_string", "resolvedTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "allTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "features": {}, "enabledFeatures": [""], "cfgOptions": {}, "env": {}, "outDirUrl": "", "procMacroArtifact": "test_string"}"#,
+            &test_data,
         );
     }
 }
