@@ -10,12 +10,12 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 public class CargoBuildTarget {
   @NonNull private String edition;
 
-  @NonNull private Set<String> required_features;
+  @NonNull private Set<String> requiredFeatures;
 
   public CargoBuildTarget(
-      @NonNull final String edition, @NonNull final Set<String> required_features) {
+      @NonNull final String edition, @NonNull final Set<String> requiredFeatures) {
     this.edition = edition;
-    this.required_features = required_features;
+    this.requiredFeatures = requiredFeatures;
   }
 
   @Pure
@@ -30,12 +30,12 @@ public class CargoBuildTarget {
 
   @Pure
   @NonNull
-  public Set<String> getRequired_features() {
-    return this.required_features;
+  public Set<String> getRequiredFeatures() {
+    return this.requiredFeatures;
   }
 
-  public void setRequired_features(@NonNull final Set<String> required_features) {
-    this.required_features = Preconditions.checkNotNull(required_features, "required_features");
+  public void setRequiredFeatures(@NonNull final Set<String> requiredFeatures) {
+    this.requiredFeatures = Preconditions.checkNotNull(requiredFeatures, "requiredFeatures");
   }
 
   @Override
@@ -43,7 +43,7 @@ public class CargoBuildTarget {
   public String toString() {
     ToStringBuilder b = new ToStringBuilder(this);
     b.add("edition", this.edition);
-    b.add("required_features", this.required_features);
+    b.add("requiredFeatures", this.requiredFeatures);
     return b.toString();
   }
 
@@ -57,9 +57,9 @@ public class CargoBuildTarget {
     if (this.edition == null) {
       if (other.edition != null) return false;
     } else if (!this.edition.equals(other.edition)) return false;
-    if (this.required_features == null) {
-      if (other.required_features != null) return false;
-    } else if (!this.required_features.equals(other.required_features)) return false;
+    if (this.requiredFeatures == null) {
+      if (other.requiredFeatures != null) return false;
+    } else if (!this.requiredFeatures.equals(other.requiredFeatures)) return false;
     return true;
   }
 
@@ -70,6 +70,6 @@ public class CargoBuildTarget {
     int result = 1;
     result = prime * result + ((this.edition == null) ? 0 : this.edition.hashCode());
     return prime * result
-        + ((this.required_features == null) ? 0 : this.required_features.hashCode());
+        + ((this.requiredFeatures == null) ? 0 : this.requiredFeatures.hashCode());
   }
 }
