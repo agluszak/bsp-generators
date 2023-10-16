@@ -33,17 +33,15 @@ mod tests {
             host: TEST_STRING.to_string(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "sysrootPath": "",
   "srcSysrootPath": "",
   "version": "test_string",
   "host": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"sysrootPath": "", "srcSysrootPath": "", "version": "test_string", "host": "test_string"}"#,

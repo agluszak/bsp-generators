@@ -35,17 +35,15 @@ mod tests {
             can_debug: Some(TEST_BOOL),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "canCompile": true,
   "canTest": true,
   "canRun": true,
   "canDebug": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"canCompile": true, "canTest": true, "canRun": true, "canDebug": true}"#,

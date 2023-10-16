@@ -25,9 +25,8 @@ mod tests {
             output_paths: vec![OutputPathItem::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -39,8 +38,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "outputPaths": [{"uri": "", "kind": 1}]}"#,

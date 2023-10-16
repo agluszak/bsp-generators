@@ -38,9 +38,8 @@ mod tests {
             data: Some(InitializeBuildParamsData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "displayName": "test_string",
   "version": "test_string",
@@ -52,8 +51,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"displayName": "test_string", "version": "test_string", "bspVersion": "test_string", "rootUri": "", "capabilities": {"languageIds": []}, "dataKind": "", "data": null}"#,

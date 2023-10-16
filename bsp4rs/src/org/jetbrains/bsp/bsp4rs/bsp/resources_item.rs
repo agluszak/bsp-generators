@@ -24,9 +24,8 @@ mod tests {
             resources: vec![URI::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -35,8 +34,7 @@ mod tests {
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"target": {"uri": ""}, "resources": [""]}"#, &test_data);
     }

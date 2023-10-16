@@ -27,9 +27,8 @@ mod tests {
             data: Some(DebugSessionParamsData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "targets": [
     {
@@ -39,8 +38,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"targets": [{"uri": ""}], "dataKind": "", "data": null}"#,

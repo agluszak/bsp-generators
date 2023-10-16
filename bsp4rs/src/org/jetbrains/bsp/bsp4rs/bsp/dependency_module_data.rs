@@ -31,9 +31,8 @@ mod tests {
 
     #[test]
     fn dependency_module_data() {
-        assert_json_snapshot!(
-           DependencyModuleData::maven(MavenDependencyModule::default()),
-           @r#"
+        assert_json_snapshot!(DependencyModuleData::maven(MavenDependencyModule::default()),
+@r#"
 {
   "dataKind": "maven",
   "data": {
@@ -43,8 +42,7 @@ mod tests {
     "artifacts": []
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            DependencyModuleData::Other(OtherData::default()),

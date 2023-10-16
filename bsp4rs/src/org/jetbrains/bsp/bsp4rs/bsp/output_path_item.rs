@@ -27,15 +27,13 @@ mod tests {
             kind: OutputPathItemKind::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "uri": "",
   "kind": 1
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"uri": "", "kind": 1}"#, &test_data);
     }

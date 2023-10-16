@@ -27,15 +27,13 @@ mod tests {
             interpreter: Some(URI::default()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "version": "test_string",
   "interpreter": ""
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"version": "test_string", "interpreter": ""}"#,

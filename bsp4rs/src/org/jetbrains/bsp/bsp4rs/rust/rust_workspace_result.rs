@@ -32,9 +32,8 @@ mod tests {
             resolved_targets: vec![BuildTargetIdentifier::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "packages": [
     {
@@ -58,8 +57,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"packages": [{"id": "", "rootUrl": "", "name": "", "version": "", "origin": "", "edition": "", "resolvedTargets": [], "allTargets": [], "features": {}, "enabledFeatures": []}], "rawDependencies": {}, "dependencies": {}, "resolvedTargets": [{"uri": ""}]}"#,

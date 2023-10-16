@@ -32,9 +32,8 @@ mod tests {
             enabled_features: BTreeSet::from([Feature::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "packageId": "test_string",
   "targets": [
@@ -47,8 +46,7 @@ mod tests {
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"packageId": "test_string", "targets": [{"uri": ""}], "availableFeatures": {}, "enabledFeatures": [""]}"#,

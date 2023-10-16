@@ -31,9 +31,8 @@ mod tests {
             dep_kinds: Some(vec![RustDepKindInfo::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "pkg": "test_string",
   "name": "test_string",
@@ -43,8 +42,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"pkg": "test_string", "name": "test_string", "depKinds": [{"kind": ""}]}"#,

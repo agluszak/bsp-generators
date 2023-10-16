@@ -29,9 +29,8 @@ mod tests {
             roots: Some(vec![URI::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -47,8 +46,7 @@ mod tests {
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "sources": [{"uri": "", "kind": 1, "generated": false}], "roots": [""]}"#,

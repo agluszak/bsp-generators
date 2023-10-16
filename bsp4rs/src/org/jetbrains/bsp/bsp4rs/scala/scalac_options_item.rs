@@ -34,9 +34,8 @@ mod tests {
             class_directory: TEST_STRING.to_string(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -49,8 +48,7 @@ mod tests {
   ],
   "classDirectory": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "options": ["test_string"], "classpath": ["test_string"], "classDirectory": "test_string"}"#,

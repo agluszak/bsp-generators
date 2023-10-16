@@ -25,9 +25,8 @@ mod tests {
             origin_id: Some(TEST_STRING.to_string()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "items": [
     {
@@ -39,8 +38,7 @@ mod tests {
   ],
   "originId": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"items": [{"target": {"uri": ""}, "classes": []}], "originId": "test_string"}"#,

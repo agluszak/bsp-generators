@@ -44,9 +44,8 @@ mod tests {
             data: Some(TestParamsData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "targets": [
     {
@@ -62,8 +61,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"targets": [{"uri": ""}], "originId": "", "arguments": ["test_string"], "environmentVariables": {}, "workingDirectory": "", "dataKind": "", "data": null}"#,

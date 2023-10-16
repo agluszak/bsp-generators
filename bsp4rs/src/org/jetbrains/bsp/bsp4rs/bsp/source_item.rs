@@ -31,16 +31,14 @@ mod tests {
             generated: TEST_BOOL,
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "uri": "",
   "kind": 1,
   "generated": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"uri": "", "kind": 1, "generated": true}"#, &test_data);
     }

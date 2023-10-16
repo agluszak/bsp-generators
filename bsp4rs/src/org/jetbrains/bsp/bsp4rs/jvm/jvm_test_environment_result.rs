@@ -21,9 +21,8 @@ mod tests {
             items: vec![JvmEnvironmentItem::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "items": [
     {
@@ -37,8 +36,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"items": [{"target": {"uri": ""}, "classpath": [], "jvmOptions": [], "workingDirectory": "", "environmentVariables": {}}]}"#,

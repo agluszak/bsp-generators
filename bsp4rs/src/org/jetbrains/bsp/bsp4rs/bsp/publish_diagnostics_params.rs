@@ -39,9 +39,8 @@ mod tests {
             reset: TEST_BOOL,
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "textDocument": {
     "uri": ""
@@ -67,8 +66,7 @@ mod tests {
   ],
   "reset": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"textDocument": {"uri": ""}, "buildTarget": {"uri": ""}, "originId": "", "diagnostics": [{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "message": ""}], "reset": true}"#,

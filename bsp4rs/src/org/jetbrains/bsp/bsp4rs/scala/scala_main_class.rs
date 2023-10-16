@@ -33,9 +33,8 @@ mod tests {
             environment_variables: Some(vec![TEST_STRING.to_string()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "class": "test_string",
   "arguments": [
@@ -48,8 +47,7 @@ mod tests {
     "test_string"
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"class": "test_string", "arguments": ["test_string"], "jvmOptions": ["test_string"], "environmentVariables": ["test_string"]}"#,

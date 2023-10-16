@@ -31,9 +31,8 @@ mod tests {
 
     #[test]
     fn run_params_data() {
-        assert_json_snapshot!(
-           RunParamsData::scala_main_class(ScalaMainClass::default()),
-           @r#"
+        assert_json_snapshot!(RunParamsData::scala_main_class(ScalaMainClass::default()),
+@r#"
 {
   "dataKind": "scala-main-class",
   "data": {
@@ -42,8 +41,7 @@ mod tests {
     "jvmOptions": []
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            RunParamsData::Other(OtherData::default()),

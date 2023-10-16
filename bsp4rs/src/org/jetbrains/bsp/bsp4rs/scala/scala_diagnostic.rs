@@ -26,9 +26,8 @@ mod tests {
             actions: Some(vec![ScalaAction::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "actions": [
     {
@@ -36,8 +35,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"actions": [{"title": ""}]}"#, &test_data);
     }

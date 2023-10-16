@@ -41,9 +41,8 @@ mod tests {
             jvm_build_target: Some(JvmBuildTarget::default()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "scalaOrganization": "test_string",
   "scalaVersion": "test_string",
@@ -54,8 +53,7 @@ mod tests {
   ],
   "jvmBuildTarget": {}
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"scalaOrganization": "test_string", "scalaVersion": "test_string", "scalaBinaryVersion": "test_string", "platform": 1, "jars": [""], "jvmBuildTarget": {}}"#,

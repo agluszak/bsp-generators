@@ -94,9 +94,8 @@ mod tests {
             proc_macro_artifact: Some(TEST_STRING.to_string()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "id": "test_string",
   "rootUrl": "",
@@ -132,8 +131,7 @@ mod tests {
   "outDirUrl": "",
   "procMacroArtifact": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"id": "test_string", "rootUrl": "", "name": "test_string", "version": "test_string", "origin": "", "edition": "", "source": "test_string", "resolvedTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "allTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "features": {}, "enabledFeatures": [""], "cfgOptions": {}, "env": {}, "outDirUrl": "", "procMacroArtifact": "test_string"}"#,

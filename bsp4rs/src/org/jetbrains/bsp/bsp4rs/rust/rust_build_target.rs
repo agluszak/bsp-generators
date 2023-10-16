@@ -47,9 +47,8 @@ mod tests {
             required_features: Some(BTreeSet::from([Feature::default()])),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "name": "test_string",
   "crateRootUrl": "",
@@ -63,8 +62,7 @@ mod tests {
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"name": "test_string", "crateRootUrl": "", "kind": 1, "crateTypes": [1], "edition": "", "doctest": true, "requiredFeatures": [""]}"#,

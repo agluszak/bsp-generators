@@ -51,9 +51,8 @@ mod tests {
             data: Some(TaskProgressData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "taskId": {
     "id": ""
@@ -67,8 +66,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "total": 2, "progress": 2, "unit": "test_string", "dataKind": "", "data": null}"#,

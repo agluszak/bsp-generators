@@ -39,29 +39,24 @@ mod tests {
 
     #[test]
     fn test_params_data() {
-        assert_json_snapshot!(
-           TestParamsData::scala_test(ScalaTestParams::default()),
-           @r#"
+        assert_json_snapshot!(TestParamsData::scala_test(ScalaTestParams::default()),
+@r#"
 {
   "dataKind": "scala-test",
   "data": {}
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           TestParamsData::scala_test_suites(Vec::<String>::default()),
-           @r#"
+        assert_json_snapshot!(TestParamsData::scala_test_suites(Vec::<String>::default()),
+@r#"
 {
   "dataKind": "scala-test-suites",
   "data": []
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           TestParamsData::scala_test_suites_selection(ScalaTestSuites::default()),
-           @r#"
+        assert_json_snapshot!(TestParamsData::scala_test_suites_selection(ScalaTestSuites::default()),
+@r#"
 {
   "dataKind": "scala-test-suites-selection",
   "data": {
@@ -70,8 +65,7 @@ mod tests {
     "environmentVariables": []
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            TestParamsData::Other(OtherData::default()),

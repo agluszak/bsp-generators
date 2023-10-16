@@ -22,14 +22,12 @@ mod tests {
             uri: URI::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "uri": ""
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"uri": ""}"#, &test_data);
     }

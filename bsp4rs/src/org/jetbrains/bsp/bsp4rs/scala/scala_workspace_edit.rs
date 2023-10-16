@@ -22,9 +22,8 @@ mod tests {
             changes: vec![ScalaTextEdit::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "changes": [
     {
@@ -42,8 +41,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"changes": [{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "newText": ""}]}"#,

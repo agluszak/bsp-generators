@@ -26,15 +26,13 @@ mod tests {
             target: Some(TEST_STRING.to_string()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "kind": "",
   "target": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"kind": "", "target": "test_string"}"#, &test_data);
     }

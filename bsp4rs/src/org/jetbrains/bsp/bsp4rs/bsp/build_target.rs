@@ -70,9 +70,8 @@ mod tests {
             data: Some(BuildTargetData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "id": {
     "uri": ""
@@ -94,8 +93,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"id": {"uri": ""}, "displayName": "test_string", "baseDirectory": "", "tags": [""], "languageIds": [""], "dependencies": [{"uri": ""}], "capabilities": {}, "dataKind": "", "data": null}"#,

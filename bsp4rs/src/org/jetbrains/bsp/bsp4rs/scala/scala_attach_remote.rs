@@ -16,12 +16,10 @@ mod tests {
     fn scala_attach_remote() {
         let test_data = ScalaAttachRemote {};
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {}
-   "#
-        );
+"#);
 
         test_deserialization(r#"{}"#, &test_data);
     }

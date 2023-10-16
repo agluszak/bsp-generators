@@ -23,9 +23,8 @@ mod tests {
             packages_features: vec![PackageFeatures::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "packagesFeatures": [
     {
@@ -36,8 +35,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"packagesFeatures": [{"packageId": "", "targets": [], "availableFeatures": {}, "enabledFeatures": []}]}"#,

@@ -49,9 +49,8 @@ mod tests {
             data: Some(DiagnosticData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "range": {
     "start": {
@@ -88,8 +87,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "severity": 1, "code": "test_string", "source": "test_string", "message": "test_string", "relatedInformation": [{"location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "message": ""}], "dataKind": "", "data": null}"#,

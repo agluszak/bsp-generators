@@ -88,9 +88,8 @@ mod tests {
             can_reload: Some(TEST_BOOL),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "compileProvider": {
     "languageIds": []
@@ -115,8 +114,7 @@ mod tests {
   "cargoFeaturesProvider": true,
   "canReload": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"compileProvider": {"languageIds": []}, "testProvider": {"languageIds": []}, "runProvider": {"languageIds": []}, "debugProvider": {"languageIds": []}, "inverseSourcesProvider": true, "dependencySourcesProvider": true, "dependencyModulesProvider": true, "resourcesProvider": true, "outputPathsProvider": true, "buildTargetChangedProvider": true, "jvmRunEnvironmentProvider": true, "jvmTestEnvironmentProvider": true, "cargoFeaturesProvider": true, "canReload": true}"#,

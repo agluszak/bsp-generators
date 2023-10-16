@@ -35,19 +35,16 @@ mod tests {
 
     #[test]
     fn debug_session_params_data() {
-        assert_json_snapshot!(
-           DebugSessionParamsData::scala_attach_remote(ScalaAttachRemote::default()),
-           @r#"
+        assert_json_snapshot!(DebugSessionParamsData::scala_attach_remote(ScalaAttachRemote::default()),
+@r#"
 {
   "dataKind": "scala-attach-remote",
   "data": {}
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           DebugSessionParamsData::scala_main_class(ScalaMainClass::default()),
-           @r#"
+        assert_json_snapshot!(DebugSessionParamsData::scala_main_class(ScalaMainClass::default()),
+@r#"
 {
   "dataKind": "scala-main-class",
   "data": {
@@ -56,8 +53,7 @@ mod tests {
     "jvmOptions": []
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            DebugSessionParamsData::Other(OtherData::default()),

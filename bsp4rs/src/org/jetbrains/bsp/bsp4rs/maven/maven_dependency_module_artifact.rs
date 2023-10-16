@@ -26,15 +26,13 @@ mod tests {
             classifier: Some(TEST_STRING.to_string()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "uri": "",
   "classifier": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"uri": "", "classifier": "test_string"}"#, &test_data);
     }

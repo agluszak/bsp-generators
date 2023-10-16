@@ -21,16 +21,14 @@ mod tests {
             text_document: TextDocumentIdentifier::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "textDocument": {
     "uri": ""
   }
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"textDocument": {"uri": ""}}"#, &test_data);
     }

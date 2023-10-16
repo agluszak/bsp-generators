@@ -24,15 +24,13 @@ mod tests {
             cleaned: TEST_BOOL,
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "message": "test_string",
   "cleaned": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"message": "test_string", "cleaned": true}"#, &test_data);
     }

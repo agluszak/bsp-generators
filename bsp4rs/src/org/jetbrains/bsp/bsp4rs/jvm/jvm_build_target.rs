@@ -31,15 +31,13 @@ mod tests {
             java_version: Some(TEST_STRING.to_string()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "javaHome": "",
   "javaVersion": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"javaHome": "", "javaVersion": "test_string"}"#,

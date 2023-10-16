@@ -45,9 +45,8 @@ mod tests {
             time: Some(TEST_LONG),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "originId": "",
   "target": {
@@ -60,8 +59,7 @@ mod tests {
   "skipped": 1,
   "time": 2
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"originId": "", "target": {"uri": ""}, "passed": 1, "failed": 1, "ignored": 1, "cancelled": 1, "skipped": 1, "time": 2}"#,

@@ -21,9 +21,8 @@ mod tests {
             changes: vec![BuildTargetEvent::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "changes": [
     {
@@ -33,8 +32,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"changes": [{"target": {"uri": ""}}]}"#, &test_data);
     }

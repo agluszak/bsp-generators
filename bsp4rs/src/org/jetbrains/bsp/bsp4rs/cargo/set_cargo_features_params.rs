@@ -26,17 +26,15 @@ mod tests {
             features: BTreeSet::from([Feature::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "packageId": "test_string",
   "features": [
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"packageId": "test_string", "features": [""]}"#,

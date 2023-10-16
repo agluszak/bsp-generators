@@ -41,9 +41,8 @@ mod tests {
             linkshared: Some(TEST_BOOL),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -59,8 +58,7 @@ mod tests {
   ],
   "linkshared": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "copts": ["test_string"], "defines": ["test_string"], "linkopts": ["test_string"], "linkshared": true}"#,

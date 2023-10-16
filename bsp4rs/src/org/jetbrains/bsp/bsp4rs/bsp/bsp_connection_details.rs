@@ -33,9 +33,8 @@ mod tests {
             languages: vec![TEST_STRING.to_string()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "name": "test_string",
   "argv": [
@@ -47,8 +46,7 @@ mod tests {
     "test_string"
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"name": "test_string", "argv": ["test_string"], "version": "test_string", "bspVersion": "test_string", "languages": ["test_string"]}"#,

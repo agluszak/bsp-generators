@@ -42,9 +42,8 @@ mod tests {
             data: Some(TaskFinishData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "taskId": {
     "id": ""
@@ -56,8 +55,7 @@ mod tests {
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "status": 1, "dataKind": "", "data": null}"#,

@@ -45,9 +45,8 @@ mod tests {
             no_op: Some(TEST_BOOL),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -58,8 +57,7 @@ mod tests {
   "time": 2,
   "noOp": true
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "originId": "", "errors": 1, "warnings": 1, "time": 2, "noOp": true}"#,

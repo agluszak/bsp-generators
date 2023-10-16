@@ -35,9 +35,8 @@ mod tests {
             message: TEST_STRING.to_string(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "type": 1,
   "task": {
@@ -46,8 +45,7 @@ mod tests {
   "originId": "",
   "message": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"type": 1, "task": {"id": ""}, "originId": "", "message": "test_string"}"#,

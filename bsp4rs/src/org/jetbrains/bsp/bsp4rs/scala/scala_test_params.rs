@@ -30,9 +30,8 @@ mod tests {
             jvm_options: Some(vec![TEST_STRING.to_string()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "testClasses": [
     {
@@ -46,8 +45,7 @@ mod tests {
     "test_string"
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"testClasses": [{"target": {"uri": ""}, "classes": []}], "jvmOptions": ["test_string"]}"#,

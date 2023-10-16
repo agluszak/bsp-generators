@@ -23,15 +23,13 @@ mod tests {
             character: TEST_INT,
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "line": 1,
   "character": 1
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"line": 1, "character": 1}"#, &test_data);
     }

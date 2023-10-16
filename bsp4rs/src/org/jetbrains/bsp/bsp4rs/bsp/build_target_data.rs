@@ -55,9 +55,8 @@ mod tests {
 
     #[test]
     fn build_target_data() {
-        assert_json_snapshot!(
-           BuildTargetData::cargo(CargoBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::cargo(CargoBuildTarget::default()),
+@r#"
 {
   "dataKind": "cargo",
   "data": {
@@ -65,42 +64,34 @@ mod tests {
     "requiredFeatures": []
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           BuildTargetData::cpp(CppBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::cpp(CppBuildTarget::default()),
+@r#"
 {
   "dataKind": "cpp",
   "data": {}
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           BuildTargetData::jvm(JvmBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::jvm(JvmBuildTarget::default()),
+@r#"
 {
   "dataKind": "jvm",
   "data": {}
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           BuildTargetData::python(PythonBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::python(PythonBuildTarget::default()),
+@r#"
 {
   "dataKind": "python",
   "data": {}
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           BuildTargetData::rust(RustBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::rust(RustBuildTarget::default()),
+@r#"
 {
   "dataKind": "rust",
   "data": {
@@ -111,12 +102,10 @@ mod tests {
     "doctest": false
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           BuildTargetData::sbt(SbtBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::sbt(SbtBuildTarget::default()),
+@r#"
 {
   "dataKind": "sbt",
   "data": {
@@ -132,12 +121,10 @@ mod tests {
     "children": []
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           BuildTargetData::scala(ScalaBuildTarget::default()),
-           @r#"
+        assert_json_snapshot!(BuildTargetData::scala(ScalaBuildTarget::default()),
+@r#"
 {
   "dataKind": "scala",
   "data": {
@@ -148,8 +135,7 @@ mod tests {
     "jars": []
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            BuildTargetData::Other(OtherData::default()),

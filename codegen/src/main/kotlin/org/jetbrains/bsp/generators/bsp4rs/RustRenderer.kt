@@ -173,12 +173,10 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
         val prettyJson = gson.toJson(jsonElement)
 
-        return """assert_json_snapshot!(
-            |   $testedValue, 
-            |   @r#"
+        return """assert_json_snapshot!($testedValue,
+            |@r#"
             |$prettyJson
-            |   "#
-            |);""".trimMargin()
+            |"#);""".trimMargin()
     }
 
     fun renderDeserializationTest(testedValue: String, expectedJson: String): String {

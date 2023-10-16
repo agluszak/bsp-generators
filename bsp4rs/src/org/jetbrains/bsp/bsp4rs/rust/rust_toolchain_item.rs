@@ -30,9 +30,8 @@ mod tests {
             proc_macro_srv_path: URI::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "rustStdLib": {
     "sysrootPath": "",
@@ -43,8 +42,7 @@ mod tests {
   "cargoBinPath": "",
   "procMacroSrvPath": ""
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"rustStdLib": {"sysrootPath": "", "srcSysrootPath": "", "version": "", "host": ""}, "cargoBinPath": "", "procMacroSrvPath": ""}"#,

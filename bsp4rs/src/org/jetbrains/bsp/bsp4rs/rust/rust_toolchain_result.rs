@@ -22,9 +22,8 @@ mod tests {
             toolchains: vec![RustToolchainItem::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "toolchains": [
     {
@@ -33,8 +32,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"toolchains": [{"cargoBinPath": "", "procMacroSrvPath": ""}]}"#,

@@ -45,9 +45,8 @@ mod tests {
 
     #[test]
     fn task_finish_data() {
-        assert_json_snapshot!(
-           TaskFinishData::compile_report(CompileReport::default()),
-           @r#"
+        assert_json_snapshot!(TaskFinishData::compile_report(CompileReport::default()),
+@r#"
 {
   "dataKind": "compile-report",
   "data": {
@@ -58,12 +57,10 @@ mod tests {
     "warnings": 0
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           TaskFinishData::test_finish(TestFinish::default()),
-           @r#"
+        assert_json_snapshot!(TaskFinishData::test_finish(TestFinish::default()),
+@r#"
 {
   "dataKind": "test-finish",
   "data": {
@@ -71,12 +68,10 @@ mod tests {
     "status": 1
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           TaskFinishData::test_report(TestReport::default()),
-           @r#"
+        assert_json_snapshot!(TaskFinishData::test_report(TestReport::default()),
+@r#"
 {
   "dataKind": "test-report",
   "data": {
@@ -90,8 +85,7 @@ mod tests {
     "skipped": 0
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            TaskFinishData::Other(OtherData::default()),

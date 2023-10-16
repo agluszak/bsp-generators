@@ -23,9 +23,8 @@ mod tests {
             end: Position::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "start": {
     "line": 0,
@@ -36,8 +35,7 @@ mod tests {
     "character": 0
   }
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}"#,

@@ -23,9 +23,8 @@ mod tests {
             targets: vec![BuildTarget::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "targets": [
     {
@@ -39,8 +38,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"targets": [{"id": {"uri": ""}, "tags": [], "languageIds": [], "dependencies": [], "capabilities": {}}]}"#,

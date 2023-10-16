@@ -30,17 +30,15 @@ mod tests {
             data: Some(DependencyModuleData::Other(OtherData::default())),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "name": "test_string",
   "version": "test_string",
   "dataKind": "",
   "data": null
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"name": "test_string", "version": "test_string", "dataKind": "", "data": null}"#,

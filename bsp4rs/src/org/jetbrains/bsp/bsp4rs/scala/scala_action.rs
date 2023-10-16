@@ -35,9 +35,8 @@ mod tests {
             edit: Some(ScalaWorkspaceEdit::default()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "title": "test_string",
   "description": "test_string",
@@ -45,8 +44,7 @@ mod tests {
     "changes": []
   }
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"title": "test_string", "description": "test_string", "edit": {"changes": []}}"#,

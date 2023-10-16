@@ -28,9 +28,8 @@ mod tests {
             message: TEST_STRING.to_string(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "location": {
     "uri": "",
@@ -47,8 +46,7 @@ mod tests {
   },
   "message": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "message": "test_string"}"#,

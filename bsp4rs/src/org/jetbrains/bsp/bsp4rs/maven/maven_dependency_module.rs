@@ -37,9 +37,8 @@ mod tests {
             scope: Some(TEST_STRING.to_string()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "organization": "test_string",
   "name": "test_string",
@@ -51,8 +50,7 @@ mod tests {
   ],
   "scope": "test_string"
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"organization": "test_string", "name": "test_string", "version": "test_string", "artifacts": [{"uri": ""}], "scope": "test_string"}"#,

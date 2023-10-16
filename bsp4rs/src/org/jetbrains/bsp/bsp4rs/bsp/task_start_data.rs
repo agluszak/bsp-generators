@@ -45,9 +45,8 @@ mod tests {
 
     #[test]
     fn task_start_data() {
-        assert_json_snapshot!(
-           TaskStartData::compile_task(CompileTask::default()),
-           @r#"
+        assert_json_snapshot!(TaskStartData::compile_task(CompileTask::default()),
+@r#"
 {
   "dataKind": "compile-task",
   "data": {
@@ -56,24 +55,20 @@ mod tests {
     }
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           TaskStartData::test_start(TestStart::default()),
-           @r#"
+        assert_json_snapshot!(TaskStartData::test_start(TestStart::default()),
+@r#"
 {
   "dataKind": "test-start",
   "data": {
     "displayName": ""
   }
 }
-   "#
-        );
+"#);
 
-        assert_json_snapshot!(
-           TaskStartData::test_task(TestTask::default()),
-           @r#"
+        assert_json_snapshot!(TaskStartData::test_task(TestTask::default()),
+@r#"
 {
   "dataKind": "test-task",
   "data": {
@@ -82,8 +77,7 @@ mod tests {
     }
   }
 }
-   "#
-        );
+"#);
 
         assert_compact_json_snapshot!(
            TaskStartData::Other(OtherData::default()),

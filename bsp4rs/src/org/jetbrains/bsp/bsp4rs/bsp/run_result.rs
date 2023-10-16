@@ -26,15 +26,13 @@ mod tests {
             status_code: StatusCode::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "originId": "",
   "statusCode": 1
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"originId": "", "statusCode": 1}"#, &test_data);
     }

@@ -44,9 +44,8 @@ mod tests {
             features: BTreeSet::from([Feature::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "name": "test_string",
   "rename": "test_string",
@@ -58,8 +57,7 @@ mod tests {
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"name": "test_string", "rename": "test_string", "kind": "", "target": "test_string", "optional": true, "usesDefaultFeatures": true, "features": [""]}"#,

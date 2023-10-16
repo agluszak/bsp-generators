@@ -21,16 +21,14 @@ mod tests {
             language_ids: vec![LanguageId::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "languageIds": [
     ""
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"languageIds": [""]}"#, &test_data);
     }

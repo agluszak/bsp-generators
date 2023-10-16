@@ -21,17 +21,15 @@ mod tests {
             arguments: vec![TEST_STRING.to_string()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "className": "test_string",
   "arguments": [
     "test_string"
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"className": "test_string", "arguments": ["test_string"]}"#,

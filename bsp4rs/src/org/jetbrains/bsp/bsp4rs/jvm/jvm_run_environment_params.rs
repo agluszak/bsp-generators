@@ -24,9 +24,8 @@ mod tests {
             origin_id: Some(Identifier::default()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "targets": [
     {
@@ -35,8 +34,7 @@ mod tests {
   ],
   "originId": ""
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"targets": [{"uri": ""}], "originId": ""}"#, &test_data);
     }

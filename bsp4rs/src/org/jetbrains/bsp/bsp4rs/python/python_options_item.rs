@@ -25,9 +25,8 @@ mod tests {
             interpreter_options: vec![TEST_STRING.to_string()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -36,8 +35,7 @@ mod tests {
     "test_string"
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "interpreterOptions": ["test_string"]}"#,

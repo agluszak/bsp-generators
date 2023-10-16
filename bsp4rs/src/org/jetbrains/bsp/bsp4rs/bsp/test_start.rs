@@ -26,9 +26,8 @@ mod tests {
             location: Some(Location::default()),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "displayName": "test_string",
   "location": {
@@ -45,8 +44,7 @@ mod tests {
     }
   }
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"displayName": "test_string", "location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}}"#,

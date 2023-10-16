@@ -22,9 +22,8 @@ mod tests {
             items: vec![ScalaTestClassesItem::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "items": [
     {
@@ -35,8 +34,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"items": [{"target": {"uri": ""}, "classes": []}]}"#,

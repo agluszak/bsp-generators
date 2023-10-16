@@ -44,9 +44,8 @@ mod tests {
             children: vec![BuildTargetIdentifier::default()],
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "sbtVersion": "test_string",
   "autoImports": [
@@ -68,8 +67,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"sbtVersion": "test_string", "autoImports": ["test_string"], "scalaBuildTarget": {"scalaOrganization": "", "scalaVersion": "", "scalaBinaryVersion": "", "platform": 1, "jars": []}, "parent": {"uri": ""}, "children": [{"uri": ""}]}"#,

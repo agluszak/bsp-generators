@@ -32,9 +32,8 @@ mod tests {
             main_classes: Some(vec![JvmMainClass::default()]),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
@@ -54,8 +53,7 @@ mod tests {
     }
   ]
 }
-   "#
-        );
+"#);
 
         test_deserialization(
             r#"{"target": {"uri": ""}, "classpath": ["test_string"], "jvmOptions": ["test_string"], "workingDirectory": "test_string", "environmentVariables": {}, "mainClasses": [{"className": "", "arguments": []}]}"#,

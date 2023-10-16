@@ -25,16 +25,14 @@ mod tests {
             target: BuildTargetIdentifier::default(),
         };
 
-        assert_json_snapshot!(
-           test_data,
-           @r#"
+        assert_json_snapshot!(test_data,
+@r#"
 {
   "target": {
     "uri": ""
   }
 }
-   "#
-        );
+"#);
 
         test_deserialization(r#"{"target": {"uri": ""}}"#, &test_data);
     }
