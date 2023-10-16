@@ -2,6 +2,8 @@ package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderType
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefault
+import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefaultJson
 import org.jetbrains.bsp.generators.bsp4rs.renderTypeJson
 import org.jetbrains.bsp.generators.bsp4rs.renderTypeTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
@@ -46,4 +48,10 @@ fun RustRenderer.renderUntaggedUnionTest(def: Def.UntaggedUnion): CodeBlock {
     }
 }
 
-fun RustRenderer.renderUntaggedUnionDefault(def: Def.UntaggedUnion): String = TODO()
+fun RustRenderer.renderUntaggedUnionDefault(def: Def.UntaggedUnion): String = def.members.first().let {
+    "${def.name}::${renderType(it).camelCaseUpperCamelCase()}(${renderTypeDefault(it)})"
+}
+
+fun RustRenderer.renderUntaggedUnionDefaultJson(def: Def.UntaggedUnion): String = def.members.first().let {
+    renderTypeDefaultJson(it)
+}

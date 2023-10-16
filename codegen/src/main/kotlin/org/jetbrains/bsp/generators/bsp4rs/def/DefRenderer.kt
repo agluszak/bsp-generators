@@ -36,5 +36,6 @@ fun RustRenderer.renderDefDefaultJson(def: Def): String = when (def) {
     is Def.Structure -> renderStructureDefaultJson(def)
     is Def.ClosedEnum<*> -> renderClosedEnumDefaultJson(def)
     is Def.OpenEnum<*> -> renderOpenEnumDefaultJson(def)
+    is Def.UntaggedUnion -> renderUntaggedUnionDefaultJson(def)
     else -> ""
 }
