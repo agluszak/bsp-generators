@@ -5,8 +5,8 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 )]
 #[repr(u8)]
 pub enum MessageType {
-    #[default]
     /// An error message.
+    #[default]
     Error = 1,
     /// A warning message.
     Warning = 2,

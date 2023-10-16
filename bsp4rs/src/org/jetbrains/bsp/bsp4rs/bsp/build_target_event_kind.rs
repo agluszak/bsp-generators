@@ -7,8 +7,8 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 )]
 #[repr(u8)]
 pub enum BuildTargetEventKind {
-    #[default]
     /// The build target is new.
+    #[default]
     Created = 1,
     /// The build target has changed.
     Changed = 2,

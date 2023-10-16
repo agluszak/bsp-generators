@@ -12,16 +12,16 @@ fun RustRenderer.renderClosedEnum(def: Def.ClosedEnum<*>): CodeBlock =
     rustCode {
         include(renderPreDef(def))
         block("pub enum ${def.name}") {
-            if (def.values.isNotEmpty())
-                -"#[default]"
-
-            def.values.forEach { value ->
-                include(renderEnumValue(value))
+            def.values.first().let { firstValue ->
+                include(renderEnumValue(firstValue, true))
+            }
+            def.values.drop(1).forEach { value ->
+                include(renderEnumValue(value, false))
             }
         }
     }
 
-private fun RustRenderer.renderEnumValue(ev: EnumValue<*>): CodeBlock {
+private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, is_first: Boolean): CodeBlock {
     val enumValueName = makeName(ev.name).snakeToUpperCamelCase()
 
     val enumVal = when (ev.value) {
@@ -32,6 +32,7 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>): CodeBlock {
 
     return rustCode {
         include(renderHints(ev.hints))
+        if (is_first) -"#[default]"
         -"$enumVal,"
     }
 }

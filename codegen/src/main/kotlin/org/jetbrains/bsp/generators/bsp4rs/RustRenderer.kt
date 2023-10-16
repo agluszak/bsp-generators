@@ -7,11 +7,7 @@ import org.jetbrains.bsp.generators.bsp4rs.def.renderDef
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDefTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
-import org.jetbrains.bsp.generators.ir.Def
-import org.jetbrains.bsp.generators.ir.EnumValue
-import org.jetbrains.bsp.generators.ir.Field
-import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.ir.*
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
@@ -111,13 +107,6 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     fun makeName(name: String): String =
         renames[name] ?: name
 
-    fun renderVariantsEnum(name: String, values: List<Pair<String, String>>): CodeBlock =
-        rustCode {
-            block("pub enum $name") {
-                lines(values.map { "${it.first}(${it.second})" }, ",", ",")
-            }
-        }
-
     fun renderPreDef(def: Def, hints: Boolean = true, untagged: Boolean = false): CodeBlock =
         rustCode {
             if (hints)
@@ -141,6 +130,13 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
     private fun renderDeprecated(hints: List<Hint.Deprecated>): List<String> {
         return hints.map { """#[deprecated(note = "${it.message}")]""" }
     }
+
+    fun renderVariantsEnum(name: String, values: List<Pair<String, String>>): CodeBlock =
+        rustCode {
+            block("pub enum $name") {
+                lines(values.map { "${it.first}(${it.second})" }, ",", ",")
+            }
+        }
 
     fun renderEnumTest(name: String, values: List<EnumValue<*>>, fn: (String) -> String): CodeBlock {
         fun renderEnumValueTest(value: EnumValue<*>): CodeBlock {

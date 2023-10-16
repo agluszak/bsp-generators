@@ -5,8 +5,8 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 )]
 #[repr(u8)]
 pub enum TestStatus {
-    #[default]
     /// The test passed successfully.
+    #[default]
     Passed = 1,
     /// The test failed.
     Failed = 2,

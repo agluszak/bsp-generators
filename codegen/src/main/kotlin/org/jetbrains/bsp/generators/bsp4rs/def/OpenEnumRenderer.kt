@@ -56,7 +56,6 @@ private fun renderConstructor(type: EnumType<*>): CodeBlock =
         }
     }
 
-// TODO (Kasia): add unknown enumVal
 fun RustRenderer.renderOpenEnumTest(def: Def.OpenEnum<*>): CodeBlock =
     renderEnumTest(def.name, def.values) { it.uppercase() }
 

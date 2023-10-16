@@ -5,8 +5,8 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 )]
 #[repr(u8)]
 pub enum RustTargetKind {
-    #[default]
     /// For lib targets.
+    #[default]
     Lib = 1,
     /// For binaries.
     Bin = 2,
