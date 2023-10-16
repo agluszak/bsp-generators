@@ -39,7 +39,6 @@ impl Request for BuildTargetScalacOptions {
 #[derive(Debug)]
 pub enum BuildTargetScalaTestClasses {}
 
-#[allow(deprecated)]
 impl Request for BuildTargetScalaTestClasses {
     type Params = ScalaTestClassesParams;
     type Result = ScalaTestClassesResult;
@@ -60,7 +59,6 @@ impl Request for BuildTargetScalaTestClasses {
 #[derive(Debug)]
 pub enum BuildTargetScalaMainClasses {}
 
-#[allow(deprecated)]
 impl Request for BuildTargetScalaMainClasses {
     type Params = ScalaMainClassesParams;
     type Result = ScalaMainClassesResult;
@@ -79,7 +77,6 @@ mod tests {
         );
     }
 
-    #[allow(deprecated)]
     #[test]
     fn build_target_scala_test_classes_method() {
         assert_eq!(
@@ -88,7 +85,6 @@ mod tests {
         );
     }
 
-    #[allow(deprecated)]
     #[test]
     fn build_target_scala_main_classes_method() {
         assert_eq!(

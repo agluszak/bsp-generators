@@ -9,6 +9,8 @@ import kotlin.io.path.Path
 
 fun RustRenderer.generateLibFile(modulesNames: List<String>): CodegenFile {
     val code = rustCode {
+        -"#![allow(deprecated)]"
+        newline()
         include(renderImports(false))
         newline()
         lines(modulesNames.map { "pub mod $it" }, ";", ";")

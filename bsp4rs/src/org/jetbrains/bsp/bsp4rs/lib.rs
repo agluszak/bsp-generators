@@ -1,3 +1,5 @@
+#![allow(deprecated)]
+
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 

@@ -38,11 +38,9 @@ object Main {
 
         val clippy =
             "cargo clippy -q --fix --allow-no-vcs --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
-        val fix =
-            "cargo fix -q --allow-no-vcs --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
         val fmt = "cargo fmt --all --manifest-path \$BUILD_WORKSPACE_DIRECTORY/$name/Cargo.toml"
 
-        val generator = FilesGenerator(name, output, generatorScript, codegenFiles, listOf(clippy, fix, fmt))
+        val generator = FilesGenerator(name, output, generatorScript, codegenFiles, listOf(clippy, fmt))
         generator.generateFiles()
         generator.writeScript()
     }
