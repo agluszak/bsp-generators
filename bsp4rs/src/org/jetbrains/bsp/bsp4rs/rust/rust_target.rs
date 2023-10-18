@@ -3,11 +3,10 @@ use serde::{Deserialize, Serialize};
 use crate::*;
 use std::collections::BTreeSet;
 
-/// This structure is embedded in the `data?: BuildTargetData` field, when the
-/// `dataKind` field contains "rust".
+/// `RustTarget` contains data of the target as defined in Cargo metadata.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RustBuildTarget {
+pub struct RustTarget {
     /// The name of the target.
     pub name: String,
     /// Path to the root module of the crate.

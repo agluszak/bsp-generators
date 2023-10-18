@@ -2,12 +2,10 @@ $version: "2"
 
 namespace bsp.rust
 
-use bsp#BuildTargetData
 use bsp#BuildTargetIdentifiers
 use bsp#EnvironmentVariables
 use bsp#URI
 use traits#enumKind
-use traits#dataKind
 use traits#jsonRPC
 use traits#jsonRequest
 use traits#set
@@ -16,7 +14,6 @@ use traits#set
 service RustBuildServer {
     operations: [
         RustWorkspace
-        RustToolchain
     ]
 }
 
@@ -46,11 +43,13 @@ structure RustWorkspaceResult {
     /// Packages of given targets.
     @required
     packages: RustPackages
-    /// Dependencies as listed in the package `Cargo.toml`,
+    /// Dependencies in `cargo metadata` as listed in the package `Cargo.toml`,
     /// without package resolution or any additional data.
     @required
     rawDependencies: RustRawDependencies
-    /// Resolved dependencies of the package. Handles renamed dependencies.
+    /// Resolved dependencies of the build. Handles renamed dependencies.
+    /// Correspond to dependencies from resolved dependency graph from `cargo metadata` that shows
+    /// the actual dependencies that are being used in the build.
     @required
     dependencies: RustDependencies
     /// A sequence of build targets taken into consideration during build process.
@@ -93,21 +92,23 @@ structure RustPackage {
     /// Code edition of the package.
     @required
     edition: RustEdition
-    /// The source ID of the dependency, `null` for the root package and path dependencies.
+    /// The source ID of the dependency, for example:
+    /// "registry+https://github.com/rust-lang/crates.io-index".
+    /// `null` for the root package and path dependencies.
     source: String
     /// Corresponds to source files which can be compiled into a crate from this package.
     /// Contains only resolved targets without conflicts.
     @required
     resolvedTargets: RustTargets
-    /// Same as `targets`, but contains all targets from this package.
+    /// Same as `resolvedTargets`, but contains all targets from this package.
     /// `targets` should be the subset of `allTargets`.
     @required
     allTargets: RustTargets
-    /// Set of features defined for the package.
+    /// Set of features defined for the package (including optional dependencies).
     /// Each feature maps to an array of features or dependencies it enables.
     /// The entry named "default" defines which features are enabled by default.
     @required
-    features: FeatureDependencyGraph
+    features: FeaturesDependencyGraph
     /// Array of features enabled on this package.
     @required
     enabledFeatures: Features
@@ -126,17 +127,15 @@ structure RustPackage {
     /// File path to compiled output of a procedural macro crate.
     /// Procedural macros are macros that generate code at compile time.
     /// Contains files with file extensions: `.dll`, `.so` or `.dylib`.
-    procMacroArtifact: String
+    procMacroArtifact: URI
 }
 
 list RustTargets {
-    member: RustBuildTarget
+    member: RustTarget
 }
 
-/// This structure is embedded in the `data?: BuildTargetData` field, when the
-/// `dataKind` field contains "rust".
-@dataKind(kind: "rust", extends: [BuildTargetData])
-structure RustBuildTarget {
+/// `RustTarget` contains data of the target as defined in Cargo metadata.
+structure RustTarget {
     /// The name of the target.
     @required
     name: String
@@ -214,13 +213,22 @@ list Features {
 
 /// The feature dependency graph is a mapping between
 /// feature and the features it turns on
-map FeatureDependencyGraph {
-    key: Feature,
+map FeaturesDependencyGraph {
+    key: Feature
     value: Features
 }
 
+/// The Rust edition.
+@enumKind("open")
+enum RustEdition {
+    E2015 = "2015"
+    E2018 = "2018"
+    E2021 = "2021"
+}
+
+/// The RustRawDependencies is a mapping between
+/// package id and the package's raw dependencies info.
 map RustRawDependencies {
-    /// Package id
     key: String
     value: RustRawDependenciesInfo
 }
@@ -234,6 +242,9 @@ structure RustRawDependency {
     @required
     name: String
     /// Name to which this dependency is renamed when declared in Cargo.toml.
+    /// This field allows to specify an alternative name for a dependency to use in a code,
+    /// regardless of how it’s published (helpful for example if multiple dependencies
+    /// have conflicting names).
     rename: String
     /// The dependency kind.
     kind: RustDepKind
@@ -250,8 +261,9 @@ structure RustRawDependency {
     features: Features
 }
 
+/// The RustDependencies is a mapping between
+/// package id and the package's dependencies info.
 map RustDependencies {
-    /// Package id
     key: String
     value: RustDependenciesInfo
 }
@@ -296,13 +308,6 @@ enum RustDepKind {
 }
 
 @enumKind("open")
-enum RustEdition {
-    E2015 = "2015"
-    E2018 = "2018"
-    E2021 = "2021"
-}
-
-@enumKind("open")
 enum RustPackageOrigin {
     /// The package comes from the standard library.
     STDLIB = "stdlib"
@@ -312,62 +317,4 @@ enum RustPackageOrigin {
     DEPENDENCY = "dependency"
     /// External dependency of [STDLIB] or other [STDLIB_DEPENDENCY] package.
     STDLIB_DEPENDENCY = "stdlib-dependency"
-}
-
-/// The Rust toolchain request is sent from the client to the server to query for
-/// the information about project's toolchain for the given list of build targets.
-///
-/// The request is essential to connect and work with `intellij-rust` plugin.
-@unstable
-@jsonRequest("buildTarget/rustToolchain")
-operation RustToolchain {
-    input: RustToolchainParams
-    output: RustToolchainResult
-}
-
-@unstable
-structure RustToolchainParams {
-    /// A sequence of build targets for toolchain resolution.
-    @required
-    targets: BuildTargetIdentifiers
-}
-
-@unstable
-structure RustToolchainResult {
-    /// A sequence of Rust toolchains.
-    @required
-    toolchains: RustToolchainItems
-}
-
-list RustToolchainItems {
-    member: RustToolchainItem
-}
-
-structure RustToolchainItem {
-    /// Additional information about Rust toolchain.
-    /// Obtained from `rustc`.
-    rustStdLib: RustcInfo
-    /// Path to Cargo executable.
-    @required
-    cargoBinPath: URI
-    /// Location of the source code of procedural macros in the Rust toolchain.
-    @required
-    procMacroSrvPath: URI
-}
-
-structure RustcInfo {
-    /// Root directory where the Rust compiler looks for standard libraries and other
-    /// essential components when building Rust projects.
-    @required
-    sysrootPath: URI
-    /// Source code for the Rust standard library.
-    @required
-    srcSysrootPath: URI
-    /// `rustc` SemVer (Semantic Versioning) version.
-    @required
-    version: String
-    /// Target architecture and operating system of the Rust compiler.
-    /// Used by [`intellij-rust`] for checking if given toolchain is supported.
-    @required
-    host: String
 }

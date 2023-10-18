@@ -24,9 +24,9 @@ public class RustPackage {
 
   private String source;
 
-  @NonNull private List<RustBuildTarget> resolvedTargets;
+  @NonNull private List<RustTarget> resolvedTargets;
 
-  @NonNull private List<RustBuildTarget> allTargets;
+  @NonNull private List<RustTarget> allTargets;
 
   @NonNull private Map<String, Set<String>> features;
 
@@ -47,8 +47,8 @@ public class RustPackage {
       @NonNull final String version,
       @NonNull final String origin,
       @NonNull final String edition,
-      @NonNull final List<RustBuildTarget> resolvedTargets,
-      @NonNull final List<RustBuildTarget> allTargets,
+      @NonNull final List<RustTarget> resolvedTargets,
+      @NonNull final List<RustTarget> allTargets,
       @NonNull final Map<String, Set<String>> features,
       @NonNull final Set<String> enabledFeatures) {
     this.id = id;
@@ -134,21 +134,21 @@ public class RustPackage {
 
   @Pure
   @NonNull
-  public List<RustBuildTarget> getResolvedTargets() {
+  public List<RustTarget> getResolvedTargets() {
     return this.resolvedTargets;
   }
 
-  public void setResolvedTargets(@NonNull final List<RustBuildTarget> resolvedTargets) {
+  public void setResolvedTargets(@NonNull final List<RustTarget> resolvedTargets) {
     this.resolvedTargets = Preconditions.checkNotNull(resolvedTargets, "resolvedTargets");
   }
 
   @Pure
   @NonNull
-  public List<RustBuildTarget> getAllTargets() {
+  public List<RustTarget> getAllTargets() {
     return this.allTargets;
   }
 
-  public void setAllTargets(@NonNull final List<RustBuildTarget> allTargets) {
+  public void setAllTargets(@NonNull final List<RustTarget> allTargets) {
     this.allTargets = Preconditions.checkNotNull(allTargets, "allTargets");
   }
 

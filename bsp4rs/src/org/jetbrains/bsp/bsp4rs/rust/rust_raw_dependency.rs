@@ -9,6 +9,9 @@ pub struct RustRawDependency {
     /// The name of the dependency.
     pub name: String,
     /// Name to which this dependency is renamed when declared in Cargo.toml.
+    /// This field allows to specify an alternative name for a dependency to use in a code,
+    /// regardless of how it’s published (helpful for example if multiple dependencies
+    /// have conflicting names).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rename: Option<String>,
     /// The dependency kind.

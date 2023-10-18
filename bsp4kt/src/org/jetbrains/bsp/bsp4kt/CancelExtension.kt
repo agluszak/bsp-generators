@@ -4,8 +4,8 @@ import org.jetbrains.jsonrpc4kt.services.JsonNotification
 import org.jetbrains.jsonrpc4kt.services.JsonRequest
 import kotlinx.serialization.SerialName
 
-interface RustBuildServer {
-  @JsonRequest("buildTarget/rustWorkspace")
-  suspend fun rustWorkspace(params: RustWorkspaceParams): RustWorkspaceResult
+interface CancelExtension {
+  @JsonNotification("$/cancelRequest")
+  fun cancelRequest(params: CancelRequestParams): Unit
 
 }

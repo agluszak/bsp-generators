@@ -98,6 +98,6 @@ cargo-specific metadata.
 export interface CargoBuildTarget {
   edition: RustEdition;
 
-  required_features: Set<Feature>;
+  requiredFeatures: Set<Feature>;
 }
 ```

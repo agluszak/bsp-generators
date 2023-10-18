@@ -5,9 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class RustcInfo(
-  val sysrootPath: String,
-  val srcSysrootPath: String,
-  val version: String,
-  val host: String
+data class CancelRequestParams(
+  val id: RequestId
 )

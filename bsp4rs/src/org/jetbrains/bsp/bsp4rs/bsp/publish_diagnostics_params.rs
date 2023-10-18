@@ -14,7 +14,7 @@ pub struct PublishDiagnosticsParams {
     pub build_target: BuildTargetIdentifier,
     /// The request id that originated this notification.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub origin_id: Option<RequestId>,
+    pub origin_id: Option<OriginId>,
     /// The diagnostics to be published by the client.
     pub diagnostics: Vec<Diagnostic>,
     /// Whether the client should clear the previous diagnostics
