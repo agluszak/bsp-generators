@@ -11,3 +11,29 @@ pub struct Position {
     /// to the line length.
     pub character: i32,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn position() {
+        let test_data = Position {
+            line: TEST_INT,
+            character: TEST_INT,
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "line": 1,
+  "character": 1
+}
+"#);
+
+        test_deserialization(r#"{"line": 1, "character": 1}"#, &test_data);
+    }
+}

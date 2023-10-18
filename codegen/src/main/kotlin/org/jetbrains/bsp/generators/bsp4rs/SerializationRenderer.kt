@@ -71,13 +71,6 @@ class SerializationRenderer {
     }
 
     private fun fieldToSerdeList(field: Field): Set<SerdeOption> {
-        fun optionalToSerdeList(type: Type): SerdeOption = when (type) {
-            is Type.List -> SerdeOption.SkipVector
-            is Type.Map -> SerdeOption.SkipMap
-            is Type.Set -> SerdeOption.SkipSet
-            else -> SerdeOption.SkipOption
-        }
-
         var serdeOpt = emptySet<SerdeOption>()
 
         if (field.type is Type.Ref && field.name == "data") {
@@ -85,8 +78,7 @@ class SerializationRenderer {
         }
 
         if (!field.required) {
-            serdeOpt = serdeOpt.plus(SerdeOption.Default)
-            serdeOpt = serdeOpt.plus(optionalToSerdeList(field.type))
+            serdeOpt = serdeOpt.plus(SerdeOption.SkipOption)
         }
 
         return serdeOpt
@@ -105,23 +97,18 @@ class SerializationRenderer {
     }
 
     sealed class SerdeOption(val key: String, val value: String) {
-        object Default : SerdeOption("default", "")
         object Transparent : SerdeOption("transparent", "")
         object Untagged : SerdeOption("untagged", "")
         object Flatten : SerdeOption("flatten", "")
+        object SkipOption : SerdeOption("skip_serializing_if", """"Option::is_none"""")
         class Rename(name: String) : SerdeOption("rename", name)
         class RenameAll(case: String) : SerdeOption("rename_all", case)
-        class SkipSerialization(fn: String) : SerdeOption("skip_serializing_if", fn)
         class Tag(tag: String) : SerdeOption("tag", tag)
         class Content(content: String) : SerdeOption("content", content)
 
         companion object {
             val RenameAllCamelCase = RenameAll(""""camelCase"""")
             val RenameAllKebabCase = RenameAll(""""kebab-case"""")
-            val SkipOption = SkipSerialization(""""Option::is_none"""")
-            val SkipVector = SkipSerialization(""""Vec::is_empty"""")
-            val SkipMap = SkipSerialization(""""BTreeMap::is_empty"""")
-            val SkipSet = SkipSerialization(""""BTreeSet::is_empty"""")
             val TagDataKind = Tag(""""dataKind"""")
             val ContentData = Content(""""data"""")
         }

@@ -10,6 +10,47 @@ pub struct SourcesItem {
     pub sources: Vec<SourceItem>,
     /// The root directories from where source files should be relativized.
     /// Example: ["file://Users/name/dev/metals/src/main/scala"]
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub roots: Vec<URI>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub roots: Option<Vec<URI>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn sources_item() {
+        let test_data = SourcesItem {
+            target: BuildTargetIdentifier::default(),
+            sources: vec![SourceItem::default()],
+            roots: Some(vec![URI::default()]),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "sources": [
+    {
+      "uri": "",
+      "kind": 1,
+      "generated": false
+    }
+  ],
+  "roots": [
+    ""
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "sources": [{"uri": "", "kind": 1, "generated": false}], "roots": [""]}"#,
+            &test_data,
+        );
+    }
 }

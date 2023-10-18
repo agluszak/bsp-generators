@@ -15,6 +15,34 @@ pub struct TaskId {
     /// execution.
     /// OriginId should not be included in the parents field, there is a separate
     /// field for that.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub parents: Vec<Identifier>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parents: Option<Vec<Identifier>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn task_id() {
+        let test_data = TaskId {
+            id: Identifier::default(),
+            parents: Some(vec![Identifier::default()]),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "id": "",
+  "parents": [
+    ""
+  ]
+}
+"#);
+
+        test_deserialization(r#"{"id": "", "parents": [""]}"#, &test_data);
+    }
 }

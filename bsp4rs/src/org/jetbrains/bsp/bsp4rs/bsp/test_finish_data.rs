@@ -15,3 +15,18 @@ pub enum TestFinishData {
 }
 
 impl TestFinishData {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn test_finish_data() {
+        assert_compact_json_snapshot!(
+           TestFinishData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

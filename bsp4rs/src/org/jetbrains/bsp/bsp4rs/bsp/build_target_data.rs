@@ -41,3 +41,87 @@ impl BuildTargetData {
         Self::Named(NamedBuildTargetData::Scala(data))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn build_target_data() {
+        assert_json_snapshot!(BuildTargetData::cargo(CargoBuildTarget::default()),
+@r#"
+{
+  "dataKind": "cargo",
+  "data": {
+    "edition": "",
+    "requiredFeatures": []
+  }
+}
+"#);
+
+        assert_json_snapshot!(BuildTargetData::cpp(CppBuildTarget::default()),
+@r#"
+{
+  "dataKind": "cpp",
+  "data": {}
+}
+"#);
+
+        assert_json_snapshot!(BuildTargetData::jvm(JvmBuildTarget::default()),
+@r#"
+{
+  "dataKind": "jvm",
+  "data": {}
+}
+"#);
+
+        assert_json_snapshot!(BuildTargetData::python(PythonBuildTarget::default()),
+@r#"
+{
+  "dataKind": "python",
+  "data": {}
+}
+"#);
+
+        assert_json_snapshot!(BuildTargetData::sbt(SbtBuildTarget::default()),
+@r#"
+{
+  "dataKind": "sbt",
+  "data": {
+    "sbtVersion": "",
+    "autoImports": [],
+    "scalaBuildTarget": {
+      "scalaOrganization": "",
+      "scalaVersion": "",
+      "scalaBinaryVersion": "",
+      "platform": 1,
+      "jars": []
+    },
+    "children": []
+  }
+}
+"#);
+
+        assert_json_snapshot!(BuildTargetData::scala(ScalaBuildTarget::default()),
+@r#"
+{
+  "dataKind": "scala",
+  "data": {
+    "scalaOrganization": "",
+    "scalaVersion": "",
+    "scalaBinaryVersion": "",
+    "platform": 1,
+    "jars": []
+  }
+}
+"#);
+
+        assert_compact_json_snapshot!(
+           BuildTargetData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

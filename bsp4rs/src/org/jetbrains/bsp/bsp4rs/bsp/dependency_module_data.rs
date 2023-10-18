@@ -21,3 +21,32 @@ impl DependencyModuleData {
         Self::Named(NamedDependencyModuleData::Maven(data))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn dependency_module_data() {
+        assert_json_snapshot!(DependencyModuleData::maven(MavenDependencyModule::default()),
+@r#"
+{
+  "dataKind": "maven",
+  "data": {
+    "organization": "",
+    "name": "",
+    "version": "",
+    "artifacts": []
+  }
+}
+"#);
+
+        assert_compact_json_snapshot!(
+           DependencyModuleData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

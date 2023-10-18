@@ -9,18 +9,51 @@ use crate::*;
 pub struct CppBuildTarget {
     /// The c++ version this target is supposed to use.
     /// For example: C++11
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
     /// The type of compiler this target is supposed to use.
     /// For example: gcc
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub compiler: Option<String>,
     /// Uri representating path to the c compiler.
     /// For example: file:///usr/bin/gcc
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub c_compiler: Option<URI>,
     /// Uri representating path to the c++ compiler.
     /// For example: file:///usr/bin/g++
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cpp_compiler: Option<URI>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn cpp_build_target() {
+        let test_data = CppBuildTarget {
+            version: Some(TEST_STRING.to_string()),
+            compiler: Some(TEST_STRING.to_string()),
+            c_compiler: Some(URI::default()),
+            cpp_compiler: Some(URI::default()),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "version": "test_string",
+  "compiler": "test_string",
+  "cCompiler": "",
+  "cppCompiler": ""
+}
+"#);
+
+        test_deserialization(
+            r#"{"version": "test_string", "compiler": "test_string", "cCompiler": "", "cppCompiler": ""}"#,
+            &test_data,
+        );
+    }
 }

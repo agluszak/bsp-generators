@@ -15,3 +15,31 @@ pub struct SourceItem {
     /// intended to be manually edited by the user.
     pub generated: bool,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn source_item() {
+        let test_data = SourceItem {
+            uri: URI::default(),
+            kind: SourceItemKind::default(),
+            generated: TEST_BOOL,
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "uri": "",
+  "kind": 1,
+  "generated": true
+}
+"#);
+
+        test_deserialization(r#"{"uri": "", "kind": 1, "generated": true}"#, &test_data);
+    }
+}

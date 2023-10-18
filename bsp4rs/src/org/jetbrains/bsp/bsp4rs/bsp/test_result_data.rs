@@ -15,3 +15,18 @@ pub enum TestResultData {
 }
 
 impl TestResultData {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn test_result_data() {
+        assert_compact_json_snapshot!(
+           TestResultData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

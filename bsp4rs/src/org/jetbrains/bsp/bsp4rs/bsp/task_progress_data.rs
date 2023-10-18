@@ -18,3 +18,18 @@ pub enum TaskProgressData {
 }
 
 impl TaskProgressData {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn task_progress_data() {
+        assert_compact_json_snapshot!(
+           TaskProgressData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

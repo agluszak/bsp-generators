@@ -10,3 +10,39 @@ pub struct OutputPathsItem {
     /// Output paths.
     pub output_paths: Vec<OutputPathItem>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn output_paths_item() {
+        let test_data = OutputPathsItem {
+            target: BuildTargetIdentifier::default(),
+            output_paths: vec![OutputPathItem::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "outputPaths": [
+    {
+      "uri": "",
+      "kind": 1
+    }
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "outputPaths": [{"uri": "", "kind": 1}]}"#,
+            &test_data,
+        );
+    }
+}

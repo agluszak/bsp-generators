@@ -11,3 +11,29 @@ use crate::*;
 pub struct TestTask {
     pub target: BuildTargetIdentifier,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn test_task() {
+        let test_data = TestTask {
+            target: BuildTargetIdentifier::default(),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "target": {
+    "uri": ""
+  }
+}
+"#);
+
+        test_deserialization(r#"{"target": {"uri": ""}}"#, &test_data);
+    }
+}

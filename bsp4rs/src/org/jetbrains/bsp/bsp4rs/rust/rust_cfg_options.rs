@@ -6,6 +6,12 @@ use std::collections::BTreeMap;
 #[serde(transparent)]
 pub struct RustCfgOptions(pub BTreeMap<String, Vec<String>>);
 
+impl RustCfgOptions {
+    pub fn new(input: BTreeMap<String, Vec<String>>) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for RustCfgOptions {
     type Target = BTreeMap<String, Vec<String>>;
 
@@ -14,8 +20,24 @@ impl std::ops::Deref for RustCfgOptions {
     }
 }
 
-impl From<BTreeMap<String, Vec<String>>> for RustCfgOptions {
-    fn from(input: BTreeMap<String, Vec<String>>) -> Self {
-        Self(input)
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn rust_cfg_options() {
+        let test_data = RustCfgOptions(BTreeMap::from([(
+            TEST_STRING.to_string(),
+            vec![TEST_STRING.to_string()],
+        )]));
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#"{"test_string": ["test_string"]}"#
+        );
+
+        test_deserialization(r#"{"test_string": ["test_string"]}"#, &test_data);
     }
 }

@@ -15,3 +15,42 @@ pub struct BspConnectionDetails {
     /// The languages supported by the BSP server.
     pub languages: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn bsp_connection_details() {
+        let test_data = BspConnectionDetails {
+            name: TEST_STRING.to_string(),
+            argv: vec![TEST_STRING.to_string()],
+            version: TEST_STRING.to_string(),
+            bsp_version: TEST_STRING.to_string(),
+            languages: vec![TEST_STRING.to_string()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "name": "test_string",
+  "argv": [
+    "test_string"
+  ],
+  "version": "test_string",
+  "bspVersion": "test_string",
+  "languages": [
+    "test_string"
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"name": "test_string", "argv": ["test_string"], "version": "test_string", "bspVersion": "test_string", "languages": ["test_string"]}"#,
+            &test_data,
+        );
+    }
+}

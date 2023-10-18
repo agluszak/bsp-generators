@@ -9,6 +9,34 @@ use crate::*;
 pub struct ScalaDiagnostic {
     /// Actions (also known as quick fixes) that are able to either fix or address
     /// the issue that is causing this diagnostic.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub actions: Vec<ScalaAction>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<ScalaAction>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_diagnostic() {
+        let test_data = ScalaDiagnostic {
+            actions: Some(vec![ScalaAction::default()]),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "actions": [
+    {
+      "title": ""
+    }
+  ]
+}
+"#);
+
+        test_deserialization(r#"{"actions": [{"title": ""}]}"#, &test_data);
+    }
 }

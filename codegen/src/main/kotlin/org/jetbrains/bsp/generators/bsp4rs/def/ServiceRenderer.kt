@@ -7,6 +7,7 @@ import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
+import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 
 fun RustRenderer.renderService(def: Def.Service): CodeBlock =
     rustCode {
@@ -21,10 +22,10 @@ private fun RustRenderer.renderOperation(op: Operation): CodeBlock {
     val traitName = renderJsonRpcMethodType(op.jsonRpcMethodType)
 
     return rustCode {
+        include(renderHints(op.hints))
         include(deriveRenderer.renderForOperation())
         block("pub enum $name") {}
         newline()
-        include(renderHints(op.hints))
         block("impl $traitName for $name") {
             include(renderOperationTraitProperties(op))
         }
@@ -47,5 +48,24 @@ private fun RustRenderer.renderOperationTraitProperties(op: Operation): CodeBloc
 
     return rustCode {
         lines(listOfNotNull(input, output, method), join = ";", end = ";")
+    }
+}
+
+fun RustRenderer.renderServiceTest(def: Def.Service): CodeBlock =
+    rustCode {
+        def.operations.forEach { operation ->
+            include(renderOperationTest(operation))
+            newline()
+        }
+    }
+
+private fun RustRenderer.renderOperationTest(op: Operation): CodeBlock {
+    val name = makeName(op.name)
+
+    return rustCode {
+        -"#[test]"
+        block("fn ${name.camelToSnakeCase()}_method()") {
+            -"""assert_eq!($name::METHOD, "${op.jsonRpcMethod}");"""
+        }
     }
 }

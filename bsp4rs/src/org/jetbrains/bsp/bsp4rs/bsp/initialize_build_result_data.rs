@@ -15,3 +15,18 @@ pub enum InitializeBuildResultData {
 }
 
 impl InitializeBuildResultData {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn initialize_build_result_data() {
+        assert_compact_json_snapshot!(
+           InitializeBuildResultData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

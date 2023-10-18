@@ -11,3 +11,31 @@ pub struct CargoBuildTarget {
     pub edition: RustEdition,
     pub required_features: BTreeSet<Feature>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn cargo_build_target() {
+        let test_data = CargoBuildTarget {
+            edition: RustEdition::default(),
+            required_features: BTreeSet::from([Feature::default()]),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "edition": "",
+  "requiredFeatures": [
+    ""
+  ]
+}
+"#);
+
+        test_deserialization(r#"{"edition": "", "requiredFeatures": [""]}"#, &test_data);
+    }
+}

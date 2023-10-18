@@ -8,3 +8,31 @@ pub struct CleanCacheParams {
     /// The build targets to clean.
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn clean_cache_params() {
+        let test_data = CleanCacheParams {
+            targets: vec![BuildTargetIdentifier::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+"#);
+
+        test_deserialization(r#"{"targets": [{"uri": ""}]}"#, &test_data);
+    }
+}

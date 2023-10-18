@@ -15,3 +15,18 @@ pub enum CompileResultData {
 }
 
 impl CompileResultData {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn compile_result_data() {
+        assert_compact_json_snapshot!(
+           CompileResultData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

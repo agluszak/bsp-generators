@@ -9,3 +9,40 @@ pub struct WorkspaceBuildTargetsResult {
     /// contain sources with the given language ids.
     pub targets: Vec<BuildTarget>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn workspace_build_targets_result() {
+        let test_data = WorkspaceBuildTargetsResult {
+            targets: vec![BuildTarget::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "targets": [
+    {
+      "id": {
+        "uri": ""
+      },
+      "tags": [],
+      "languageIds": [],
+      "dependencies": [],
+      "capabilities": {}
+    }
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"targets": [{"id": {"uri": ""}, "tags": [], "languageIds": [], "dependencies": [], "capabilities": {}}]}"#,
+            &test_data,
+        );
+    }
+}

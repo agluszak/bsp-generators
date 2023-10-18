@@ -9,6 +9,12 @@ use std::collections::{BTreeMap, BTreeSet};
 #[serde(transparent)]
 pub struct FeaturesDependencyGraph(pub BTreeMap<Feature, BTreeSet<Feature>>);
 
+impl FeaturesDependencyGraph {
+    pub fn new(input: BTreeMap<Feature, BTreeSet<Feature>>) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for FeaturesDependencyGraph {
     type Target = BTreeMap<Feature, BTreeSet<Feature>>;
 
@@ -17,8 +23,24 @@ impl std::ops::Deref for FeaturesDependencyGraph {
     }
 }
 
-impl From<BTreeMap<Feature, BTreeSet<Feature>>> for FeaturesDependencyGraph {
-    fn from(input: BTreeMap<Feature, BTreeSet<Feature>>) -> Self {
-        Self(input)
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn features_dependency_graph() {
+        let test_data = FeaturesDependencyGraph(BTreeMap::from([(
+            Feature::default(),
+            BTreeSet::from([Feature::default()]),
+        )]));
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#"{"": [""]}"#
+        );
+
+        test_deserialization(r#"{"": [""]}"#, &test_data);
     }
 }

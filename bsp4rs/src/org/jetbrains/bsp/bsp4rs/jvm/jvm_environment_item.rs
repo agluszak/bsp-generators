@@ -10,6 +10,54 @@ pub struct JvmEnvironmentItem {
     pub jvm_options: Vec<String>,
     pub working_directory: String,
     pub environment_variables: EnvironmentVariables,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub main_classes: Vec<JvmMainClass>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub main_classes: Option<Vec<JvmMainClass>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn jvm_environment_item() {
+        let test_data = JvmEnvironmentItem {
+            target: BuildTargetIdentifier::default(),
+            classpath: vec![TEST_STRING.to_string()],
+            jvm_options: vec![TEST_STRING.to_string()],
+            working_directory: TEST_STRING.to_string(),
+            environment_variables: EnvironmentVariables::default(),
+            main_classes: Some(vec![JvmMainClass::default()]),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "classpath": [
+    "test_string"
+  ],
+  "jvmOptions": [
+    "test_string"
+  ],
+  "workingDirectory": "test_string",
+  "environmentVariables": {},
+  "mainClasses": [
+    {
+      "className": "",
+      "arguments": []
+    }
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"target": {"uri": ""}, "classpath": ["test_string"], "jvmOptions": ["test_string"], "workingDirectory": "test_string", "environmentVariables": {}, "mainClasses": [{"className": "", "arguments": []}]}"#,
+            &test_data,
+        );
+    }
 }

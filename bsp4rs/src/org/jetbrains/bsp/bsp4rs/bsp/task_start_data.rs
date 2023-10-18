@@ -35,3 +35,53 @@ impl TaskStartData {
         Self::Named(NamedTaskStartData::TestTask(data))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn task_start_data() {
+        assert_json_snapshot!(TaskStartData::compile_task(CompileTask::default()),
+@r#"
+{
+  "dataKind": "compile-task",
+  "data": {
+    "target": {
+      "uri": ""
+    }
+  }
+}
+"#);
+
+        assert_json_snapshot!(TaskStartData::test_start(TestStart::default()),
+@r#"
+{
+  "dataKind": "test-start",
+  "data": {
+    "displayName": ""
+  }
+}
+"#);
+
+        assert_json_snapshot!(TaskStartData::test_task(TestTask::default()),
+@r#"
+{
+  "dataKind": "test-task",
+  "data": {
+    "target": {
+      "uri": ""
+    }
+  }
+}
+"#);
+
+        assert_compact_json_snapshot!(
+           TaskStartData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

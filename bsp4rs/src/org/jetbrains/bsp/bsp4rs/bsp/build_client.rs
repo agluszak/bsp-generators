@@ -1,29 +1,26 @@
 use crate::*;
 
-#[derive(Debug)]
-pub enum OnBuildShowMessage {}
-
 /// The show message notification is sent from a server to a client to ask the client to display a particular message in the user interface.
 ///
 /// A build/showMessage notification is similar to LSP's window/showMessage, except for a few additions like id and originId.
+#[derive(Debug)]
+pub enum OnBuildShowMessage {}
+
 impl Notification for OnBuildShowMessage {
     type Params = ShowMessageParams;
     const METHOD: &'static str = "build/showMessage";
 }
 
-#[derive(Debug)]
-pub enum OnBuildLogMessage {}
-
 /// The log message notification is sent from a server to a client to ask the client to log a particular message in its console.
 ///
 /// A build/logMessage notification is similar to LSP's window/logMessage, except for a few additions like id and originId.
+#[derive(Debug)]
+pub enum OnBuildLogMessage {}
+
 impl Notification for OnBuildLogMessage {
     type Params = LogMessageParams;
     const METHOD: &'static str = "build/logMessage";
 }
-
-#[derive(Debug)]
-pub enum OnBuildPublishDiagnostics {}
 
 /// The Diagnostics notification are sent from the server to the client to signal results of validation runs.
 ///
@@ -39,24 +36,24 @@ pub enum OnBuildPublishDiagnostics {}
 ///
 /// The optional originId field in the definition of PublishDiagnosticsParams can be used by clients to know which request originated the notification.
 /// This field will be defined if the client defined it in the original request that triggered this notification.
+#[derive(Debug)]
+pub enum OnBuildPublishDiagnostics {}
+
 impl Notification for OnBuildPublishDiagnostics {
     type Params = PublishDiagnosticsParams;
     const METHOD: &'static str = "build/publishDiagnostics";
 }
 
-#[derive(Debug)]
-pub enum OnBuildTargetDidChange {}
-
 /// The build target changed notification is sent from the server to the client to
 /// signal a change in a build target. The server communicates during the initialize
 /// handshake whether this method is supported or not.
+#[derive(Debug)]
+pub enum OnBuildTargetDidChange {}
+
 impl Notification for OnBuildTargetDidChange {
     type Params = DidChangeBuildTarget;
     const METHOD: &'static str = "buildTarget/didChange";
 }
-
-#[derive(Debug)]
-pub enum OnBuildTaskStart {}
 
 /// The BSP server can inform the client on the execution state of any task in the
 /// build tool. The execution of some tasks, such as compilation or tests, must
@@ -78,47 +75,103 @@ pub enum OnBuildTaskStart {}
 /// Tasks that are spawned by another task should reference the originating task's
 /// `taskId` in their own `taskId`'s `parent` field. Tasks spawned directly by a
 /// request should reference the request's `originId` parent.
+#[derive(Debug)]
+pub enum OnBuildTaskStart {}
+
 impl Notification for OnBuildTaskStart {
     type Params = TaskStartParams;
     const METHOD: &'static str = "build/taskStart";
 }
 
+/// After a `taskStart` and before `taskFinish` for a `taskId`, the server may send
+/// any number of progress notifications.
 #[derive(Debug)]
 pub enum OnBuildTaskProgress {}
 
-/// After a `taskStart` and before `taskFinish` for a `taskId`, the server may send
-/// any number of progress notifications.
 impl Notification for OnBuildTaskProgress {
     type Params = TaskProgressParams;
     const METHOD: &'static str = "build/taskProgress";
 }
 
+/// A `build/taskFinish` notification must always be sent after a `build/taskStart`
+/// with the same `taskId` was sent.
 #[derive(Debug)]
 pub enum OnBuildTaskFinish {}
 
-/// A `build/taskFinish` notification must always be sent after a `build/taskStart`
-/// with the same `taskId` was sent.
 impl Notification for OnBuildTaskFinish {
     type Params = TaskFinishParams;
     const METHOD: &'static str = "build/taskFinish";
 }
 
+/// Notification sent from the server to the client when the target being run or tested
+/// prints something to stdout.
 #[derive(Debug)]
 pub enum OnRunPrintStdout {}
 
-/// Notification sent from the server to the client when the target being run or tested
-/// prints something to stdout.
 impl Notification for OnRunPrintStdout {
     type Params = PrintParams;
     const METHOD: &'static str = "run/printStdout";
 }
 
+/// Notification sent from the server to the client when the target being run or tested
+/// prints something to stderr.
 #[derive(Debug)]
 pub enum OnRunPrintStderr {}
 
-/// Notification sent from the server to the client when the target being run or tested
-/// prints something to stderr.
 impl Notification for OnRunPrintStderr {
     type Params = PrintParams;
     const METHOD: &'static str = "run/printStderr";
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn on_build_show_message_method() {
+        assert_eq!(OnBuildShowMessage::METHOD, "build/showMessage");
+    }
+
+    #[test]
+    fn on_build_log_message_method() {
+        assert_eq!(OnBuildLogMessage::METHOD, "build/logMessage");
+    }
+
+    #[test]
+    fn on_build_publish_diagnostics_method() {
+        assert_eq!(
+            OnBuildPublishDiagnostics::METHOD,
+            "build/publishDiagnostics"
+        );
+    }
+
+    #[test]
+    fn on_build_target_did_change_method() {
+        assert_eq!(OnBuildTargetDidChange::METHOD, "buildTarget/didChange");
+    }
+
+    #[test]
+    fn on_build_task_start_method() {
+        assert_eq!(OnBuildTaskStart::METHOD, "build/taskStart");
+    }
+
+    #[test]
+    fn on_build_task_progress_method() {
+        assert_eq!(OnBuildTaskProgress::METHOD, "build/taskProgress");
+    }
+
+    #[test]
+    fn on_build_task_finish_method() {
+        assert_eq!(OnBuildTaskFinish::METHOD, "build/taskFinish");
+    }
+
+    #[test]
+    fn on_run_print_stdout_method() {
+        assert_eq!(OnRunPrintStdout::METHOD, "run/printStdout");
+    }
+
+    #[test]
+    fn on_run_print_stderr_method() {
+        assert_eq!(OnRunPrintStderr::METHOD, "run/printStderr");
+    }
 }

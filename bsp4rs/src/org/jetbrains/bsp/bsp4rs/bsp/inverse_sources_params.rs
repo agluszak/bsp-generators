@@ -7,3 +7,29 @@ use crate::*;
 pub struct InverseSourcesParams {
     pub text_document: TextDocumentIdentifier,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn inverse_sources_params() {
+        let test_data = InverseSourcesParams {
+            text_document: TextDocumentIdentifier::default(),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "textDocument": {
+    "uri": ""
+  }
+}
+"#);
+
+        test_deserialization(r#"{"textDocument": {"uri": ""}}"#, &test_data);
+    }
+}

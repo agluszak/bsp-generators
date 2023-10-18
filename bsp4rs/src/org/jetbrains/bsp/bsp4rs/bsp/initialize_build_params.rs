@@ -16,6 +16,46 @@ pub struct InitializeBuildParams {
     /// The capabilities of the client
     pub capabilities: BuildClientCapabilities,
     /// Additional metadata about the client
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
+    #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<InitializeBuildParamsData>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn initialize_build_params() {
+        let test_data = InitializeBuildParams {
+            display_name: TEST_STRING.to_string(),
+            version: TEST_STRING.to_string(),
+            bsp_version: TEST_STRING.to_string(),
+            root_uri: URI::default(),
+            capabilities: BuildClientCapabilities::default(),
+            data: Some(InitializeBuildParamsData::Other(OtherData::default())),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "displayName": "test_string",
+  "version": "test_string",
+  "bspVersion": "test_string",
+  "rootUri": "",
+  "capabilities": {
+    "languageIds": []
+  },
+  "dataKind": "",
+  "data": null
+}
+"#);
+
+        test_deserialization(
+            r#"{"displayName": "test_string", "version": "test_string", "bspVersion": "test_string", "rootUri": "", "capabilities": {"languageIds": []}, "dataKind": "", "data": null}"#,
+            &test_data,
+        );
+    }
 }
