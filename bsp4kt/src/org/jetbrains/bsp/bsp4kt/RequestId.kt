@@ -3,18 +3,18 @@ package org.jetbrains.bsp.bsp4kt
 import org.jetbrains.bsp.util.StringIntUnionSerializer
 import kotlinx.serialization.Serializable
 
-@Serializable(with = Code.Companion::class)
-sealed interface Code {
+@Serializable(with = RequestId.Companion::class)
+sealed interface RequestId {
   @Serializable
   @JvmInline
-  value class StringValue(val value: String): Code {}
+  value class StringValue(val value: String): RequestId {}
 
   @Serializable
   @JvmInline
-  value class IntValue(val value: Int): Code {}
+  value class IntValue(val value: Int): RequestId {}
 
-  companion object : StringIntUnionSerializer<Code>(
-    clazz = Code::class,
+  companion object : StringIntUnionSerializer<RequestId>(
+    clazz = RequestId::class,
     stringSerializer = StringValue.serializer(),
     intSerializer = IntValue.serializer(),
   )

@@ -8,7 +8,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 @SuppressWarnings("all")
-public class RustBuildTarget {
+public class RustTarget {
   @NonNull private String name;
 
   @NonNull private String crateRootUrl;
@@ -23,7 +23,7 @@ public class RustBuildTarget {
 
   private Set<String> requiredFeatures;
 
-  public RustBuildTarget(
+  public RustTarget(
       @NonNull final String name,
       @NonNull final String crateRootUrl,
       @NonNull final RustTargetKind kind,
@@ -124,7 +124,7 @@ public class RustBuildTarget {
     if (this == obj) return true;
     if (obj == null) return false;
     if (getClass() != obj.getClass()) return false;
-    RustBuildTarget other = (RustBuildTarget) obj;
+    RustTarget other = (RustTarget) obj;
     if (this.name == null) {
       if (other.name != null) return false;
     } else if (!this.name.equals(other.name)) return false;

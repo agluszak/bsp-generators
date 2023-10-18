@@ -114,7 +114,6 @@ object BuildTargetDataKind {
   val Cpp = "cpp"
   val Jvm = "jvm"
   val Python = "python"
-  val Rust = "rust"
   val Sbt = "sbt"
   val Scala = "scala"
 }
@@ -170,6 +169,15 @@ object BuildTargetTag {
   val Test = "test"
 }
 
+final case class CancelRequestParams (
+  id: Either[String, Int],
+)
+
+object CancelRequestParams {
+  implicit val codec: JsonValueCodec[CancelRequestParams] = JsonCodecMaker.makeWithRequiredCollectionFields
+  implicit val codecForEither: JsonValueCodec[Either[String, Int]] = CustomCodec.forEitherStringInt
+}
+
 final case class CargoBuildTarget (
   edition: String,
   requiredFeatures: Set[String],
@@ -202,6 +210,14 @@ final case class CleanCacheResult (
 
 object CleanCacheResult {
   implicit val codec: JsonValueCodec[CleanCacheResult] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
+final case class CodeDescription (
+  href: Uri,
+)
+
+object CodeDescription {
+  implicit val codec: JsonValueCodec[CodeDescription] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
 final case class CompileParams (
@@ -395,9 +411,11 @@ object DependencySourcesResult {
 final case class Diagnostic (
   range: Range,
   severity: Option[DiagnosticSeverity],
-  code: Option[String],
+  code: Option[Either[String, Int]],
+  codeDescription: Option[CodeDescription],
   source: Option[String],
   message: String,
+  tags: Option[List[Int]],
   relatedInformation: Option[List[DiagnosticRelatedInformation]],
   dataKind: Option[String],
   data: Option[RawJson],
@@ -405,6 +423,7 @@ final case class Diagnostic (
 
 object Diagnostic {
   implicit val codec: JsonValueCodec[Diagnostic] = JsonCodecMaker.makeWithRequiredCollectionFields
+  implicit val codecForEither: JsonValueCodec[Either[String, Int]] = CustomCodec.forEitherStringInt
 }
 
 object DiagnosticDataKind {
@@ -863,20 +882,6 @@ object RunResult {
   implicit val codec: JsonValueCodec[RunResult] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
-final case class RustBuildTarget (
-  name: String,
-  crateRootUrl: Uri,
-  kind: RustTargetKind,
-  crateTypes: Option[List[RustCrateType]],
-  edition: String,
-  doctest: Boolean,
-  requiredFeatures: Option[Set[String]],
-)
-
-object RustBuildTarget {
-  implicit val codec: JsonValueCodec[RustBuildTarget] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
 sealed abstract class RustCrateType(val value: Int)
 object RustCrateType {
   case object Bin extends RustCrateType(1)
@@ -946,14 +951,14 @@ final case class RustPackage (
   origin: String,
   edition: String,
   source: Option[String],
-  resolvedTargets: List[RustBuildTarget],
-  allTargets: List[RustBuildTarget],
+  resolvedTargets: List[RustTarget],
+  allTargets: List[RustTarget],
   features: Map[String, Set[String]],
   enabledFeatures: Set[String],
   cfgOptions: Option[Map[String, List[String]]],
   env: Option[Map[String, String]],
   outDirUrl: Option[Uri],
-  procMacroArtifact: Option[String],
+  procMacroArtifact: Option[Uri],
 )
 
 object RustPackage {
@@ -979,6 +984,20 @@ final case class RustRawDependency (
 
 object RustRawDependency {
   implicit val codec: JsonValueCodec[RustRawDependency] = JsonCodecMaker.makeWithRequiredCollectionFields
+}
+
+final case class RustTarget (
+  name: String,
+  crateRootUrl: Uri,
+  kind: RustTargetKind,
+  crateTypes: Option[List[RustCrateType]],
+  edition: String,
+  doctest: Boolean,
+  requiredFeatures: Option[Set[String]],
+)
+
+object RustTarget {
+  implicit val codec: JsonValueCodec[RustTarget] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
 sealed abstract class RustTargetKind(val value: Int)
@@ -1008,32 +1027,6 @@ object RustTargetKind {
     }
   }
 }
-final case class RustToolchainItem (
-  rustStdLib: Option[RustcInfo],
-  cargoBinPath: Uri,
-  procMacroSrvPath: Uri,
-)
-
-object RustToolchainItem {
-  implicit val codec: JsonValueCodec[RustToolchainItem] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
-final case class RustToolchainParams (
-  targets: List[BuildTargetIdentifier],
-)
-
-object RustToolchainParams {
-  implicit val codec: JsonValueCodec[RustToolchainParams] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
-final case class RustToolchainResult (
-  toolchains: List[RustToolchainItem],
-)
-
-object RustToolchainResult {
-  implicit val codec: JsonValueCodec[RustToolchainResult] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
 final case class RustWorkspaceParams (
   targets: List[BuildTargetIdentifier],
 )
@@ -1051,17 +1044,6 @@ final case class RustWorkspaceResult (
 
 object RustWorkspaceResult {
   implicit val codec: JsonValueCodec[RustWorkspaceResult] = JsonCodecMaker.makeWithRequiredCollectionFields
-}
-
-final case class RustcInfo (
-  sysrootPath: Uri,
-  srcSysrootPath: Uri,
-  version: String,
-  host: String,
-)
-
-object RustcInfo {
-  implicit val codec: JsonValueCodec[RustcInfo] = JsonCodecMaker.makeWithRequiredCollectionFields
 }
 
 final case class SbtBuildTarget (

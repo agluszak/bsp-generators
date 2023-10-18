@@ -4,6 +4,7 @@ use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
 pub mod bsp;
+pub mod cancel;
 pub mod cargo;
 pub mod cpp;
 pub mod java;
@@ -15,6 +16,7 @@ pub mod sbt;
 pub mod scala;
 
 use bsp::*;
+use cancel::*;
 use cargo::*;
 use cpp::*;
 use java::*;

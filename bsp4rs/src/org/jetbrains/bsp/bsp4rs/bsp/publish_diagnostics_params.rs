@@ -14,7 +14,7 @@ pub struct PublishDiagnosticsParams {
     pub build_target: BuildTargetIdentifier,
     /// The request id that originated this notification.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub origin_id: Option<RequestId>,
+    pub origin_id: Option<OriginId>,
     /// The diagnostics to be published by the client.
     pub diagnostics: Vec<Diagnostic>,
     /// Whether the client should clear the previous diagnostics
@@ -34,7 +34,7 @@ mod tests {
         let test_data = PublishDiagnosticsParams {
             text_document: TextDocumentIdentifier::default(),
             build_target: BuildTargetIdentifier::default(),
-            origin_id: Some(RequestId::default()),
+            origin_id: Some(OriginId::default()),
             diagnostics: vec![Diagnostic::default()],
             reset: TEST_BOOL,
         };

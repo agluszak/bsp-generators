@@ -30,19 +30,21 @@ pub struct RustPackage {
     pub origin: RustPackageOrigin,
     /// Code edition of the package.
     pub edition: RustEdition,
-    /// The source ID of the dependency, `null` for the root package and path dependencies.
+    /// The source ID of the dependency, for example:
+    /// "registry+https://github.com/rust-lang/crates.io-index".
+    /// `null` for the root package and path dependencies.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
     /// Corresponds to source files which can be compiled into a crate from this package.
     /// Contains only resolved targets without conflicts.
-    pub resolved_targets: Vec<RustBuildTarget>,
-    /// Same as `targets`, but contains all targets from this package.
+    pub resolved_targets: Vec<RustTarget>,
+    /// Same as `resolvedTargets`, but contains all targets from this package.
     /// `targets` should be the subset of `allTargets`.
-    pub all_targets: Vec<RustBuildTarget>,
-    /// Set of features defined for the package.
+    pub all_targets: Vec<RustTarget>,
+    /// Set of features defined for the package (including optional dependencies).
     /// Each feature maps to an array of features or dependencies it enables.
     /// The entry named "default" defines which features are enabled by default.
-    pub features: FeatureDependencyGraph,
+    pub features: FeaturesDependencyGraph,
     /// Array of features enabled on this package.
     pub enabled_features: BTreeSet<Feature>,
     /// Conditional compilation flags that can be set based on certain conditions.
@@ -64,7 +66,7 @@ pub struct RustPackage {
     /// Procedural macros are macros that generate code at compile time.
     /// Contains files with file extensions: `.dll`, `.so` or `.dylib`.
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub proc_macro_artifact: Option<String>,
+    pub proc_macro_artifact: Option<URI>,
 }
 
 #[cfg(test)]
@@ -84,14 +86,14 @@ mod tests {
             origin: RustPackageOrigin::default(),
             edition: RustEdition::default(),
             source: Some(TEST_STRING.to_string()),
-            resolved_targets: vec![RustBuildTarget::default()],
-            all_targets: vec![RustBuildTarget::default()],
-            features: FeatureDependencyGraph::default(),
+            resolved_targets: vec![RustTarget::default()],
+            all_targets: vec![RustTarget::default()],
+            features: FeaturesDependencyGraph::default(),
             enabled_features: BTreeSet::from([Feature::default()]),
             cfg_options: Some(RustCfgOptions::default()),
             env: Some(EnvironmentVariables::default()),
             out_dir_url: Some(URI::default()),
-            proc_macro_artifact: Some(TEST_STRING.to_string()),
+            proc_macro_artifact: Some(URI::default()),
         };
 
         assert_json_snapshot!(test_data,
@@ -129,12 +131,12 @@ mod tests {
   "cfgOptions": {},
   "env": {},
   "outDirUrl": "",
-  "procMacroArtifact": "test_string"
+  "procMacroArtifact": ""
 }
 "#);
 
         test_deserialization(
-            r#"{"id": "test_string", "rootUrl": "", "name": "test_string", "version": "test_string", "origin": "", "edition": "", "source": "test_string", "resolvedTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "allTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "features": {}, "enabledFeatures": [""], "cfgOptions": {}, "env": {}, "outDirUrl": "", "procMacroArtifact": "test_string"}"#,
+            r#"{"id": "test_string", "rootUrl": "", "name": "test_string", "version": "test_string", "origin": "", "edition": "", "source": "test_string", "resolvedTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "allTargets": [{"name": "", "crateRootUrl": "", "kind": 1, "edition": "", "doctest": false}], "features": {}, "enabledFeatures": [""], "cfgOptions": {}, "env": {}, "outDirUrl": "", "procMacroArtifact": ""}"#,
             &test_data,
         );
     }

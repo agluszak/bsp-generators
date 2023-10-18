@@ -7,15 +7,15 @@ use std::collections::{BTreeMap, BTreeSet};
 /// feature and the features it turns on
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct FeatureDependencyGraph(pub BTreeMap<Feature, BTreeSet<Feature>>);
+pub struct FeaturesDependencyGraph(pub BTreeMap<Feature, BTreeSet<Feature>>);
 
-impl FeatureDependencyGraph {
+impl FeaturesDependencyGraph {
     pub fn new(input: BTreeMap<Feature, BTreeSet<Feature>>) -> Self {
         Self(input)
     }
 }
 
-impl std::ops::Deref for FeatureDependencyGraph {
+impl std::ops::Deref for FeaturesDependencyGraph {
     type Target = BTreeMap<Feature, BTreeSet<Feature>>;
 
     fn deref(&self) -> &Self::Target {
@@ -30,8 +30,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
 
     #[test]
-    fn feature_dependency_graph() {
-        let test_data = FeatureDependencyGraph(BTreeMap::from([(
+    fn features_dependency_graph() {
+        let test_data = FeaturesDependencyGraph(BTreeMap::from([(
             Feature::default(),
             BTreeSet::from([Feature::default()]),
         )]));

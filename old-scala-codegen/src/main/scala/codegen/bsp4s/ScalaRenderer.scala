@@ -273,13 +273,13 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
     case TUntaggedUnion(tpes)      => renderUntaggedUnion(tpes)
    }
 
-   private def renderUntaggedUnion(types: List[Type]): String = {
-     val supported = List(Type.TString, Type.TPrimitive(Primitive.PInt,ShapeId.fromParts("bsp","Integer")))
-     if (types.size != 2 || !(types == supported))
-       throw new Exception("Only unions with String and Int are supported (order matters)")
+  private def renderUntaggedUnion(types: List[Type]): String = {
+    val primitiveTypes = types.collect { case TPrimitive(prim, _) => prim }
+    if (types.size != 2 || !(primitiveTypes == List(Primitive.PString, Primitive.PInt)))
+      throw new Exception("Only unions with String and Int are supported (order matters)")
 
-     s"Either[${types.map(renderType).mkString(", ")}]"
-   }
+    s"Either[${types.map(renderType).mkString(", ")}]"
+  }
 
   def renderPrimitive(prim: Primitive, shapeId: ShapeId): String = {
     // Special handling for URI

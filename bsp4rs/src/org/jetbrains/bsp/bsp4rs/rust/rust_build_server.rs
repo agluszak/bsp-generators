@@ -16,19 +16,6 @@ impl Request for RustWorkspace {
     const METHOD: &'static str = "buildTarget/rustWorkspace";
 }
 
-/// The Rust toolchain request is sent from the client to the server to query for
-/// the information about project's toolchain for the given list of build targets.
-///
-/// The request is essential to connect and work with `intellij-rust` plugin.
-#[derive(Debug)]
-pub enum RustToolchain {}
-
-impl Request for RustToolchain {
-    type Params = RustToolchainParams;
-    type Result = RustToolchainResult;
-    const METHOD: &'static str = "buildTarget/rustToolchain";
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -36,10 +23,5 @@ mod tests {
     #[test]
     fn rust_workspace_method() {
         assert_eq!(RustWorkspace::METHOD, "buildTarget/rustWorkspace");
-    }
-
-    #[test]
-    fn rust_toolchain_method() {
-        assert_eq!(RustToolchain::METHOD, "buildTarget/rustToolchain");
     }
 }

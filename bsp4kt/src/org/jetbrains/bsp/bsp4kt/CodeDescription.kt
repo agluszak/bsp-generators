@@ -5,8 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class RustToolchainItem(
-  val rustStdLib: RustcInfo? = null,
-  val cargoBinPath: String,
-  val procMacroSrvPath: String
+data class CodeDescription(
+  val href: String
 )

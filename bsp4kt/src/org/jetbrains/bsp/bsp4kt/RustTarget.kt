@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class RustBuildTarget(
+data class RustTarget(
   val name: String,
   val crateRootUrl: String,
   val kind: RustTargetKind,

@@ -7,7 +7,8 @@ pub struct DiagnosticTag(pub i32);
 impl DiagnosticTag {
     /// Unused or unnecessary code.
     ///
-    /// Clients are allowed to render diagnostics with this tag faded out instead of having an error squiggle.
+    /// Clients are allowed to render diagnostics with this tag faded out
+    /// instead of having an error squiggle.
     pub const UNNECESSARY: DiagnosticTag = DiagnosticTag::new(1);
     /// Deprecated or obsolete code.
     ///

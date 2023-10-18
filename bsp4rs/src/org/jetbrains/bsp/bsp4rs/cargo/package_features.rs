@@ -11,7 +11,7 @@ pub struct PackageFeatures {
     /// The list of build target identifiers assigned to the Cargo package.
     pub targets: Vec<BuildTargetIdentifier>,
     /// The list of available features for the Cargo package.
-    pub available_features: FeatureDependencyGraph,
+    pub available_features: FeaturesDependencyGraph,
     /// The list of enabled features for the Cargo package.
     pub enabled_features: BTreeSet<Feature>,
 }
@@ -28,7 +28,7 @@ mod tests {
         let test_data = PackageFeatures {
             package_id: TEST_STRING.to_string(),
             targets: vec![BuildTargetIdentifier::default()],
-            available_features: FeatureDependencyGraph::default(),
+            available_features: FeaturesDependencyGraph::default(),
             enabled_features: BTreeSet::from([Feature::default()]),
         };
 

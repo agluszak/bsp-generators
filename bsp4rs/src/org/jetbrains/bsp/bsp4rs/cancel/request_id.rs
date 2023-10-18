@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
+/// Represents the identifier of a JsonRpc request id.
 #[derive(Clone, Debug, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum Code {
+pub enum RequestId {
     String(String),
     I32(i32),
 }
@@ -14,17 +15,20 @@ mod tests {
     use insta::assert_compact_json_snapshot;
 
     #[test]
-    fn code() {
+    fn request_id() {
         assert_compact_json_snapshot!(
-           Code::String(TEST_STRING.to_string()),
+           RequestId::String(TEST_STRING.to_string()),
            @r#""test_string""#
         );
-        test_deserialization(r#""test_string""#, &Code::String(TEST_STRING.to_string()));
+        test_deserialization(
+            r#""test_string""#,
+            &RequestId::String(TEST_STRING.to_string()),
+        );
 
         assert_compact_json_snapshot!(
-           Code::I32(TEST_INT),
+           RequestId::I32(TEST_INT),
            @r#"1"#
         );
-        test_deserialization(r#"1"#, &Code::I32(TEST_INT));
+        test_deserialization(r#"1"#, &RequestId::I32(TEST_INT));
     }
 }
