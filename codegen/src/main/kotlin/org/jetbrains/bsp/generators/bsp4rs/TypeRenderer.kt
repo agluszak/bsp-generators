@@ -1,15 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDefDefault
-import org.jetbrains.bsp.generators.bsp4rs.def.renderDefDefaultJson
-import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Type
-
-fun renderEnumValueJson(ev: EnumValue<*>): String = when (val value = ev.value) {
-    is Int -> "$value"
-    is String -> """"$value""""
-    else -> ""
-}
 
 // normal type
 
@@ -70,37 +62,4 @@ fun RustRenderer.renderTypeDefault(type: Type): String {
     }
 
     return "$typeName::default()"
-}
-
-
-// value in json of minimal not default type
-
-fun RustRenderer.renderTypeJson(type: Type): String = when (type) {
-    is Type.Unit -> "null"
-    is Type.Bool -> renderTypeTestConstValue(Type.Bool)
-    is Type.Int -> renderTypeTestConstValue(Type.Int)
-    is Type.Long -> renderTypeTestConstValue(Type.Long)
-    is Type.String -> renderTypeTestConstValue(Type.String)
-    is Type.Json -> "{${renderTypeJson(Type.String)}: ${renderTypeJson(Type.String)}}"
-    is Type.List -> "[${renderTypeJson(type.member)}]"
-    is Type.Map -> "{${renderTypeJson(type.key)}: ${renderTypeJson(type.value)}}"
-    is Type.Set -> "[${renderTypeJson(type.member)}]"
-    is Type.Ref -> renderDefDefaultJson(shapes[type.shapeId]!!)
-    else -> ""
-}
-
-// value in json of default type
-
-fun RustRenderer.renderTypeDefaultJson(type: Type): String = when (type) {
-    is Type.Unit -> "null"
-    is Type.Bool -> "false"
-    is Type.Int -> "0"
-    is Type.Long -> "0"
-    is Type.String -> """"""""
-    is Type.Json -> "null"
-    is Type.List -> "[]"
-    is Type.Map -> "{}"
-    is Type.Set -> "[]"
-    is Type.Ref -> renderDefDefaultJson(shapes[type.shapeId]!!)
-    else -> ""
 }

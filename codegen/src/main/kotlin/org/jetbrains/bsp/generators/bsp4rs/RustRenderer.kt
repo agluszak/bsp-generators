@@ -3,6 +3,7 @@ package org.jetbrains.bsp.generators.bsp4rs
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.bsp4json.JsonRenderer
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDef
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDefTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
@@ -27,6 +28,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
 
     val deriveRenderer = DeriveRenderer(shapes)
     val serializationRenderer = SerializationRenderer()
+    val jsonRenderer = JsonRenderer(modules.flatMap { it.definitions })
 
     private val renames: Map<String, String> = mapOf(Pair("type", "r#type"), Pair("r#version", "version"))
 
@@ -142,7 +144,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         fun renderEnumValueTest(value: EnumValue<*>): CodeBlock {
             val enumValueName = fn(makeName(value.name))
             val renderedTestValue = "$name::$enumValueName"
-            val renderedJson = renderEnumValueJson(value)
+            val renderedJson = jsonRenderer.renderEnumValueJson(value)
 
             return rustCode {
                 -renderSerializationTest(renderedTestValue, renderedJson, true)

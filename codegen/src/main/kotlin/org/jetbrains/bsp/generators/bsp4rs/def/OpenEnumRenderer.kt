@@ -1,14 +1,11 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import org.jetbrains.bsp.generators.bsp4rs.renderEnumValueJson
-import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefaultJson
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.EnumValue
-import org.jetbrains.bsp.generators.ir.Type
 
 fun RustRenderer.renderOpenEnum(def: Def.OpenEnum<*>): CodeBlock {
     val name = def.name
@@ -37,7 +34,7 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, enumName: String): Co
 
     return rustCode {
         include(renderHints(ev.hints))
-        -"pub const $enumValueName: $enumName = $enumName::new(${renderEnumValueJson(ev)});"
+        -"pub const $enumValueName: $enumName = $enumName::new(${jsonRenderer.renderEnumValueJson(ev)});"
     }
 }
 
@@ -58,8 +55,3 @@ private fun renderConstructor(type: EnumType<*>): CodeBlock =
 
 fun RustRenderer.renderOpenEnumTest(def: Def.OpenEnum<*>): CodeBlock =
     renderEnumTest(def.name, def.values) { it.uppercase() }
-
-fun RustRenderer.renderOpenEnumDefaultJson(def: Def.OpenEnum<*>): String = when (def.enumType) {
-    EnumType.IntEnum -> renderTypeDefaultJson(Type.Int)
-    EnumType.StringEnum -> renderTypeDefaultJson(Type.String)
-}

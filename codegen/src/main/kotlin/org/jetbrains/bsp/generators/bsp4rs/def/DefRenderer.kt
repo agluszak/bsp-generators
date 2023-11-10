@@ -30,12 +30,3 @@ fun RustRenderer.renderDefDefault(def: Def): String = when (def) {
     is Def.DataKinds -> renderDataKindsDefault(def)
     else -> makeName(def.name) + "::default()"
 }
-
-fun RustRenderer.renderDefDefaultJson(def: Def): String = when (def) {
-    is Def.Alias -> renderAliasDefaultJson(def)
-    is Def.Structure -> renderStructureDefaultJson(def)
-    is Def.ClosedEnum<*> -> renderClosedEnumDefaultJson(def)
-    is Def.OpenEnum<*> -> renderOpenEnumDefaultJson(def)
-    is Def.UntaggedUnion -> renderUntaggedUnionDefaultJson(def)
-    else -> ""
-}

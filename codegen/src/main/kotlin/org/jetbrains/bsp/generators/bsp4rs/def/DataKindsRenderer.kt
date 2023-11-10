@@ -3,7 +3,6 @@ package org.jetbrains.bsp.generators.bsp4rs.def
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefault
-import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefaultJson
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -71,7 +70,7 @@ fun RustRenderer.renderDataKindsTest(def: Def.DataKinds): CodeBlock {
 private fun RustRenderer.renderDataKindTest(enumName: String, data: PolymorphicDataKind): String {
     val dataName = makeName(data.kind).kebabToSnakeCase()
     val renderedTestValue = "$enumName::$dataName(${renderTypeDefault(data.shape)})"
-    val renderedJson = """{"dataKind": "${data.kind}", "data": ${renderTypeDefaultJson(data.shape)}}"""
+    val renderedJson = """{"dataKind": "${data.kind}", "data": ${jsonRenderer.renderTypeDefaultJson(data.shape)}}"""
 
     return renderSerializationTest(renderedTestValue, renderedJson, false)
 }
@@ -79,13 +78,10 @@ private fun RustRenderer.renderDataKindTest(enumName: String, data: PolymorphicD
 private fun RustRenderer.renderOtherDataKindTest(enumName: String): String {
     val otherType = Type.Ref(otherDataDef.shapeId)
     val renderedTestValue = "$enumName::Other(${renderTypeDefault(otherType)})"
-    val renderedJson = renderTypeDefaultJson(otherType)
+    val renderedJson = jsonRenderer.renderTypeDefaultJson(otherType)
 
     return renderSerializationTest(renderedTestValue, renderedJson, true)
 }
 
 fun RustRenderer.renderDataKindsDefault(def: Def.DataKinds): String =
     "${def.name}::Other(${renderDefDefault(otherDataDef)})"
-
-fun RustRenderer.renderDataKindsDefaultJson(): String =
-    renderDefDefaultJson(otherDataDef).drop(1).dropLast(1)

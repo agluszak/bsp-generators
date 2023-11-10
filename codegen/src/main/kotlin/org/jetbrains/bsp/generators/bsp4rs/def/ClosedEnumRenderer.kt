@@ -1,7 +1,6 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
-import org.jetbrains.bsp.generators.bsp4rs.renderEnumValueJson
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Def
@@ -39,5 +38,3 @@ private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, is_first: Boolean): C
 
 fun RustRenderer.renderClosedEnumTest(def: Def.ClosedEnum<*>): CodeBlock =
     renderEnumTest(def.name, def.values) { it.snakeToUpperCamelCase() }
-
-fun RustRenderer.renderClosedEnumDefaultJson(def: Def.ClosedEnum<*>): String = renderEnumValueJson(def.values.first())
