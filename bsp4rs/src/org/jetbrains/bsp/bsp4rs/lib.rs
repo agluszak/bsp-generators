@@ -27,7 +27,7 @@ use rust::*;
 use sbt::*;
 use scala::*;
 
-pub const PROTOCOL_VERSION: &str = "2.1.0";
+pub const PROTOCOL_VERSION: &str = "2.2.0";
 
 pub trait Request {
     type Params: DeserializeOwned + Serialize;

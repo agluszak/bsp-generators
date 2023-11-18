@@ -9,6 +9,7 @@ import org.eclipse.lsp4j.util.Preconditions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
+/** Diagnostic is defined as it is in the LSP. */
 @SuppressWarnings("all")
 public class Diagnostic {
   @NonNull private Range range;

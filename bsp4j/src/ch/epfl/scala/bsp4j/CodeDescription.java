@@ -5,6 +5,7 @@ import org.eclipse.lsp4j.util.Preconditions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
+/** Structure to capture a description for an error code. */
 @SuppressWarnings("all")
 public class CodeDescription {
   @NonNull private String href;
