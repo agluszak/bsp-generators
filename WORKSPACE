@@ -143,6 +143,24 @@ maven_install(
         "com.github.plokhotnyuk.jsoniter-scala:jsoniter-scala-macros_2.13:2.23.2",
         "me.vican.jorge:jsonrpc4s_2.13:0.1.0",
 
+        # testkit
+        "org.scalacheck:scalacheck_2.13:1.17.0",
+        "de.danielbechler:java-object-diff:0.95",
+        "org.scala-lang.modules:scala-java8-compat_2.13:1.0.2",
+        "org.scala-lang.modules:scala-collection-compat_2.13:2.11.0",
+
+        # scala tests
+        "com.googlecode.java-diff-utils:diffutils:1.3.0",
+        "org.scala-sbt.ipcsocket:ipcsocket:1.0.1",
+        "org.scalatest:scalatest_2.13:3.2.16",
+        "org.scalatestplus:scalacheck-1-16_2.13:3.2.14.0",
+
+        # these must match the versions used by jsonrpc4s
+        "io.monix:monix_2.13:3.2.0",
+        "io.monix:monix-eval_2.13:3.2.0",
+        "io.monix:monix-execution_2.13:3.2.0",
+        "com.outr:scribe_2.13:3.5.5",
+
         # lsp4j 21.1 causes "b = new (this);" bug (missing ToStringBuilder)
         "org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1",
         "org.eclipse.lsp4j:org.eclipse.lsp4j.generator:0.20.1",

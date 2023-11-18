@@ -9,4 +9,5 @@ kt_jvm_export(
         "@maven//:com_github_agluszak_jsonrpc4kt",
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
     ],
+    visibility = ["//visibility:public"],
 )
