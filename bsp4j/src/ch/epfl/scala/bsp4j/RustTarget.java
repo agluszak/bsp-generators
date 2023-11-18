@@ -7,6 +7,7 @@ import org.eclipse.lsp4j.util.Preconditions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
+/** `RustTarget` contains data of the target as defined in Cargo metadata. */
 @SuppressWarnings("all")
 public class RustTarget {
   @NonNull private String name;

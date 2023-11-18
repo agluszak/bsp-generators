@@ -6,6 +6,7 @@ import org.eclipse.lsp4j.util.Preconditions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
+/** **Unstable** (may change in future versions) */
 @SuppressWarnings("all")
 public class SetCargoFeaturesParams {
   @NonNull private String packageId;
