@@ -7,7 +7,8 @@ pub struct DiagnosticTag(pub i32);
 impl DiagnosticTag {
     /// Unused or unnecessary code.
     ///
-    /// Clients are allowed to render diagnostics with this tag faded out instead of having an error squiggle.
+    /// Clients are allowed to render diagnostics with this tag faded out
+    /// instead of having an error squiggle.
     pub const UNNECESSARY: DiagnosticTag = DiagnosticTag::new(1);
     /// Deprecated or obsolete code.
     ///
@@ -16,5 +17,27 @@ impl DiagnosticTag {
 
     pub const fn new(tag: i32) -> Self {
         Self(tag)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn diagnostic_tag() {
+        assert_compact_json_snapshot!(
+           DiagnosticTag::UNNECESSARY,
+           @r#"1"#
+        );
+        test_deserialization(r#"1"#, &DiagnosticTag::UNNECESSARY);
+
+        assert_compact_json_snapshot!(
+           DiagnosticTag::DEPRECATED,
+           @r#"2"#
+        );
+        test_deserialization(r#"2"#, &DiagnosticTag::DEPRECATED);
     }
 }

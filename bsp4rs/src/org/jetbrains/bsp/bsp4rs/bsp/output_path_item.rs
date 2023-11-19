@@ -12,3 +12,29 @@ pub struct OutputPathItem {
     /// Type of file of the output item, such as whether it is file or directory.
     pub kind: OutputPathItemKind,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn output_path_item() {
+        let test_data = OutputPathItem {
+            uri: URI::default(),
+            kind: OutputPathItemKind::default(),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "uri": "",
+  "kind": 1
+}
+"#);
+
+        test_deserialization(r#"{"uri": "", "kind": 1}"#, &test_data);
+    }
+}

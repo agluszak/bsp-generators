@@ -6,6 +6,12 @@ use serde::{Deserialize, Serialize};
 #[serde(transparent)]
 pub struct URI(pub String);
 
+impl URI {
+    pub fn new(input: String) -> Self {
+        Self(input)
+    }
+}
+
 impl std::ops::Deref for URI {
     type Target = String;
 
@@ -14,14 +20,27 @@ impl std::ops::Deref for URI {
     }
 }
 
-impl From<String> for URI {
-    fn from(input: String) -> Self {
-        Self(input)
-    }
-}
-
 impl From<&str> for URI {
     fn from(input: &str) -> Self {
         Self(input.to_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn uri() {
+        let test_data = URI(TEST_STRING.to_string());
+
+        assert_compact_json_snapshot!(
+           test_data,
+           @r#""test_string""#
+        );
+
+        test_deserialization(r#""test_string""#, &test_data);
     }
 }

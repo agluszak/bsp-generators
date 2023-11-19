@@ -1,7 +1,10 @@
+#![allow(deprecated)]
+
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
 pub mod bsp;
+pub mod cancel;
 pub mod cargo;
 pub mod cpp;
 pub mod java;
@@ -13,6 +16,7 @@ pub mod sbt;
 pub mod scala;
 
 use bsp::*;
+use cancel::*;
 use cargo::*;
 use cpp::*;
 use java::*;
@@ -41,4 +45,22 @@ pub trait Notification {
 pub struct OtherData {
     pub data_kind: String,
     pub data: serde_json::Value,
+}
+
+#[cfg(test)]
+pub mod tests {
+    use serde::Deserialize;
+
+    pub const TEST_BOOL: bool = true;
+    pub const TEST_INT: i32 = 1;
+    pub const TEST_LONG: i64 = 2;
+    pub const TEST_STRING: &str = "test_string";
+
+    pub fn test_deserialization<T>(json: &str, expected: &T)
+    where
+        T: for<'de> Deserialize<'de> + PartialEq + std::fmt::Debug,
+    {
+        let value = serde_json::from_str::<T>(json).unwrap();
+        assert_eq!(&value, expected);
+    }
 }

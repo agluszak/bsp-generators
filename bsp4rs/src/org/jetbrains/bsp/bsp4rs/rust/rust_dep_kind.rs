@@ -18,3 +18,37 @@ impl RustDepKind {
         Self(std::borrow::Cow::Borrowed(tag))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+    use insta::assert_compact_json_snapshot;
+
+    #[test]
+    fn rust_dep_kind() {
+        assert_compact_json_snapshot!(
+           RustDepKind::BUILD,
+           @r#""build""#
+        );
+        test_deserialization(r#""build""#, &RustDepKind::BUILD);
+
+        assert_compact_json_snapshot!(
+           RustDepKind::DEV,
+           @r#""dev""#
+        );
+        test_deserialization(r#""dev""#, &RustDepKind::DEV);
+
+        assert_compact_json_snapshot!(
+           RustDepKind::NORMAL,
+           @r#""normal""#
+        );
+        test_deserialization(r#""normal""#, &RustDepKind::NORMAL);
+
+        assert_compact_json_snapshot!(
+           RustDepKind::UNCLASSIFIED,
+           @r#""unclassified""#
+        );
+        test_deserialization(r#""unclassified""#, &RustDepKind::UNCLASSIFIED);
+    }
+}

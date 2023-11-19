@@ -16,18 +16,18 @@ use crate::*;
 #[derive(Clone, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BuildTarget {
-    /// The target’s unique identifier
+    /// The target's unique identifier
     pub id: BuildTargetIdentifier,
     /// A human readable name for this target.
     /// May be presented in the user interface.
     /// Should be unique if possible.
     /// The id.uri is used if None.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
     /// The directory where this target belongs to. Multiple build targets are allowed to map
     /// to the same base directory, and a build target is not required to have a base directory.
     /// A base directory does not determine the sources of a target, see buildTarget/sources.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub base_directory: Option<URI>,
     /// Free-form string tags to categorize or label this build target.
     /// For example, can be used by the client to:
@@ -46,6 +46,58 @@ pub struct BuildTarget {
     pub capabilities: BuildTargetCapabilities,
     /// Language-specific metadata about this target.
     /// See ScalaBuildTarget as an example.
-    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
+    #[serde(flatten, skip_serializing_if = "Option::is_none")]
     pub data: Option<BuildTargetData>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn build_target() {
+        let test_data = BuildTarget {
+            id: BuildTargetIdentifier::default(),
+            display_name: Some(TEST_STRING.to_string()),
+            base_directory: Some(URI::default()),
+            tags: vec![BuildTargetTag::default()],
+            language_ids: vec![LanguageId::default()],
+            dependencies: vec![BuildTargetIdentifier::default()],
+            capabilities: BuildTargetCapabilities::default(),
+            data: Some(BuildTargetData::Other(OtherData::default())),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "id": {
+    "uri": ""
+  },
+  "displayName": "test_string",
+  "baseDirectory": "",
+  "tags": [
+    ""
+  ],
+  "languageIds": [
+    ""
+  ],
+  "dependencies": [
+    {
+      "uri": ""
+    }
+  ],
+  "capabilities": {},
+  "dataKind": "",
+  "data": null
+}
+"#);
+
+        test_deserialization(
+            r#"{"id": {"uri": ""}, "displayName": "test_string", "baseDirectory": "", "tags": [""], "languageIds": [""], "dependencies": [{"uri": ""}], "capabilities": {}, "dataKind": "", "data": null}"#,
+            &test_data,
+        );
+    }
 }

@@ -22,7 +22,56 @@ pub struct SbtBuildTarget {
     pub sbt_version: String,
     pub auto_imports: Vec<String>,
     pub scala_build_target: ScalaBuildTarget,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent: Option<BuildTargetIdentifier>,
     pub children: Vec<BuildTargetIdentifier>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn sbt_build_target() {
+        let test_data = SbtBuildTarget {
+            sbt_version: TEST_STRING.to_string(),
+            auto_imports: vec![TEST_STRING.to_string()],
+            scala_build_target: ScalaBuildTarget::default(),
+            parent: Some(BuildTargetIdentifier::default()),
+            children: vec![BuildTargetIdentifier::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "sbtVersion": "test_string",
+  "autoImports": [
+    "test_string"
+  ],
+  "scalaBuildTarget": {
+    "scalaOrganization": "",
+    "scalaVersion": "",
+    "scalaBinaryVersion": "",
+    "platform": 1,
+    "jars": []
+  },
+  "parent": {
+    "uri": ""
+  },
+  "children": [
+    {
+      "uri": ""
+    }
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"sbtVersion": "test_string", "autoImports": ["test_string"], "scalaBuildTarget": {"scalaOrganization": "", "scalaVersion": "", "scalaBinaryVersion": "", "platform": 1, "jars": []}, "parent": {"uri": ""}, "children": [{"uri": ""}]}"#,
+            &test_data,
+        );
+    }
 }

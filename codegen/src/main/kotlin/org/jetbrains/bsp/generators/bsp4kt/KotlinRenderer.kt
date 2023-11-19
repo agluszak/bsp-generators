@@ -1,6 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4kt
 
 import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.Loader
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.code
 import org.jetbrains.bsp.generators.ir.Def
@@ -8,10 +9,10 @@ import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.EnumValue
 import org.jetbrains.bsp.generators.ir.Field
 import org.jetbrains.bsp.generators.ir.Hint
-import org.jetbrains.bsp.generators.ir.IrShape
 import org.jetbrains.bsp.generators.ir.JsonRpcMethodType
 import org.jetbrains.bsp.generators.ir.Operation
 import org.jetbrains.bsp.generators.ir.Type
+import org.jetbrains.bsp.generators.utils.camelCaseUpperCamelCase
 import org.jetbrains.bsp.generators.utils.kebabToScreamingSnakeCase
 import org.jetbrains.bsp.generators.utils.snakeToUpperCamelCase
 import kotlin.io.path.Path
@@ -22,7 +23,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
     fun render(): List<CodegenFile> {
         val files = definitions.mapNotNull { renderDef(it) }
         val versionFile = renderVersion()
-        return listOf(versionFile) + files
+        return listOf(versionFile, copySerializers()) + files
     }
 
     fun renderVersion(): CodegenFile {
@@ -37,6 +38,12 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return CodegenFile(baseRelPath.resolve("Bsp4Kt.kt"), code.toString())
     }
 
+    private fun copySerializers(): CodegenFile {
+        val contents = Loader.readResource("Serializers.kt")
+        val path = baseRelPath.parent.resolve("util").resolve("Serializers.kt")
+        return CodegenFile(path, contents)
+    }
+
     fun renderDef(def: Def): CodegenFile? {
         return when (def) {
             is Def.Alias -> null
@@ -45,6 +52,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             is Def.Service -> renderService(def)
             is Def.Structure -> renderStructure(def)
             is Def.DataKinds -> renderData(def)
+            is Def.UntaggedUnion -> renderUntaggedUnion(def)
         }
     }
 
@@ -118,6 +126,51 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         return renderOpenEnum(dataKindDef)
     }
 
+    private fun renderUntaggedUnion(def: Def.UntaggedUnion): CodegenFile {
+        require(def.members.size == 2 && def.members.containsAll(listOf(Type.String, Type.Int))) {
+            "Only unions with String and Int are supported"
+        }
+
+        fun makeTypeName(renderedType: String): String = "${renderedType.camelCaseUpperCamelCase()}Value"
+
+        val name = def.name
+        val stringTypeName = def.members.find { it == Type.String }?.let { makeTypeName(renderType(it)) }
+        val intTypeName = def.members.find { it == Type.Int }?.let { makeTypeName(renderType(it)) }
+
+        fun renderConstructor(type: Type): CodeBlock {
+            val renderedType = renderType(type)
+            val typeName = makeTypeName(renderedType)
+
+            return code {
+                -"@Serializable"
+                -"@JvmInline"
+                -"value class $typeName(val value: $renderedType): $name {}"
+            }
+        }
+
+        val code = code {
+            -"package $basepkg"
+            newline()
+            -"import org.jetbrains.bsp.util.StringIntUnionSerializer"
+            -"import kotlinx.serialization.Serializable"
+            newline()
+            -"""@Serializable(with = $name.Companion::class)"""
+            block("sealed interface $name") {
+                def.members.forEach { member ->
+                    include(renderConstructor(member))
+                    newline()
+                }
+                paren("companion object : StringIntUnionSerializer<$name>") {
+                    -"clazz = $name::class,"
+                    -"stringSerializer = $stringTypeName.serializer(),"
+                    -"intSerializer = $intTypeName.serializer(),"
+                }
+            }
+        }
+
+        return CodegenFile(baseRelPath.resolve("$name.kt"), code.toString())
+    }
+
     fun renderFieldRaw(field: Field): String {
         return "val ${field.name}: ${renderType(field.type)}${if (field.required) "" else "? = null"}"
     }
@@ -132,17 +185,18 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
         }
     }
 
-    fun renderType(irShape: IrShape): String = when (val type = irShape.type) {
+    fun renderType(type: Type): String = when (type) {
         Type.Bool -> "Boolean"
         Type.Int -> "Int"
         Type.Json -> "JsonElement"
         is Type.List -> "List<${renderType(type.member)}>"
         Type.Long -> "Long"
         is Type.Map -> "Map<${renderType(type.key)}, ${renderType(type.value)}>"
-        is Type.Ref -> irShape.shapeId.name
+        is Type.Ref -> type.shapeId.name
         is Type.Set -> "Set<${renderType(type.member)}>"
         Type.String -> "String"
         Type.Unit -> "Unit"
+        is Type.UntaggedUnion -> ""
     }
 
     fun renderOperation(op: Operation): CodeBlock {
@@ -155,7 +209,7 @@ class KotlinRenderer(val basepkg: String, val definitions: List<Def>, val versio
             JsonRpcMethodType.Request -> "suspend "
         }
         val input = when (op.inputType) {
-            IrShape.Unit -> ""
+            Type.Unit -> ""
             else -> "params: ${renderType(op.inputType)}"
         }
         val rpcMethod = op.jsonRpcMethod

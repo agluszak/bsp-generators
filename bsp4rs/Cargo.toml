@@ -2,18 +2,17 @@
 name = "bsp4rs"
 version = "0.1.0"
 edition = "2021"
+description = "Types for interaction with a build server, using Build Server Protocol"
+license = "MIT OR Apache-2.0"
 
 [lib]
 path = "src/org/jetbrains/bsp/bsp4rs/lib.rs"
 
 [dependencies]
-cargo_metadata = "0.17.0"
-lsp-types = "0.94.0"
-serde = "1.0.147"
-serde_json = "1.0.89"
-serde_repr = "0.1.9"
-serde-enum-str = "0.3.2"
+serde = { version = "1.0.34", features = ["derive"] }
+serde_json = "1.0.106"
+serde_repr = "0.1.16"
+serde-enum-str = "0.4.0"
 
 [dev-dependencies]
-insta = { version = "1.29.0", features = ["yaml", "json"] }
-url = "2.3.1"
+insta = { version = "1.31.0", features = ["yaml", "json"] }

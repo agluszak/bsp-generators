@@ -35,3 +35,61 @@ impl TaskFinishData {
         Self::Named(NamedTaskFinishData::TestReport(data))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn task_finish_data() {
+        assert_json_snapshot!(TaskFinishData::compile_report(CompileReport::default()),
+@r#"
+{
+  "dataKind": "compile-report",
+  "data": {
+    "target": {
+      "uri": ""
+    },
+    "errors": 0,
+    "warnings": 0
+  }
+}
+"#);
+
+        assert_json_snapshot!(TaskFinishData::test_finish(TestFinish::default()),
+@r#"
+{
+  "dataKind": "test-finish",
+  "data": {
+    "displayName": "",
+    "status": 1
+  }
+}
+"#);
+
+        assert_json_snapshot!(TaskFinishData::test_report(TestReport::default()),
+@r#"
+{
+  "dataKind": "test-report",
+  "data": {
+    "target": {
+      "uri": ""
+    },
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0,
+    "cancelled": 0,
+    "skipped": 0
+  }
+}
+"#);
+
+        assert_compact_json_snapshot!(
+           TaskFinishData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

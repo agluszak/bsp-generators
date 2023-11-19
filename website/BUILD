@@ -1,27 +1,34 @@
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@npm//website:@docusaurus/core/package_json.bzl", docusaurus_bin = "bin")
-
-load("@aspect_rules_js//js:defs.bzl", "js_run_binary", "js_binary")
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_run_binary")
 
 npm_link_all_packages(name = "node_modules")
 
 filegroup(
     name = "website-files",
-    srcs = glob(["generated/**/*", "src/**/*", "static/**/*"]) + [
-        "sidebars.json",
+    srcs = glob([
+        "generated/**/*",
+        "src/**/*",
+        "static/**/*",
+    ]) + [
         "docusaurus.config.js",
         "package.json",
-        ":node_modules/@docusaurus/preset-classic",
+        "sidebars.json",
         ":node_modules/@docusaurus/plugin-client-redirects",
+        ":node_modules/@docusaurus/preset-classic",
         ":node_modules/@easyops-cn/docusaurus-search-local",
-        ":node_modules/react",
         ":node_modules/@mdx-js/react",
+        ":node_modules/react",
     ],
 )
 
 docusaurus_bin.docusaurus_binary(
     name = "docusaurus-start",
-    args = ["start", "--config", "docusaurus.config.js"],
+    args = [
+        "start",
+        "--config",
+        "docusaurus.config.js",
+    ],
     chdir = package_name(),
     data = [":website-files"],
     visibility = ["//visibility:public"],
@@ -29,7 +36,11 @@ docusaurus_bin.docusaurus_binary(
 
 docusaurus_bin.docusaurus_binary(
     name = "docusaurus-build",
-    args = ["build", "--config", "docusaurus.config.js"],
+    args = [
+        "build",
+        "--config",
+        "docusaurus.config.js",
+    ],
     chdir = package_name(),
     data = [":website-files"],
     visibility = ["//visibility:public"],
@@ -37,7 +48,11 @@ docusaurus_bin.docusaurus_binary(
 
 docusaurus_bin.docusaurus_binary(
     name = "docusaurus-deploy",
-    args = ["deploy", "--config", "docusaurus.config.js"],
+    args = [
+        "deploy",
+        "--config",
+        "docusaurus.config.js",
+    ],
     chdir = package_name(),
     data = [":website-files"],
     visibility = ["//visibility:public"],

@@ -13,9 +13,42 @@ pub struct ScalaAction {
     /// A short, human-readable, title for this code action.
     pub title: String,
     /// A description that may be shown to the user client side to explain the action.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// The workspace edit this code action performs.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub edit: Option<ScalaWorkspaceEdit>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_action() {
+        let test_data = ScalaAction {
+            title: TEST_STRING.to_string(),
+            description: Some(TEST_STRING.to_string()),
+            edit: Some(ScalaWorkspaceEdit::default()),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "title": "test_string",
+  "description": "test_string",
+  "edit": {
+    "changes": []
+  }
+}
+"#);
+
+        test_deserialization(
+            r#"{"title": "test_string", "description": "test_string", "edit": {"changes": []}}"#,
+            &test_data,
+        );
+    }
 }

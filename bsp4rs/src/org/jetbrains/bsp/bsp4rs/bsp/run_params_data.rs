@@ -21,3 +21,31 @@ impl RunParamsData {
         Self::Named(NamedRunParamsData::ScalaMainClass(data))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn run_params_data() {
+        assert_json_snapshot!(RunParamsData::scala_main_class(ScalaMainClass::default()),
+@r#"
+{
+  "dataKind": "scala-main-class",
+  "data": {
+    "class": "",
+    "arguments": [],
+    "jvmOptions": []
+  }
+}
+"#);
+
+        assert_compact_json_snapshot!(
+           RunParamsData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

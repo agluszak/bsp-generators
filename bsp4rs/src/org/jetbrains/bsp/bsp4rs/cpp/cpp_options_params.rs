@@ -8,3 +8,31 @@ pub struct CppOptionsParams {
     /// The targets for which the options are requested.
     pub targets: Vec<BuildTargetIdentifier>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn cpp_options_params() {
+        let test_data = CppOptionsParams {
+            targets: vec![BuildTargetIdentifier::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "targets": [
+    {
+      "uri": ""
+    }
+  ]
+}
+"#);
+
+        test_deserialization(r#"{"targets": [{"uri": ""}]}"#, &test_data);
+    }
+}

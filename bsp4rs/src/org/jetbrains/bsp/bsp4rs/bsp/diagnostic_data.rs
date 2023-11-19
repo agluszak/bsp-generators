@@ -21,3 +21,27 @@ impl DiagnosticData {
         Self::Named(NamedDiagnosticData::Scala(data))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use insta::assert_compact_json_snapshot;
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn diagnostic_data() {
+        assert_json_snapshot!(DiagnosticData::scala(ScalaDiagnostic::default()),
+@r#"
+{
+  "dataKind": "scala",
+  "data": {}
+}
+"#);
+
+        assert_compact_json_snapshot!(
+           DiagnosticData::Other(OtherData::default()),
+           @r#"{"dataKind": "", "data": null}"#
+        );
+    }
+}

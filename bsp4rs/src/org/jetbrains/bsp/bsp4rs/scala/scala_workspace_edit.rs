@@ -8,3 +8,44 @@ use crate::*;
 pub struct ScalaWorkspaceEdit {
     pub changes: Vec<ScalaTextEdit>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_workspace_edit() {
+        let test_data = ScalaWorkspaceEdit {
+            changes: vec![ScalaTextEdit::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "changes": [
+    {
+      "range": {
+        "start": {
+          "line": 0,
+          "character": 0
+        },
+        "end": {
+          "line": 0,
+          "character": 0
+        }
+      },
+      "newText": ""
+    }
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"changes": [{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "newText": ""}]}"#,
+            &test_data,
+        );
+    }
+}

@@ -13,3 +13,41 @@ pub struct ScalaTextEdit {
     /// empty string.
     pub new_text: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_text_edit() {
+        let test_data = ScalaTextEdit {
+            range: Range::default(),
+            new_text: TEST_STRING.to_string(),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "range": {
+    "start": {
+      "line": 0,
+      "character": 0
+    },
+    "end": {
+      "line": 0,
+      "character": 0
+    }
+  },
+  "newText": "test_string"
+}
+"#);
+
+        test_deserialization(
+            r#"{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "newText": "test_string"}"#,
+            &test_data,
+        );
+    }
+}

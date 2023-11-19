@@ -5,7 +5,7 @@ namespace bsp.cargo
 use bsp#BuildTargetData
 use bsp#BuildTargetIdentifiers
 use bsp#StatusCode
-use bsp.rust#FeatureDependencyGraph
+use bsp.rust#FeaturesDependencyGraph
 use bsp.rust#Features
 use bsp.rust#RustEdition
 use traits#dataKind
@@ -27,7 +27,7 @@ structure CargoBuildTarget {
     @required
     edition: RustEdition
     @required
-    required_features: Features
+    requiredFeatures: Features
 }
 
 /// The cargo features state request is sent from the client to the server to
@@ -56,7 +56,7 @@ structure PackageFeatures {
     targets: BuildTargetIdentifiers
     /// The list of available features for the Cargo package.
     @required
-    availableFeatures: FeatureDependencyGraph
+    availableFeatures: FeaturesDependencyGraph
     /// The list of enabled features for the Cargo package.
     @required
     enabledFeatures: Features

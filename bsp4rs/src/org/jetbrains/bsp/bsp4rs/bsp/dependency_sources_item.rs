@@ -11,3 +11,33 @@ pub struct DependencySourcesItem {
     /// Can be source files, jar files, zip files, or directories.
     pub sources: Vec<URI>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn dependency_sources_item() {
+        let test_data = DependencySourcesItem {
+            target: BuildTargetIdentifier::default(),
+            sources: vec![URI::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "target": {
+    "uri": ""
+  },
+  "sources": [
+    ""
+  ]
+}
+"#);
+
+        test_deserialization(r#"{"target": {"uri": ""}, "sources": [""]}"#, &test_data);
+    }
+}

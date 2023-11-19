@@ -4,3 +4,23 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScalaAttachRemote {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_attach_remote() {
+        let test_data = ScalaAttachRemote {};
+
+        assert_json_snapshot!(test_data,
+@r#"
+{}
+"#);
+
+        test_deserialization(r#"{}"#, &test_data);
+    }
+}

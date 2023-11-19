@@ -13,6 +13,45 @@ pub struct ScalaMainClass {
     pub jvm_options: Vec<String>,
     /// The environment variables for the application.
     #[deprecated(note = "Use `buildTarget/run` params instead")]
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub environment_variables: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<Vec<String>>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_main_class() {
+        let test_data = ScalaMainClass {
+            class_name: TEST_STRING.to_string(),
+            arguments: vec![TEST_STRING.to_string()],
+            jvm_options: vec![TEST_STRING.to_string()],
+            environment_variables: Some(vec![TEST_STRING.to_string()]),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "class": "test_string",
+  "arguments": [
+    "test_string"
+  ],
+  "jvmOptions": [
+    "test_string"
+  ],
+  "environmentVariables": [
+    "test_string"
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"class": "test_string", "arguments": ["test_string"], "jvmOptions": ["test_string"], "environmentVariables": ["test_string"]}"#,
+            &test_data,
+        );
+    }
 }

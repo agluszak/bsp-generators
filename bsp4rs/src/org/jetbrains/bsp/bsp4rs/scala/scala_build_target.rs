@@ -19,6 +19,45 @@ pub struct ScalaBuildTarget {
     /// A sequence of Scala jars such as scala-library, scala-compiler and scala-reflect.
     pub jars: Vec<URI>,
     /// The jvm build target describing jdk to be used
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub jvm_build_target: Option<JvmBuildTarget>,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_build_target() {
+        let test_data = ScalaBuildTarget {
+            scala_organization: TEST_STRING.to_string(),
+            scala_version: TEST_STRING.to_string(),
+            scala_binary_version: TEST_STRING.to_string(),
+            platform: ScalaPlatform::default(),
+            jars: vec![URI::default()],
+            jvm_build_target: Some(JvmBuildTarget::default()),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "scalaOrganization": "test_string",
+  "scalaVersion": "test_string",
+  "scalaBinaryVersion": "test_string",
+  "platform": 1,
+  "jars": [
+    ""
+  ],
+  "jvmBuildTarget": {}
+}
+"#);
+
+        test_deserialization(
+            r#"{"scalaOrganization": "test_string", "scalaVersion": "test_string", "scalaBinaryVersion": "test_string", "platform": 1, "jars": [""], "jvmBuildTarget": {}}"#,
+            &test_data,
+        );
+    }
 }

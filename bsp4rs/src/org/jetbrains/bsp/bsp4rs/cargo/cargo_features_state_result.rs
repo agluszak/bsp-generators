@@ -9,3 +9,37 @@ pub struct CargoFeaturesStateResult {
     /// identifiers and available features.
     pub packages_features: Vec<PackageFeatures>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn cargo_features_state_result() {
+        let test_data = CargoFeaturesStateResult {
+            packages_features: vec![PackageFeatures::default()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "packagesFeatures": [
+    {
+      "packageId": "",
+      "targets": [],
+      "availableFeatures": {},
+      "enabledFeatures": []
+    }
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"packagesFeatures": [{"packageId": "", "targets": [], "availableFeatures": {}, "enabledFeatures": []}]}"#,
+            &test_data,
+        );
+    }
+}

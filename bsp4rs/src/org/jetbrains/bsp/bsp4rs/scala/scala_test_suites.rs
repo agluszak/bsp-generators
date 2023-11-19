@@ -13,3 +13,43 @@ pub struct ScalaTestSuites {
     #[deprecated(note = "Use `buildTarget/test` params instead")]
     pub environment_variables: Vec<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tests::*;
+
+    use insta::assert_json_snapshot;
+
+    #[test]
+    fn scala_test_suites() {
+        let test_data = ScalaTestSuites {
+            suites: vec![ScalaTestSuiteSelection::default()],
+            jvm_options: vec![TEST_STRING.to_string()],
+            environment_variables: vec![TEST_STRING.to_string()],
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "suites": [
+    {
+      "className": "",
+      "tests": []
+    }
+  ],
+  "jvmOptions": [
+    "test_string"
+  ],
+  "environmentVariables": [
+    "test_string"
+  ]
+}
+"#);
+
+        test_deserialization(
+            r#"{"suites": [{"className": "", "tests": []}], "jvmOptions": ["test_string"], "environmentVariables": ["test_string"]}"#,
+            &test_data,
+        );
+    }
+}
