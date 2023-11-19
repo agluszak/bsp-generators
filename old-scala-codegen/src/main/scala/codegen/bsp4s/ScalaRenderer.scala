@@ -187,22 +187,6 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
     )
   }
 
-  def renderOperations(operations: List[Operation]): Lines = {
-    val groupedByTargetName = operations.groupBy(_.jsonRPCMethod.split("/")(0))
-    lines(
-      groupedByTargetName.map { case (targetName, operations) =>
-        val targetNameCapitalized = targetName.capitalize
-        lines(
-          s"object $targetNameCapitalized extends $targetNameCapitalized",
-          block(s"trait $targetNameCapitalized")(
-            operations.foldMap(renderOperation)
-          )
-        )
-      }.toList,
-      newline
-    )
-  }
-
   def renderDocs(hints: List[Hint]): Lines = {
     val isUnstable = hints.contains(Unstable)
     val unstableNote = if (isUnstable) {
@@ -223,6 +207,22 @@ class ScalaRenderer(basepkg: String, definitions: List[Def], version: String) {
           " */"
         )
     }
+  }
+
+  def renderOperations(operations: List[Operation]): Lines = {
+    val groupedByTargetName = operations.groupBy(_.jsonRPCMethod.split("/")(0))
+    lines(
+      groupedByTargetName.map { case (targetName, operations) =>
+        val targetNameCapitalized = targetName.capitalize
+        lines(
+          s"object $targetNameCapitalized extends $targetNameCapitalized",
+          block(s"trait $targetNameCapitalized")(
+            operations.foldMap(renderOperation)
+          )
+        )
+      }.toList,
+      newline
+    )
   }
 
   def renderOperation(operation: Operation): Lines = {

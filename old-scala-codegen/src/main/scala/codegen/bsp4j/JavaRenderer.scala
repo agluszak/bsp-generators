@@ -263,7 +263,7 @@ class JavaRenderer(basepkg: String, definitions: List[Def], version: String) {
       lines(s"import org.eclipse.lsp4j.jsonrpc.messages.Either") ++ tpes.foldMap(
         renderImportFromType
       )
-    case TPrimitive(prim, _)  => empty
+    case TPrimitive(prim, _) => empty
   }
 
   def renderImport(field: Field): Lines = {

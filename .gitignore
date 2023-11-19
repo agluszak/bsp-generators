@@ -1,8 +1,12 @@
-projectview.bazelproject
 .idea
+
+.aspect
+bazel-*
+
+# bsp specific
 .bsp
 .bazelbsp
-bazel-*
+projectview.bazelproject
+
+# generated libs sepcific
 bsp4rs/target
-.aspect
-website/node_modules
