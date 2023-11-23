@@ -70,17 +70,17 @@ It can come in one of two forms: a binary crate or a library crate.
 `Binary crates` are programs you can compile to an executable that you can run,
 such as a command-line program or a server.
 Each must have a function called main that defines what happens when the executable runs.
-`Library crates` don’t have a main function, and they don’t compile to an executable.
+`Library crates` don't have a main function, and they don't compile to an executable.
 Instead, they define functionality intended to be shared with multiple projects.
 
 A `package` is a bundle of one or more crates that provides a set of functionality.
 It contains a Cargo.toml file that describes how to build those crates.
 A package can contain many binary crates, but at most only one library crate.
-However, it must contain at least one crate, whether that’s a library or binary crate.
+However, it must contain at least one crate, whether that's a library or binary crate.
 
 ```ts
 export interface RustPackage {
-  /** The package’s unique identifier */
+  /** The package's unique identifier */
   id: string;
 
   /** The package's root path. */
@@ -275,7 +275,7 @@ export interface RustRawDependency {
 
   /** Name to which this dependency is renamed when declared in Cargo.toml.
    * This field allows to specify an alternative name for a dependency to use in a code,
-   * regardless of how it’s published (helpful for example if multiple dependencies
+   * regardless of how it's published (helpful for example if multiple dependencies
    * have conflicting names). */
   rename?: string;
 
