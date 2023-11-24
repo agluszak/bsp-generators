@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-/// Structure describing how to start a BSP server and the capabilities it supportss.
+/// Structure describing how to start a BSP server and the capabilities it supports.
 #[derive(Clone, Debug, Default, Eq, PartialEq, Hash, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BspConnectionDetails {

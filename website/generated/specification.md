@@ -9,7 +9,7 @@ This document is the specification of the Build Server Protocol (BSP).
 Edits to this specification can be made via a pull request against this markdown
 document, see "edit" button at the bottom of this page on the website.
 
-## Motivationn
+## Motivation
 
 The goal of BSP is to reduce the effort required by tooling developers to
 integrate between available IDEs and build tools. Currently, every IDE must

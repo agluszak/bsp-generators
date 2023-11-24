@@ -45,6 +45,6 @@ jobs:
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
-          cat ${{ steps.verify-changed-files.outputs.changed_files }}
+          echo "Detected changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
           echo "Make sure to run 'bazel run //:generate' before pushing."
           exit 1

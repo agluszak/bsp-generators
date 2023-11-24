@@ -5,7 +5,7 @@ sidebar_label: cpp
 ---
 
 The following section contains C++-specific extensions to the build server
-protocoll.
+protocol.
 
 ## BSP version
 
