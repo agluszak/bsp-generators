@@ -10,8 +10,6 @@ use traits#jsonRPC
 use traits#jsonRequest
 use traits#untaggedUnion
 
-// TODO: add WorkspaceLibraries endpoint
-
 /// An integer is a 32-bit signed integer ranging from -2^31 to (2^31)-1 (inclusive).
 integer Integer
 
