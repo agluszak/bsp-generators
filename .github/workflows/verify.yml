@@ -19,8 +19,7 @@ jobs:
       - name: Mount bazel cache
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.cache/bazel
+          path: "/home/runner/.cache/bazel"
           key: bazel
 
       - name: Generate
@@ -37,14 +36,11 @@ jobs:
         id: verify-changed-files
         with:
           files: |
-            **/*.kt
-            **/*.rs
-            **/*.scala
-            **/*.java
-            **/*.md
-            !~/.cache/bazel
-            !website/node_modules
-            !bsp4rs/target
+            bsp4kt/src/**/*.kt
+            bsp4rs/src/**/*.rs
+            bsp4s/src/**/*.scala
+            bsp4j/src/**/*.java
+            website/generated/**/*.md
 
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'
