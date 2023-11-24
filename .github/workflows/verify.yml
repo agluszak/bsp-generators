@@ -36,16 +36,15 @@ jobs:
         id: verify-changed-files
         with:
           files: |
-            bsp4kt/src/**/*.kt
-            bsp4rs/src/**/*.rs
-            bsp4s/src/**/*.scala
-            bsp4j/src/**/*.java
-            website/generated/**/*.md
+            bsp4kt/src
+            bsp4rs/src
+            bsp4s/src
+            bsp4j/src
+            website/generated
 
       - name: Fail if we detect changed files
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         run: |
           cat ${{ steps.verify-changed-files.outputs.changed_files }}
-          echo "Detected changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
           echo "Make sure to run 'bazel run //:generate' before pushing."
           exit 1

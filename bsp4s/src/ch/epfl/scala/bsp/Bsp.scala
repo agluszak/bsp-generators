@@ -40,7 +40,7 @@ object Uri {
   }
 }
 
-/** Structure describing how to start a BSP server and the capabilities it supports.
+/** Structure describing how to start a BSP server and the capabilities it supportss.
   */
 final case class BspConnectionDetails(
     name: String,

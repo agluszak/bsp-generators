@@ -7,7 +7,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 /**
- * Structure describing how to start a BSP server and the capabilities it supports.
+ * Structure describing how to start a BSP server and the capabilities it supportss.
  */
 @SuppressWarnings("all")
 public class BspConnectionDetails {

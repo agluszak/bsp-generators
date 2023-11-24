@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
+
 @Serializable
 data class BspConnectionDetails(
   val name: String,
