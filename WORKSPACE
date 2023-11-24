@@ -1,8 +1,9 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-BAZEL_SKYLIB_VERSION = "1.4.2"
+BAZEL_SKYLIB_VERSION = "1.5.0"
 
-BAZEL_SKYLIB_SHA = "66ffd9315665bfaafc96b52278f57c7e2dd09f5ede279ea6d39b2be471e7e3aa"
+BAZEL_SKYLIB_SHA = "cd55a062e763b9349921f0f5db8c3933288dc8ba4f76dd9416aac68acee3cb94"
 
 http_archive(
     name = "bazel_skylib",
@@ -13,9 +14,9 @@ http_archive(
     ],
 )
 
-RULES_PYTHON_VERSION = "0.26.0"
+RULES_PYTHON_VERSION = "0.27.0"
 
-RULES_PYTHON_SHA = "9d04041ac92a0985e344235f5d946f71ac543f1b1565f2cdbc9a2aaee8adf55b"
+RULES_PYTHON_SHA = "9acc0944c94adb23fba1c9988b48768b1bacc6583b52a2586895c5b7491e2e31"
 
 http_archive(
     name = "rules_python",
@@ -68,33 +69,40 @@ scalatest_repositories()
 
 scalatest_toolchain()
 
-RULES_KOTLIN_VERSION = "1.8.1"
+RULES_KOTLIN_VERSION = "1.9.0"
 
-RULES_KOTLIN_SHA = "a630cda9fdb4f56cf2dc20a4bf873765c41cf00e9379e8d59cd07b24730f4fde"
+RULES_KOTLIN_SHA = "5766f1e599acf551aa56f49dab9ab9108269b03c557496c54acaf41f98e2b8d6"
 
 http_archive(
-    name = "io_bazel_rules_kotlin",
+    name = "rules_kotlin",
     sha256 = RULES_KOTLIN_SHA,
-    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin_release.tgz" % RULES_KOTLIN_VERSION],
+    urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/v%s/rules_kotlin-v%s.tar.gz" % (RULES_KOTLIN_VERSION, RULES_KOTLIN_VERSION)],
 )
 
-load("@io_bazel_rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
+load("@rules_kotlin//kotlin:repositories.bzl", "kotlin_repositories")
 
 kotlin_repositories()  # if you want the default. Otherwise see custom kotlinc distribution below
 
-load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
+load("@rules_kotlin//kotlin:core.bzl", "kt_register_toolchains")
 
 kt_register_toolchains()  # to use the default toolchain, otherwise see toolchains below
 
-RULES_JVM_EXTERNAL_VERSION = "5.3"
+# RULES_JVM_EXTERNAL_TAG = "5.3"
+#
+# RULES_JVM_EXTERNAL_SHA = "d31e369b854322ca5098ea12c69d7175ded971435e55c18dd9dd5f29cc5249ac"
+#
+# http_archive(
+#    name = "rules_jvm_external",
+#    sha256 = RULES_JVM_EXTERNAL_SHA,
+#    strip_prefix = "rules_jvm_external-%s" % RULES_JVM_EXTERNAL_TAG,
+#    url = "https://github.com/bazelbuild/rules_jvm_external/releases/download/%s/rules_jvm_external-%s.tar.gz" % (RULES_JVM_EXTERNAL_TAG, RULES_JVM_EXTERNAL_TAG),
+#)
 
-RULES_JVM_EXTERNAL_SHA = "d31e369b854322ca5098ea12c69d7175ded971435e55c18dd9dd5f29cc5249ac"
-
-http_archive(
+# change this back to http_archive once version using rules_kotlin 1.9.0 is released
+git_repository(
     name = "rules_jvm_external",
-    sha256 = RULES_JVM_EXTERNAL_SHA,
-    strip_prefix = "rules_jvm_external-{}".format(RULES_JVM_EXTERNAL_VERSION),
-    url = "https://github.com/bazelbuild/rules_jvm_external/releases/download/%s/rules_jvm_external-%s.tar.gz" % (RULES_JVM_EXTERNAL_VERSION, RULES_JVM_EXTERNAL_VERSION),
+    commit = "9a4aa70bed415dc7b0ab7db7f642fef801dce5cc",
+    remote = "https://github.com/bazelbuild/rules_jvm_external.git",
 )
 
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
@@ -121,7 +129,6 @@ maven_install(
         "org.junit.platform:junit-platform-console:1.10.0",
 
         # bsp4kt
-        "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1",
         "com.github.agluszak:jsonrpc4kt:f4d0c972f8",
 
         # docs
@@ -181,9 +188,9 @@ maven_install(
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-RULES_JS_VERSION = "1.32.2"
+RULES_JS_VERSION = "1.34.0"
 
-RULES_JS_SHA = "77c4ea46c27f96e4aadcc580cd608369208422cf774988594ae8a01df6642c82"
+RULES_JS_SHA = "d9ceb89e97bb5ad53b278148e01a77a3e9100db272ce4ebdcd59889d26b9076e"
 
 http_archive(
     name = "aspect_rules_js",
@@ -217,9 +224,46 @@ load("@npm//:repositories.bzl", "npm_repositories")
 
 npm_repositories()
 
-RULES_RUST_VERSION = "0.26.0"
+RULES_MULTIRUN_VERSION = "0.6.1"
 
-RULES_RUST_SHA = "9d04e658878d23f4b00163a72da3db03ddb451273eb347df7d7c50838d698f49"
+RULES_MULTIRUN_SHA = "9cd384e42b2da00104f0e18f25e66285aa21f64b573c667638a7a213206885ab"
+
+http_archive(
+    name = "rules_multirun",
+    sha256 = RULES_MULTIRUN_SHA,
+    strip_prefix = "rules_multirun-%s" % RULES_MULTIRUN_VERSION,
+    url = "https://github.com/keith/rules_multirun/archive/refs/tags/%s.tar.gz" % RULES_MULTIRUN_VERSION,
+)
+
+git_repository(
+    name = "aspect_rules_format",
+    commit = "a416c6b3744ce9f9f4307a2a9b135328eb009de9",
+    remote = "https://github.com/agluszak/bazel-super-formatter.git",
+)
+
+load("@aspect_rules_format//format:repositories.bzl", "rules_format_dependencies")
+
+rules_format_dependencies()
+
+load("@aspect_rules_format//format:dependencies.bzl", "parse_dependencies")
+
+parse_dependencies()
+
+load("@aspect_rules_format//format:dependencies.bzl", "rules_format_setup")
+
+rules_format_setup()
+
+# Installs toolchains for running programs under Node, Python, etc.
+# Be sure to register your own toolchains before this.
+# Most users should do this LAST in their WORKSPACE to avoid getting our versions of
+# things like the Go toolchain rather than the one you intended.
+load("@aspect_rules_format//format:toolchains.bzl", "format_register_toolchains")
+
+format_register_toolchains()
+
+RULES_RUST_VERSION = "0.31.0"
+
+RULES_RUST_SHA = "36ab8f9facae745c9c9c1b33d225623d976e78f2cc3f729b7973d8c20934ab95"
 
 http_archive(
     name = "rules_rust",
@@ -253,42 +297,3 @@ crates_repository(
 load("@crate_index//:defs.bzl", "crate_repositories")
 
 crate_repositories()
-
-RULES_MULTIRUN_VERSION = "0.6.1"
-
-RULES_MULTIRUN_SHA = "9cd384e42b2da00104f0e18f25e66285aa21f64b573c667638a7a213206885ab"
-
-http_archive(
-    name = "rules_multirun",
-    sha256 = RULES_MULTIRUN_SHA,
-    strip_prefix = "rules_multirun-%s" % RULES_MULTIRUN_VERSION,
-    url = "https://github.com/keith/rules_multirun/archive/refs/tags/%s.tar.gz" % RULES_MULTIRUN_VERSION,
-)
-
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-
-git_repository(
-    name = "aspect_rules_format",
-    commit = "a416c6b3744ce9f9f4307a2a9b135328eb009de9",
-    remote = "https://github.com/agluszak/bazel-super-formatter.git",
-)
-
-load("@aspect_rules_format//format:repositories.bzl", "rules_format_dependencies")
-
-rules_format_dependencies()
-
-load("@aspect_rules_format//format:dependencies.bzl", "parse_dependencies")
-
-parse_dependencies()
-
-load("@aspect_rules_format//format:dependencies.bzl", "rules_format_setup")
-
-rules_format_setup()
-
-# Installs toolchains for running programs under Node, Python, etc.
-# Be sure to register your own toolchains before this.
-# Most users should do this LAST in their WORKSPACE to avoid getting our versions of
-# things like the Go toolchain rather than the one you intended.
-load("@aspect_rules_format//format:toolchains.bzl", "format_register_toolchains")
-
-format_register_toolchains()

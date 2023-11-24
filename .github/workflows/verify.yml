@@ -42,7 +42,7 @@ jobs:
             **/*.scala
             **/*.java
             **/*.md
-            !bazel-*
+            !~/.cache/bazel
             !website/node_modules
             !bsp4rs/target
 
