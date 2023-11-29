@@ -114,4 +114,3 @@ sealed interface Hint {
     data class JsonRename(val name: String) : Hint
     object Unstable : Hint
 }
-

@@ -48,13 +48,13 @@ class Bsp4rsTest {
             TestCase(
                 Field("test", Type.Bool, false, emptyList()),
                 rustCode {
-                    -"""#[serde(default, skip_serializing_if = "Option::is_none")]"""
+                    -"""#[serde(skip_serializing_if = "Option::is_none")]"""
                 },
             ),
             TestCase(
                 Field("test", Type.List(Type.Int), false, emptyList()),
                 rustCode {
-                    -"""#[serde(default, skip_serializing_if = "Vec::is_empty")]"""
+                    -"""#[serde(skip_serializing_if = "Option::is_none")]"""
                 }
             ),
             TestCase(
@@ -65,13 +65,13 @@ class Bsp4rsTest {
                     emptyList()
                 ),
                 rustCode {
-                    -"""#[serde(default, skip_serializing_if = "BTreeMap::is_empty")]"""
+                    -"""#[serde(skip_serializing_if = "Option::is_none")]"""
                 }
             ),
             TestCase(
                 Field("test", Type.Set(Type.Json), false, emptyList()),
                 rustCode {
-                    -"""#[serde(default, skip_serializing_if = "BTreeSet::is_empty")]"""
+                    -"""#[serde(skip_serializing_if = "Option::is_none")]"""
                 }
             ),
         )

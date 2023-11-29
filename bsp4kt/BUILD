@@ -8,6 +8,5 @@ kt_jvm_export(
     deps = [
         "//:kotlin_serialization",
         "@maven//:com_github_agluszak_jsonrpc4kt",
-        "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_json",
     ],
 )

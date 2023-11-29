@@ -1,5 +1,5 @@
-load("@io_bazel_rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
-load("@io_bazel_rules_kotlin//kotlin:core.bzl", "kt_compiler_plugin")
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary", "kt_jvm_library")
+load("@rules_kotlin//kotlin:core.bzl", "kt_compiler_plugin")
 load("@io_bazel_rules_scala//scala:scala.bzl", "scala_binary")
 load("@io_bazel_rules_scala//scala:scala_import.bzl", "scala_import")
 load("@rules_multirun//:defs.bzl", "command", "multirun")
@@ -20,10 +20,10 @@ multirun(
 multirun(
     name = "generate_all",
     commands = [
-        "//:generate-bsp4kt_command",
-        "//:generate-bsp4s_command",
         "//:generate-bsp4j_command",
+        "//:generate-bsp4kt_command",
         "//:generate-bsp4rs_command",
+        "//:generate-bsp4s_command",
         "//:generate-website_command",
     ],
     jobs = 0,
@@ -55,7 +55,7 @@ website(
         "//codegen:codegen.jar",
         "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_jsonrpc",
         "@maven//:com_google_code_gson_gson",
-        "@com_github_jetbrains_kotlin//:kotlin-stdlib",
+        "@rules_kotlin//kotlin/compiler:kotlin-stdlib",
         "@maven//:software_amazon_smithy_smithy_model",
         "@maven//:software_amazon_smithy_smithy_utils",
         "//spec-traits:spec-traits.jar",
@@ -72,7 +72,7 @@ kt_compiler_plugin(
     id = "org.jetbrains.kotlin.serialization",
     stubs_phase = True,
     deps = [
-        "@com_github_jetbrains_kotlin//:kotlinx-serialization-compiler-plugin",
+        "@rules_kotlin//kotlin/compiler:kotlinx-serialization-compiler-plugin",
     ],
 )
 
@@ -84,38 +84,6 @@ kt_jvm_library(
     exports = [
         "@maven//:org_jetbrains_kotlinx_kotlinx_serialization_core_jvm",
     ],
-)
-
-java_binary(
-    name = "bsp4kt-generator",
-    main_class = "org.jetbrains.bsp.generators.bsp4kt.Main",
-    visibility = ["//visibility:public"],
-    runtime_deps = [
-        "//codegen",
-    ],
-)
-
-library_generator(
-    name = "generate-bsp4kt",
-    gen_tool = ":bsp4kt-generator",
-    library_name = "bsp4kt",
-    visibility = ["//visibility:public"],
-)
-
-java_binary(
-    name = "bsp4s-generator",
-    main_class = "bsp.codegen.bsp4s.Main",
-    visibility = ["//visibility:public"],
-    runtime_deps = [
-        "//old-scala-codegen",
-    ],
-)
-
-library_generator(
-    name = "generate-bsp4s",
-    gen_tool = ":bsp4s-generator",
-    library_name = "bsp4s",
-    visibility = ["//visibility:public"],
 )
 
 java_binary(
@@ -135,6 +103,22 @@ library_generator(
 )
 
 java_binary(
+    name = "bsp4kt-generator",
+    main_class = "org.jetbrains.bsp.generators.bsp4kt.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        "//codegen",
+    ],
+)
+
+library_generator(
+    name = "generate-bsp4kt",
+    gen_tool = ":bsp4kt-generator",
+    library_name = "bsp4kt",
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
     name = "bsp4rs-generator",
     main_class = "org.jetbrains.bsp.generators.bsp4rs.Main",
     visibility = ["//visibility:public"],
@@ -147,5 +131,21 @@ library_generator(
     name = "generate-bsp4rs",
     gen_tool = ":bsp4rs-generator",
     library_name = "bsp4rs",
+    visibility = ["//visibility:public"],
+)
+
+java_binary(
+    name = "bsp4s-generator",
+    main_class = "bsp.codegen.bsp4s.Main",
+    visibility = ["//visibility:public"],
+    runtime_deps = [
+        "//old-scala-codegen",
+    ],
+)
+
+library_generator(
+    name = "generate-bsp4s",
+    gen_tool = ":bsp4s-generator",
+    library_name = "bsp4s",
     visibility = ["//visibility:public"],
 )

@@ -7,7 +7,16 @@ import traits.EnumKindTrait.EnumKind.{CLOSED, OPEN}
 import software.amazon.smithy.model.Model
 import software.amazon.smithy.model.shapes._
 import software.amazon.smithy.model.traits._
-import traits.{DataKindTrait, DataTrait, DocsPriorityTrait, EnumKindTrait, JsonNotificationTrait, JsonRequestTrait, SetTrait, UntaggedUnionTrait}
+import traits.{
+  DataKindTrait,
+  DataTrait,
+  DocsPriorityTrait,
+  EnumKindTrait,
+  JsonNotificationTrait,
+  JsonRequestTrait,
+  SetTrait,
+  UntaggedUnionTrait
+}
 
 import java.util.Optional
 import scala.collection.mutable.{Map => MMap}
@@ -376,7 +385,9 @@ class SmithyToIR(model: Model) {
       .map(_.getMessage.orElse(""))
       .map(Hint.Deprecated)
 
-    List(documentation, deprecated).flatten
+    val unstable = if (shape.hasTrait(classOf[UnstableTrait])) Some(Hint.Unstable) else None
+
+    List(documentation, deprecated, unstable).flatten
   }
 
   class DocShapeVisitor(map: MMap[ShapeId, DocNode]) extends ShapeVisitor.Default[Unit] {
