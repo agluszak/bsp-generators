@@ -11,3 +11,17 @@ kt_jvm_binary(
         "//bsp4kt"
     ],
 )
+
+load("//rules/kotlin:junit5.bzl", "kt_test")
+
+kt_test(
+    name = "serialization_test",
+    src = "src/test/kotlin/SerializationTest.kt",
+    classname = "SerializationTest",
+    data = [
+        "//tests:kotlin_json_roundtrip"
+    ],
+    deps = [
+        "@bazel_tools//tools/java/runfiles:runfiles",
+    ],
+)

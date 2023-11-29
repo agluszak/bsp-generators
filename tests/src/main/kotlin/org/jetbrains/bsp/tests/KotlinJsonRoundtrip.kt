@@ -177,6 +177,7 @@ const val TERMINAL_STRING = "exit"
 data class DataWrapper(val name: String, val jsonData: String)
 
 fun main() {
+    println("I'm running :)")
     val gson: Gson = GsonBuilder().create()
 
     while (true) {
