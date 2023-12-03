@@ -4,6 +4,7 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
 import org.jetbrains.bsp.bsp4kt.*
 
@@ -135,7 +136,7 @@ val serializersMap = mapOf<String, KSerializer<*>>(
 const val TERMINAL_STRING = "exit"
 
 @Serializable
-data class DataWrapper(val name: String, val jsonData: String)
+data class DataWrapper(val name: String, val jsonData: JsonElement)
 
 fun main() {
     val json = Json { ignoreUnknownKeys = true }
@@ -152,7 +153,7 @@ fun main() {
             continue
         }
 
-        val instance = Json.decodeFromString(kClassSerializer, wrapper.jsonData)
+        val instance = Json.decodeFromJsonElement(kClassSerializer, wrapper.jsonData)
 
         val encodedInstance = Json.encodeToJsonElement(kClassSerializer as KSerializer<Any>, instance!!)
         println(encodedInstance.toString())

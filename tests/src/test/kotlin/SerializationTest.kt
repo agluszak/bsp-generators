@@ -1,5 +1,5 @@
 import org.jetbrains.bsp.generators.Loader
-import org.jetbrains.bsp.generators.bsp4json.JsonRenderer
+import org.jetbrains.bsp.generators.bsp4json.JsonRenderer2
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeAll
 import java.io.BufferedReader
@@ -8,17 +8,19 @@ import java.io.PrintWriter
 import java.io.File
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.IrConfig
 import org.jetbrains.bsp.generators.ir.SmithyToIr
 import org.jetbrains.bsp.generators.ir.TypeAliasing
 import org.jetbrains.bsp.generators.ir.AbstractionLevel
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals
 
 @Serializable
-data class DataWrapper(val name: String, val jsonData: String)
+data class DataWrapper(val name: String, val jsonData: JsonElement)
 
 class SerializationTest {
     @Test
@@ -42,7 +44,7 @@ class SerializationTest {
 
             val response = reader.readLine()
             println("RES  : $response")
-            assertEquals(objectMapper.readTree(data.jsonData), objectMapper.readTree(response));
+            assertEquals(objectMapper.readTree(json.encodeToString(data.jsonData)), objectMapper.readTree(response));
         }
 
         writer.println("exit")
@@ -72,7 +74,7 @@ class SerializationTest {
             val ir = SmithyToIr(model, irConfig)
             val definitions = namespaces.flatMap { ir.definitions(it) }
 
-            val jsonRenderer = JsonRenderer(definitions)
+            val jsonRenderer = JsonRenderer2(definitions)
             val shapes =
                 definitions.associateBy { it.shapeId }.filterValues { it is Def.Structure }.mapValues { (_, def) ->
                     jsonRenderer.renderStructureJson(def as Def.Structure, true)
