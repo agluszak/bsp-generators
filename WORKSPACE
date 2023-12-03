@@ -176,6 +176,11 @@ maven_install(
         "org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.28.0",
         "com.google.guava:guava:30.1.1-jre",
         "com.google.inject:guice:7.0.0",
+
+        # tests
+        "com.fasterxml.jackson.core:jackson-annotations:2.16.0",
+        "com.fasterxml.jackson.core:jackson-core:2.16.0",
+        "com.fasterxml.jackson.core:jackson-databind:2.16.0",
     ],
     fetch_sources = True,
     repositories = [

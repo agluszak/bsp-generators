@@ -35,8 +35,8 @@ kt_jvm_binary(
     visibility = ["//visibility:public"],
     srcs = glob(["src/main/kotlin/**/*.kt"]),
     deps = [
-        "@maven//:com_google_code_gson_gson",
-        "//bsp4kt"
+        "@//:kotlin_serialization",
+        "//bsp4kt",
     ],
 )
 
@@ -50,6 +50,13 @@ kt_test(
         "//tests:kotlin_json_roundtrip"
     ],
     deps = [
-        "@bazel_tools//tools/java/runfiles:runfiles",
+        "//codegen",
+        "@//:kotlin_serialization",
+        "@maven//:com_github_agluszak_jsonrpc4kt",
+        "@maven//:software_amazon_smithy_smithy_codegen_core",
+        "@maven//:software_amazon_smithy_smithy_model",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
     ],
 )
