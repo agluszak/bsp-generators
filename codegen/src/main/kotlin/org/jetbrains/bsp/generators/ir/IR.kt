@@ -61,6 +61,7 @@ sealed interface Type {
     // collections
     data class Set(val member: Type) : Type
     data class List(val member: Type) : Type
+    // TODO: it doesn't make sense to have a map with a non-string key
     data class Map(val key: Type, val value: Type) : Type
 
     // references
