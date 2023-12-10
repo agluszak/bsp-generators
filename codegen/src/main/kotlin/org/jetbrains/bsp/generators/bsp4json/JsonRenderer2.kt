@@ -18,10 +18,11 @@ val DEFAULT_LIST = emptyList<JsonElement>()
 
 enum class ContentsType {
     Default,
-    TestValue
+    TestOnlyPrimitive,
+    TestAll
 }
 
-enum class NotRequiredState {
+enum class NotRequired {
     Include,
     Exclude
 }
@@ -29,10 +30,7 @@ enum class NotRequiredState {
 class JsonRenderer2(val definitions: List<Def>) {
     val shapes = definitions.associateBy { it.shapeId }
 
-    fun renderDefJsonString(def: Def, contents: ContentsType, notRequired: NotRequiredState): String =
-        renderDefJson(def, contents, notRequired).toString()
-
-    fun renderDefJson(def: Def, contents: ContentsType, notRequired: NotRequiredState): JsonElement =
+    fun renderDefJson(def: Def, contents: ContentsType, notRequired: NotRequired): JsonElement =
         when (def) {
             is Def.Alias -> renderAliasJson(def, contents, notRequired)
             is Def.Structure -> renderStructureJson(def, contents, notRequired)
@@ -42,11 +40,11 @@ class JsonRenderer2(val definitions: List<Def>) {
             else -> JsonNull
         }
 
-    private fun renderStructureJson(def: Def.Structure, contents: ContentsType, notRequired: NotRequiredState): JsonElement {
-        val allFields = notRequired == NotRequiredState.Include
+    private fun renderStructureJson(def: Def.Structure, contents: ContentsType, notRequired: NotRequired): JsonElement {
+        val allFields = notRequired == NotRequired.Include
         val filteredFields = def.fields.filter { allFields || it.required }
 
-        val dataKindsFlattened = filteredFields.fold(emptyList<Field>()) { acc, field->
+        val dataKindsFlattened = filteredFields.fold(emptyList<Field>()) { acc, field ->
             if (field.type is Type.Ref && shapes[field.type.shapeId]!! is Def.DataKinds) {
                 acc + Field("dataKind", Type.String, true, listOf()) + Field("data", Type.Json, true, listOf())
             } else {
@@ -66,7 +64,7 @@ class JsonRenderer2(val definitions: List<Def>) {
         return renamed?.name ?: field.name
     }
 
-    private fun renderAliasJson(def: Def.Alias, contents: ContentsType, notRequired: NotRequiredState): JsonElement {
+    private fun renderAliasJson(def: Def.Alias, contents: ContentsType, notRequired: NotRequired): JsonElement {
         return renderTypeJson(def.aliasedType, contents, notRequired)
     }
 
@@ -89,13 +87,13 @@ class JsonRenderer2(val definitions: List<Def>) {
             EnumType.IntEnum -> Type.Int
             EnumType.StringEnum -> Type.String
         }
-        return renderTypeJson(type, contents, NotRequiredState.Exclude)
+        return renderTypeJson(type, contents, NotRequired.Exclude)
     }
 
     private fun renderUntaggedUnionJson(
         def: Def.UntaggedUnion,
         contents: ContentsType,
-        notRequired: NotRequiredState
+        notRequired: NotRequired
     ): JsonElement = if (contents == ContentsType.Default) {
         def.members.first().let { renderTypeJson(it, contents, notRequired) }
     } else {
@@ -103,7 +101,7 @@ class JsonRenderer2(val definitions: List<Def>) {
         def.members.first().let { renderTypeJson(it, contents, notRequired) }
     }
 
-    private fun renderTypeJson(type: Type, contents: ContentsType, notRequired: NotRequiredState): JsonElement =
+    private fun renderTypeJson(type: Type, contents: ContentsType, notRequired: NotRequired): JsonElement =
         when (contents) {
             ContentsType.Default -> when (type) {
                 is Type.Unit -> JsonNull
@@ -115,22 +113,46 @@ class JsonRenderer2(val definitions: List<Def>) {
                 is Type.List -> JsonArray(DEFAULT_LIST)
                 is Type.Map -> JsonObject(DEFAULT_MAP)
                 is Type.Set -> JsonArray(DEFAULT_LIST)
-                is Type.Ref -> renderDefJson(shapes[type.shapeId]!!, contents, notRequired)
+                is Type.Ref -> renderDefJson(shapes[type.shapeId]!!, ContentsType.Default, NotRequired.Exclude)
                 else -> JsonNull
             }
 
-            ContentsType.TestValue -> when (type) {
+            ContentsType.TestOnlyPrimitive -> when (type) {
                 is Type.Unit -> JsonNull
                 is Type.Bool -> JsonPrimitive(TEST_BOOL)
                 is Type.Int -> JsonPrimitive(TEST_INT)
                 is Type.Long -> JsonPrimitive(TEST_LONG)
                 is Type.String -> JsonPrimitive(TEST_STRING)
-                is Type.Json -> JsonObject(mapOf(TEST_MAP_KEY to JsonPrimitive(TEST_LONG)))
+                is Type.Json -> JsonObject(DEFAULT_MAP)
+                is Type.List -> JsonArray(listOf(renderTypeJson(type.member, contents, NotRequired.Exclude)))
+                is Type.Map -> JsonObject(DEFAULT_MAP)
+                is Type.Set -> JsonArray(listOf(renderTypeJson(type.member, contents, NotRequired.Exclude)))
+                is Type.Ref -> renderDefJson(shapes[type.shapeId]!!, ContentsType.Default, NotRequired.Exclude)
+                else -> JsonNull
+            }
+
+            ContentsType.TestAll -> when (type) {
+                is Type.Unit -> JsonNull
+                is Type.Bool -> JsonPrimitive(TEST_BOOL)
+                is Type.Int -> JsonPrimitive(TEST_INT)
+                is Type.Long -> JsonPrimitive(TEST_LONG)
+                is Type.String -> JsonPrimitive(TEST_STRING)
+                is Type.Json -> JsonObject(mapOf(TEST_MAP_KEY to JsonPrimitive(TEST_STRING)))
                 is Type.List -> JsonArray(listOf(renderTypeJson(type.member, contents, notRequired)))
-                is Type.Map -> JsonObject(mapOf(TEST_MAP_KEY to renderTypeJson(type.value, contents, notRequired)))
+                is Type.Map -> JsonObject(
+                    mapOf(renderTestMapKey(type.key) to renderTypeJson(type.value, contents, notRequired))
+                )
+
                 is Type.Set -> JsonArray(listOf(renderTypeJson(type.member, contents, notRequired)))
                 is Type.Ref -> renderDefJson(shapes[type.shapeId]!!, contents, notRequired)
                 else -> JsonNull
             }
         }
+
+
+    private fun renderTestMapKey(type: Type): String = when (type) {
+        is Type.String -> TEST_STRING
+        is Type.Ref -> DEFAULT_STRING
+        else -> ""
+    }
 } 

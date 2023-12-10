@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 import org.jetbrains.bsp.generators.bsp4json.ContentsType
-import org.jetbrains.bsp.generators.bsp4json.NotRequiredState
+import org.jetbrains.bsp.generators.bsp4json.NotRequired
 import org.junit.jupiter.api.Assertions.assertEquals
 
 @Serializable
@@ -80,9 +80,10 @@ class SerializationTest {
             val shapes =
                 definitions.associateBy { it.shapeId }.filterValues { it is Def.Structure }.mapValues { (_, def) ->
                     listOf(
-                        jsonRenderer.renderDefJson(def, ContentsType.TestValue, NotRequiredState.Exclude),
-                        jsonRenderer.renderDefJson(def, ContentsType.Default, NotRequiredState.Include),
-                        jsonRenderer.renderDefJson(def, ContentsType.TestValue, NotRequiredState.Include),
+                        jsonRenderer.renderDefJson(def, ContentsType.Default, NotRequired.Include),
+                        jsonRenderer.renderDefJson(def, ContentsType.TestOnlyPrimitive, NotRequired.Include),
+                        jsonRenderer.renderDefJson(def, ContentsType.TestAll, NotRequired.Include),
+                        jsonRenderer.renderDefJson(def, ContentsType.TestAll, NotRequired.Exclude),
                     )
                 }
 
