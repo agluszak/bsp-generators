@@ -25,8 +25,8 @@ mod tests {
     fn scala_test_suites() {
         let test_data = ScalaTestSuites {
             suites: vec![ScalaTestSuiteSelection::default()],
-            jvm_options: vec![TEST_STRING.to_string()],
-            environment_variables: vec![TEST_STRING.to_string()],
+            jvm_options: vec![String::default()],
+            environment_variables: vec![String::default()],
         };
 
         assert_json_snapshot!(test_data,
@@ -39,16 +39,16 @@ mod tests {
     }
   ],
   "jvmOptions": [
-    "test_string"
+    ""
   ],
   "environmentVariables": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"suites": [{"className": "", "tests": []}], "jvmOptions": ["test_string"], "environmentVariables": ["test_string"]}"#,
+            r#"{"suites": [{"className": "", "tests": []}], "jvmOptions": [""], "environmentVariables": [""]}"#,
             &test_data,
         );
     }

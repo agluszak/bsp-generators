@@ -27,10 +27,10 @@ mod tests {
     fn bsp_connection_details() {
         let test_data = BspConnectionDetails {
             name: TEST_STRING.to_string(),
-            argv: vec![TEST_STRING.to_string()],
+            argv: vec![String::default()],
             version: TEST_STRING.to_string(),
             bsp_version: TEST_STRING.to_string(),
-            languages: vec![TEST_STRING.to_string()],
+            languages: vec![String::default()],
         };
 
         assert_json_snapshot!(test_data,
@@ -38,18 +38,18 @@ mod tests {
 {
   "name": "test_string",
   "argv": [
-    "test_string"
+    ""
   ],
   "version": "test_string",
   "bspVersion": "test_string",
   "languages": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"name": "test_string", "argv": ["test_string"], "version": "test_string", "bspVersion": "test_string", "languages": ["test_string"]}"#,
+            r#"{"name": "test_string", "argv": [""], "version": "test_string", "bspVersion": "test_string", "languages": [""]}"#,
             &test_data,
         );
     }

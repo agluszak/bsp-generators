@@ -29,8 +29,8 @@ mod tests {
     fn javac_options_item() {
         let test_data = JavacOptionsItem {
             target: BuildTargetIdentifier::default(),
-            options: vec![TEST_STRING.to_string()],
-            classpath: vec![TEST_STRING.to_string()],
+            options: vec![String::default()],
+            classpath: vec![String::default()],
             class_directory: TEST_STRING.to_string(),
         };
 
@@ -41,17 +41,17 @@ mod tests {
     "uri": ""
   },
   "options": [
-    "test_string"
+    ""
   ],
   "classpath": [
-    "test_string"
+    ""
   ],
   "classDirectory": "test_string"
 }
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "options": ["test_string"], "classpath": ["test_string"], "classDirectory": "test_string"}"#,
+            r#"{"target": {"uri": ""}, "options": [""], "classpath": [""], "classDirectory": "test_string"}"#,
             &test_data,
         );
     }

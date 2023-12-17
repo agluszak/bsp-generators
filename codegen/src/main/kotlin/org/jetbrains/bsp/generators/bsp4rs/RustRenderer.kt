@@ -8,7 +8,11 @@ import org.jetbrains.bsp.generators.bsp4rs.def.renderDef
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDefTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumValue
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.Type
 import org.jetbrains.bsp.generators.utils.camelToSnakeCase
 import software.amazon.smithy.model.shapes.ShapeId
 import java.nio.file.Path
@@ -60,7 +64,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             newline()
             -"#[cfg(test)]"
             block("mod tests") {
-                include(renderTestsImports())
+                include(renderTestsImports(true))
                 newline()
                 include(renderDefTest(def))
             }
@@ -93,12 +97,14 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    private fun renderTestsImports(): CodeBlock {
+    fun renderTestsImports(canImportCrate: Boolean): CodeBlock {
         return rustCode {
             -"use super::*;"
-            -"use crate::tests::*;"
+            if (canImportCrate)
+                -"use crate::tests::*;"
             -"use insta::assert_compact_json_snapshot;"
             -"use insta::assert_json_snapshot;"
+            -"use serde::Deserialize;"
         }
     }
 

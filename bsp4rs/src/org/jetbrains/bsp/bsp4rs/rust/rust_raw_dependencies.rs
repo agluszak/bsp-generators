@@ -32,18 +32,15 @@ mod tests {
     #[test]
     fn rust_raw_dependencies() {
         let test_data = RustRawDependencies(BTreeMap::from([(
-            TEST_STRING.to_string(),
-            vec![RustRawDependency::default()],
+            String::default(),
+            Vec::<RustRawDependency>::default(),
         )]));
 
         assert_compact_json_snapshot!(
            test_data,
-           @r#"{"test_string": [{"name": "", "optional": false, "usesDefaultFeatures": false, "features": []}]}"#
+           @r#"{"": []}"#
         );
 
-        test_deserialization(
-            r#"{"test_string": [{"name": "", "optional": false, "usesDefaultFeatures": false, "features": []}]}"#,
-            &test_data,
-        );
+        test_deserialization(r#"{"": []}"#, &test_data);
     }
 }

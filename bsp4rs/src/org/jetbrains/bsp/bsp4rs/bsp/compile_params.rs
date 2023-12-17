@@ -28,7 +28,7 @@ mod tests {
         let test_data = CompileParams {
             targets: vec![BuildTargetIdentifier::default()],
             origin_id: Some(Identifier::default()),
-            arguments: Some(vec![TEST_STRING.to_string()]),
+            arguments: Some(vec![String::default()]),
         };
 
         assert_json_snapshot!(test_data,
@@ -41,13 +41,13 @@ mod tests {
   ],
   "originId": "",
   "arguments": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"targets": [{"uri": ""}], "originId": "", "arguments": ["test_string"]}"#,
+            r#"{"targets": [{"uri": ""}], "originId": "", "arguments": [""]}"#,
             &test_data,
         );
     }

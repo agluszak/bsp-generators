@@ -35,9 +35,9 @@ mod tests {
     fn cpp_options_item() {
         let test_data = CppOptionsItem {
             target: BuildTargetIdentifier::default(),
-            copts: vec![TEST_STRING.to_string()],
-            defines: vec![TEST_STRING.to_string()],
-            linkopts: vec![TEST_STRING.to_string()],
+            copts: vec![String::default()],
+            defines: vec![String::default()],
+            linkopts: vec![String::default()],
             linkshared: Some(TEST_BOOL),
         };
 
@@ -48,20 +48,20 @@ mod tests {
     "uri": ""
   },
   "copts": [
-    "test_string"
+    ""
   ],
   "defines": [
-    "test_string"
+    ""
   ],
   "linkopts": [
-    "test_string"
+    ""
   ],
   "linkshared": true
 }
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "copts": ["test_string"], "defines": ["test_string"], "linkopts": ["test_string"], "linkshared": true}"#,
+            r#"{"target": {"uri": ""}, "copts": [""], "defines": [""], "linkopts": [""], "linkshared": true}"#,
             &test_data,
         );
     }

@@ -28,7 +28,7 @@ mod tests {
         let test_data = ScalaTestClassesItem {
             target: BuildTargetIdentifier::default(),
             framework: Some(TEST_STRING.to_string()),
-            classes: vec![TEST_STRING.to_string()],
+            classes: vec![String::default()],
         };
 
         assert_json_snapshot!(test_data,
@@ -39,13 +39,13 @@ mod tests {
   },
   "framework": "test_string",
   "classes": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "framework": "test_string", "classes": ["test_string"]}"#,
+            r#"{"target": {"uri": ""}, "framework": "test_string", "classes": [""]}"#,
             &test_data,
         );
     }

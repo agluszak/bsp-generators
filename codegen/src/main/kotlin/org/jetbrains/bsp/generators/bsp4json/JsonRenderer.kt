@@ -1,6 +1,11 @@
 package org.jetbrains.bsp.generators.bsp4json
 
-import org.jetbrains.bsp.generators.ir.*
+import org.jetbrains.bsp.generators.ir.Def
+import org.jetbrains.bsp.generators.ir.EnumType
+import org.jetbrains.bsp.generators.ir.EnumValue
+import org.jetbrains.bsp.generators.ir.Field
+import org.jetbrains.bsp.generators.ir.Hint
+import org.jetbrains.bsp.generators.ir.Type
 import software.amazon.smithy.model.shapes.ShapeId
 
 class JsonRenderer(val definitions: List<Def>) {
@@ -88,10 +93,10 @@ class JsonRenderer(val definitions: List<Def>) {
         is Type.Int -> renderTypeTestConstValue(Type.Int)
         is Type.Long -> renderTypeTestConstValue(Type.Long)
         is Type.String -> renderTypeTestConstValue(Type.String)
-        is Type.Json -> "{${renderTypeJson(Type.String)}: ${renderTypeJson(Type.String)}}"
-        is Type.List -> "[${renderTypeJson(type.member)}]"
-        is Type.Map -> "{${renderTypeJson(type.key)}: ${renderTypeJson(type.value)}}"
-        is Type.Set -> "[${renderTypeJson(type.member)}]"
+        is Type.Json -> "{}"
+        is Type.List -> "[${renderTypeDefaultJson(type.member)}]"
+        is Type.Map -> "{${renderTypeDefaultJson(type.key)}: ${renderTypeDefaultJson(type.value)}}"
+        is Type.Set -> "[${renderTypeDefaultJson(type.member)}]"
         is Type.Ref -> renderDefDefaultJson(shapes[type.shapeId]!!)
         else -> ""
     }

@@ -49,6 +49,9 @@ pub struct OtherData {
 
 #[cfg(test)]
 pub mod tests {
+    use super::*;
+
+    use insta::assert_json_snapshot;
     use serde::Deserialize;
 
     pub const TEST_BOOL: bool = true;
@@ -62,5 +65,23 @@ pub mod tests {
     {
         let value = serde_json::from_str::<T>(json).unwrap();
         assert_eq!(&value, expected);
+    }
+
+    #[test]
+    fn other_data() {
+        let test_data = OtherData {
+            data_kind: TEST_STRING.to_string(),
+            data: serde_json::json!({}),
+        };
+
+        assert_json_snapshot!(test_data,
+@r#"
+{
+  "dataKind": "test_string",
+  "data": {}
+}
+"#);
+
+        test_deserialization(r#"{"dataKind": "test_string", "data": {}}"#, &test_data);
     }
 }

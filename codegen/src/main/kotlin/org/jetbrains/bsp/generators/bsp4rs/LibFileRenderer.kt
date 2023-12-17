@@ -2,6 +2,7 @@ package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
+import org.jetbrains.bsp.generators.bsp4rs.def.renderStructureTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
 import org.jetbrains.bsp.generators.dsl.rustCode
 import org.jetbrains.bsp.generators.ir.Type
@@ -53,7 +54,7 @@ private fun renderRpcTraits(): CodeBlock {
     }
 }
 
-private fun renderTestsBlock(): CodeBlock {
+private fun RustRenderer.renderTestsBlock(): CodeBlock {
     val consts = listOf(Type.Bool, Type.Int, Type.Long, Type.String).map {
         Pair(
             Pair(
@@ -67,7 +68,7 @@ private fun renderTestsBlock(): CodeBlock {
     return rustCode {
         -"#[cfg(test)]"
         block("pub mod tests") {
-            -"use serde::Deserialize;"
+            include(renderTestsImports(false))
             newline()
             consts.forEach { (nameTypePair, value) ->
                 -"""pub const ${nameTypePair.first}: ${nameTypePair.second} = $value;"""
@@ -77,6 +78,8 @@ private fun renderTestsBlock(): CodeBlock {
                 -"let value = serde_json::from_str::<T>(json).unwrap();"
                 -"assert_eq!(&value, expected);"
             }
+            newline()
+            include(renderStructureTest(otherDataDef))
         }
     }
 }

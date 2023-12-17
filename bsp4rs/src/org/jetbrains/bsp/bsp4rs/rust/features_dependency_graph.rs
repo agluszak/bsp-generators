@@ -33,14 +33,14 @@ mod tests {
     fn features_dependency_graph() {
         let test_data = FeaturesDependencyGraph(BTreeMap::from([(
             Feature::default(),
-            BTreeSet::from([Feature::default()]),
+            BTreeSet::<Feature>::default(),
         )]));
 
         assert_compact_json_snapshot!(
            test_data,
-           @r#"{"": [""]}"#
+           @r#"{"": []}"#
         );
 
-        test_deserialization(r#"{"": [""]}"#, &test_data);
+        test_deserialization(r#"{"": []}"#, &test_data);
     }
 }

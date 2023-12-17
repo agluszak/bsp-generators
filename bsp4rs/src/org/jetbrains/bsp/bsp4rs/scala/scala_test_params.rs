@@ -27,7 +27,7 @@ mod tests {
     fn scala_test_params() {
         let test_data = ScalaTestParams {
             test_classes: Some(vec![ScalaTestClassesItem::default()]),
-            jvm_options: Some(vec![TEST_STRING.to_string()]),
+            jvm_options: Some(vec![String::default()]),
         };
 
         assert_json_snapshot!(test_data,
@@ -42,13 +42,13 @@ mod tests {
     }
   ],
   "jvmOptions": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"testClasses": [{"target": {"uri": ""}, "classes": []}], "jvmOptions": ["test_string"]}"#,
+            r#"{"testClasses": [{"target": {"uri": ""}, "classes": []}], "jvmOptions": [""]}"#,
             &test_data,
         );
     }

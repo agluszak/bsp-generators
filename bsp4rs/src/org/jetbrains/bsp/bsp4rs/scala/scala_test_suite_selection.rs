@@ -21,7 +21,7 @@ mod tests {
     fn scala_test_suite_selection() {
         let test_data = ScalaTestSuiteSelection {
             class_name: TEST_STRING.to_string(),
-            tests: vec![TEST_STRING.to_string()],
+            tests: vec![String::default()],
         };
 
         assert_json_snapshot!(test_data,
@@ -29,14 +29,11 @@ mod tests {
 {
   "className": "test_string",
   "tests": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
-        test_deserialization(
-            r#"{"className": "test_string", "tests": ["test_string"]}"#,
-            &test_data,
-        );
+        test_deserialization(r#"{"className": "test_string", "tests": [""]}"#, &test_data);
     }
 }

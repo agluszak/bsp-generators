@@ -29,15 +29,15 @@ mod tests {
     #[test]
     fn rust_cfg_options() {
         let test_data = RustCfgOptions(BTreeMap::from([(
-            TEST_STRING.to_string(),
-            vec![TEST_STRING.to_string()],
+            String::default(),
+            Vec::<String>::default(),
         )]));
 
         assert_compact_json_snapshot!(
            test_data,
-           @r#"{"test_string": ["test_string"]}"#
+           @r#"{"": []}"#
         );
 
-        test_deserialization(r#"{"test_string": ["test_string"]}"#, &test_data);
+        test_deserialization(r#"{"": []}"#, &test_data);
     }
 }

@@ -28,9 +28,9 @@ mod tests {
     fn scala_main_class() {
         let test_data = ScalaMainClass {
             class_name: TEST_STRING.to_string(),
-            arguments: vec![TEST_STRING.to_string()],
-            jvm_options: vec![TEST_STRING.to_string()],
-            environment_variables: Some(vec![TEST_STRING.to_string()]),
+            arguments: vec![String::default()],
+            jvm_options: vec![String::default()],
+            environment_variables: Some(vec![String::default()]),
         };
 
         assert_json_snapshot!(test_data,
@@ -38,19 +38,19 @@ mod tests {
 {
   "class": "test_string",
   "arguments": [
-    "test_string"
+    ""
   ],
   "jvmOptions": [
-    "test_string"
+    ""
   ],
   "environmentVariables": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"class": "test_string", "arguments": ["test_string"], "jvmOptions": ["test_string"], "environmentVariables": ["test_string"]}"#,
+            r#"{"class": "test_string", "arguments": [""], "jvmOptions": [""], "environmentVariables": [""]}"#,
             &test_data,
         );
     }

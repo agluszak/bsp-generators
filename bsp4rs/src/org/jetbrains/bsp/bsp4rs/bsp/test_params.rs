@@ -38,7 +38,7 @@ mod tests {
         let test_data = TestParams {
             targets: vec![BuildTargetIdentifier::default()],
             origin_id: Some(Identifier::default()),
-            arguments: Some(vec![TEST_STRING.to_string()]),
+            arguments: Some(vec![String::default()]),
             environment_variables: Some(EnvironmentVariables::default()),
             working_directory: Some(URI::default()),
             data: Some(TestParamsData::Other(OtherData::default())),
@@ -54,7 +54,7 @@ mod tests {
   ],
   "originId": "",
   "arguments": [
-    "test_string"
+    ""
   ],
   "environmentVariables": {},
   "workingDirectory": "",
@@ -64,7 +64,7 @@ mod tests {
 "#);
 
         test_deserialization(
-            r#"{"targets": [{"uri": ""}], "originId": "", "arguments": ["test_string"], "environmentVariables": {}, "workingDirectory": "", "dataKind": "", "data": null}"#,
+            r#"{"targets": [{"uri": ""}], "originId": "", "arguments": [""], "environmentVariables": {}, "workingDirectory": "", "dataKind": "", "data": null}"#,
             &test_data,
         );
     }

@@ -22,7 +22,7 @@ mod tests {
     fn python_options_item() {
         let test_data = PythonOptionsItem {
             target: BuildTargetIdentifier::default(),
-            interpreter_options: vec![TEST_STRING.to_string()],
+            interpreter_options: vec![String::default()],
         };
 
         assert_json_snapshot!(test_data,
@@ -32,13 +32,13 @@ mod tests {
     "uri": ""
   },
   "interpreterOptions": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "interpreterOptions": ["test_string"]}"#,
+            r#"{"target": {"uri": ""}, "interpreterOptions": [""]}"#,
             &test_data,
         );
     }

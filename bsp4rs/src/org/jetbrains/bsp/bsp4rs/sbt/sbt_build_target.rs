@@ -38,7 +38,7 @@ mod tests {
     fn sbt_build_target() {
         let test_data = SbtBuildTarget {
             sbt_version: TEST_STRING.to_string(),
-            auto_imports: vec![TEST_STRING.to_string()],
+            auto_imports: vec![String::default()],
             scala_build_target: ScalaBuildTarget::default(),
             parent: Some(BuildTargetIdentifier::default()),
             children: vec![BuildTargetIdentifier::default()],
@@ -49,7 +49,7 @@ mod tests {
 {
   "sbtVersion": "test_string",
   "autoImports": [
-    "test_string"
+    ""
   ],
   "scalaBuildTarget": {
     "scalaOrganization": "",
@@ -70,7 +70,7 @@ mod tests {
 "#);
 
         test_deserialization(
-            r#"{"sbtVersion": "test_string", "autoImports": ["test_string"], "scalaBuildTarget": {"scalaOrganization": "", "scalaVersion": "", "scalaBinaryVersion": "", "platform": 1, "jars": []}, "parent": {"uri": ""}, "children": [{"uri": ""}]}"#,
+            r#"{"sbtVersion": "test_string", "autoImports": [""], "scalaBuildTarget": {"scalaOrganization": "", "scalaVersion": "", "scalaBinaryVersion": "", "platform": 1, "jars": []}, "parent": {"uri": ""}, "children": [{"uri": ""}]}"#,
             &test_data,
         );
     }

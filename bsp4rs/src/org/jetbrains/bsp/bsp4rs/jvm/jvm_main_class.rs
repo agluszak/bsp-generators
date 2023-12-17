@@ -18,7 +18,7 @@ mod tests {
     fn jvm_main_class() {
         let test_data = JvmMainClass {
             class_name: TEST_STRING.to_string(),
-            arguments: vec![TEST_STRING.to_string()],
+            arguments: vec![String::default()],
         };
 
         assert_json_snapshot!(test_data,
@@ -26,13 +26,13 @@ mod tests {
 {
   "className": "test_string",
   "arguments": [
-    "test_string"
+    ""
   ]
 }
 "#);
 
         test_deserialization(
-            r#"{"className": "test_string", "arguments": ["test_string"]}"#,
+            r#"{"className": "test_string", "arguments": [""]}"#,
             &test_data,
         );
     }

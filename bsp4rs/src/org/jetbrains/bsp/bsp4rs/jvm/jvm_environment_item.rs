@@ -25,8 +25,8 @@ mod tests {
     fn jvm_environment_item() {
         let test_data = JvmEnvironmentItem {
             target: BuildTargetIdentifier::default(),
-            classpath: vec![TEST_STRING.to_string()],
-            jvm_options: vec![TEST_STRING.to_string()],
+            classpath: vec![String::default()],
+            jvm_options: vec![String::default()],
             working_directory: TEST_STRING.to_string(),
             environment_variables: EnvironmentVariables::default(),
             main_classes: Some(vec![JvmMainClass::default()]),
@@ -39,10 +39,10 @@ mod tests {
     "uri": ""
   },
   "classpath": [
-    "test_string"
+    ""
   ],
   "jvmOptions": [
-    "test_string"
+    ""
   ],
   "workingDirectory": "test_string",
   "environmentVariables": {},
@@ -56,7 +56,7 @@ mod tests {
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "classpath": ["test_string"], "jvmOptions": ["test_string"], "workingDirectory": "test_string", "environmentVariables": {}, "mainClasses": [{"className": "", "arguments": []}]}"#,
+            r#"{"target": {"uri": ""}, "classpath": [""], "jvmOptions": [""], "workingDirectory": "test_string", "environmentVariables": {}, "mainClasses": [{"className": "", "arguments": []}]}"#,
             &test_data,
         );
     }

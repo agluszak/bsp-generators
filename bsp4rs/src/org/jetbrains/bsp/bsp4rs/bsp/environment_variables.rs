@@ -28,16 +28,14 @@ mod tests {
 
     #[test]
     fn environment_variables() {
-        let test_data = EnvironmentVariables(BTreeMap::from([(
-            TEST_STRING.to_string(),
-            TEST_STRING.to_string(),
-        )]));
+        let test_data =
+            EnvironmentVariables(BTreeMap::from([(String::default(), String::default())]));
 
         assert_compact_json_snapshot!(
            test_data,
-           @r#"{"test_string": "test_string"}"#
+           @r#"{"": ""}"#
         );
 
-        test_deserialization(r#"{"test_string": "test_string"}"#, &test_data);
+        test_deserialization(r#"{"": ""}"#, &test_data);
     }
 }

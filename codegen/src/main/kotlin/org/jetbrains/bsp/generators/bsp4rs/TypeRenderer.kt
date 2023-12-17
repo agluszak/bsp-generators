@@ -45,10 +45,10 @@ fun RustRenderer.renderTypeTest(type: Type): String = when (type) {
     is Type.Int -> renderTypeTestConstName(Type.Int)
     is Type.Long -> renderTypeTestConstName(Type.Long)
     is Type.String -> renderTypeTestConstName(Type.String) + ".to_string()"
-    is Type.Json -> "serde_json::json!({${renderTypeTestConstName(Type.String)}: ${renderTypeTestConstName(Type.String)}})"
-    is Type.List -> "vec![${renderTypeTest(type.member)}]"
-    is Type.Map -> "BTreeMap::from([(${renderTypeTest(type.key)}, ${renderTypeTest(type.value)})])"
-    is Type.Set -> "BTreeSet::from([${renderTypeTest(type.member)}])"
+    is Type.Json -> "serde_json::json!({})"
+    is Type.List -> "vec![${renderTypeDefault(type.member)}]"
+    is Type.Map -> "BTreeMap::from([(${renderTypeDefault(type.key)}, ${renderTypeDefault(type.value)})])"
+    is Type.Set -> "BTreeSet::from([${renderTypeDefault(type.member)}])"
     is Type.Ref -> renderDefDefault(shapes[type.shapeId]!!)
     else -> ""
 }
