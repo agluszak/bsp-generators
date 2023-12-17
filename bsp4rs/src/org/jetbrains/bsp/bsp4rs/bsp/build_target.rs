@@ -57,6 +57,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn build_target() {
         let test_data = BuildTarget {
@@ -67,7 +69,10 @@ mod tests {
             language_ids: vec![LanguageId::default()],
             dependencies: vec![BuildTargetIdentifier::default()],
             capabilities: BuildTargetCapabilities::default(),
-            data: Some(BuildTargetData::Other(OtherData::default())),
+            data: Some(BuildTargetData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -91,12 +96,12 @@ mod tests {
   ],
   "capabilities": {},
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"id": {"uri": ""}, "displayName": "test_string", "baseDirectory": "", "tags": [""], "languageIds": [""], "dependencies": [{"uri": ""}], "capabilities": {}, "dataKind": "", "data": null}"#,
+            r#"{"id": {"uri": ""}, "displayName": "test_string", "baseDirectory": "", "tags": [""], "languageIds": [""], "dependencies": [{"uri": ""}], "capabilities": {}, "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

@@ -1,5 +1,9 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import org.jetbrains.bsp.generators.bsp4json.ContentsType
+import org.jetbrains.bsp.generators.bsp4json.NotRequired
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefault
@@ -70,18 +74,25 @@ fun RustRenderer.renderDataKindsTest(def: Def.DataKinds): CodeBlock {
 private fun RustRenderer.renderDataKindTest(enumName: String, data: PolymorphicDataKind): String {
     val dataName = makeName(data.kind).kebabToSnakeCase()
     val renderedTestValue = "$enumName::$dataName(${renderTypeDefault(data.shape)})"
-    val renderedJson = """{"dataKind": "${data.kind}", "data": ${jsonRenderer.renderTypeDefaultJson(data.shape)}}"""
+    val renderedJson = JsonObject(
+        mapOf(
+            "dataKind" to JsonPrimitive(data.kind),
+            "data" to jsonRenderer.renderTypeJson(data.shape, ContentsType.Default, NotRequired.Exclude)
+        )
+    )
 
     return renderSerializationTest(renderedTestValue, renderedJson, false)
 }
 
 private fun RustRenderer.renderOtherDataKindTest(enumName: String): String {
-    val otherType = Type.Ref(otherDataDef.shapeId)
-    val renderedTestValue = "$enumName::Other(${renderTypeDefault(otherType)})"
-    val renderedJson = jsonRenderer.renderTypeDefaultJson(otherType)
+    val renderedTestValue = "$enumName::Other(${renderOtherDataDefault()})"
+    val renderedJson = jsonRenderer.renderStructureJson(otherDataDef, ContentsType.Default, NotRequired.Exclude)
 
     return renderSerializationTest(renderedTestValue, renderedJson, true)
 }
 
 fun RustRenderer.renderDataKindsDefault(def: Def.DataKinds): String =
-    "${def.name}::Other(${renderDefDefault(otherDataDef)})"
+    "${def.name}::Other(${renderOtherDataDefault()})"
+
+fun RustRenderer.renderOtherDataDefault(): String =
+    "${makeName(otherDataDef.name)} { data: json!({}), ..${makeName(otherDataDef.name)}::default()}"

@@ -43,6 +43,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn task_start_data() {
         assert_json_snapshot!(TaskStartData::compile_task(CompileTask::default()),
@@ -80,8 +82,8 @@ mod tests {
 "#);
 
         assert_compact_json_snapshot!(
-           TaskStartData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           TaskStartData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

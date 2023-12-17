@@ -23,12 +23,17 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn test_result() {
         let test_data = TestResult {
             origin_id: Some(Identifier::default()),
             status_code: StatusCode::default(),
-            data: Some(TestResultData::Other(OtherData::default())),
+            data: Some(TestResultData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -37,12 +42,12 @@ mod tests {
   "originId": "",
   "statusCode": 1,
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"originId": "", "statusCode": 1, "dataKind": "", "data": null}"#,
+            r#"{"originId": "", "statusCode": 1, "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

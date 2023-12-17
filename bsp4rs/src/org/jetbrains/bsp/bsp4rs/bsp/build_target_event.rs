@@ -22,12 +22,17 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn build_target_event() {
         let test_data = BuildTargetEvent {
             target: BuildTargetIdentifier::default(),
             kind: Some(BuildTargetEventKind::default()),
-            data: Some(BuildTargetEventData::Other(OtherData::default())),
+            data: Some(BuildTargetEventData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -38,12 +43,12 @@ mod tests {
   },
   "kind": 1,
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "kind": 1, "dataKind": "", "data": null}"#,
+            r#"{"target": {"uri": ""}, "kind": 1, "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

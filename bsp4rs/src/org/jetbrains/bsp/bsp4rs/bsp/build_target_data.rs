@@ -49,6 +49,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn build_target_data() {
         assert_json_snapshot!(BuildTargetData::cargo(CargoBuildTarget::default()),
@@ -120,8 +122,8 @@ mod tests {
 "#);
 
         assert_compact_json_snapshot!(
-           BuildTargetData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           BuildTargetData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

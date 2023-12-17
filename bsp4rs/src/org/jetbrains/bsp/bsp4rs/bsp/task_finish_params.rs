@@ -31,6 +31,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn task_finish_params() {
         let test_data = TaskFinishParams {
@@ -39,7 +41,10 @@ mod tests {
             event_time: Some(TEST_LONG),
             message: Some(TEST_STRING.to_string()),
             status: StatusCode::default(),
-            data: Some(TaskFinishData::Other(OtherData::default())),
+            data: Some(TaskFinishData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -53,12 +58,12 @@ mod tests {
   "message": "test_string",
   "status": 1,
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "status": 1, "dataKind": "", "data": null}"#,
+            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "status": 1, "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

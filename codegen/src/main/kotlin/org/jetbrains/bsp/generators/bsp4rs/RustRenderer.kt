@@ -1,9 +1,10 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
+import kotlinx.serialization.json.JsonElement
 import org.jetbrains.bsp.generators.CodegenFile
 import org.jetbrains.bsp.generators.bsp4json.JsonRenderer
+import org.jetbrains.bsp.generators.bsp4json.makeCompactJsonString
+import org.jetbrains.bsp.generators.bsp4json.makeGsonPrettyJsonString
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDef
 import org.jetbrains.bsp.generators.bsp4rs.def.renderDefTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
@@ -105,6 +106,7 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             -"use insta::assert_compact_json_snapshot;"
             -"use insta::assert_json_snapshot;"
             -"use serde::Deserialize;"
+            -"use serde_json::json;"
         }
     }
 
@@ -169,17 +171,17 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
         }
     }
 
-    fun renderSerializationTest(testedValue: String, expectedJson: String, isCompact: Boolean): String {
+    fun renderSerializationTest(testedValue: String, expectedJson: JsonElement, isCompact: Boolean): String {
         if (isCompact) {
+            val prettyJson = makeCompactJsonString(expectedJson)
+
             return """assert_compact_json_snapshot!(
             |   $testedValue, 
-            |   @r#"$expectedJson"#
+            |   @r#"$prettyJson"#
             |);""".trimMargin()
         }
 
-        val jsonElement = JsonParser.parseString(expectedJson)
-        val gson = GsonBuilder().setPrettyPrinting().serializeNulls().create()
-        val prettyJson = gson.toJson(jsonElement)
+        val prettyJson = makeGsonPrettyJsonString(expectedJson)
 
         return """assert_json_snapshot!($testedValue,
             |@r#"
@@ -187,9 +189,11 @@ class RustRenderer(basepkg: String, private val modules: List<Module>, val versi
             |"#);""".trimMargin()
     }
 
-    fun renderDeserializationTest(testedValue: String, expectedJson: String): String {
+    fun renderDeserializationTest(testedValue: String, expectedJson: JsonElement): String {
+        val prettyJson = makeCompactJsonString(expectedJson)
+
         return """test_deserialization(
-            |   r#"$expectedJson"#,
+            |   r#"$prettyJson"#,
             |   &$testedValue
             |);""".trimMargin()
     }

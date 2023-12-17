@@ -25,6 +25,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn initialize_build_result() {
         let test_data = InitializeBuildResult {
@@ -32,7 +34,10 @@ mod tests {
             version: TEST_STRING.to_string(),
             bsp_version: TEST_STRING.to_string(),
             capabilities: BuildServerCapabilities::default(),
-            data: Some(InitializeBuildResultData::Other(OtherData::default())),
+            data: Some(InitializeBuildResultData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -43,12 +48,12 @@ mod tests {
   "bspVersion": "test_string",
   "capabilities": {},
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"displayName": "test_string", "version": "test_string", "bspVersion": "test_string", "capabilities": {}, "dataKind": "", "data": null}"#,
+            r#"{"displayName": "test_string", "version": "test_string", "bspVersion": "test_string", "capabilities": {}, "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

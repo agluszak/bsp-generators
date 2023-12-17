@@ -31,10 +31,15 @@ private fun renderType(type: EnumType<*>): String = when (type) {
 
 private fun RustRenderer.renderEnumValue(ev: EnumValue<*>, enumName: String): CodeBlock {
     val enumValueName = makeName(ev.name).uppercase()
+    val enumValue = when (val value = ev.value) {
+        is Int -> "$value"
+        is String -> """"$value""""
+        else -> ""
+    }
 
     return rustCode {
         include(renderHints(ev.hints))
-        -"pub const $enumValueName: $enumName = $enumName::new(${jsonRenderer.renderEnumValueJson(ev)});"
+        -"pub const $enumValueName: $enumName = $enumName::new($enumValue);"
     }
 }
 

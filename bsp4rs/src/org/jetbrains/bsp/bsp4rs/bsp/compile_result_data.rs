@@ -22,11 +22,13 @@ mod tests {
 
     use insta::assert_compact_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn compile_result_data() {
         assert_compact_json_snapshot!(
-           CompileResultData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           CompileResultData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

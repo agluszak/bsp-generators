@@ -38,6 +38,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn task_progress_params() {
         let test_data = TaskProgressParams {
@@ -48,7 +50,10 @@ mod tests {
             total: Some(TEST_LONG),
             progress: Some(TEST_LONG),
             unit: Some(TEST_STRING.to_string()),
-            data: Some(TaskProgressData::Other(OtherData::default())),
+            data: Some(TaskProgressData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -64,12 +69,12 @@ mod tests {
   "progress": 2,
   "unit": "test_string",
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "total": 2, "progress": 2, "unit": "test_string", "dataKind": "", "data": null}"#,
+            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "total": 2, "progress": 2, "unit": "test_string", "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

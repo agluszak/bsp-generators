@@ -29,6 +29,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn diagnostic_data() {
         assert_json_snapshot!(DiagnosticData::scala(ScalaDiagnostic::default()),
@@ -40,8 +42,8 @@ mod tests {
 "#);
 
         assert_compact_json_snapshot!(
-           DiagnosticData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           DiagnosticData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

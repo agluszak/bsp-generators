@@ -29,6 +29,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn task_start_params() {
         let test_data = TaskStartParams {
@@ -36,7 +38,10 @@ mod tests {
             origin_id: Some(Identifier::default()),
             event_time: Some(TEST_LONG),
             message: Some(TEST_STRING.to_string()),
-            data: Some(TaskStartData::Other(OtherData::default())),
+            data: Some(TaskStartData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -49,12 +54,12 @@ mod tests {
   "eventTime": 2,
   "message": "test_string",
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "dataKind": "", "data": null}"#,
+            r#"{"taskId": {"id": ""}, "originId": "", "eventTime": 2, "message": "test_string", "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

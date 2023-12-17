@@ -33,6 +33,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn run_params() {
         let test_data = RunParams {
@@ -41,7 +43,10 @@ mod tests {
             arguments: Some(vec![String::default()]),
             environment_variables: Some(EnvironmentVariables::default()),
             working_directory: Some(URI::default()),
-            data: Some(RunParamsData::Other(OtherData::default())),
+            data: Some(RunParamsData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -57,12 +62,12 @@ mod tests {
   "environmentVariables": {},
   "workingDirectory": "",
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"target": {"uri": ""}, "originId": "", "arguments": [""], "environmentVariables": {}, "workingDirectory": "", "dataKind": "", "data": null}"#,
+            r#"{"target": {"uri": ""}, "originId": "", "arguments": [""], "environmentVariables": {}, "workingDirectory": "", "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

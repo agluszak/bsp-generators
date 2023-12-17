@@ -20,11 +20,16 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn debug_session_params() {
         let test_data = DebugSessionParams {
             targets: vec![BuildTargetIdentifier::default()],
-            data: Some(DebugSessionParamsData::Other(OtherData::default())),
+            data: Some(DebugSessionParamsData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -36,12 +41,12 @@ mod tests {
     }
   ],
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"targets": [{"uri": ""}], "dataKind": "", "data": null}"#,
+            r#"{"targets": [{"uri": ""}], "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

@@ -22,12 +22,17 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn dependency_module() {
         let test_data = DependencyModule {
             name: TEST_STRING.to_string(),
             version: TEST_STRING.to_string(),
-            data: Some(DependencyModuleData::Other(OtherData::default())),
+            data: Some(DependencyModuleData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -36,12 +41,12 @@ mod tests {
   "name": "test_string",
   "version": "test_string",
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"name": "test_string", "version": "test_string", "dataKind": "", "data": null}"#,
+            r#"{"name": "test_string", "version": "test_string", "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

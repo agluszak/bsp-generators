@@ -22,11 +22,13 @@ mod tests {
 
     use insta::assert_compact_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn build_target_event_data() {
         assert_compact_json_snapshot!(
-           BuildTargetEventData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           BuildTargetEventData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

@@ -25,11 +25,13 @@ mod tests {
 
     use insta::assert_compact_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn task_progress_data() {
         assert_compact_json_snapshot!(
-           TaskProgressData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           TaskProgressData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

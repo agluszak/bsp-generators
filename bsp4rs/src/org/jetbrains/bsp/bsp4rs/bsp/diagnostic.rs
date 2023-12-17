@@ -45,6 +45,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn diagnostic() {
         let test_data = Diagnostic {
@@ -56,7 +58,10 @@ mod tests {
             message: TEST_STRING.to_string(),
             tags: Some(vec![DiagnosticTag::default()]),
             related_information: Some(vec![DiagnosticRelatedInformation::default()]),
-            data: Some(DiagnosticData::Other(OtherData::default())),
+            data: Some(DiagnosticData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -101,12 +106,12 @@ mod tests {
     }
   ],
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "severity": 1, "code": "", "codeDescription": {"href": ""}, "source": "test_string", "message": "test_string", "tags": [0], "relatedInformation": [{"location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "message": ""}], "dataKind": "", "data": null}"#,
+            r#"{"range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}, "severity": 1, "code": "", "codeDescription": {"href": ""}, "source": "test_string", "message": "test_string", "tags": [0], "relatedInformation": [{"location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "message": ""}], "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

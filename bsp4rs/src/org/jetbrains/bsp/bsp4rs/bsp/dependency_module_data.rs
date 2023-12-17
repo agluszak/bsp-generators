@@ -29,6 +29,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn dependency_module_data() {
         assert_json_snapshot!(DependencyModuleData::maven(MavenDependencyModule::default()),
@@ -45,8 +47,8 @@ mod tests {
 "#);
 
         assert_compact_json_snapshot!(
-           DependencyModuleData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           DependencyModuleData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

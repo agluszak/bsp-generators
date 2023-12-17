@@ -1,5 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
+import org.jetbrains.bsp.generators.bsp4json.ContentsType
+import org.jetbrains.bsp.generators.bsp4json.NotRequired
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.bsp4rs.renderTypeDefault
@@ -31,7 +33,7 @@ fun RustRenderer.renderUntaggedUnionTest(def: Def.UntaggedUnion): CodeBlock {
     fun renderMemberTest(type: Type): CodeBlock {
         val enumValueName = renderType(type).camelCaseUpperCamelCase()
         val renderedTestValue = "$name::$enumValueName(${renderTypeTest(type)})"
-        val renderedJson = jsonRenderer.renderTypeJson(type)
+        val renderedJson = jsonRenderer.renderTypeJson(type, ContentsType.TestOnlyPrimitive, NotRequired.Include)
 
         return rustCode {
             -renderSerializationTest(renderedTestValue, renderedJson, true)

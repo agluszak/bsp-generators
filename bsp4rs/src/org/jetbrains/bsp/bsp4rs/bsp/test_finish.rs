@@ -28,6 +28,8 @@ mod tests {
 
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn test_finish() {
         let test_data = TestFinish {
@@ -35,7 +37,10 @@ mod tests {
             message: Some(TEST_STRING.to_string()),
             status: TestStatus::default(),
             location: Some(Location::default()),
-            data: Some(TestFinishData::Other(OtherData::default())),
+            data: Some(TestFinishData::Other(OtherData {
+                data: json!({}),
+                ..OtherData::default()
+            })),
         };
 
         assert_json_snapshot!(test_data,
@@ -58,12 +63,12 @@ mod tests {
     }
   },
   "dataKind": "",
-  "data": null
+  "data": {}
 }
 "#);
 
         test_deserialization(
-            r#"{"displayName": "test_string", "message": "test_string", "status": 1, "location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "dataKind": "", "data": null}"#,
+            r#"{"displayName": "test_string", "message": "test_string", "status": 1, "location": {"uri": "", "range": {"start": {"line": 0, "character": 0}, "end": {"line": 0, "character": 0}}}, "dataKind": "", "data": {}}"#,
             &test_data,
         );
     }

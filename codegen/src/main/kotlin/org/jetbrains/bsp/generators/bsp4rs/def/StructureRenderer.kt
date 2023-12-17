@@ -1,5 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
+import org.jetbrains.bsp.generators.bsp4json.ContentsType
+import org.jetbrains.bsp.generators.bsp4json.NotRequired
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderIrShape
 import org.jetbrains.bsp.generators.bsp4rs.renderIrShapeTest
@@ -38,7 +40,7 @@ private fun RustRenderer.renderStructFieldName(field: Field): String = makeName(
 
 fun RustRenderer.renderStructureTest(def: Def.Structure): CodeBlock {
     val renderedTestValue = renderStructureTestValue(def)
-    val renderedJson = jsonRenderer.renderStructureJson(def, true)
+    val renderedJson = jsonRenderer.renderStructureJson(def, ContentsType.TestOnlyPrimitive, NotRequired.Include)
 
     return rustCode {
         -"#[test]"

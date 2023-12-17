@@ -29,6 +29,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn run_params_data() {
         assert_json_snapshot!(RunParamsData::scala_main_class(ScalaMainClass::default()),
@@ -44,8 +46,8 @@ mod tests {
 "#);
 
         assert_compact_json_snapshot!(
-           RunParamsData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           RunParamsData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }

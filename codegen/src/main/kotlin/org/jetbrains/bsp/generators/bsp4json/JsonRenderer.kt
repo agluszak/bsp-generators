@@ -1,5 +1,10 @@
 package org.jetbrains.bsp.generators.bsp4json
 
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.bsp.generators.ir.Def
 import org.jetbrains.bsp.generators.ir.EnumType
 import org.jetbrains.bsp.generators.ir.EnumValue
@@ -8,36 +13,72 @@ import org.jetbrains.bsp.generators.ir.Hint
 import org.jetbrains.bsp.generators.ir.Type
 import software.amazon.smithy.model.shapes.ShapeId
 
+const val TEST_BOOL = true
+const val TEST_INT = 1
+const val TEST_LONG = 2L
+const val TEST_STRING = "test_string"
+const val TEST_MAP_KEY = "test_key"
+
+const val DEFAULT_BOOL = false
+const val DEFAULT_INT = 0
+const val DEFAULT_LONG = 0L
+const val DEFAULT_STRING = ""
+val DEFAULT_MAP = emptyMap<String, JsonElement>()
+val DEFAULT_LIST = emptyList<JsonElement>()
+
+enum class ContentsType {
+    Default,
+    TestOnlyPrimitive,
+    TestAll
+}
+
+enum class NotRequired {
+    Include,
+    Exclude
+}
+
 class JsonRenderer(val definitions: List<Def>) {
-    private val otherDataDef = Def.Structure(
-        ShapeId.fromParts("bsp", "OtherData"),
-        listOf(
-            Field("dataKind", Type.String, true, listOf()),
-            Field("data", Type.Json, true, listOf())
-        ),
-        listOf()
-    )
-    val shapes = definitions.plus(otherDataDef).associateBy { it.shapeId }
+    private val otherDataKindId = ShapeId.fromParts("dataWithKind", "dataKind")
+    private val otherDataId = ShapeId.fromParts("dataWithKind", "data")
 
-    // render def Json
+    private val shapes = definitions
+        .plus(Def.Alias(otherDataKindId, Type.String, emptyList()))
+        .plus(Def.Alias(otherDataId, Type.Json, emptyList()))
+        .associateBy { it.shapeId }
 
-    fun renderAliasJson(def: Def.Alias): String {
-        return renderTypeJson(def.aliasedType)
-    }
+    fun renderDefJson(
+        def: Def,
+        contents: ContentsType = ContentsType.Default,
+        notRequired: NotRequired = NotRequired.Exclude
+    ): JsonElement =
+        when (def) {
+            is Def.Alias -> renderAliasJson(def, contents, notRequired)
+            is Def.Structure -> renderStructureJson(def, contents, notRequired)
+            is Def.ClosedEnum<*> -> renderClosedEnumJson(def, contents)
+            is Def.OpenEnum<*> -> renderOpenEnumJson(def, contents)
+            is Def.UntaggedUnion -> renderUnionJson(def, contents, notRequired)
+            else -> JsonNull
+        }
 
-    fun renderStructureJson(def: Def.Structure, allFields: Boolean): String {
+    fun renderStructureJson(def: Def.Structure, contents: ContentsType, notRequired: NotRequired): JsonElement {
+        val allFields = notRequired == NotRequired.Include
         val filteredFields = def.fields.filter { allFields || it.required }
 
-        val renderedFields = filteredFields.map { field ->
+        val dataKindsFlattened = filteredFields.fold(emptyList<Field>()) { acc, field ->
             if (field.type is Type.Ref && shapes[field.type.shapeId]!! is Def.DataKinds) {
-                renderDataKindsDefaultJson()
+                acc +
+                        Field("dataKind", Type.Ref(otherDataKindId), true, listOf()) +
+                        Field("data", Type.Ref(otherDataId), true, listOf())
             } else {
-                val jsonValue = if (allFields) renderTypeJson(field.type) else renderTypeDefaultJson(field.type)
-                """"${renderStructFieldNameJson(field)}"""" + ": " + jsonValue
+                acc + field
             }
         }
 
-        return "{" + renderedFields.joinToString(", ") + "}"
+        val fields = dataKindsFlattened.associate { field ->
+            renderStructFieldNameJson(field) to renderTypeJson(field.type, contents, notRequired)
+        }
+
+        return JsonObject(fields)
     }
 
     private fun renderStructFieldNameJson(field: Field): String {
@@ -45,82 +86,103 @@ class JsonRenderer(val definitions: List<Def>) {
         return renamed?.name ?: field.name
     }
 
-    private fun renderDataKindsDefaultJson(): String =
-        renderDefDefaultJson(otherDataDef).drop(1).dropLast(1)
-
-    // render Def default json
-
-    private fun renderDefDefaultJson(def: Def): String = when (def) {
-        is Def.Alias -> renderAliasDefaultJson(def)
-        is Def.Structure -> renderStructureDefaultJson(def)
-        is Def.ClosedEnum<*> -> renderClosedEnumDefaultJson(def)
-        is Def.OpenEnum<*> -> renderOpenEnumDefaultJson(def)
-        is Def.UntaggedUnion -> renderUntaggedUnionDefaultJson(def)
-        else -> ""
+    fun renderAliasJson(def: Def.Alias, contents: ContentsType, notRequired: NotRequired): JsonElement {
+        return renderTypeJson(def.aliasedType, contents, notRequired)
     }
 
-    private fun renderAliasDefaultJson(def: Def.Alias): String {
-        return renderTypeDefaultJson(def.aliasedType)
+    private fun renderClosedEnumJson(def: Def.ClosedEnum<*>, contents: ContentsType): JsonElement =
+        if (contents == ContentsType.Default) {
+            renderEnumValueJson(def.values.first())
+        } else {
+            // TODO Kasia: do something smarter
+            renderEnumValueJson(def.values.first())
+        }
+
+    fun renderEnumValueJson(ev: EnumValue<*>): JsonElement = when (val value = ev.value) {
+        is Int -> JsonPrimitive(value)
+        is String -> JsonPrimitive(value)
+        else -> JsonNull
     }
 
-    private fun renderStructureDefaultJson(def: Def.Structure): String =
-        renderStructureJson(def, false)
-
-    private fun renderClosedEnumDefaultJson(def: Def.ClosedEnum<*>): String =
-        renderEnumValueJson(def.values.first())
-
-    fun renderEnumValueJson(ev: EnumValue<*>): String = when (val value = ev.value) {
-        is Int -> "$value"
-        is String -> """"$value""""
-        else -> ""
+    private fun renderOpenEnumJson(def: Def.OpenEnum<*>, contents: ContentsType): JsonElement {
+        val type = when (def.enumType) {
+            EnumType.IntEnum -> Type.Int
+            EnumType.StringEnum -> Type.String
+        }
+        return renderTypeJson(type, contents, NotRequired.Exclude)
     }
 
-    private fun renderOpenEnumDefaultJson(def: Def.OpenEnum<*>): String = when (def.enumType) {
-        EnumType.IntEnum -> renderTypeDefaultJson(Type.Int)
-        EnumType.StringEnum -> renderTypeDefaultJson(Type.String)
-    }
+    private fun renderUnionJson(def: Def.UntaggedUnion, contents: ContentsType, notRequired: NotRequired): JsonElement =
+        if (contents == ContentsType.Default) {
+            def.members.first().let { renderTypeJson(it, contents, notRequired) }
+        } else {
+            // TODO Kasia: do something smarter
+            def.members.first().let { renderTypeJson(it, contents, notRequired) }
+        }
 
-    private fun renderUntaggedUnionDefaultJson(def: Def.UntaggedUnion): String = def.members.first().let {
-        renderTypeDefaultJson(it)
-    }
+    fun renderTypeJson(
+        type: Type,
+        contents: ContentsType = ContentsType.Default,
+        notRequired: NotRequired = NotRequired.Exclude
+    ): JsonElement =
+        when (contents) {
+            ContentsType.Default -> when (type) {
+                is Type.Unit -> JsonNull
+                is Type.Bool -> JsonPrimitive(DEFAULT_BOOL)
+                is Type.Int -> JsonPrimitive(DEFAULT_INT)
+                is Type.Long -> JsonPrimitive(DEFAULT_LONG)
+                is Type.String -> JsonPrimitive(DEFAULT_STRING)
+                is Type.Json -> JsonObject(DEFAULT_MAP)
+                is Type.List -> JsonArray(DEFAULT_LIST)
+                is Type.Map -> JsonObject(DEFAULT_MAP)
+                is Type.Set -> JsonArray(DEFAULT_LIST)
+                is Type.Ref -> renderDefJson(shapes[type.shapeId]!!)
+                else -> JsonNull
+            }
 
-    // render Type json value
+            ContentsType.TestOnlyPrimitive -> when (type) {
+                is Type.Unit -> JsonNull
+                is Type.Bool -> JsonPrimitive(TEST_BOOL)
+                is Type.Int -> JsonPrimitive(TEST_INT)
+                is Type.Long -> JsonPrimitive(TEST_LONG)
+                is Type.String -> JsonPrimitive(TEST_STRING)
+                is Type.Json -> JsonObject(DEFAULT_MAP)
+                is Type.List -> JsonArray(listOf(renderTypeJson(type.member)))
+                is Type.Map -> JsonObject(mapOf(renderTestMapKey(type.key) to renderTypeJson(type.value)))
+                is Type.Set -> JsonArray(listOf(renderTypeJson(type.member)))
+                is Type.Ref -> renderDefJson(shapes[type.shapeId]!!)
+                else -> JsonNull
+            }
 
-    // value in json of minimal not default type
-    fun renderTypeJson(type: Type): String = when (type) {
-        is Type.Unit -> "null"
-        is Type.Bool -> renderTypeTestConstValue(Type.Bool)
-        is Type.Int -> renderTypeTestConstValue(Type.Int)
-        is Type.Long -> renderTypeTestConstValue(Type.Long)
-        is Type.String -> renderTypeTestConstValue(Type.String)
-        is Type.Json -> "{}"
-        is Type.List -> "[${renderTypeDefaultJson(type.member)}]"
-        is Type.Map -> "{${renderTypeDefaultJson(type.key)}: ${renderTypeDefaultJson(type.value)}}"
-        is Type.Set -> "[${renderTypeDefaultJson(type.member)}]"
-        is Type.Ref -> renderDefDefaultJson(shapes[type.shapeId]!!)
-        else -> ""
-    }
+            ContentsType.TestAll -> when (type) {
+                is Type.Unit -> JsonNull
+                is Type.Bool -> JsonPrimitive(TEST_BOOL)
+                is Type.Int -> JsonPrimitive(TEST_INT)
+                is Type.Long -> JsonPrimitive(TEST_LONG)
+                is Type.String -> JsonPrimitive(TEST_STRING)
+                is Type.Json -> JsonObject(mapOf(TEST_MAP_KEY to JsonPrimitive(TEST_STRING)))
+                is Type.List -> JsonArray(listOf(renderTypeJson(type.member, contents, notRequired)))
+                is Type.Map -> JsonObject(
+                    mapOf(
+                        renderTestMapKey(type.key, contents, notRequired) to
+                                renderTypeJson(type.value, contents, notRequired)
+                    )
+                )
 
-    // value in json of default type
-    fun renderTypeDefaultJson(type: Type): String = when (type) {
-        is Type.Unit -> "null"
-        is Type.Bool -> "false"
-        is Type.Int -> "0"
-        is Type.Long -> "0"
-        is Type.String -> """"""""
-        is Type.Json -> "null"
-        is Type.List -> "[]"
-        is Type.Map -> "{}"
-        is Type.Set -> "[]"
-        is Type.Ref -> renderDefDefaultJson(shapes[type.shapeId]!!)
-        else -> ""
-    }
+                is Type.Set -> JsonArray(listOf(renderTypeJson(type.member, contents, notRequired)))
+                is Type.Ref -> renderDefJson(shapes[type.shapeId]!!, contents, notRequired)
+                else -> JsonNull
+            }
+        }
 
-    private fun renderTypeTestConstValue(type: Type): String = when (type) {
-        is Type.Bool -> "true"
-        is Type.Int -> "1"
-        is Type.Long -> "2"
-        is Type.String -> """"test_string""""
-        else -> ""
+    private fun renderTestMapKey(
+        type: Type,
+        contents: ContentsType = ContentsType.Default,
+        notRequired: NotRequired = NotRequired.Exclude
+    ): String {
+        return when (val jsonElement = renderTypeJson(type, contents, notRequired)) {
+            is JsonPrimitive -> jsonElement.content
+            else -> ""
+        }
     }
 }

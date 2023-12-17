@@ -1,5 +1,7 @@
 package org.jetbrains.bsp.generators.bsp4rs.def
 
+import org.jetbrains.bsp.generators.bsp4json.ContentsType
+import org.jetbrains.bsp.generators.bsp4json.NotRequired
 import org.jetbrains.bsp.generators.bsp4rs.RustRenderer
 import org.jetbrains.bsp.generators.bsp4rs.renderType
 import org.jetbrains.bsp.generators.bsp4rs.renderTypeTest
@@ -59,7 +61,7 @@ private fun renderFrom(from: String, name: String, fn: String): CodeBlock =
 fun RustRenderer.renderAliasTest(def: Def.Alias): CodeBlock {
     val name = def.name
     val renderedTestValue = "$name(${renderTypeTest(def.aliasedType)})"
-    val renderedJson = jsonRenderer.renderAliasJson(def)
+    val renderedJson = jsonRenderer.renderAliasJson(def, ContentsType.TestOnlyPrimitive, NotRequired.Include)
 
     return rustCode {
         -"#[test]"

@@ -1,5 +1,5 @@
 import org.jetbrains.bsp.generators.Loader
-import org.jetbrains.bsp.generators.bsp4json.JsonRenderer2
+import org.jetbrains.bsp.generators.bsp4json.JsonRenderer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeAll
 import java.io.BufferedReader
@@ -76,14 +76,16 @@ class SerializationTest {
             val ir = SmithyToIr(model, irConfig)
             val definitions = namespaces.flatMap { ir.definitions(it) }
 
-            val jsonRenderer = JsonRenderer2(definitions)
+            val jsonRenderer = JsonRenderer(definitions)
             val shapes =
                 definitions.associateBy { it.shapeId }.filterValues { it is Def.Structure }.mapValues { (_, def) ->
                     listOf(
+                        jsonRenderer.renderDefJson(def, ContentsType.Default, NotRequired.Exclude),
                         jsonRenderer.renderDefJson(def, ContentsType.Default, NotRequired.Include),
+                        jsonRenderer.renderDefJson(def, ContentsType.TestOnlyPrimitive, NotRequired.Exclude),
                         jsonRenderer.renderDefJson(def, ContentsType.TestOnlyPrimitive, NotRequired.Include),
-                        jsonRenderer.renderDefJson(def, ContentsType.TestAll, NotRequired.Include),
                         jsonRenderer.renderDefJson(def, ContentsType.TestAll, NotRequired.Exclude),
+                        jsonRenderer.renderDefJson(def, ContentsType.TestAll, NotRequired.Include),
                     )
                 }
 

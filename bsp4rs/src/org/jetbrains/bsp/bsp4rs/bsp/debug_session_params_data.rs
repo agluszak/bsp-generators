@@ -33,6 +33,8 @@ mod tests {
     use insta::assert_compact_json_snapshot;
     use insta::assert_json_snapshot;
 
+    use serde_json::json;
+
     #[test]
     fn debug_session_params_data() {
         assert_json_snapshot!(DebugSessionParamsData::scala_attach_remote(ScalaAttachRemote::default()),
@@ -56,8 +58,8 @@ mod tests {
 "#);
 
         assert_compact_json_snapshot!(
-           DebugSessionParamsData::Other(OtherData::default()),
-           @r#"{"dataKind": "", "data": null}"#
+           DebugSessionParamsData::Other(OtherData { data: json!({}), ..OtherData::default()}),
+           @r#"{"dataKind": "", "data": {}}"#
         );
     }
 }
