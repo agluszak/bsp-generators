@@ -1,6 +1,8 @@
 package org.jetbrains.bsp.generators.bsp4rs
 
 import org.jetbrains.bsp.generators.CodegenFile
+import org.jetbrains.bsp.generators.bsp4json.ContentsType
+import org.jetbrains.bsp.generators.bsp4json.makeCompactJsonString
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructure
 import org.jetbrains.bsp.generators.bsp4rs.def.renderStructureTest
 import org.jetbrains.bsp.generators.dsl.CodeBlock
@@ -92,10 +94,5 @@ fun renderTypeTestConstType(type: Type): String = when (type) {
     else -> ""
 }
 
-fun renderTypeTestConstValue(type: Type): String = when (type) {
-    is Type.Bool -> "true"
-    is Type.Int -> "1"
-    is Type.Long -> "2"
-    is Type.String -> """"test_string""""
-    else -> ""
-}
+fun RustRenderer.renderTypeTestConstValue(type: Type): String =
+    makeCompactJsonString(jsonRenderer.renderTypeJson(type, ContentsType.TestOnlyPrimitive))
