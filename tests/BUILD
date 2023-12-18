@@ -35,8 +35,20 @@ kt_jvm_binary(
     visibility = ["//visibility:public"],
     srcs = glob(["src/main/kotlin/**/*.kt"]),
     deps = [
-        "@//:kotlin_serialization",
         "//bsp4kt",
+        "@//:kotlin_serialization",
+    ],
+)
+
+java_binary(
+    name = "java_json_roundtrip",
+    main_class = "org.jetbrains.bsp.tests.JavaJsonRoundtrip",
+    visibility = ["//visibility:public"],
+    srcs = glob(["src/main/java/**/*.java"]),
+    deps = [
+        "//bsp4j",
+        "@maven//:com_google_code_gson_gson",
+        "@maven//:org_eclipse_lsp4j_org_eclipse_lsp4j_jsonrpc",
     ],
 )
 
@@ -47,7 +59,8 @@ kt_test(
     src = "src/test/kotlin/SerializationTest.kt",
     classname = "SerializationTest",
     data = [
-        "//tests:kotlin_json_roundtrip"
+        "//tests:java_json_roundtrip",
+        "//tests:kotlin_json_roundtrip",
     ],
     deps = [
         "//codegen",

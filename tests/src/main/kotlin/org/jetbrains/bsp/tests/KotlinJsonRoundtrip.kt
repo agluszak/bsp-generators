@@ -142,20 +142,24 @@ fun main() {
     val json = Json { ignoreUnknownKeys = true }
 
     while (true) {
-        val inputLine = readlnOrNull() ?: break
-        if (inputLine == TERMINAL_STRING) break
+        try {
+            val inputLine = readlnOrNull() ?: break
+            if (inputLine == TERMINAL_STRING) break
 
-        val wrapper = json.decodeFromString<DataWrapper>(inputLine)
+            val wrapper = json.decodeFromString<DataWrapper>(inputLine)
 
-        val kClassSerializer = serializersMap[wrapper.name]
-        if (kClassSerializer == null) {
-            System.err.println("Type '" + wrapper.name + "' not known")
-            continue
+            val kClassSerializer = serializersMap[wrapper.name]
+            if (kClassSerializer == null) {
+                println("Type '" + wrapper.name + "' not known")
+                continue
+            }
+
+            val instance = Json.decodeFromJsonElement(kClassSerializer, wrapper.jsonData)
+
+            val encodedInstance = Json.encodeToJsonElement(kClassSerializer as KSerializer<Any>, instance!!)
+            println(encodedInstance.toString())
+        } catch (e: Exception) {
+            println("Error processing input: ${e.message}")
         }
-
-        val instance = Json.decodeFromJsonElement(kClassSerializer, wrapper.jsonData)
-
-        val encodedInstance = Json.encodeToJsonElement(kClassSerializer as KSerializer<Any>, instance!!)
-        println(encodedInstance.toString())
     }
 }

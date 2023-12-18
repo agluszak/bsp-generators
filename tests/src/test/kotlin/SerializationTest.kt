@@ -25,13 +25,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 data class DataWrapper(val name: String, val jsonData: JsonElement)
 
 class SerializationTest {
-    @Test
-    fun empty() {
-        assert(true)
 
+    fun testCore(binaryName: String) {
         val objectMapper = ObjectMapper()
         val json = Json { ignoreUnknownKeys = true }
-        val processBuilder = ProcessBuilder("./tests/kotlin_json_roundtrip").directory(File("."))
+        val processBuilder = ProcessBuilder(binaryName).directory(File("."))
         println(processBuilder.command())
         val process = processBuilder.start()
 
@@ -55,6 +53,16 @@ class SerializationTest {
         process.waitFor()
         writer.close()
         reader.close()
+    }
+
+    @Test
+    fun bsp4kt_serialization() {
+        testCore("./tests/kotlin_json_roundtrip")
+    }
+
+    @Test
+    fun bsp4j_serialization() {
+        testCore("./tests/java_json_roundtrip")
     }
 
     companion object {
