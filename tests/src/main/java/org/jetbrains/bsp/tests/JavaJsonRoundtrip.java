@@ -169,6 +169,6 @@ public class JavaJsonRoundtrip {
 
     private static class DataWrapper {
         public String name;
-        public JsonObject jsonData;
+        public String jsonData;
     }
 }

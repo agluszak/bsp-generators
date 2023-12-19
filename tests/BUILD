@@ -1,4 +1,4 @@
-load("@io_bazel_rules_scala//scala:scala.bzl", "scala_test")
+load("@io_bazel_rules_scala//scala:scala.bzl", "scala_test", "scala_binary")
 
 scala_test(
     name = "tests",
@@ -52,6 +52,18 @@ java_binary(
     ],
 )
 
+scala_binary(
+    name = "scala_json_roundtrip",
+    main_class = "org.jetbrains.bsp.tests.ScalaJsonRoundtrip",
+    visibility = ["//visibility:public"],
+    srcs = glob(["src/main/scala/**/*.scala"]),
+    deps = [
+        "//bsp4s",
+        "@maven//:com_github_plokhotnyuk_jsoniter_scala_jsoniter_scala_core_2_13",
+        "@maven//:com_github_plokhotnyuk_jsoniter_scala_jsoniter_scala_macros_2_13",
+    ],
+)
+
 load("//rules/kotlin:junit5.bzl", "kt_test")
 
 kt_test(
@@ -61,6 +73,7 @@ kt_test(
     data = [
         "//tests:java_json_roundtrip",
         "//tests:kotlin_json_roundtrip",
+        "//tests:scala_json_roundtrip",
     ],
     deps = [
         "//codegen",
