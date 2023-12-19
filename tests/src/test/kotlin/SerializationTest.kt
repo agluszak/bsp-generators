@@ -68,6 +68,11 @@ class SerializationTest {
         testCore("./tests/scala_json_roundtrip")
     }
 
+    @Test
+    fun bsp4rs_serialization() {
+        testCore("./tests/rust_json_roundtrip")
+    }
+
     companion object {
 
         var testData: List<DataWrapper> = listOf()

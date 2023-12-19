@@ -26,8 +26,31 @@ scala_test(
     visibility = ["//visibility:public"],
 )
 
-load("@rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_binary")
+load("//rules/kotlin:junit5.bzl", "kt_test")
 
+kt_test(
+    name = "serialization_test",
+    src = "src/test/kotlin/SerializationTest.kt",
+    classname = "SerializationTest",
+    data = [
+        "//tests:java_json_roundtrip",
+        "//tests:kotlin_json_roundtrip",
+        "//tests:rust_json_roundtrip",
+        "//tests:scala_json_roundtrip",
+    ],
+    deps = [
+        "//codegen",
+        "@//:kotlin_serialization",
+        "@maven//:com_github_agluszak_jsonrpc4kt",
+        "@maven//:software_amazon_smithy_smithy_codegen_core",
+        "@maven//:software_amazon_smithy_smithy_model",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+    ],
+)
+
+load("@rules_kotlin//kotlin:kotlin.bzl", "kt_jvm_binary")
 
 kt_jvm_binary(
     name = "kotlin_json_roundtrip",
@@ -64,25 +87,15 @@ scala_binary(
     ],
 )
 
-load("//rules/kotlin:junit5.bzl", "kt_test")
+load("@rules_rust//rust:defs.bzl", "rust_binary")
 
-kt_test(
-    name = "serialization_test",
-    src = "src/test/kotlin/SerializationTest.kt",
-    classname = "SerializationTest",
-    data = [
-        "//tests:java_json_roundtrip",
-        "//tests:kotlin_json_roundtrip",
-        "//tests:scala_json_roundtrip",
-    ],
+rust_binary(
+    name = "rust_json_roundtrip",
+    srcs = glob(["src/main/rust/**/*.rs"]),
     deps = [
-        "//codegen",
-        "@//:kotlin_serialization",
-        "@maven//:com_github_agluszak_jsonrpc4kt",
-        "@maven//:software_amazon_smithy_smithy_codegen_core",
-        "@maven//:software_amazon_smithy_smithy_model",
-        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
-        "@maven//:com_fasterxml_jackson_core_jackson_core",
-        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "//bsp4rs",
+        "@crate_index//:serde",
+        "@crate_index//:serde_json",
     ],
+    visibility = ["//visibility:public"],
 )
