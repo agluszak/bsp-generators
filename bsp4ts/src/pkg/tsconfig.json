@@ -1,0 +1,13 @@
+
+        {
+            "compilerOptions": {
+              "outDir": "./lib",
+              "module": "CommonJS",
+              "declaration": true,
+              "declarationMap": true,
+              "esModuleInterop": true,
+              "target": "ES6",
+              "strict": true
+            }
+        }
+        
