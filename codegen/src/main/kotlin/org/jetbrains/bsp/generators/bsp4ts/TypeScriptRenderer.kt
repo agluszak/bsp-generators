@@ -74,6 +74,7 @@ class TypeScriptRenderer(val basepkg: String, val definitions: List<Def>, val ve
     fun renderImports(): CodeBlock {
         val code = code {
             -"import { RequestType, RequestType0, RequestHandler, NotificationType, NotificationHandler } from 'vscode-jsonrpc'"
+            -"import { MessageConnection } from 'vscode-jsonrpc/node'"
         }
 
         return code
@@ -244,13 +245,28 @@ class TypeScriptRenderer(val basepkg: String, val definitions: List<Def>, val ve
     fun renderService(def: Def.Service): CodeBlock {
         val name = def.name
         val code = code {
+            // Render method, type, and HandlerSignature for each operation.
             def.operations.forEach { operation ->
                 include(renderOperation(operation))
             }
+
+            // Interface with all required handlers.
             block("export interface $name") {
                 code {
                     def.operations.forEach { operation ->
                         line("""${operation.name.replaceFirstChar { it.lowercase() }}: ${operation.name}.HandlerSignature""")
+                    }
+                }
+            }
+            newline()
+
+            // Registration function to assign handler implementations to a connection.
+            val funcName = "register${name}Handlers"
+            block("export function $funcName(connection: MessageConnection, handlers: $name)") {
+                def.operations.forEach { operation ->
+                    when (operation.jsonRpcMethodType) {
+                        JsonRpcMethodType.Request -> line("connection.onRequest(${operation.name}.type, handlers.${operation.name.replaceFirstChar { it.lowercase() }})")
+                        JsonRpcMethodType.Notification -> line("connection.onNotification(${operation.name}.type, handlers.${operation.name.replaceFirstChar { it.lowercase() }})")
                     }
                 }
             }
