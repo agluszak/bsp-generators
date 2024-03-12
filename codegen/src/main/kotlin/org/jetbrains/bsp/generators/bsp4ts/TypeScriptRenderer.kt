@@ -73,7 +73,7 @@ class TypeScriptRenderer(val basepkg: String, val definitions: List<Def>, val ve
 
     fun renderImports(): CodeBlock {
         val code = code {
-            -"import { RequestType, RequestType0, RequestHandler, NotificationType, NotificationHandler } from 'vscode-jsonrpc'"
+            -"import { RequestType, RequestType0, RequestHandler, RequestHandler0, NotificationType, NotificationHandler } from 'vscode-jsonrpc'"
             -"import { MessageConnection } from 'vscode-jsonrpc/node'"
         }
 
@@ -226,7 +226,10 @@ class TypeScriptRenderer(val basepkg: String, val definitions: List<Def>, val ve
         }
 
         val handlerLine = when (op.jsonRpcMethodType) {
-            JsonRpcMethodType.Request -> """export type HandlerSignature = RequestHandler<${input}, ${output}, void>"""
+            JsonRpcMethodType.Request -> when (op.inputType) {
+                Type.Unit -> """export type HandlerSignature = RequestHandler0<${output}, void>"""
+                else -> """export type HandlerSignature = RequestHandler<${input}, ${output}, void>"""
+            }
             JsonRpcMethodType.Notification -> """export type HandlerSignature = NotificationHandler<${input}>"""
         }
 

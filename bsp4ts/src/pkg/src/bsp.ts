@@ -1,4 +1,4 @@
-import { RequestType, RequestType0, RequestHandler, NotificationType, NotificationHandler } from 'vscode-jsonrpc'
+import { RequestType, RequestType0, RequestHandler, RequestHandler0, NotificationType, NotificationHandler } from 'vscode-jsonrpc'
 import { MessageConnection } from 'vscode-jsonrpc/node'
 
 export namespace Bsp4Ts {
@@ -157,7 +157,7 @@ export namespace OnBuildInitialized {
 export namespace BuildShutdown {
   export const method: 'build/shutdown' = 'build/shutdown'
   export const type = new RequestType0<void, void>(method)
-  export type HandlerSignature = RequestHandler<void, void, void>
+  export type HandlerSignature = RequestHandler0<void, void>
 }
 
 export namespace OnBuildExit {
@@ -169,13 +169,13 @@ export namespace OnBuildExit {
 export namespace WorkspaceBuildTargets {
   export const method: 'workspace/buildTargets' = 'workspace/buildTargets'
   export const type = new RequestType0<WorkspaceBuildTargetsResult, void>(method)
-  export type HandlerSignature = RequestHandler<void, WorkspaceBuildTargetsResult, void>
+  export type HandlerSignature = RequestHandler0<WorkspaceBuildTargetsResult, void>
 }
 
 export namespace WorkspaceReload {
   export const method: 'workspace/reload' = 'workspace/reload'
   export const type = new RequestType0<void, void>(method)
-  export type HandlerSignature = RequestHandler<void, void, void>
+  export type HandlerSignature = RequestHandler0<void, void>
 }
 
 export namespace BuildTargetSources {
@@ -841,7 +841,7 @@ export interface CargoBuildTarget {
 export namespace CargoFeaturesState {
   export const method: 'workspace/cargoFeaturesState' = 'workspace/cargoFeaturesState'
   export const type = new RequestType0<CargoFeaturesStateResult, void>(method)
-  export type HandlerSignature = RequestHandler<void, CargoFeaturesStateResult, void>
+  export type HandlerSignature = RequestHandler0<CargoFeaturesStateResult, void>
 }
 
 export namespace SetCargoFeatures {
