@@ -268,8 +268,8 @@ class TypeScriptRenderer(val basepkg: String, val definitions: List<Def>, val ve
             block("export function $funcName(connection: MessageConnection, handlers: $name)") {
                 def.operations.forEach { operation ->
                     when (operation.jsonRpcMethodType) {
-                        JsonRpcMethodType.Request -> line("connection.onRequest(${operation.name}.type, handlers.${operation.name.replaceFirstChar { it.lowercase() }})")
-                        JsonRpcMethodType.Notification -> line("connection.onNotification(${operation.name}.type, handlers.${operation.name.replaceFirstChar { it.lowercase() }})")
+                        JsonRpcMethodType.Request -> line("connection.onRequest(${operation.name}.type, handlers.${operation.name.replaceFirstChar { it.lowercase() }}.bind(handlers))")
+                        JsonRpcMethodType.Notification -> line("connection.onNotification(${operation.name}.type, handlers.${operation.name.replaceFirstChar { it.lowercase() }}.bind(handlers))")
                     }
                 }
             }

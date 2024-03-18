@@ -272,24 +272,24 @@ export interface BuildServer {
 }
 
 export function registerBuildServerHandlers(connection: MessageConnection, handlers: BuildServer) {
-  connection.onRequest(BuildInitialize.type, handlers.buildInitialize)
-  connection.onNotification(OnBuildInitialized.type, handlers.onBuildInitialized)
-  connection.onRequest(BuildShutdown.type, handlers.buildShutdown)
-  connection.onNotification(OnBuildExit.type, handlers.onBuildExit)
-  connection.onRequest(WorkspaceBuildTargets.type, handlers.workspaceBuildTargets)
-  connection.onRequest(WorkspaceReload.type, handlers.workspaceReload)
-  connection.onRequest(BuildTargetSources.type, handlers.buildTargetSources)
-  connection.onRequest(BuildTargetInverseSources.type, handlers.buildTargetInverseSources)
-  connection.onRequest(BuildTargetDependencySources.type, handlers.buildTargetDependencySources)
-  connection.onRequest(BuildTargetDependencyModules.type, handlers.buildTargetDependencyModules)
-  connection.onRequest(BuildTargetResources.type, handlers.buildTargetResources)
-  connection.onRequest(BuildTargetOutputPaths.type, handlers.buildTargetOutputPaths)
-  connection.onRequest(BuildTargetCompile.type, handlers.buildTargetCompile)
-  connection.onRequest(BuildTargetRun.type, handlers.buildTargetRun)
-  connection.onRequest(BuildTargetTest.type, handlers.buildTargetTest)
-  connection.onRequest(DebugSessionStart.type, handlers.debugSessionStart)
-  connection.onRequest(BuildTargetCleanCache.type, handlers.buildTargetCleanCache)
-  connection.onNotification(OnRunReadStdin.type, handlers.onRunReadStdin)
+  connection.onRequest(BuildInitialize.type, handlers.buildInitialize.bind(handlers))
+  connection.onNotification(OnBuildInitialized.type, handlers.onBuildInitialized.bind(handlers))
+  connection.onRequest(BuildShutdown.type, handlers.buildShutdown.bind(handlers))
+  connection.onNotification(OnBuildExit.type, handlers.onBuildExit.bind(handlers))
+  connection.onRequest(WorkspaceBuildTargets.type, handlers.workspaceBuildTargets.bind(handlers))
+  connection.onRequest(WorkspaceReload.type, handlers.workspaceReload.bind(handlers))
+  connection.onRequest(BuildTargetSources.type, handlers.buildTargetSources.bind(handlers))
+  connection.onRequest(BuildTargetInverseSources.type, handlers.buildTargetInverseSources.bind(handlers))
+  connection.onRequest(BuildTargetDependencySources.type, handlers.buildTargetDependencySources.bind(handlers))
+  connection.onRequest(BuildTargetDependencyModules.type, handlers.buildTargetDependencyModules.bind(handlers))
+  connection.onRequest(BuildTargetResources.type, handlers.buildTargetResources.bind(handlers))
+  connection.onRequest(BuildTargetOutputPaths.type, handlers.buildTargetOutputPaths.bind(handlers))
+  connection.onRequest(BuildTargetCompile.type, handlers.buildTargetCompile.bind(handlers))
+  connection.onRequest(BuildTargetRun.type, handlers.buildTargetRun.bind(handlers))
+  connection.onRequest(BuildTargetTest.type, handlers.buildTargetTest.bind(handlers))
+  connection.onRequest(DebugSessionStart.type, handlers.debugSessionStart.bind(handlers))
+  connection.onRequest(BuildTargetCleanCache.type, handlers.buildTargetCleanCache.bind(handlers))
+  connection.onNotification(OnRunReadStdin.type, handlers.onRunReadStdin.bind(handlers))
 }
 
 export interface ResourcesItem {
@@ -428,15 +428,15 @@ export interface BuildClient {
 }
 
 export function registerBuildClientHandlers(connection: MessageConnection, handlers: BuildClient) {
-  connection.onNotification(OnBuildShowMessage.type, handlers.onBuildShowMessage)
-  connection.onNotification(OnBuildLogMessage.type, handlers.onBuildLogMessage)
-  connection.onNotification(OnBuildPublishDiagnostics.type, handlers.onBuildPublishDiagnostics)
-  connection.onNotification(OnBuildTargetDidChange.type, handlers.onBuildTargetDidChange)
-  connection.onNotification(OnBuildTaskStart.type, handlers.onBuildTaskStart)
-  connection.onNotification(OnBuildTaskProgress.type, handlers.onBuildTaskProgress)
-  connection.onNotification(OnBuildTaskFinish.type, handlers.onBuildTaskFinish)
-  connection.onNotification(OnRunPrintStdout.type, handlers.onRunPrintStdout)
-  connection.onNotification(OnRunPrintStderr.type, handlers.onRunPrintStderr)
+  connection.onNotification(OnBuildShowMessage.type, handlers.onBuildShowMessage.bind(handlers))
+  connection.onNotification(OnBuildLogMessage.type, handlers.onBuildLogMessage.bind(handlers))
+  connection.onNotification(OnBuildPublishDiagnostics.type, handlers.onBuildPublishDiagnostics.bind(handlers))
+  connection.onNotification(OnBuildTargetDidChange.type, handlers.onBuildTargetDidChange.bind(handlers))
+  connection.onNotification(OnBuildTaskStart.type, handlers.onBuildTaskStart.bind(handlers))
+  connection.onNotification(OnBuildTaskProgress.type, handlers.onBuildTaskProgress.bind(handlers))
+  connection.onNotification(OnBuildTaskFinish.type, handlers.onBuildTaskFinish.bind(handlers))
+  connection.onNotification(OnRunPrintStdout.type, handlers.onRunPrintStdout.bind(handlers))
+  connection.onNotification(OnRunPrintStderr.type, handlers.onRunPrintStderr.bind(handlers))
 }
 
 export namespace BuildTargetDataKind {
@@ -814,7 +814,7 @@ export interface CancelExtension {
 }
 
 export function registerCancelExtensionHandlers(connection: MessageConnection, handlers: CancelExtension) {
-  connection.onNotification(CancelRequest.type, handlers.cancelRequest)
+  connection.onNotification(CancelRequest.type, handlers.cancelRequest.bind(handlers))
 }
 
 export interface SetCargoFeaturesResult {
@@ -856,8 +856,8 @@ export interface CargoBuildServer {
 }
 
 export function registerCargoBuildServerHandlers(connection: MessageConnection, handlers: CargoBuildServer) {
-  connection.onRequest(CargoFeaturesState.type, handlers.cargoFeaturesState)
-  connection.onRequest(SetCargoFeatures.type, handlers.setCargoFeatures)
+  connection.onRequest(CargoFeaturesState.type, handlers.cargoFeaturesState.bind(handlers))
+  connection.onRequest(SetCargoFeatures.type, handlers.setCargoFeatures.bind(handlers))
 }
 
 export interface CargoFeaturesStateResult {
@@ -898,7 +898,7 @@ export interface CppBuildServer {
 }
 
 export function registerCppBuildServerHandlers(connection: MessageConnection, handlers: CppBuildServer) {
-  connection.onRequest(BuildTargetCppOptions.type, handlers.buildTargetCppOptions)
+  connection.onRequest(BuildTargetCppOptions.type, handlers.buildTargetCppOptions.bind(handlers))
 }
 
 export interface JavacOptionsResult {
@@ -916,7 +916,7 @@ export interface JavaBuildServer {
 }
 
 export function registerJavaBuildServerHandlers(connection: MessageConnection, handlers: JavaBuildServer) {
-  connection.onRequest(BuildTargetJavacOptions.type, handlers.buildTargetJavacOptions)
+  connection.onRequest(BuildTargetJavacOptions.type, handlers.buildTargetJavacOptions.bind(handlers))
 }
 
 export interface JavacOptionsItem {
@@ -952,8 +952,8 @@ export interface JvmBuildServer {
 }
 
 export function registerJvmBuildServerHandlers(connection: MessageConnection, handlers: JvmBuildServer) {
-  connection.onRequest(BuildTargetJvmTestEnvironment.type, handlers.buildTargetJvmTestEnvironment)
-  connection.onRequest(BuildTargetJvmRunEnvironment.type, handlers.buildTargetJvmRunEnvironment)
+  connection.onRequest(BuildTargetJvmTestEnvironment.type, handlers.buildTargetJvmTestEnvironment.bind(handlers))
+  connection.onRequest(BuildTargetJvmRunEnvironment.type, handlers.buildTargetJvmRunEnvironment.bind(handlers))
 }
 
 export interface JvmBuildTarget {
@@ -1022,7 +1022,7 @@ export interface PythonBuildServer {
 }
 
 export function registerPythonBuildServerHandlers(connection: MessageConnection, handlers: PythonBuildServer) {
-  connection.onRequest(BuildTargetPythonOptions.type, handlers.buildTargetPythonOptions)
+  connection.onRequest(BuildTargetPythonOptions.type, handlers.buildTargetPythonOptions.bind(handlers))
 }
 
 export interface PythonOptionsItem {
@@ -1093,7 +1093,7 @@ export interface RustBuildServer {
 }
 
 export function registerRustBuildServerHandlers(connection: MessageConnection, handlers: RustBuildServer) {
-  connection.onRequest(RustWorkspace.type, handlers.rustWorkspace)
+  connection.onRequest(RustWorkspace.type, handlers.rustWorkspace.bind(handlers))
 }
 
 export namespace RustDepKind {
@@ -1253,9 +1253,9 @@ export interface ScalaBuildServer {
 }
 
 export function registerScalaBuildServerHandlers(connection: MessageConnection, handlers: ScalaBuildServer) {
-  connection.onRequest(BuildTargetScalacOptions.type, handlers.buildTargetScalacOptions)
-  connection.onRequest(BuildTargetScalaTestClasses.type, handlers.buildTargetScalaTestClasses)
-  connection.onRequest(BuildTargetScalaMainClasses.type, handlers.buildTargetScalaMainClasses)
+  connection.onRequest(BuildTargetScalacOptions.type, handlers.buildTargetScalacOptions.bind(handlers))
+  connection.onRequest(BuildTargetScalaTestClasses.type, handlers.buildTargetScalaTestClasses.bind(handlers))
+  connection.onRequest(BuildTargetScalaMainClasses.type, handlers.buildTargetScalaMainClasses.bind(handlers))
 }
 
 export interface ScalaMainClassesItem {
